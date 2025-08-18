@@ -1,0 +1,645 @@
+/* Premium Design System - Influencer App */
+
+/* CSS Custom Properties for Design Tokens */
+:root {
+  /* Color Palette */
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  --danger-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+
+  /* Glassmorphism Colors */
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  --glass-backdrop: blur(16px);
+
+  /* Neumorphism Colors */
+  --neu-light: rgba(255, 255, 255, 0.1);
+  --neu-dark: rgba(0, 0, 0, 0.2);
+  --neu-shadow-light: 8px 8px 16px rgba(0, 0, 0, 0.3);
+  --neu-shadow-dark: -8px -8px 16px rgba(255, 255, 255, 0.05);
+
+  /* AURAX Brand Colors */
+  --aurax-neon-purple: #a259ff;
+  --aurax-electric-blue: #00e0ff;
+  --aurax-aurora-pink: #ff4fcb;
+  --aurax-midnight-black: #0d0d1a;
+  --aurax-white-glow: rgba(255, 255, 255, 0.5);
+
+  /* AURAX Gradients */
+  --gradient-aurax-primary: linear-gradient(
+    135deg,
+    var(--aurax-neon-purple),
+    var(--aurax-electric-blue)
+  );
+  --gradient-aurax-secondary: linear-gradient(
+    135deg,
+    var(--aurax-aurora-pink),
+    var(--aurax-neon-purple)
+  );
+  --gradient-aurax-accent: linear-gradient(
+    135deg,
+    var(--aurax-electric-blue),
+    var(--aurax-aurora-pink)
+  );
+  --gradient-aurax-full: linear-gradient(
+    135deg,
+    var(--aurax-neon-purple) 0%,
+    var(--aurax-electric-blue) 50%,
+    var(--aurax-aurora-pink) 100%
+  );
+
+  /* Neon Accents (Legacy) */
+  --neon-blue: var(--aurax-electric-blue);
+  --neon-pink: var(--aurax-aurora-pink);
+  --neon-purple: var(--aurax-neon-purple);
+  --neon-green: #00ff88;
+  --neon-orange: #ff6b35;
+
+  /* AURAX Typography */
+  --font-primary: "Inter", "Poppins", -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  --font-display: "Space Grotesk", "Orbitron", "Clash Display", "Inter",
+    sans-serif;
+  --font-heading: "Space Grotesk", "Orbitron", "Arial Black", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  /* Spacing Scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  /* Transitions */
+  --transition-fast: 150ms ease-out;
+  --transition-normal: 300ms ease-out;
+  --transition-slow: 500ms ease-out;
+  --transition-bounce: 300ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Dark Theme Variables */
+[data-theme="dark"] {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #1a1a2e;
+  --bg-tertiary: #16213e;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --text-muted: #6b7280;
+}
+
+/* Light Theme Variables */
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+}
+
+/* Glassmorphism Components */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-backdrop);
+  -webkit-backdrop-filter: var(--glass-backdrop);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-card {
+  @apply glass rounded-xl p-6;
+  transition: all var(--transition-normal);
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.45);
+}
+
+/* Neumorphism Components */
+.neumorphic {
+  background: var(--bg-secondary);
+  box-shadow: var(--neu-shadow-light), var(--neu-shadow-dark);
+  border-radius: var(--radius-lg);
+}
+
+.neumorphic-inset {
+  background: var(--bg-secondary);
+  box-shadow: inset var(--neu-shadow-light), inset var(--neu-shadow-dark);
+  border-radius: var(--radius-lg);
+}
+
+.neumorphic-button {
+  @apply neumorphic px-6 py-3 rounded-lg font-medium;
+  transition: all var(--transition-normal);
+}
+
+.neumorphic-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 12px 12px 24px rgba(0, 0, 0, 0.4),
+    -12px -12px 24px rgba(255, 255, 255, 0.08);
+}
+
+.neumorphic-button:active {
+  transform: translateY(0);
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.3),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.05);
+}
+
+/* Neon Effects */
+.neon-glow {
+  box-shadow: 0 0 20px currentColor;
+}
+
+.neon-text {
+  text-shadow: 0 0 10px currentColor, 0 0 20px currentColor,
+    0 0 30px currentColor;
+}
+
+.neon-border {
+  box-shadow: 0 0 10px currentColor, inset 0 0 10px currentColor;
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-secondary {
+  background: var(--secondary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated Gradients */
+.animated-gradient {
+  background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Floating Animation */
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* Pulse Animation */
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulseGlow {
+  from {
+    box-shadow: 0 0 20px currentColor;
+  }
+  to {
+    box-shadow: 0 0 40px currentColor, 0 0 60px currentColor;
+  }
+}
+
+/* Morphing Shapes */
+.morphing-shape {
+  background: var(--primary-gradient);
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  animation: morphing 8s ease-in-out infinite;
+}
+
+@keyframes morphing {
+  0%,
+  100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+  25% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+  }
+  50% {
+    border-radius: 50% 60% 30% 60% / 60% 30% 60% 40%;
+  }
+  75% {
+    border-radius: 60% 30% 60% 40% / 50% 60% 70% 60%;
+  }
+}
+
+/* 3D Transform Utilities */
+.perspective-3d {
+  perspective: 1000px;
+}
+
+.rotate-3d {
+  transform-style: preserve-3d;
+  transition: transform var(--transition-normal);
+}
+
+.rotate-3d:hover {
+  transform: rotateY(10deg) rotateX(5deg);
+}
+
+/* Micro-interactions */
+.hover-lift {
+  transition: transform var(--transition-bounce);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.hover-glow {
+  transition: all var(--transition-normal);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+}
+
+/* Loading States */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Responsive Design Utilities */
+@media (max-width: 768px) {
+  .glass-card {
+    @apply p-4;
+  }
+
+  .neumorphic-button {
+    @apply px-4 py-2;
+  }
+}
+
+/* Advanced Micro-interactions */
+.magnetic-hover {
+  transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-effect::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.3) 0%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  animation: ripple 0.6s linear;
+  pointer-events: none;
+}
+
+.shimmer-loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-loading::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: shimmer 1.5s infinite;
+}
+
+.smooth-reveal {
+  animation: slide-up 0.6s ease-out forwards;
+}
+
+.typewriter-effect {
+  overflow: hidden;
+  border-right: 0.15em solid var(--accent-primary);
+  white-space: nowrap;
+  margin: 0 auto;
+  letter-spacing: 0.15em;
+  animation: typewriter 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: var(--accent-primary);
+  }
+}
+
+/* Performance Optimizations */
+.gpu-accelerated {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .typewriter-effect {
+    animation: none;
+    border-right: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  :root {
+    --glass-bg: rgba(0, 0, 0, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.8);
+    --text-primary: #ffffff;
+    --text-secondary: #e0e0e0;
+  }
+}
+
+/* Focus management for accessibility */
+.focus-trap:focus-within {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .glass {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #000;
+  }
+
+  .neumorphic {
+    background: #ffffff;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* ========================================
+   AURAX Brand Utilities
+   ======================================== */
+
+.aurax-logo {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.75rem;
+  background: var(--gradient-aurax-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px rgba(162, 89, 255, 0.5);
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.aurax-logo:hover {
+  text-shadow: 0 0 30px rgba(162, 89, 255, 0.8), 0 0 60px rgba(0, 224, 255, 0.4);
+  transform: scale(1.05);
+}
+
+.aurax-logo-pulse {
+  animation: aurax-pulse 2s ease-in-out infinite;
+}
+
+@keyframes aurax-pulse {
+  0%,
+  100% {
+    text-shadow: 0 0 20px rgba(162, 89, 255, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 40px rgba(162, 89, 255, 0.8),
+      0 0 80px rgba(0, 224, 255, 0.6);
+  }
+}
+
+.aurax-button-brand {
+  background: var(--gradient-aurax-primary);
+  border: 2px solid transparent;
+  border-radius: 25px;
+  color: white;
+  font-weight: 600;
+  padding: 12px 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.aurax-button-brand::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: var(--gradient-aurax-primary);
+  border-radius: 25px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.aurax-button-brand:hover::before {
+  opacity: 1;
+  box-shadow: 0 0 30px rgba(162, 89, 255, 0.6), 0 0 60px rgba(0, 224, 255, 0.4);
+}
+
+.aurax-button-creator {
+  background: var(--gradient-aurax-secondary);
+  border: 2px solid transparent;
+  border-radius: 25px;
+  color: white;
+  font-weight: 600;
+  padding: 12px 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.aurax-button-creator::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: var(--gradient-aurax-secondary);
+  border-radius: 25px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.aurax-button-creator:hover::before {
+  opacity: 1;
+  box-shadow: 0 0 30px rgba(255, 79, 203, 0.6), 0 0 60px rgba(162, 89, 255, 0.4);
+}
+
+.aurax-nav-link {
+  position: relative;
+  color: white;
+  text-decoration: none;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.aurax-nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-aurax-full);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.aurax-nav-link:hover::after {
+  width: 100%;
+  box-shadow: 0 0 10px rgba(162, 89, 255, 0.8);
+}
+
+.aurax-nav-link:hover {
+  color: var(--aurax-electric-blue);
+  text-shadow: 0 0 10px rgba(0, 224, 255, 0.5);
+}
+
+/* AURAX Streak Animation */
+@keyframes aurax-streak {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.aurax-nav-streak {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-aurax-full);
+  transform: translateX(-100%);
+  animation: aurax-streak 0.6s ease-out;
+}
+
+/* Responsive AURAX Styles */
+@media (max-width: 768px) {
+  .aurax-logo {
+    font-size: 1.5rem;
+  }
+
+  .aurax-button-brand,
+  .aurax-button-creator {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}

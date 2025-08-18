@@ -1,0 +1,114 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.creatorCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: linear-gradient(
+    to right,
+    rgba(30, 41, 59, 0.7),
+    rgba(46, 16, 101, 0.5)
+  );
+  border-radius: 1rem;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.creatorCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px -5px rgba(139, 92, 246, 0.2);
+  border-color: rgba(192, 132, 252, 0.5);
+}
+
+.avatarContainer {
+  position: relative;
+}
+
+.avatar {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  border: 2px solid #a78bfa;
+}
+
+.onlineIndicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: #10b981;
+  border: 2px solid #1e293b;
+}
+
+.creatorInfo {
+  flex: 1;
+}
+
+.namePlatform {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.name {
+  font-weight: 600;
+  color: #e9d5ff;
+  font-size: 1rem;
+}
+
+.platform {
+  font-size: 0.75rem;
+  background: rgba(124, 58, 237, 0.3);
+  color: #c4b5fd;
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.followers {
+  font-size: 0.875rem;
+  color: #c7d2fe;
+  margin-bottom: 0.5rem;
+}
+
+.engagementContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.engagementBar {
+  flex: 1;
+  height: 0.5rem;
+  background: rgba(124, 58, 237, 0.2);
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.engagementFill {
+  height: 100%;
+  background: linear-gradient(to right, #8b5cf6, #ec4899);
+  border-radius: 0.25rem;
+}
+
+.engagementValue {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #a78bfa;
+  min-width: 3rem;
+  text-align: right;
+}

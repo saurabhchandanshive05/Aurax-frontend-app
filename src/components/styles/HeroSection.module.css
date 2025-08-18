@@ -1,0 +1,98 @@
+.heroSection {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: #0c0c17;
+  color: #eaeaea;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3rem 6rem;
+  overflow: hidden;
+  font-family: "Inter", sans-serif;
+}
+
+.content {
+  max-width: 600px;
+  z-index: 10;
+}
+
+.tagline {
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #31c5f4;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  user-select: none;
+}
+
+.headline {
+  font-weight: 700;
+  font-size: 3.5rem;
+  line-height: 1.2;
+  margin-bottom: 2rem;
+  color: white;
+  text-shadow: 0 0 10px rgba(255, 62, 62, 0.7), 0 0 20px rgba(194, 58, 255, 0.5);
+}
+
+.cta {
+  font-size: 1.25rem;
+  background: transparent;
+  border: 2px solid #ff3e3e;
+  padding: 0.75rem 2rem;
+  color: #ff3e3e;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 8px #ff3e3e, 0 0 20px #ff3e3e;
+}
+
+.cta:hover,
+.cta:focus {
+  color: white;
+  background: linear-gradient(90deg, #ff3e3e, #c23aff, #31c5f4);
+  box-shadow: 0 0 20px #ff3e3e, 0 0 30px #c23aff, 0 0 40px #31c5f4;
+  border-color: transparent;
+  outline: none;
+}
+
+.heroScene {
+  width: 50%;
+  height: 100%;
+  pointer-events: none; /* So user can’t interact with orbit controls on desktop if desired */
+}
+
+.avatarImg {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #31c5f4;
+  box-shadow: 0 0 10px #31c5f4aa;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Responsive */
+
+@media screen and (max-width: 960px) {
+  .heroSection {
+    flex-direction: column;
+    padding: 3rem 2rem;
+    height: auto;
+  }
+  .content {
+    max-width: 100%;
+    text-align: center;
+  }
+  .heroScene {
+    width: 100%;
+    height: 300px;
+    margin-top: 2rem;
+  }
+  .headline {
+    font-size: 2.4rem;
+  }
+}

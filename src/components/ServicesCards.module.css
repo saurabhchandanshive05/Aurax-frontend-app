@@ -1,0 +1,417 @@
+.servicesContainer {
+  position: relative;
+  background: linear-gradient(180deg, #0b0b1e 0%, #101628 60%, #0d1a2b 100%);
+  overflow: hidden;
+  font-family: "Satoshi", "Neue Montreal", sans-serif;
+  padding: 100px 0;
+}
+
+.servicesContainer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+      circle at 20% 30%,
+      rgba(91, 119, 255, 0.1) 0%,
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      rgba(236, 72, 153, 0.1) 0%,
+      transparent 40%
+    );
+  z-index: 0;
+}
+
+/* Neural Grid Background */
+.neuralGrid {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background-image: linear-gradient(
+      rgba(91, 119, 255, 0.05) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(91, 119, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  transform: rotate(30deg) translateX(-25%);
+  animation: gridMove 40s linear infinite;
+  z-index: -1;
+}
+
+@keyframes gridMove {
+  0% {
+    transform: rotate(30deg) translate(-25%, -25%);
+  }
+  100% {
+    transform: rotate(30deg) translate(-75%, -75%);
+  }
+}
+
+/* Featured Creators Section */
+.featuredSection {
+  position: relative;
+  z-index: 2;
+  padding: 50px 0;
+}
+
+.sectionTitle {
+  font-size: 2.8rem;
+  text-align: center;
+  margin-bottom: 50px;
+  font-weight: 700;
+  background: linear-gradient(to right, #ffffff, #00ccff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.featuredGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.cardContainer {
+  position: relative;
+  height: 400px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.cardFront,
+.cardBack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.cardFront {
+  transform: rotateY(0deg);
+}
+
+.cardBack {
+  transform: rotateY(180deg);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+}
+
+.flipped .cardFront {
+  transform: rotateY(-180deg);
+}
+
+.flipped .cardBack {
+  transform: rotateY(0deg);
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+.cardOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  background: linear-gradient(
+    to top,
+    rgba(10, 10, 31, 0.9) 0%,
+    transparent 100%
+  );
+  color: white;
+}
+
+.influencerName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.influencerLocation {
+  font-size: 1rem;
+  color: #ccc;
+}
+
+.plusButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.plusButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.closeButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.influencerBio {
+  color: #ccc;
+  margin-bottom: 20px;
+  flex-grow: 1;
+  font-size: 0.95rem;
+}
+
+.categoriesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.categoryTag {
+  background: rgba(0, 204, 255, 0.15);
+  color: #00ccff;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.socialLink {
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 8px 15px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.socialLink:hover {
+  background: rgba(0, 204, 255, 0.3);
+  transform: translateY(-3px);
+}
+
+.profileButton {
+  background: linear-gradient(to right, #5b77ff, #00ccff);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.profileButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(91, 119, 255, 0.3);
+}
+
+.exploreButton {
+  display: block;
+  margin: 0 auto;
+  background: transparent;
+  color: #00ccff;
+  border: 2px solid #00ccff;
+  padding: 12px 35px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.exploreButton:hover {
+  background: rgba(0, 204, 255, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px rgba(0, 204, 255, 0.3);
+}
+
+/* Brands Section */
+.brandsSection {
+  position: relative;
+  z-index: 2;
+  padding: 100px 0 50px;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  background: rgba(255, 255, 255, 0.02);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+}
+
+.marqueeContainer {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  padding: 16px 0;
+}
+
+.marqueeTrack {
+  display: flex;
+  width: 200%;
+  animation: marquee 20s linear infinite;
+}
+
+.brandCard {
+  width: 200px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  flex-shrink: 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.brandLogo {
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.35));
+}
+
+.glowEffect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at center,
+    rgba(91, 119, 255, 0.3),
+    transparent 70%
+  );
+  z-index: -1;
+}
+
+.brandCard:hover .brandLogo {
+  transform: scale(1.06);
+  filter: drop-shadow(0 12px 34px rgba(91, 119, 255, 0.35));
+}
+
+.brandCard:hover {
+  transform: translateY(-6px);
+}
+
+.sectionKicker {
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.25rem;
+}
+
+.sectionCtaRow {
+  margin-top: 18px;
+}
+
+.caseStudiesCta {
+  background: transparent;
+  color: #9ecbff;
+  border: 1px solid rgba(158, 203, 255, 0.35);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 700;
+  transition: all 0.25s ease;
+}
+
+.caseStudiesCta:hover {
+  background: rgba(158, 203, 255, 0.1);
+  border-color: rgba(158, 203, 255, 0.55);
+  transform: translateY(-2px);
+}
+
+.shimmerEffect {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: shimmer 3s infinite;
+  z-index: -1;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: rotate(0deg) translateX(-50%);
+  }
+  100% {
+    transform: rotate(360deg) translateX(-50%);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .servicesContainer {
+    padding: 0 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 2.2rem;
+  }
+
+  .featuredGrid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  .brandCard {
+    width: 150px;
+    height: 120px;
+  }
+}

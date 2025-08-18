@@ -1,0 +1,75 @@
+.card {
+  background: linear-gradient(to bottom right, #1e293b, #0f172a);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  border: 1px solid #334155;
+  overflow: hidden;
+  position: relative;
+}
+
+.glowEffect {
+  position: absolute;
+  top: -1rem;
+  right: -1rem;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.1);
+  filter: blur(24px);
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  z-index: 10;
+}
+
+.title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #94a3b8;
+  margin-bottom: 0.25rem;
+}
+
+.values {
+  display: flex;
+  align-items: baseline;
+}
+
+.value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-right: 0.5rem;
+}
+
+.change {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.2);
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+}
+
+.iconContainer {
+  font-size: 1.5rem;
+  padding: 0.75rem;
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 0.5rem;
+}
+
+.progressBar {
+  margin-top: 1rem;
+  height: 0.25rem;
+  background: #334155;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(to right, #3b82f6, #06b6d4);
+}

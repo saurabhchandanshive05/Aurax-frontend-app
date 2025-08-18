@@ -1,0 +1,438 @@
+.brand-login-container {
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a23 0%, #1a1a40 100%);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.tech-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+      rgba(99, 102, 241, 0.1) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: 1;
+}
+
+.floating-elements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.floating-element {
+  position: absolute;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 50%;
+  animation: float 15s infinite linear;
+}
+
+@keyframes float {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(100px, 100px) rotate(360deg);
+    opacity: 0.2;
+  }
+}
+
+.login-dashboard-container {
+  display: flex;
+  max-width: 1200px;
+  width: 100%;
+  background: rgba(22, 22, 49, 0.8);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.dashboard-preview {
+  flex: 1;
+  padding: 2rem;
+  background: rgba(10, 10, 35, 0.7);
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-preview::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.1) 0%,
+    transparent 70%
+  );
+  z-index: -1;
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.dashboard-header p {
+  color: #a0a0c0;
+}
+
+.charts-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.chart {
+  background: rgba(30, 30, 58, 0.6);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.chart h3 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.bar-chart {
+  display: flex;
+  height: 150px;
+  align-items: flex-end;
+  justify-content: space-around;
+}
+
+.bar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.bar {
+  width: 20px;
+  background: linear-gradient(to top, #6366f1, #8b5cf6);
+  border-radius: 4px 4px 0 0;
+  transition: height 1.5s ease-out;
+}
+
+.bar-label {
+  margin-top: 0.5rem;
+  color: #a0a0c0;
+  font-size: 0.8rem;
+}
+
+.line-chart {
+  height: 150px;
+}
+
+.line {
+  fill: none;
+  stroke: #8b5cf6;
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.stats-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  background: rgba(30, 30, 58, 0.6);
+  border-radius: 10px;
+  padding: 1rem;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.stat-icon {
+  margin-right: 0.8rem;
+}
+
+.icon-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.stat-item h4 {
+  font-size: 1.3rem;
+  margin-bottom: 0.2rem;
+  color: white;
+}
+
+.stat-item p {
+  color: #a0a0c0;
+  font-size: 0.9rem;
+}
+
+.login-form-container {
+  flex: 1;
+  padding: 3rem;
+  background: rgba(22, 22, 49, 0.9);
+  display: flex;
+  align-items: center;
+}
+
+.form-content {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.brand-logo {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.logo-box {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border-radius: 20px;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: white;
+}
+
+.brand-logo h1 {
+  font-size: 1.8rem;
+  color: white;
+}
+
+.form-title {
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.form-subtitle {
+  text-align: center;
+  color: #a0a0c0;
+  margin-bottom: 2rem;
+}
+
+.error-message {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fecaca;
+  padding: 0.8rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.login-form {
+  margin-bottom: 2rem;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 1rem;
+  background: rgba(30, 30, 58, 0.6);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.input-label {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  color: #a0a0c0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus + .input-label,
+.form-input:not(:placeholder-shown) + .input-label {
+  top: -0.8rem;
+  left: 0.8rem;
+  font-size: 0.8rem;
+  background: rgba(22, 22, 49, 0.9);
+  padding: 0 0.5rem;
+  color: #6366f1;
+}
+
+.remember-me {
+  margin: 1.5rem 0;
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  color: #a0a0c0;
+  cursor: pointer;
+}
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  height: 20px;
+  width: 20px;
+  background: rgba(30, 30, 58, 0.6);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 5px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background: #6366f1;
+  border-color: #6366f1;
+}
+
+.checkmark:after {
+  content: "";
+  display: none;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-top: -2px;
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.login-button {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(to right, #6366f1, #8b5cf6);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-button span {
+  position: relative;
+  z-index: 2;
+}
+
+.login-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, #4f46e5, #7c3aed);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.login-button:hover::before {
+  opacity: 1;
+}
+
+.register-prompt {
+  text-align: center;
+  color: #a0a0c0;
+  margin-bottom: 1rem;
+}
+
+.register-prompt p {
+  margin-bottom: 1rem;
+}
+
+.register-button {
+  width: 100%;
+  padding: 0.8rem;
+  background: transparent;
+  color: #6366f1;
+  border: 1px solid #6366f1;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.register-button:hover {
+  background: rgba(99, 102, 241, 0.1);
+}
+
+@media (max-width: 768px) {
+  .login-dashboard-container {
+    flex-direction: column;
+  }
+
+  .dashboard-preview {
+    display: none;
+  }
+
+  .login-form-container {
+    padding: 2rem;
+  }
+}

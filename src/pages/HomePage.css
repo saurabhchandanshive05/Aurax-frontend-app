@@ -1,0 +1,186 @@
+/* HomePage.css */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+.home-page {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #f3f4f6;
+  background-color: #0a192f;
+  overflow-x: hidden;
+}
+
+/* Custom Cursor */
+.cursor {
+  position: fixed;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #9b5de5;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.cursor::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  background: #9b5de5;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.cursor.hover {
+  width: 48px;
+  height: 48px;
+  background-color: rgba(155, 93, 229, 0.2);
+  border-color: #c77dff;
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+}
+
+/* Animation Effects */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .hero h1 {
+    font-size: 3.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+  }
+
+  .cursor {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .stats-bar > div {
+    min-width: 45%;
+  }
+}
+
+/* Z-index adjustments */
+.vanta-canvas {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+}
+
+/* Color contrast improvements */
+.text-gray-300 {
+  color: #d1d5db;
+}
+
+.text-gray-400 {
+  color: #9ca3af;
+}
+
+.bg-gray-800 {
+  background-color: #1e293b;
+}
+
+.bg-gray-750 {
+  background-color: #2d3748;
+}
+
+/* Service Card Alignment */
+.service-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Section Spacing */
+section {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Button Refinements */
+button.cursor-hover {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 20px rgba(155, 93, 229, 0.4);
+}
+
+button.cursor-hover:hover {
+  box-shadow: 0 8px 25px rgba(155, 93, 229, 0.6);
+}
+
+/* Form Input Contrast */
+input,
+textarea {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  color: #f3f4f6 !important;
+}
+
+/* Stats Bar Positioning */
+.stats-bar {
+  position: absolute;
+  bottom: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .stats-bar {
+    bottom: 4rem;
+  }
+}
+
+/* Card hover effect */
+.bg-gray-800:hover {
+  background-color: #2d3748;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Wave effect enhancements */
+.vanta-canvas {
+  filter: brightness(0.9) contrast(1.1);
+}

@@ -1,0 +1,236 @@
+.campaignsSection {
+  padding: 6rem 1rem;
+  position: relative;
+  z-index: 2;
+  background: rgba(10, 10, 25, 0.7);
+}
+
+.sectionTitle {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #5b77ff, #00d2ff, #ec4899);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: inline-block;
+  text-align: center;
+}
+
+.sectionTitle::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #5b77ff, #00d2ff, #ec4899);
+  border-radius: 2px;
+  animation: pulseLine 2s infinite;
+}
+
+@keyframes pulseLine {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.sectionSubtitle {
+  font-size: 1.25rem;
+  color: #a1a1aa;
+  max-width: 700px;
+  margin: 0 auto 3rem;
+  text-align: center;
+  line-height: 1.7;
+}
+
+.campaignsContainer {
+  overflow: hidden;
+  position: relative;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.campaignsGrid {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 2rem;
+  width: max-content;
+  will-change: transform;
+}
+
+.campaignCard {
+  flex: 0 0 200px;
+  height: 350px;
+  background: rgba(20, 20, 35, 0.7);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid rgba(91, 119, 255, 0.3);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.campaignCard:hover {
+  transform: scale(1.05) translateY(-10px);
+  box-shadow: 0 20px 40px rgba(91, 119, 255, 0.4);
+  border-color: rgba(91, 119, 255, 0.6);
+}
+
+.campaignThumbnail {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(3px);
+  transition: filter 0.5s ease;
+}
+
+.campaignCard:hover .campaignThumbnail {
+  filter: blur(0);
+}
+
+.playIconContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.playIcon {
+  width: 60px;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.playTriangle {
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-left: 25px solid #fff;
+  border-bottom: 15px solid transparent;
+  margin-left: 5px;
+}
+
+.campaignCard:hover .playIcon {
+  background: rgba(0, 210, 255, 0.8);
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
+  animation: pulseIcon 1.5s infinite;
+}
+
+@keyframes pulseIcon {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.playIconTrail {
+  position: absolute;
+  top: 50%;
+  left: -50px;
+  width: 50px;
+  height: 2px;
+  background: rgba(0, 210, 255, 0.7);
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+  opacity: 0;
+}
+
+.animateTrail {
+  animation: trailMove 1.5s infinite linear;
+}
+
+@keyframes trailMove {
+  0% {
+    left: -50px;
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+.campaignInfo {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  z-index: 3;
+}
+
+.campaignBrand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.campaignStats {
+  color: #00d2ff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .sectionTitle {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .sectionTitle {
+    font-size: 2.2rem;
+  }
+
+  .campaignCard {
+    flex: 0 0 180px;
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sectionTitle {
+    font-size: 1.8rem;
+  }
+
+  .sectionSubtitle {
+    font-size: 1.1rem;
+  }
+
+  .campaignCard {
+    flex: 0 0 160px;
+    height: 280px;
+  }
+
+  .campaignBrand {
+    font-size: 1.3rem;
+  }
+}
