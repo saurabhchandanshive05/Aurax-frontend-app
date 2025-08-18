@@ -64,7 +64,8 @@ function MobileNavMenu() {
 
   return null; // Disabled to prevent footer overlap
 
-  // return (
+  /* Commented out mobile navigation - causing footer overlap
+  return (
     <nav
       className="mobile-menu"
       role="navigation"
@@ -159,6 +160,7 @@ function MobileNavMenu() {
       </Link>
     </nav>
   );
+  */
 }
 
 function App() {
