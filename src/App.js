@@ -48,7 +48,10 @@ const InfluencerDiscovery = React.lazy(() =>
 );
 const DataDrivenGrowth = React.lazy(() => import("./pages/DataDrivenGrowth"));
 const Signup = React.lazy(() => import("./pages/Signup"));
-const CopyEnvironmentTest = React.lazy(() => import("./pages/CopyEnvironmentTest"));
+const CopyEnvironmentTest = React.lazy(() =>
+  import("./pages/CopyEnvironmentTest")
+);
+const TestImageLoad = React.lazy(() => import("./pages/TestImageLoad"));
 
 // Mobile navigation component
 function MobileNavMenu() {
@@ -261,9 +264,15 @@ function App() {
                     <Route path="/creator/login" element={<CreatorLogin />} />
                     <Route path="/coming-soon" element={<ComingSoonPage />} />
                     <Route path="/signup" element={<Signup />} />
-                    
+
                     {/* Copy Environment Test Route */}
-                    <Route path="/copy-test" element={<CopyEnvironmentTest />} />
+                    <Route
+                      path="/copy-test"
+                      element={<CopyEnvironmentTest />}
+                    />
+
+                    {/* Image Load Test Route */}
+                    <Route path="/test-images" element={<TestImageLoad />} />
 
                     {/* Specialization Routes */}
                     <Route path="/ai-marketing" element={<AIMarketing />} />
