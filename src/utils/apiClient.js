@@ -1,7 +1,8 @@
 // Centralized API Client with Error Handling and Authentication
+import { copyLogger } from './copyLogger';
 
 const BASE_URL =
-  process.env.REACT_APP_API_BASE_URL || "http://localhost:5003/api";
+  process.env.REACT_APP_API_BASE_URL || "https://backend-copy.onrender.com/api";
 
 class APIError extends Error {
   constructor(message, status, details = {}) {
@@ -19,6 +20,8 @@ export const apiClient = {
 
     const defaultHeaders = {
       "Content-Type": "application/json",
+      "X-Copy-Environment": "true",
+      "X-Database": "influencer_copy",
       ...(token && { Authorization: `Bearer ${token}` }),
     };
 
@@ -29,26 +32,49 @@ export const apiClient = {
     };
 
     try {
+      // Verify we're in copy environment before making API calls
+      copyLogger.verifyCopyEnvironment();
+      
+      // Log the API call attempt
+      copyLogger.log('API_CALL_INITIATED', { 
+        endpoint, 
+        method: config.method, 
+        url,
+        headers: { ...config.headers, Authorization: '[REDACTED]' }
+      });
+
       const response = await fetch(url, config);
+      const responseData = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        const errorBody = await response.json().catch(() => ({}));
+        copyLogger.logAPICall(endpoint, config.method, { status: response.status, data: responseData }, 
+          new Error(responseData.message || "API Error"));
+        
         throw new APIError(
-          errorBody.message || "An unexpected error occurred",
+          responseData.message || "An unexpected error occurred",
           response.status,
-          errorBody
+          responseData
         );
       }
 
-      return await response.json();
-    } catch (error) {
-      if (error instanceof APIError) throw error;
+      // Log successful API call
+      copyLogger.logAPICall(endpoint, config.method, { status: response.status, data: responseData });
 
-      throw new APIError(
+      return responseData;
+    } catch (error) {
+      if (error instanceof APIError) {
+        copyLogger.logAPICall(endpoint, config.method, null, error);
+        throw error;
+      }
+
+      const networkError = new APIError(
         error.message || "Network error",
         error.status || 500,
         { originalError: error }
       );
+      
+      copyLogger.logAPICall(endpoint, config.method, null, networkError);
+      throw networkError;
     }
   },
 
