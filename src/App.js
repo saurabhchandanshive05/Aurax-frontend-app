@@ -52,6 +52,7 @@ const CopyEnvironmentTest = React.lazy(() =>
   import("./pages/CopyEnvironmentTest")
 );
 const TestImageLoad = React.lazy(() => import("./pages/TestImageLoad"));
+const ComprehensiveTest = React.lazy(() => import("./pages/ComprehensiveTest"));
 
 // Mobile navigation component
 function MobileNavMenu() {
@@ -273,6 +274,9 @@ function App() {
 
                     {/* Image Load Test Route */}
                     <Route path="/test-images" element={<TestImageLoad />} />
+
+                    {/* Comprehensive Test Route */}
+                    <Route path="/comprehensive-test" element={<ComprehensiveTest />} />
 
                     {/* Specialization Routes */}
                     <Route path="/ai-marketing" element={<AIMarketing />} />
