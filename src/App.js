@@ -60,6 +60,7 @@ const CopyDashboard = React.lazy(() => import("./pages/CopyDashboard"));
 const CopyEnvironmentStatus = React.lazy(() => import("./pages/CopyEnvironmentStatus"));
 const DirectDatabaseTest = React.lazy(() => import("./pages/DirectDatabaseTest"));
 const BackendFix = React.lazy(() => import("./pages/BackendFix"));
+const LoginTestReady = React.lazy(() => import("./pages/LoginTestReady"));
 
 // Mobile navigation component
 function MobileNavMenu() {
@@ -299,6 +300,7 @@ function App() {
               <Route path="/copy-status" element={<CopyEnvironmentStatus />} />
               <Route path="/direct-db-test" element={<DirectDatabaseTest />} />
               <Route path="/backend-fix" element={<BackendFix />} />
+              <Route path="/login-test" element={<LoginTestReady />} />
 
                     {/* Specialization Routes */}
                     <Route path="/ai-marketing" element={<AIMarketing />} />
