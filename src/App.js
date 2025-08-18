@@ -55,6 +55,8 @@ const TestImageLoad = React.lazy(() => import("./pages/TestImageLoad"));
 const ComprehensiveTest = React.lazy(() => import("./pages/ComprehensiveTest"));
 const QuickAPITest = React.lazy(() => import("./pages/QuickAPITest"));
 const BackendStatus = React.lazy(() => import("./pages/BackendStatus"));
+const DeploymentGuide = React.lazy(() => import("./pages/DeploymentGuide"));
+const CopyDashboard = React.lazy(() => import("./pages/CopyDashboard"));
 
 // Mobile navigation component
 function MobileNavMenu() {
@@ -285,6 +287,12 @@ function App() {
 
                     {/* Backend Status Route */}
                     <Route path="/backend-status" element={<BackendStatus />} />
+
+                    {/* Deployment Guide Route */}
+                    <Route path="/deployment-guide" element={<DeploymentGuide />} />
+
+                    {/* Copy Dashboard Route */}
+                    <Route path="/copy-dashboard" element={<CopyDashboard />} />
 
                     {/* Specialization Routes */}
                     <Route path="/ai-marketing" element={<AIMarketing />} />
