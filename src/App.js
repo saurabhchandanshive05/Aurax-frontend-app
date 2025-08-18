@@ -64,7 +64,7 @@ function MobileNavMenu() {
 
   return null; // Disabled to prevent footer overlap
 
-  return (
+  // return (
     <nav
       className="mobile-menu"
       role="navigation"
@@ -358,7 +358,8 @@ function App() {
                 className="fixed bottom-16 right-4 bg-red-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-red-700 z-50"
                 onClick={() => {
                   setShowStatus(true);
-                  checkBackendConnection();
+                  // Reload the page to re-run backend connection check
+                  window.location.reload();
                 }}
                 aria-label="Recheck backend connection"
               >
