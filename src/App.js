@@ -32,7 +32,7 @@ const BrandLogin = React.lazy(() => import("./pages/BrandLogin"));
 const CreatorLogin = React.lazy(() => import("./pages/CreatorLogin"));
 const ComingSoonPage = React.lazy(() => import("./pages/ComingSoonPage"));
 const AboutPage = React.lazy(() => import("./pages/AboutPage"));
-const BrandsPage = React.lazy(() => import("./pages/BrandsPage"));
+const BrandsPage = React.lazy(() => import("./pages/BrandPage"));
 const CareersPage = React.lazy(() => import("./pages/CareersPage"));
 const ContactPage = React.lazy(() => import("./pages/ContactPage"));
 const BrandCollaborations = React.lazy(() =>

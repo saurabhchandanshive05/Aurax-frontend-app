@@ -106,10 +106,10 @@ const BrandCollaborations = () => {
       campaign: "AI-Powered Beauty Campaign",
     },
     {
-      name: "Plum",
+      name: "Astrotalk",
       logo: "/images/brands/plum.png",
       path: "/campaigns/plum",
-      campaign: "Vegan Beauty Revolution",
+      campaign: "Celebs recommend Astrotalk",
     },
     {
       name: "Mamaearth",
@@ -118,34 +118,34 @@ const BrandCollaborations = () => {
       campaign: "Natural Parenting Solutions",
     },
     {
-      name: "JioCinema",
+      name: "Hotstar",
       logo: "/images/brands/jiocinema.png",
       path: "/campaigns/jiocinema",
       campaign: "Streaming Experience Redefined",
     },
     {
-      name: "Dot & Key",
+      name: "Lakme",
       logo: "/images/brands/dot-key.png",
       path: "/campaigns/dot-key",
       campaign: "Skincare Personalization",
     },
     {
-      name: "Liquid IV",
+      name: "Minimalist ",
       logo: "/images/brands/liquid-iv.png",
       path: "/campaigns/liquid-iv",
-      campaign: "Hydration Science Campaign",
+      campaign: "Minimalist Campaign",
     },
     {
-      name: "Pond's",
+      name: "Ghar Soap",
       logo: "/images/brands/ponds.png",
       path: "/campaigns/ponds",
       campaign: "Age-Defying Skincare",
     },
     {
-      name: "WishCare",
+      name: "Boat",
       logo: "/images/brands/wishcare.png",
       path: "/campaigns/wishcare",
-      campaign: "Haircare Innovation",
+      campaign: "Boat Lifestyle Innovation",
     },
   ];
 

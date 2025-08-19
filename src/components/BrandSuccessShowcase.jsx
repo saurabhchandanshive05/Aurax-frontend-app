@@ -20,7 +20,7 @@ const BrandSuccessShowcase = () => {
     },
     {
       id: 2,
-      brand: "Amazon",
+      brand: "Flipkart",
       views: "+1.8M",
       roas: "95%",
       videoUrl: "/videos/amazon-campaign.mp4",
@@ -28,7 +28,7 @@ const BrandSuccessShowcase = () => {
     },
     {
       id: 3,
-      brand: "Samsung",
+      brand: "Sprite",
       views: "+3.2M",
       roas: "150%",
       videoUrl: "/videos/samsung-campaign.mp4",
@@ -44,7 +44,7 @@ const BrandSuccessShowcase = () => {
     },
     {
       id: 5,
-      brand: "Apple",
+      brand: "Nivea",
       views: "+1.5M",
       roas: "110%",
       videoUrl: "/videos/apple-campaign.mp4",

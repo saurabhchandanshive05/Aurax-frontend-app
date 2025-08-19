@@ -40,8 +40,8 @@ const Footer = () => {
   const companyLinks = [
     { name: "About", href: "/about", icon: "ℹ️" },
     { name: "Careers", href: "/careers", icon: "💼" },
-    { name: "Blog", href: "/blog", icon: "📝" },
-    { name: "Press", href: "/press", icon: "📰" },
+    { name: "Blog", href: "/", icon: "📝" },
+    { name: "Press", href: "/", icon: "📰" },
   ];
 
   return (
@@ -101,23 +101,6 @@ const Footer = () => {
 
           {/* Quick Links Grid */}
           <div className="links-grid">
-            {/* Platform Links */}
-            <div className="links-section">
-              <h4 className="section-title">
-                <span className="aurax-gradient-text">Platform</span>
-                <div className="title-glow"></div>
-              </h4>
-              <div className="footer-links">
-                {platformLinks.map((link, index) => (
-                  <a key={index} href={link.href} className="footer-link">
-                    <span className="link-icon">{link.icon}</span>
-                    <span className="link-text">{link.name}</span>
-                    <div className="link-underline"></div>
-                  </a>
-                ))}
-              </div>
-            </div>
-
             {/* Company Links */}
             <div className="links-section">
               <h4 className="section-title">
