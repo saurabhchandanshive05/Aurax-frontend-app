@@ -1,8 +1,8 @@
 // Centralized API Client with Error Handling and Authentication
-import { copyLogger } from './copyLogger';
+import { copyLogger } from "./copyLogger";
 
 const BASE_URL =
-  process.env.REACT_APP_API_BASE_URL || "https://backend-copy.onrender.com/api";
+  process.env.REACT_APP_API_BASE_URL || "http://localhost:5002/api";
 
 class APIError extends Error {
   constructor(message, status, details = {}) {
@@ -34,22 +34,26 @@ export const apiClient = {
     try {
       // Verify we're in copy environment before making API calls
       copyLogger.verifyCopyEnvironment();
-      
+
       // Log the API call attempt
-      copyLogger.log('API_CALL_INITIATED', { 
-        endpoint, 
-        method: config.method, 
+      copyLogger.log("API_CALL_INITIATED", {
+        endpoint,
+        method: config.method,
         url,
-        headers: { ...config.headers, Authorization: '[REDACTED]' }
+        headers: { ...config.headers, Authorization: "[REDACTED]" },
       });
 
       const response = await fetch(url, config);
       const responseData = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        copyLogger.logAPICall(endpoint, config.method, { status: response.status, data: responseData }, 
-          new Error(responseData.message || "API Error"));
-        
+        copyLogger.logAPICall(
+          endpoint,
+          config.method,
+          { status: response.status, data: responseData },
+          new Error(responseData.message || "API Error")
+        );
+
         throw new APIError(
           responseData.message || "An unexpected error occurred",
           response.status,
@@ -58,7 +62,10 @@ export const apiClient = {
       }
 
       // Log successful API call
-      copyLogger.logAPICall(endpoint, config.method, { status: response.status, data: responseData });
+      copyLogger.logAPICall(endpoint, config.method, {
+        status: response.status,
+        data: responseData,
+      });
 
       return responseData;
     } catch (error) {
@@ -72,7 +79,7 @@ export const apiClient = {
         error.status || 500,
         { originalError: error }
       );
-      
+
       copyLogger.logAPICall(endpoint, config.method, null, networkError);
       throw networkError;
     }
@@ -142,7 +149,7 @@ export const apiClient = {
       ...options,
       method: "DELETE",
     });
-  }
+  },
 };
 
 // Global error handler

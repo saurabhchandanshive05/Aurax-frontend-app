@@ -4,9 +4,9 @@ module.exports = function (app) {
   app.use(
     "/api",
     createProxyMiddleware({
-      target: "https://backend-copy.onrender.com",
+      target: "http://localhost:5002",
       changeOrigin: true,
-      secure: true,
+      secure: false,
       logLevel: "debug",
       onProxyReq: (proxyReq, req) => {
         console.log(`[COPY-PROXY] ${proxyReq.method} ${proxyReq.path}`);
