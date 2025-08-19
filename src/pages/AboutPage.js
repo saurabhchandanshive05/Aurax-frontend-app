@@ -78,8 +78,6 @@ const AboutPage = () => {
     },
   ];
 
-
-
   return (
     <div className="about-page">
       {/* Hero Section */}
@@ -270,8 +268,6 @@ const AboutPage = () => {
           </div>
         </div>
       </section>
-
-
 
       {/* CTA Section */}
       <section id="cta" className="final-cta-section">
