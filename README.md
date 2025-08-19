@@ -1,70 +1,171 @@
-# Getting Started with Create React App
+# AURAX - AI-Powered Influencer Marketing Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![AURAX Platform](https://img.shields.io/badge/AURAX-Frontend-blue) ![React](https://img.shields.io/badge/React-18.2.0-61DAFB) ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 
-## Available Scripts
+## 🚀 Overview
 
-In the project directory, you can run:
+AURAX is a next-generation influencer marketing platform that revolutionizes how brands connect with creators through AI-powered matching, real-time optimization, and transparent analytics.
 
-### `npm start`
+## ✨ Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 🎯 Core Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **AI-Powered Creator Matching**: Advanced algorithms to find perfect brand-creator fits
+- **Real-Time Campaign Optimization**: Dynamic performance tracking and adjustment
+- **Comprehensive Analytics Dashboard**: Deep insights into campaign performance
+- **Interactive 3D UI**: Modern, engaging user interface with Three.js integration
+- **Mobile-First Design**: Responsive across all devices
 
-### `npm test`
+### 🔧 Technical Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **React 18** with modern hooks and functional components
+- **Framer Motion** for smooth animations and transitions
+- **Three.js & React-Three-Fiber** for 3D graphics and interactions
+- **Chart.js** for data visualization
+- **React Router DOM** for seamless navigation
+- **Progressive Web App (PWA)** capabilities
 
-### `npm run build`
+## 🛠️ Tech Stack
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Frontend Framework**: React.js 18.2.0
+- **Build Tool**: Create React App
+- **Styling**: CSS Modules, Modern CSS Grid/Flexbox
+- **Animation**: Framer Motion, GSAP
+- **3D Graphics**: Three.js, React-Three-Fiber
+- **Charts**: Chart.js, React-ChartJS-2
+- **Routing**: React Router DOM 6.18.0
+- **State Management**: React Context API
+- **HTTP Client**: Fetch API with custom wrapper
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🚀 Quick Start
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Prerequisites
 
-### `npm run eject`
+- Node.js (v16 or higher)
+- npm or yarn package manager
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Installation
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. **Clone the repository**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   ```bash
+   git clone https://github.com/[username]/Aurax-frontend-app.git
+   cd Aurax-frontend-app
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+2. **Install dependencies**
 
-## Learn More
+   ```bash
+   npm install
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+3. **Start development server**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   ```bash
+   npm start
+   ```
 
-### Code Splitting
+4. **Build for production**
+   ```bash
+   npm run build
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 📁 Project Structure
 
-### Analyzing the Bundle Size
+```
+src/
+├── components/          # Reusable UI components
+│   ├── ai/             # AI-related components
+│   ├── analytics/      # Dashboard analytics
+│   ├── layout/         # Layout components (Navbar, Footer)
+│   └── ui/             # Generic UI components
+├── pages/              # Page components
+├── context/            # React Context providers
+├── hooks/              # Custom React hooks
+├── utils/              # Utility functions
+├── styles/             # Global styles and CSS modules
+└── data/               # Static data and configurations
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## 🌟 Key Pages
 
-### Making a Progressive Web App
+- **Home**: Landing page with hero section and key features
+- **About**: Company information and mission
+- **Creator Directory**: Browse and discover content creators
+- **Brand Dashboard**: Campaign management for brands
+- **Analytics**: Performance tracking and insights
+- **Creator CRM**: Creator relationship management
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 🎨 Design System
 
-### Advanced Configuration
+The application follows a modern design system with:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- **Color Scheme**: Dark theme with neon accents (#00ffff, #ff00cc)
+- **Typography**: Inter font family for optimal readability
+- **Spacing**: Consistent 8px grid system
+- **Animations**: Smooth micro-interactions and page transitions
 
-### Deployment
+## 🔧 Build & Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Production Build
 
-### `npm run build` fails to minify
+```bash
+npm run build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Deployment Configuration
+
+- **Build Output**: `build/` directory
+- **Build Command**: `npm run build`
+- **Node Version**: 18.x or higher
+- **Environment**: Production-optimized bundle
+
+## 🌐 Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+REACT_APP_API_BASE_URL=https://your-api-url.com/api
+REACT_APP_ENVIRONMENT=production
+```
+
+## 📱 PWA Features
+
+- Offline functionality
+- Install prompt for mobile users
+- Service worker for caching
+- Responsive design across all devices
+
+## 🧪 Testing
+
+```bash
+# Run tests
+npm test
+
+# Run tests with coverage
+npm test -- --coverage
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Contact
+
+**AURAX Team**
+
+- Website: [AURAX Platform](https://aurax-frontend.netlify.app)
+- Email: contact@aurax.com
+- LinkedIn: [AURAX](https://linkedin.com/company/aurax)
+
+---
+
+Built with ❤️ by the AURAX team | Revolutionizing Influencer Marketing with AI

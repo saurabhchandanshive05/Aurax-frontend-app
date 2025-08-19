@@ -377,21 +377,12 @@ function App() {
                     {/* Redirects */}
                     <Route
                       path="/brand"
-                      element={<Navigate to="/brand/dashboard" replace />}
-                    />
-                    <Route
-                      path="/brand/*"
-                      element={<Navigate to="/brand/dashboard" replace />}
+                      element={<Navigate to="/brands" replace />}
                     />
                     <Route
                       path="/creator"
-                      element={<Navigate to="/coming-soon" replace />}
+                      element={<Navigate to="/creators" replace />}
                     />
-                    <Route
-                      path="/creator/*"
-                      element={<Navigate to="/coming-soon" replace />}
-                    />
-                    {/** creator/login now has a real page above */}
 
                     {/* 404 */}
                     <Route path="*" element={<Navigate to="/" replace />} />
