@@ -52,7 +52,7 @@ const FeaturedCreators = () => {
     },
     {
       id: 3,
-      name: "Mumbiker Nikhil",
+      name: "anitasdigitaldiaryy",
       location: "Mumbai, India",
       image: "/images/mumbiker-nikhil.png",
       instagramUrl: "https://instagram.com/mumbikernikhil",
@@ -105,13 +105,63 @@ const FeaturedCreators = () => {
   ];
 
   // Duplicate some creators to increase variety without requiring new assets
+  // ...existing code...
+  // Duplicate some creators to increase variety without requiring new assets
   const extraInfluencers = [
-    { ...influencers[0], id: 101, name: "Komal Pandey" },
-    { ...influencers[1], id: 102, name: "Tech Burner" },
-    { ...influencers[2], id: 103, name: "Sejal Kumar" },
-    { ...influencers[3], id: 104, name: "CarryMinati" },
+    {
+      id: 101,
+      name: "Bhuvan Bam",
+      location: "Delhi, India",
+      image: "/images/bhuvan-bam.png",
+      instagramUrl: "https://instagram.com/bhuvan.bam22",
+      youtubeUrl: "https://youtube.com/bbkvines",
+      bio: "Comedian, singer, and YouTube sensation known for BB Ki Vines.",
+      categories: ["Comedy", "Music", "Entertainment"],
+      followers: "16M",
+      engagement: "10.2%",
+      posts: "1.5K",
+    },
+    {
+      id: 102,
+      name: "Dhruv Rathee",
+      location: "Germany / India",
+      image: "/images/dhruv-rathee.png",
+      instagramUrl: "https://instagram.com/dhruvrathee",
+      youtubeUrl: "https://youtube.com/dhruvrathee",
+      bio: "Popular educator and social commentator creating informative videos.",
+      categories: ["Education", "Politics", "Social"],
+      followers: "2.2M",
+      engagement: "8.7%",
+      posts: "900",
+    },
+    {
+      id: 103,
+      name: "Kusha Kapila",
+      location: "Delhi, India",
+      image: "/images/kusha-kapila.png",
+      instagramUrl: "https://instagram.com/kushakapila",
+      youtubeUrl: "https://youtube.com/kushakapila",
+      bio: "Actor, comedian, and digital creator known for her witty sketches.",
+      categories: ["Comedy", "Acting", "Fashion"],
+      followers: "3.5M",
+      engagement: "9.8%",
+      posts: "2.3K",
+    },
+    {
+      id: 104,
+      name: "Jannat Zubair",
+      location: "Mumbai, India",
+      image: "/images/jannat-zubair.png",
+      instagramUrl: "https://instagram.com/jannatzubair29",
+      youtubeUrl: "https://youtube.com/jannatzubair",
+      bio: "Actress and social media star popular for her music and lifestyle content.",
+      categories: ["Acting", "Music", "Lifestyle"],
+      followers: "45M",
+      engagement: "7.5%",
+      posts: "3.8K",
+    },
   ];
-
+  // ...existing code...
   const baseCreators = [...influencers, ...extraInfluencers];
   const total = baseCreators.length;
   const extendedCreators = [...baseCreators, ...baseCreators, ...baseCreators];

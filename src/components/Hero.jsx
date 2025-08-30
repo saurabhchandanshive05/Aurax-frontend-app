@@ -22,7 +22,6 @@ const itemVariants = {
 };
 
 const Hero = () => {
-  const { currentTheme } = useTheme();
   const [timeOfDay, setTimeOfDay] = useState("day");
   const [aiMessage, setAiMessage] = useState("Initializing Neural Grid...");
   const [avatarIndex, setAvatarIndex] = useState(0);

@@ -80,7 +80,7 @@ const ContactUs = () => {
 
             <div className={styles.emailContainer}>
               <div className={styles.emailDisplay} onClick={copyToClipboard}>
-                <span className={styles.emailLink}>connect@aurax.io</span>
+                <span className={styles.emailLink}>hello@auraxai.in</span>
                 <span className={styles.copyIcon} title="Copy to clipboard">
                   {emailCopied ? "✅" : "📋"}
                 </span>

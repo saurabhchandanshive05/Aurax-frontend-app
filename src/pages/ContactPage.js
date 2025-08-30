@@ -38,7 +38,7 @@ const Contact = () => {
       platform: "WhatsApp",
       handle: "+91 98765 43210",
       icon: "💬",
-      url: "https://wa.me/919876543210",
+      url: "https://wa.me/919923717368",
     },
     {
       platform: "Twitter",
@@ -158,7 +158,7 @@ const Contact = () => {
                 className="email-display"
                 onClick={() => copyToClipboard("connect@aurax.io")}
               >
-                <span className="email-text">connect@aurax.io</span>
+                <span className="email-text">hello@auraxai.in</span>
                 <span className="copy-icon" title="Copy to clipboard">
                   📋
                 </span>
@@ -324,16 +324,16 @@ const Contact = () => {
             <div className="contact-details">
               <div className="contact-item">
                 <span className="icon">📞</span>
-                <a href="tel:+919876543210">+91 98765 43210</a>
+                <a href="tel:+919923717368">+91 98765 43210</a>
               </div>
               <div className="contact-item">
                 <span className="icon">📧</span>
-                <a href="mailto:connect@aurax.io">connect@aurax.io</a>
+                <a href="mailto:hello@auraxai.io">connect@aurax.io</a>
               </div>
               <div className="contact-item">
                 <span className="icon">💬</span>
                 <a
-                  href="https://wa.me/919876543210"
+                  href="https://wa.me/919923717368"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

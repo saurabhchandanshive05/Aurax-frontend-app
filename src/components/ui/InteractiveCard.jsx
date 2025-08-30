@@ -198,4 +198,3 @@ const InteractiveCard = ({
 };
 
 export default InteractiveCard;
-

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import styles from "./styles/BrandCollaborations.module.css";
 
@@ -36,7 +36,7 @@ const BrandCollaborations = () => {
   const statsRef = useRef(null);
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
-  const [currentSlide, setCurrentSlide] = useState(0);
+
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
@@ -179,6 +179,18 @@ const BrandCollaborations = () => {
   const handleTouchEnd = () => {
     setIsDragging(false);
     setScrollLeft(containerRef.current.scrollLeft);
+  };
+
+  // Mobile carousel scroll by item width
+  const scrollByItem = (direction) => {
+    if (!containerRef.current) return;
+    const item = containerRef.current.querySelector(`.${styles.mobileLogoItem}`);
+    if (!item) return;
+    const scrollAmount = item.offsetWidth + 16; // item width + gap
+    containerRef.current.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
   };
 
   // Animation variants
@@ -325,47 +337,78 @@ const BrandCollaborations = () => {
           {/* Logo Grid/Carousel */}
           <motion.div className={styles.logoSection} variants={itemVariants}>
             {isMobile ? (
-              // Mobile Swipeable Carousel
-              <div
-                className={styles.mobileCarousel}
-                ref={containerRef}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-              >
-                <div className={styles.carouselTrack}>
-                  {brands.map((brand, index) => (
-                    <motion.div
-                      key={index}
-                      className={styles.mobileLogoItem}
-                      whileTap={{ scale: 0.95 }}
-                      whileHover={{ scale: 1.05 }}
-                      onClick={() => handleLogoClick(brand.path)}
-                    >
-                      <div className={styles.logoContainer}>
-                        <div className={styles.logoImageContainer}>
-                          <img
-                            src={brand.logo}
-                            alt={brand.name}
-                            className={styles.logoImage}
-                            onError={(e) => {
-                              e.target.style.display = "none";
-                              e.target.nextElementSibling.style.display =
-                                "flex";
-                            }}
-                          />
-                          <div className={styles.logoFallback}>
-                            {getInitials(brand.name)}
+              // Mobile Swipeable Carousel with Arrows
+              <div className={styles.mobileCarouselWrapper}>
+                <button
+                  className={styles.carouselArrowLeft}
+                  aria-label="Scroll left"
+                  onClick={() => scrollByItem("left")}
+                >
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <path
+                      d="M20 24L12 16L20 8"
+                      stroke="#a855f7"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+                <div
+                  className={styles.mobileCarousel}
+                  ref={containerRef}
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                >
+                  <div className={styles.carouselTrack}>
+                    {brands.map((brand, index) => (
+                      <motion.div
+                        key={index}
+                        className={styles.mobileLogoItem}
+                        whileTap={{ scale: 0.95 }}
+                        whileHover={{ scale: 1.05 }}
+                        onClick={() => handleLogoClick(brand.path)}
+                      >
+                        <div className={styles.logoContainer}>
+                          <div className={styles.logoImageContainer}>
+                            <img
+                              src={brand.logo}
+                              alt={brand.name}
+                              className={styles.logoImage}
+                              onError={(e) => {
+                                e.target.style.display = "none";
+                                e.target.nextElementSibling.style.display = "flex";
+                              }}
+                            />
+                            <div className={styles.logoFallback}>
+                              {getInitials(brand.name)}
+                            </div>
                           </div>
+                          <div className={styles.logoText}>{brand.name}</div>
                         </div>
-                        <div className={styles.logoText}>{brand.name}</div>
-                      </div>
-                      <div className={styles.logoHoverText}>
-                        {brand.campaign}
-                      </div>
-                    </motion.div>
-                  ))}
+                        <div className={styles.logoHoverText}>
+                          {brand.campaign}
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
+                <button
+                  className={styles.carouselArrowRight}
+                  aria-label="Scroll right"
+                  onClick={() => scrollByItem("right")}
+                >
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <path
+                      d="M12 8L20 16L12 24"
+                      stroke="#0ea5e9"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
               </div>
             ) : (
               // Desktop Grid

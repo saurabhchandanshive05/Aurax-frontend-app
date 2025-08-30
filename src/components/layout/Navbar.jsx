@@ -488,12 +488,71 @@ function Navbar() {
                   </motion.button>
                 </motion.div>
 
+                {/* Mobile Auth Actions - moved above nav links */}
+                {!isAuthenticated ? (
+                  <motion.div
+                    className="mobile-auth-actions"
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.8 }}
+                  >
+                    <motion.div whileTap={{ scale: 0.95 }}>
+                      <Link
+                        to="/brand/login"
+                        className="aurax-button-brand"
+                        onClick={toggleMenu}
+                      >
+                        <span>Brand Login</span>
+                      </Link>
+                    </motion.div>
+                    <motion.div whileTap={{ scale: 0.95 }}>
+                      <Link
+                        to="/creator/login"
+                        className="aurax-button-creator"
+                        onClick={toggleMenu}
+                      >
+                        <span>Creator Login</span>
+                      </Link>
+                    </motion.div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    className="mobile-user-actions"
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.8 }}
+                  >
+                    <div className="mobile-user-info">
+                      <motion.div
+                        className="user-badge"
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        {user?.name?.charAt(0) || "U"}
+                      </motion.div>
+                      <div>
+                        <div className="user-name">{user?.name}</div>
+                        <div className="user-type">{user?.role}</div>
+                      </div>
+                    </div>
+                    <motion.button
+                      className="mobile-logout-btn"
+                      onClick={() => {
+                        logout();
+                        toggleMenu();
+                      }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      Logout
+                    </motion.button>
+                  </motion.div>
+                )}
+
                 {/* Mobile Navigation Links */}
                 <motion.div
                   className="mobile-nav-links"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
+                  transition={{ duration: 0.5, delay: 1.0 }}
                 >
                   {navItems.map((item, index) => {
                     const getIcon = (path) => {
@@ -593,7 +652,8 @@ function Navbar() {
                     className="mobile-features-section"
                     initial={{ opacity: 0, x: 50 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.8 }}
+                    transition={{ duration: 0.5, delay: 1.2 }}
+                    style={{ marginBottom: 0 }} // Remove extra margin below features
                   >
                     <div className="mobile-section-title">Features</div>
                     {featureItems.map((item, index) => (
@@ -601,7 +661,7 @@ function Navbar() {
                         key={item.path}
                         initial={{ opacity: 0, x: 30 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: 0.1 * index + 0.9 }}
+                        transition={{ duration: 0.3, delay: 0.1 * index + 1.3 }}
                       >
                         <Link
                           to={item.path}
@@ -614,65 +674,6 @@ function Navbar() {
                     ))}
                   </motion.div>
                 </motion.div>
-
-                {/* Mobile Auth Actions */}
-                {!isAuthenticated ? (
-                  <motion.div
-                    className="mobile-auth-actions"
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 1.2 }}
-                  >
-                    <motion.div whileTap={{ scale: 0.95 }}>
-                      <Link
-                        to="/brand/login"
-                        className="aurax-button-brand"
-                        onClick={toggleMenu}
-                      >
-                        <span>Brand Login</span>
-                      </Link>
-                    </motion.div>
-                    <motion.div whileTap={{ scale: 0.95 }}>
-                      <Link
-                        to="/creator/login"
-                        className="aurax-button-creator"
-                        onClick={toggleMenu}
-                      >
-                        <span>Creator Login</span>
-                      </Link>
-                    </motion.div>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    className="mobile-user-actions"
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 1.2 }}
-                  >
-                    <div className="mobile-user-info">
-                      <motion.div
-                        className="user-badge"
-                        whileTap={{ scale: 0.9 }}
-                      >
-                        {user?.name?.charAt(0) || "U"}
-                      </motion.div>
-                      <div>
-                        <div className="user-name">{user?.name}</div>
-                        <div className="user-type">{user?.role}</div>
-                      </div>
-                    </div>
-                    <motion.button
-                      className="mobile-logout-btn"
-                      onClick={() => {
-                        logout();
-                        toggleMenu();
-                      }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      Logout
-                    </motion.button>
-                  </motion.div>
-                )}
               </div>
             </motion.div>
           </>

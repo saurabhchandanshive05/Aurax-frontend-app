@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import styles from "../styles/AIMarketing.module.css";
 
 const AIMarketing = () => {
@@ -11,39 +12,113 @@ const AIMarketing = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.hero}>
-        <h1>AI-Powered Marketing</h1>
-        <p className={styles.subtitle}>
+      {/* Hero Section */}
+      <motion.section
+        className={styles.hero}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          AI-Powered Marketing
+        </motion.h1>
+        <motion.p
+          className={styles.subtitle}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+        >
           Autonomous optimization for influencer campaigns
-        </p>
-      </div>
+        </motion.p>
+      </motion.section>
 
-      <div className={styles.content}>
-        <h2>Dynamic Campaign Optimization</h2>
-        <p>
+      {/* Content Section */}
+      <motion.section
+        className={styles.content}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.6 }}
+      >
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+        >
+          Dynamic Campaign Optimization
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1.0 }}
+        >
           Our AI applies machine learning to analyze real-time engagement
           metrics, dynamically adjusting posting schedules, budgets, and
           messaging to maximize impact.
-        </p>
+        </motion.p>
 
-        <div className={styles.features}>
+        <motion.div
+          className={styles.features}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1.2 }}
+        >
           <h3>Key Benefits:</h3>
           <ul>
-            <li>Real-time budget reallocation</li>
-            <li>Audience-specific messaging</li>
-            <li>Predictive performance optimization</li>
-            <li>Continuous learning algorithms</li>
-            <li>Automated A/B testing</li>
+            <motion.li
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 1.4 }}
+            >
+              Real-time budget reallocation
+            </motion.li>
+            <motion.li
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 1.5 }}
+            >
+              Audience-specific messaging
+            </motion.li>
+            <motion.li
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 1.6 }}
+            >
+              Predictive performance optimization
+            </motion.li>
+            <motion.li
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 1.7 }}
+            >
+              Continuous learning algorithms
+            </motion.li>
+            <motion.li
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 1.8 }}
+            >
+              Automated A/B testing
+            </motion.li>
           </ul>
-        </div>
-      </div>
+        </motion.div>
+      </motion.section>
 
-      <button
+      {/* Back Button */}
+      <motion.button
         onClick={() => navigate("/specialization")}
         className={styles.backButton}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 2.0 }}
+        whileHover={{ y: -2 }}
+        whileTap={{ scale: 0.98 }}
       >
         ← Back to Specializations
-      </button>
+      </motion.button>
     </div>
   );
 };

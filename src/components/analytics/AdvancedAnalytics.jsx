@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Line, Bar, Doughnut, Radar } from "react-chartjs-2";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Line, Doughnut, Radar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -423,4 +423,3 @@ const AdvancedAnalytics = ({ creatorId }) => {
 };
 
 export default AdvancedAnalytics;
-

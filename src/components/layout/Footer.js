@@ -74,18 +74,18 @@ const Footer = () => {
               <div className="contact-item">
                 <a href="tel:+919876543210" className="contact-link">
                   <div className="contact-icon phone-icon">📞</div>
-                  <span>+91 98765 43210</span>
+                  <span>+91 9923717368</span>
                 </a>
               </div>
               <div className="contact-item">
-                <a href="mailto:hello@aurax.com" className="contact-link">
+                <a href="mailto:hello@auraxai.com" className="contact-link">
                   <div className="contact-icon email-icon">✉️</div>
-                  <span>hello@aurax.com</span>
+                  <span>hello@auraxai.com</span>
                 </a>
               </div>
               <div className="contact-item">
                 <a
-                  href="https://wa.me/919876543210"
+                  href="https://wa.me/919923717368"
                   className="contact-link whatsapp-link"
                 >
                   <div className="contact-icon whatsapp-icon">💬</div>
@@ -221,7 +221,7 @@ const Footer = () => {
                 <div className="social-glow youtube-glow"></div>
               </a>
               <a
-                href="https://wa.me/919876543210"
+                href="https://wa.me/919923717368"
                 className="social-icon whatsapp"
                 aria-label="WhatsApp"
               >

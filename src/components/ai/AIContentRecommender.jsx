@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "../../context/ThemeContext";
 
-const AIContentRecommender = ({ creatorData, onRecommendationSelect }) => {
+const AIContentRecommender = ({ creatorData }) => {
   const { currentTheme } = useTheme();
   const [recommendations, setRecommendations] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -115,7 +115,7 @@ const AIContentRecommender = ({ creatorData, onRecommendationSelect }) => {
   ];
 
   const handleRecommendationClick = (recommendation) => {
-    onRecommendationSelect?.(recommendation);
+    console.log("Recommendation selected:", recommendation);
   };
 
   const containerVariants = {
@@ -278,4 +278,3 @@ const AIContentRecommender = ({ creatorData, onRecommendationSelect }) => {
 };
 
 export default AIContentRecommender;
-
