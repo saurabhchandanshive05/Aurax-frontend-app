@@ -1144,8 +1144,8 @@
 }
 
 .perk-toggle input:checked + .toggle-slider {
-  background: linear-gradient(90deg, #4ECDC4 0%, #667eea 100%);
-  box-shadow: 0 0 8px #4ECDC488;
+  background: linear-gradient(90deg, #4ecdc4 0%, #667eea 100%);
+  box-shadow: 0 0 8px #4ecdc488;
 }
 
 .toggle-slider:before {
@@ -1232,7 +1232,7 @@
 }
 
 .community-score {
-  color: #4ECDC4;
+  color: #4ecdc4;
   font-weight: 700;
   margin-left: 0.2rem;
 }
