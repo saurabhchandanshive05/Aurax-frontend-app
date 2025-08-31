@@ -1,8 +1,9 @@
 // Centralized API Client with Error Handling and Authentication
 import { copyLogger } from "./copyLogger";
 
-const BASE_URL =
-  process.env.REACT_APP_API_BASE_URL || "http://localhost:5002/api";
+const BASE_URL = process.env.NODE_ENV === 'production'
+  ? 'https://influencer-backend-etq5.onrender.com/api'
+  : (process.env.REACT_APP_API_BASE_URL || 'http://localhost:5002/api');
 
 class APIError extends Error {
   constructor(message, status, details = {}) {
