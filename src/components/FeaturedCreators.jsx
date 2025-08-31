@@ -109,7 +109,7 @@ const FeaturedCreators = () => {
   // Duplicate some creators to increase variety without requiring new assets
   const extraInfluencers = [
     {
-      id: 101,
+      id: 106,
       name: "Bhuvan Bam",
       location: "Delhi, India",
       image: "/images/bhuvan-bam.png",

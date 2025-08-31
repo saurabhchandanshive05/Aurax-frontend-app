@@ -62,19 +62,17 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     hot: true,
-    port: 3000,,
-    proxy: { proxy: {
-      '/api': {    '/api': {
-
-
-
-
-
-
-
-};  }    }      }        secure: false        changeOrigin: true,        target: 'https://influencer-backend-etq5.onrender.com',        target: 'https://influencer-backend-etq5.onrender.com',
+    port: 3000,
+    proxy: {
+      '/api': {
+        target: process.env.NODE_ENV === 'production' 
+          ? 'https://influencer-backend-etq5.onrender.com'
+          : 'http://localhost:5002',
         changeOrigin: true,
-        secure: false
+        secure: false,
+        pathRewrite: {
+          '^/api': '/api'
+        }
       }
     }
   }
