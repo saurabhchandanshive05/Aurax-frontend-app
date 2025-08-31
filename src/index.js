@@ -24,4 +24,13 @@ if (container) {
   document.body.appendChild(errorDiv);
 }
 
+if (process.env.NODE_ENV === 'development') {
+  window.addEventListener('webglcontextlost', (e) => {
+    e.preventDefault();
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  }, false);
+}
+
 reportWebVitals();

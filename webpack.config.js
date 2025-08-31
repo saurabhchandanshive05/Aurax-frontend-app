@@ -26,7 +26,10 @@ module.exports = {
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: 'asset/resource'
+        type: 'asset/resource',
+        generator: {
+          filename: 'images/[name][ext]'
+        }
       }
     ]
   },
@@ -59,6 +62,20 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     hot: true,
-    port: 3000
+    port: 3000,,
+    proxy: { proxy: {
+      '/api': {    '/api': {
+
+
+
+
+
+
+
+};  }    }      }        secure: false        changeOrigin: true,        target: 'https://influencer-backend-etq5.onrender.com',        target: 'https://influencer-backend-etq5.onrender.com',
+        changeOrigin: true,
+        secure: false
+      }
+    }
   }
 };
