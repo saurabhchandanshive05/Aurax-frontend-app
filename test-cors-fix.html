@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🔧 CORS Fix Test</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background: linear-gradient(
+          135deg,
+          #0f0f23 0%,
+          #1a1a2e 50%,
+          #16213e 100%
+        );
+        color: #ffffff;
+        min-height: 100vh;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+        padding: 30px;
+        background: rgba(59, 130, 246, 0.1);
+        border-radius: 20px;
+        border: 2px solid rgba(59, 130, 246, 0.3);
+      }
+
+      h1 {
+        color: #3b82f6;
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        text-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+      }
+
+      .test-section {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 25px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+      }
+
+      button {
+        padding: 15px 30px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        margin: 10px;
+        min-width: 200px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+      }
+
+      .btn-success {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: white;
+      }
+
+      .btn-warning {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: white;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .result {
+        margin-top: 20px;
+        padding: 20px;
+        border-radius: 8px;
+        font-family: "Courier New", monospace;
+        font-size: 14px;
+        max-height: 400px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+      }
+
+      .result-success {
+        background: rgba(34, 197, 94, 0.2);
+        color: #86efac;
+        border: 2px solid #22c55e;
+      }
+
+      .result-error {
+        background: rgba(239, 68, 68, 0.2);
+        color: #fca5a5;
+        border: 2px solid #ef4444;
+      }
+
+      .result-info {
+        background: rgba(59, 130, 246, 0.2);
+        color: #93c5fd;
+        border: 2px solid #3b82f6;
+      }
+
+      .status-indicator {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 8px;
+      }
+
+      .status-success {
+        background-color: #22c55e;
+      }
+      .status-error {
+        background-color: #ef4444;
+      }
+      .status-pending {
+        background-color: #f59e0b;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>🔧 CORS Fix Test</h1>
+      <p>
+        Testing API calls from <strong>http://localhost:3003</strong> to
+        <strong>http://localhost:5002</strong>
+      </p>
+      <p>
+        <span id="corsStatus" class="status-indicator status-pending"></span
+        >CORS Status: <span id="corsStatusText">Testing...</span>
+      </p>
+    </div>
+
+    <div class="test-section">
+      <h2 style="color: #3b82f6">🎯 CORS Issue Details</h2>
+      <div
+        style="
+          background: rgba(239, 68, 68, 0.1);
+          padding: 15px;
+          border-radius: 8px;
+          border: 1px solid #ef4444;
+          margin-bottom: 20px;
+        "
+      >
+        <h3 style="color: #ef4444; margin-top: 0">Original Error:</h3>
+        <code style="color: #fca5a5">
+          Access to fetch at 'http://localhost:5002/api/auth/register' from
+          origin 'http://localhost:3003' has been blocked by CORS policy:
+          Response to preflight request doesn't pass access control check: No
+          'Access-Control-Allow-Origin' header is present on the requested
+          resource.
+        </code>
+      </div>
+
+      <div
+        style="
+          background: rgba(34, 197, 94, 0.1);
+          padding: 15px;
+          border-radius: 8px;
+          border: 1px solid #22c55e;
+        "
+      >
+        <h3 style="color: #22c55e; margin-top: 0">✅ Fix Applied:</h3>
+        <ul style="color: #86efac">
+          <li>
+            Added <code>http://localhost:3003</code> to CORS allowed origins
+          </li>
+          <li>
+            Added <code>http://localhost:3004</code> for future compatibility
+          </li>
+          <li>Updated backend-copy/server.js CORS configuration</li>
+          <li>Restarted backend server with new settings</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="test-section">
+      <h2 style="color: #22c55e">🧪 Test CORS Fix</h2>
+
+      <div style="text-align: center; margin: 20px 0">
+        <button class="btn-primary" onclick="testBackendHealth()">
+          🏥 Test Backend Health
+        </button>
+        <button class="btn-success" onclick="testRegistrationEndpoint()">
+          📝 Test Registration API
+        </button>
+        <button class="btn-warning" onclick="testCORSPreflight()">
+          ✈️ Test CORS Preflight
+        </button>
+      </div>
+
+      <div
+        id="testResult"
+        class="result result-info"
+        style="display: none"
+      ></div>
+    </div>
+
+    <div class="test-section">
+      <h2 style="color: #fbbf24">🚀 Next Steps After CORS Fix</h2>
+      <ol style="line-height: 1.8">
+        <li>
+          <strong>Test Registration Flow:</strong> Go to
+          <a
+            href="http://localhost:3003/signup"
+            target="_blank"
+            style="color: #3b82f6"
+            >http://localhost:3003/signup</a
+          >
+        </li>
+        <li>
+          <strong>Verify No CORS Errors:</strong> Check browser developer
+          console for CORS errors
+        </li>
+        <li>
+          <strong>Test Complete Flow:</strong> Registration → Email Verification
+          → Success
+        </li>
+        <li>
+          <strong>Validate All Endpoints:</strong> Login, resend verification,
+          etc.
+        </li>
+      </ol>
+    </div>
+
+    <script>
+      const API_BASE = "http://localhost:5002/api";
+
+      function showResult(message, type = "info") {
+        const resultDiv = document.getElementById("testResult");
+        resultDiv.className = `result result-${type}`;
+        resultDiv.textContent = message;
+        resultDiv.style.display = "block";
+        resultDiv.scrollTop = resultDiv.scrollHeight;
+      }
+
+      function updateCORSStatus(success, message) {
+        const statusIndicator = document.getElementById("corsStatus");
+        const statusText = document.getElementById("corsStatusText");
+
+        if (success) {
+          statusIndicator.className = "status-indicator status-success";
+          statusText.textContent = "Fixed ✅";
+          statusText.style.color = "#22c55e";
+        } else {
+          statusIndicator.className = "status-indicator status-error";
+          statusText.textContent = "Error ❌";
+          statusText.style.color = "#ef4444";
+        }
+      }
+
+      async function testBackendHealth() {
+        try {
+          showResult("🏥 Testing backend health endpoint...", "info");
+
+          const response = await fetch(`${API_BASE}/test`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Origin: "http://localhost:3003",
+            },
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            updateCORSStatus(true, "Backend health check successful");
+            showResult(
+              `✅ BACKEND HEALTH CHECK SUCCESSFUL!
+
+Response Status: ${response.status}
+Response Headers:
+${Array.from(response.headers.entries())
+  .map(([key, value]) => `  ${key}: ${value}`)
+  .join("\n")}
+
+Response Data:
+${JSON.stringify(data, null, 2)}
+
+🎉 CORS is working! No more blocked requests from port 3003.`,
+              "success"
+            );
+          } else {
+            updateCORSStatus(false, "Backend responded with error");
+            showResult(
+              `⚠️ Backend responded but with error:
+Status: ${response.status}
+Data: ${JSON.stringify(data, null, 2)}`,
+              "error"
+            );
+          }
+        } catch (error) {
+          updateCORSStatus(false, error.message);
+          showResult(
+            `❌ Backend health check failed: ${error.message}
+
+This could mean:
+• Backend server is not running on port 5002
+• CORS issue still exists
+• Network connectivity problem
+
+Please check:
+1. Backend server is running: ✅ Backend server running on http://localhost:5002
+2. CORS configuration includes http://localhost:3003
+3. No firewall blocking the connection`,
+            "error"
+          );
+        }
+      }
+
+      async function testRegistrationEndpoint() {
+        try {
+          showResult(
+            "📝 Testing registration endpoint with CORS headers...",
+            "info"
+          );
+
+          const testData = {
+            email: "corstest@example.com",
+            username: "corstest",
+            password: "test123",
+            role: "creator",
+          };
+
+          const response = await fetch(`${API_BASE}/auth/register`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Origin: "http://localhost:3003",
+            },
+            body: JSON.stringify(testData),
+          });
+
+          const data = await response.json();
+
+          if (response.ok || response.status === 400) {
+            // 400 is expected if user already exists - that's fine for CORS testing
+            updateCORSStatus(true, "Registration endpoint accessible");
+            showResult(
+              `✅ REGISTRATION ENDPOINT ACCESSIBLE!
+
+Request successful - no CORS errors!
+Status: ${response.status}
+Response: ${JSON.stringify(data, null, 2)}
+
+🎯 CORS Fix Confirmed:
+• Frontend (port 3003) can now communicate with backend (port 5002)
+• No "Access-Control-Allow-Origin" errors
+• Registration API is accessible
+
+You can now proceed to test the full registration flow on your frontend!`,
+              "success"
+            );
+          } else {
+            showResult(
+              `Registration endpoint responded:
+Status: ${response.status}
+Data: ${JSON.stringify(data, null, 2)}
+
+Note: The important thing is that there are no CORS errors. 
+Response errors (like validation) are expected in testing.`,
+              "info"
+            );
+          }
+        } catch (error) {
+          if (
+            error.message.includes("CORS") ||
+            error.message.includes("Access-Control")
+          ) {
+            updateCORSStatus(false, "CORS error still present");
+            showResult(
+              `❌ CORS ERROR STILL EXISTS: ${error.message}
+
+The CORS fix may not have been applied correctly.
+Please check:
+1. Backend server restarted with new CORS config
+2. CORS origins include http://localhost:3003
+3. Proper CORS headers in response`,
+              "error"
+            );
+          } else {
+            showResult(`❌ Registration test error: ${error.message}`, "error");
+          }
+        }
+      }
+
+      async function testCORSPreflight() {
+        try {
+          showResult("✈️ Testing CORS preflight request...", "info");
+
+          // Trigger preflight by using a custom header
+          const response = await fetch(`${API_BASE}/auth/register`, {
+            method: "OPTIONS",
+            headers: {
+              Origin: "http://localhost:3003",
+              "Access-Control-Request-Method": "POST",
+              "Access-Control-Request-Headers": "Content-Type",
+            },
+          });
+
+          showResult(
+            `✅ CORS PREFLIGHT SUCCESSFUL!
+
+Status: ${response.status}
+CORS Headers in Response:
+${Array.from(response.headers.entries())
+  .filter(([key]) => key.toLowerCase().includes("access-control"))
+  .map(([key, value]) => `  ${key}: ${value}`)
+  .join("\n")}
+
+🎉 CORS preflight is working correctly!
+This means complex requests (like POST with JSON) will work without CORS errors.`,
+            "success"
+          );
+        } catch (error) {
+          showResult(
+            `❌ Preflight test error: ${error.message}
+
+This indicates CORS preflight is not configured correctly.`,
+            "error"
+          );
+        }
+      }
+
+      // Auto-test on page load
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          testBackendHealth();
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>

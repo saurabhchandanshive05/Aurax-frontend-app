@@ -36,9 +36,9 @@ const Contact = () => {
     },
     {
       platform: "WhatsApp",
-      handle: "+91 98765 43210",
+      handle: "+91 9923717300",
       icon: "💬",
-      url: "https://wa.me/919923717368",
+      url: "https://wa.me/919923717300",
     },
     {
       platform: "Twitter",
@@ -324,16 +324,16 @@ const Contact = () => {
             <div className="contact-details">
               <div className="contact-item">
                 <span className="icon">📞</span>
-                <a href="tel:+919923717368">+91 98765 43210</a>
+                <a href="tel:+919923717300">+91 9923717300</a>
               </div>
               <div className="contact-item">
                 <span className="icon">📧</span>
-                <a href="mailto:hello@auraxai.io">connect@aurax.io</a>
+                <a href="mailto:hello@auraxai.io">hello@auraxai.in</a>
               </div>
               <div className="contact-item">
                 <span className="icon">💬</span>
                 <a
-                  href="https://wa.me/919923717368"
+                  href="https://wa.me/919923717300"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

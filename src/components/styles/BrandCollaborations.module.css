@@ -470,6 +470,127 @@
   opacity: 0.4;
 }
 
+/* Mobile Carousel Wrapper */
+.mobileCarouselWrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* Premium Slider Controls */
+.sliderControls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 0 1rem;
+}
+
+/* Slider Dots */
+.sliderDots {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.sliderDot {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(168, 85, 247, 0.3);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sliderDot:hover {
+  border-color: rgba(168, 85, 247, 0.6);
+  transform: scale(1.1);
+}
+
+.sliderDot.active {
+  border-color: #a855f7;
+  background: rgba(168, 85, 247, 0.2);
+}
+
+.dotInner {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.sliderDot.active .dotInner {
+  background: #a855f7;
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
+}
+
+/* Progress Bar */
+.sliderProgress {
+  position: relative;
+  width: 80px;
+  height: 4px;
+  background: rgba(168, 85, 247, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background: linear-gradient(90deg, #a855f7, #0ea5e9);
+  border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.progressBar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 2px;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+}
+
+/* Animation for progress bar */
+@keyframes progressPulse {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.progressBar::after {
+  animation: progressPulse 2s ease-in-out infinite;
+}
+
+/* Enhanced dot animation */
+.sliderDot.active {
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.1);
+  }
+}
+
 /* Responsive Design */
 @media (min-width: 1024px) {
   .contentGrid {
@@ -591,5 +712,46 @@
 
   .carouselTrack {
     padding: 0 0.5rem;
+  }
+
+  /* Responsive Slider Controls */
+  .sliderControls {
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  .sliderProgress {
+    width: 60px;
+  }
+
+  .sliderDots {
+    gap: 0.375rem;
+  }
+
+  .sliderDot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .dotInner {
+    width: 3px;
+    height: 3px;
+  }
+
+  .sliderInfo {
+    font-size: 0.8rem;
+  }
+}
+
+/* Hover effects for touch devices */
+@media (hover: hover) {
+  .sliderDot:hover {
+    border-color: rgba(168, 85, 247, 0.8);
+    transform: scale(1.15);
+  }
+
+  .progressBar:hover::after {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
   }
 }

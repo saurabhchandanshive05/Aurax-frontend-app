@@ -3,223 +3,107 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(to bottom right, #1a0636, #3b0764, #6d28d9);
-  padding: 1rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.particlesContainer {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-
-.floatingCircleTop {
-  position: absolute;
-  top: 2.5rem;
-  left: 2.5rem;
-  width: 8rem;
-  height: 8rem;
-  border-radius: 50%;
-  background: rgba(192, 132, 252, 0.2);
-  filter: blur(48px);
-  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-.floatingCircleBottom {
-  position: absolute;
-  bottom: 5rem;
-  right: 5rem;
-  width: 10rem;
-  height: 10rem;
-  border-radius: 50%;
-  background: rgba(236, 72, 153, 0.2);
-  filter: blur(48px);
-  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  animation-delay: 1s;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.6;
-  }
-}
-
-.glowOrb1 {
-  position: absolute;
-  top: 25%;
-  left: 25%;
-  width: 4rem;
-  height: 4rem;
-  border-radius: 50%;
-  background: rgba(192, 132, 252, 0.3);
-  filter: blur(24px);
-  animation: bounce 3s ease infinite;
-}
-
-.glowOrb2 {
-  position: absolute;
-  bottom: 33%;
-  right: 33%;
-  width: 5rem;
-  height: 5rem;
-  border-radius: 50%;
-  background: rgba(236, 72, 153, 0.3);
-  filter: blur(24px);
-  animation: bounce 3s ease infinite;
-  animation-delay: 1s;
-}
-
-@keyframes bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
 }
 
 .loginCard {
-  max-width: 28rem;
+  background: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
   width: 100%;
-  padding: 2rem;
-  background: rgba(30, 27, 75, 0.9);
-  backdrop-filter: blur(12px);
-  border-radius: 1rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(139, 92, 246, 0.5);
-  z-index: 10;
-  position: relative;
-  overflow: hidden;
-}
-
-.neonGlow {
-  position: absolute;
-  inset: -0.25rem;
-  background: linear-gradient(to right, #7e22ce, #ec4899);
-  border-radius: 1.125rem;
-  filter: blur(12px);
-  opacity: 0.3;
-  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 .header {
   text-align: center;
-  margin-bottom: 2rem;
-  position: relative;
-  z-index: 10;
+  margin-bottom: 30px;
 }
 
 .logoContainer {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
-}
-
-.logoGradient {
-  background: linear-gradient(to right, #7e22ce, #ec4899);
-  padding: 0.25rem;
-  border-radius: 0.5rem;
-}
-
-.logoBg {
-  background-color: #1e1b4b;
-  padding: 0.5rem;
-  border-radius: 0.375rem;
+  margin-bottom: 20px;
 }
 
 .logoIcon {
-  height: 2rem;
-  width: 2rem;
-  color: white;
+  height: 60px;
+  width: 60px;
+  color: #667eea;
+  margin-bottom: 20px;
 }
 
 .title {
-  font-size: 1.875rem;
+  font-size: 28px;
   font-weight: 700;
-  color: white;
-  margin-bottom: 0.5rem;
+  color: #333;
+  margin-bottom: 8px;
 }
 
 .subtitle {
-  color: #d8b4fe;
+  color: #666;
+  font-size: 16px;
 }
 
 .errorAlert {
-  margin-bottom: 1rem;
-  padding: 0.75rem;
-  background: rgba(239, 68, 68, 0.2);
-  color: #fecaca;
-  border-radius: 0.5rem;
+  margin-bottom: 20px;
+  padding: 12px;
+  background: #fee;
+  color: #c53030;
+  border-radius: 8px;
   text-align: center;
-  backdrop-filter: blur(4px);
+  border: 1px solid #feb2b2;
 }
 
 .form {
-  position: relative;
-  z-index: 10;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 20px;
 }
 
 .inputGroup {
   position: relative;
-  transition: all 0.3s ease;
 }
 
 .inputLabel {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #d8b4fe;
-  transition: all 0.3s ease;
-  pointer-events: none;
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #374151;
+  font-size: 14px;
 }
 
 .inputField {
   width: 100%;
-  padding: 0.75rem 1rem;
-  background: #2e1065;
-  border: 1px solid rgba(139, 92, 246, 0.5);
-  border-radius: 0.5rem;
-  color: white;
-  outline: none;
-  transition: all 0.3s ease;
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+  background: white;
+  color: #111827;
 }
 
 .inputField:focus {
-  border-color: transparent;
-  box-shadow: 0 0 0 2px #8b5cf6;
-}
-
-.inputFocused .inputLabel {
-  top: -0.625rem;
-  left: 0.625rem;
-  font-size: 0.75rem;
-  background: rgba(46, 16, 101, 0.9);
-  padding: 0 0.3125rem;
-  border-radius: 0.25rem;
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .errorText {
-  margin-top: 0.25rem;
-  color: #f87171;
-  font-size: 0.875rem;
+  margin-top: 4px;
+  color: #ef4444;
+  font-size: 14px;
 }
 
 .optionsContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 20px 0;
 }
 
 .rememberMe {
@@ -228,85 +112,68 @@
 }
 
 .checkbox {
-  height: 1rem;
-  width: 1rem;
-  color: #8b5cf6;
-  border-color: rgba(139, 92, 246, 0.5);
-  border-radius: 0.25rem;
-  background-color: #2e1065;
+  height: 16px;
+  width: 16px;
+  color: #667eea;
+  border-color: #d1d5db;
+  border-radius: 4px;
+  background-color: white;
 }
 
 .rememberLabel {
-  margin-left: 0.5rem;
-  color: #d8b4fe;
-  font-size: 0.875rem;
+  margin-left: 8px;
+  color: #374151;
+  font-size: 14px;
 }
 
 .forgotPassword {
-  color: #a855f7;
-  font-size: 0.875rem;
-  transition: color 0.3s;
+  color: #667eea;
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: 500;
 }
 
 .forgotPassword:hover {
-  color: #c084fc;
+  color: #5a67d8;
+  text-decoration: underline;
 }
 
 .submitButton {
-  width: 100;
-  padding: 0.75rem 1rem;
-  background: linear-gradient(to right, #7e22ce, #ec4899);
+  width: 100%;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  font-weight: 500;
-  border-radius: 0.5rem;
-  transition: all 0.3s;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.buttonText {
-  position: relative;
-  z-index: 10;
-}
-
-.buttonHover {
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(4px);
-  opacity: 0;
-  transition: opacity 0.3s;
 }
 
 .submitButton:hover {
-  background: linear-gradient(to right, #6b21a8, #db2777);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  transform: scale(1.02);
-}
-
-.submitButton:hover .buttonHover {
-  opacity: 1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 .submitButton:active {
-  transform: scale(0.98);
+  transform: translateY(0);
 }
 
 .submitButton:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .spinner {
   animation: spin 1s linear infinite;
-  height: 1.25rem;
-  width: 1.25rem;
-  margin-right: 0.75rem;
+  height: 20px;
+  width: 20px;
+  margin-right: 8px;
 }
 
 @keyframes spin {
@@ -318,84 +185,632 @@
   }
 }
 
-.spinnerCircle {
-  opacity: 0.25;
-}
-
-.spinnerPath {
-  opacity: 0.75;
-}
-
-.footer {
-  margin-top: 2rem;
-  position: relative;
-  z-index: 10;
-}
-
-.dividerContainer {
-  position: relative;
-  margin-bottom: 1.5rem;
-}
-
-.divider {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  border-top: 1px solid rgba(192, 132, 252, 0.3);
-}
-
-.dividerText {
-  position: relative;
-  padding: 0 0.75rem;
-  background: rgba(30, 27, 75, 0.9);
-  color: #d8b4fe;
-  font-size: 0.875rem;
-}
-
-.socialButtons {
-  display: flex;
-  justify-content: center;
-  gap: 0.75rem;
-}
-
-.socialButton {
-  padding: 0.75rem;
-  background: #2e1065;
-  border: 1px solid rgba(192, 132, 252, 0.5);
-  border-radius: 9999px;
-  color: white;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: all 0.3s;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.socialButton:hover {
-  background: #3b0764;
-  transform: scale(1.1);
-}
-
-.socialIcon {
-  height: 1.25rem;
-  width: 1.25rem;
-}
-
 .signupLink {
-  margin-top: 1.5rem;
+  margin-top: 30px;
   text-align: center;
-  color: #d8b4fe;
-  font-size: 0.875rem;
+  color: #6b7280;
+  font-size: 14px;
 }
 
 .signupText {
-  color: #a855f7;
-  font-weight: 500;
-  transition: color 0.3s;
+  color: #667eea;
+  font-weight: 600;
+  text-decoration: none;
 }
 
 .signupText:hover {
-  color: #c084fc;
+  color: #5a67d8;
+  text-decoration: underline;
+}
+
+/* Remove all the complex floating elements and particles */
+.particlesContainer,
+.floatingCircleTop,
+.floatingCircleBottom,
+.glowBorder,
+.dividerContainer,
+.divider,
+.dividerText,
+.socialButtons,
+.socialButton,
+.socialIcon,
+.footer {
+  display: none;
+}
+
+/* Privacy note for Remember Me */
+.privacyNote {
+  font-size: 12px;
+  color: #888;
+  margin: 4px 0 0 0;
+  font-style: italic;
+}
+
+/* Progressive disclosure for advanced options */
+.advancedToggle {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.advancedButton {
+  background: none;
+  border: none;
+  color: #667eea;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto;
+  padding: 8px 0;
+  transition: color 0.3s ease;
+}
+
+.advancedButton:hover {
+  color: #5a67d8;
+}
+
+.toggleIcon {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+}
+
+.toggleIcon.rotated {
+  transform: rotate(180deg);
+}
+
+.advancedOptions {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #e2e8f0;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.selectField {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+  background-color: white;
+}
+
+.selectField:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.checkboxGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.checkboxLabel {
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+/* Enhanced footer links */
+.footerLinks {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.signupLink {
+  color: #6b7280;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.helpLinks {
+  font-size: 13px;
+  color: #888;
+}
+
+.helpLink {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.helpLink:hover {
+  color: #5a67d8;
+  text-decoration: underline;
+}
+
+/* AURAX Logo Section - Top Center */
+.logoSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 4px; /* Very close to welcome message */
+  padding: 16px 16px 2px; /* Minimal bottom padding */
+  animation: logoFadeIn 1s ease-out;
+}
+
+.auraxLogoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px; /* Round blue circle container */
+  height: 60px; /* Round blue circle container */
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3),
+    0 0 0 1px rgba(102, 126, 234, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: logoScale 1s ease-out 0.2s both;
+  overflow: hidden; /* Keep logo within container */
+}
+
+.auraxLogoContainer:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4),
+    0 0 0 1px rgba(102, 126, 234, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.auraxLogo {
+  width: 55px; /* Image size matches container size */
+  height: 55px; /* Image size matches container size */
+  border-radius: 50%;
+  object-fit: cover;
+  filter: contrast(1.1) saturate(1.2) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+  transition: all 0.3s ease;
+}
+
+/* Animations */
+@keyframes logoFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes logoScale {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .logoSection {
+    margin-bottom: 4px; /* Small gap to welcome message on tablet */
+    padding: 12px 12px 0px; /* Minimal top padding, no bottom padding */
+  }
+
+  .auraxLogoContainer {
+    width: 55px; /* Container size */
+    height: 55px; /* Container size */
+    margin-bottom: 4px; /* Small gap to welcome message */
+  }
+
+  .auraxLogo {
+    width: 50px; /* Image size matches container */
+    height: 50px; /* Image size matches container */
+  }
+
+  .header {
+    margin-bottom: 25px; /* Slightly reduced margin for tablet */
+  }
+
+  .title {
+    font-size: 24px; /* Slightly smaller on tablet */
+    margin-bottom: 6px; /* Reduced margin */
+  }
+}
+
+@media (max-width: 480px) {
+  .logoSection {
+    margin-bottom: 2px; /* Minimal gap to welcome message */
+    padding: 8px 8px 0px; /* Minimal top padding, no bottom padding */
+  }
+
+  .auraxLogoContainer {
+    width: 50px; /* Container size */
+    height: 50px; /* Container size */
+    margin-bottom: 2px; /* Very small gap to welcome message */
+  }
+
+  .auraxLogo {
+    width: 45px; /* Image size matches container */
+    height: 45px; /* Image size matches container */
+  }
+
+  .header {
+    margin-bottom: 20px; /* Reduced margin for mobile */
+  }
+
+  .title {
+    font-size: 22px; /* Slightly smaller on mobile */
+    margin-bottom: 6px; /* Reduced margin */
+  }
+
+  .subtitle {
+    font-size: 14px; /* Smaller subtitle on mobile */
+  }
+}
+
+.auraxLogoWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 250, 252, 0.9) 100%
+  );
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Debug styles - temporary */
+  border: 2px solid blue;
+  background: rgba(0, 0, 255, 0.1);
+}
+
+.auraxLogoWrapper:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.auraxLogo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  filter: contrast(1.1) saturate(1.2) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+  transition: all 0.3s ease;
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.auraxBrandText {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI",
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: linear-gradient(
+    135deg,
+    #1f2937 0%,
+    #374151 30%,
+    #4b5563 60%,
+    #6366f1 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #1f2937; /* Fallback */
+}
+
+/* Premium fade-in animation */
+@keyframes logoFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .auraxLogoWrapper {
+    gap: 8px;
+    padding: 8px 16px;
+  }
+
+  .auraxLogo {
+    width: 32px;
+    height: 32px;
+  }
+
+  .auraxBrandText {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auraxLogoWrapper {
+    gap: 6px;
+    padding: 6px 12px;
+  }
+
+  .auraxLogo {
+    width: 28px;
+    height: 28px;
+  }
+
+  .auraxBrandText {
+    font-size: 18px;
+  }
+
+  .auraxLogoContainer {
+    margin-bottom: 20px;
+  }
+}
+
+/* Instagram API Test Section Styles */
+.instagramTestSection {
+  margin-top: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  border: 2px solid #e1e8ed;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.instagramTestSection::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    45deg,
+    #e1306c,
+    #fd5949,
+    #f56040,
+    #f77737,
+    #fcaf45,
+    #ffdc80
+  );
+  border-radius: 12px 12px 0 0;
+}
+
+.testHeader {
+  margin-bottom: 15px;
+}
+
+.testDescription {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 5px 0 0 0;
+  line-height: 1.4;
+}
+
+.testButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #e1306c 0%, #fd5949 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.testButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(225, 48, 108, 0.3);
+  background: linear-gradient(135deg, #d12962 0%, #e54942 100%);
+}
+
+.testButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.instagramIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.testResult {
+  margin-top: 15px;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid;
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.testSuccess {
+  background-color: #f0fdf4;
+  border-color: #22c55e;
+  color: #166534;
+}
+
+.testError {
+  background-color: #fef2f2;
+  border-color: #ef4444;
+  color: #991b1b;
+}
+
+.testStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.statusIcon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.testDetails {
+  background: rgba(255, 255, 255, 0.7);
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.testDetails p {
+  margin: 4px 0;
+  font-size: 13px;
+}
+
+.testErrorDetails {
+  margin-top: 10px;
+}
+
+.testErrorDetails p {
+  margin: 4px 0;
+  font-size: 13px;
+}
+
+.troubleshooting {
+  background: rgba(255, 255, 255, 0.7);
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 8px;
+}
+
+.troubleshooting strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+.troubleshooting ul {
+  margin: 6px 0;
+  padding-left: 16px;
+}
+
+.troubleshooting li {
+  font-size: 12px;
+  margin-bottom: 3px;
+  line-height: 1.4;
+}
+
+.setupGuideLink {
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.setupGuideLink a {
+  color: #e1306c;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.setupGuideLink a:hover {
+  color: #d12962;
+  text-decoration: underline;
+}
+
+/* Responsive design for Instagram test section */
+@media (max-width: 768px) {
+  .instagramTestSection {
+    padding: 15px;
+  }
+
+  .testButton {
+    padding: 10px 16px;
+    font-size: 13px;
+    gap: 8px;
+  }
+
+  .instagramIcon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .testResult {
+    padding: 12px;
+  }
+
+  .testDetails,
+  .troubleshooting {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .instagramTestSection {
+    padding: 12px;
+    margin-top: 15px;
+  }
+
+  .testButton {
+    padding: 8px 14px;
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  .instagramIcon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .testDescription {
+    font-size: 13px;
+  }
+
+  .testResult {
+    padding: 10px;
+  }
+
+  .statusIcon {
+    width: 16px;
+    height: 16px;
+  }
 }

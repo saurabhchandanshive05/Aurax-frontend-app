@@ -371,3 +371,251 @@
     transform: translate(-20px, -10px) rotate(-5deg);
   }
 }
+
+/* Instagram Enhanced Controls */
+.instagramControls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.toggleButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+.toggleButton:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.toggleButton.active {
+  opacity: 1;
+  background: linear-gradient(135deg, #e1306c 0%, #fd5949 100%);
+  box-shadow: 0 4px 15px rgba(225, 48, 108, 0.4);
+}
+
+.settingsButton {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.settingsButton:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.settingsButton.active {
+  background: rgba(225, 48, 108, 0.2);
+  border-color: rgba(225, 48, 108, 0.5);
+  color: #e1306c;
+}
+
+/* Instagram Integration Styles */
+.instagramConnectCard {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  padding: 40px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.connectContent {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.connectIcon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.connectContent h3 {
+  font-size: 28px;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.connectContent p {
+  font-size: 16px;
+  opacity: 0.9;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.benefits {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 30px 0;
+  flex-wrap: wrap;
+}
+
+.benefit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.benefitIcon {
+  font-size: 20px;
+}
+
+.connectButton {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.connectButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.connectButtonIcon {
+  font-size: 20px;
+}
+
+.connectButton.connecting {
+  background: rgba(255, 255, 255, 0.1);
+  cursor: not-allowed;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.connectButton.connecting .connectButtonIcon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.connectNote {
+  margin-top: 20px;
+  font-size: 14px;
+  opacity: 0.8;
+  line-height: 1.5;
+}
+
+.instagramStatusCard {
+  background: rgba(20, 20, 40, 0.6);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+}
+
+.statusContent h3 {
+  color: #4caf50;
+  margin-bottom: 10px;
+}
+
+.statusIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.viewDashboardButton {
+  background: linear-gradient(90deg, #4caf50, #45a049);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: all 0.3s ease;
+}
+
+.viewDashboardButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(76, 175, 80, 0.3);
+}
+
+.disconnectButton {
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  color: #f44336;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.disconnectButton:hover {
+  background: rgba(244, 67, 54, 0.2);
+  border-color: rgba(244, 67, 54, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .benefits {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .instagramConnectCard {
+    padding: 30px 20px;
+  }
+
+  .connectContent h3 {
+    font-size: 24px;
+  }
+
+  .connectButton {
+    font-size: 16px;
+    padding: 14px 28px;
+  }
+}

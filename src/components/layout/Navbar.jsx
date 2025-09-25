@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
+import AuraLogo from "../AuraLogo";
 import "./Navbar.css";
 
 function Navbar() {
@@ -52,10 +53,15 @@ function Navbar() {
     [location]
   );
 
-  // Navigation items
+  // Navigation items - dynamic based on authentication
   const navItems = [
     { path: "/", label: "Home" },
     { path: "/about", label: "About" },
+    ...(isAuthenticated && user?.role === "creator"
+      ? [{ path: "/creator/dashboard", label: "Dashboard" }]
+      : isAuthenticated && user?.role === "brand"
+      ? [{ path: "/brand/dashboard", label: "Dashboard" }]
+      : []),
     { path: "/brands", label: "For Brands" },
     { path: "/creators", label: "For Creators" },
   ];
@@ -80,29 +86,53 @@ function Navbar() {
           <div className="navbar-gradient-overlay"></div>
         </div>
         <div className="nav-container">
-          {/* AURAX Logo */}
+          {/* Logo with Cloudinary Icon + AURAX Text */}
           <Link to="/" className="logo">
             <motion.div
-              className="logo-container"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className="logo-combination"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <motion.span
-                className="aurax-logo aurax-logo-pulse"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                onMouseEnter={(e) => {
-                  // Add streak animation on hover
-                  const streakEl = document.createElement("div");
-                  streakEl.className = "aurax-nav-streak";
-                  e.target.appendChild(streakEl);
-                  setTimeout(() => streakEl.remove(), 600);
-                }}
+              {/* Cloudinary Logo Icon (Circular) */}
+              <motion.div
+                className="cloudinary-icon-container"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                transition={{ duration: 0.3 }}
+              >
+                <img
+                  src="https://res.cloudinary.com/dzvtsnpr6/image/upload/w_64,h_64,c_fill,f_webp,q_auto/v1756973830/Copilot_20250904_134350_fyxhey.webp"
+                  alt="AURAX Icon"
+                  className="navbar-cloudinary-icon"
+                  loading="eager"
+                  crossOrigin="anonymous"
+                  onError={(e) => {
+                    console.log("Navbar logo failed to load:", e.target.src);
+                    // Try original URL without transformations
+                    if (e.target.src.includes("w_64,h_64")) {
+                      e.target.src =
+                        "https://res.cloudinary.com/dzvtsnpr6/image/upload/v1756973830/Copilot_20250904_134350_fyxhey.webp";
+                    } else {
+                      // Use a placeholder SVG if all fails
+                      e.target.src =
+                        "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9InVybCgjZ3JhZGllbnQwX2xpbmVhcl8xXzEpIi8+CjxwYXRoIGQ9Ik0yMCAyMkg0NEwyMCA0NEgzNkw0NCAzNkwyOCAyOFoiIGZpbGw9IndoaXRlIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50MF9saW5lYXJfMV8xIiB4MT0iMCIgeTE9IjAiIHgyPSI2NCIgeTI9IjY0IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiM2NjdlZWEiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNzY0YmEyIi8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHN2Zz4K";
+                    }
+                  }}
+                  onLoad={() => {
+                    console.log("AURAX navbar logo loaded successfully");
+                  }}
+                />
+                <div className="icon-glow-effect" />
+              </motion.div>
+
+              {/* Custom AURAX Text */}
+              <motion.div
+                className="aurax-brand-text"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
               >
                 AURAX
-              </motion.span>
-              <div className="logo-glow" />
+              </motion.div>
             </motion.div>
           </Link>
 
@@ -267,14 +297,31 @@ function Navbar() {
                     <div className="user-type">{user?.role}</div>
                   </div>
                 </div>
-                <motion.button
-                  className="logout-btn"
-                  onClick={logout}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Logout
-                </motion.button>
+                <motion.div className="user-controls">
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Link
+                      to={
+                        user?.role === "creator"
+                          ? "/creator/dashboard"
+                          : "/brand/dashboard"
+                      }
+                      className="dashboard-btn"
+                    >
+                      Dashboard
+                    </Link>
+                  </motion.div>
+                  <motion.button
+                    className="logout-btn"
+                    onClick={logout}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Logout
+                  </motion.button>
+                </motion.div>
               </motion.div>
             )}
           </div>
@@ -534,16 +581,31 @@ function Navbar() {
                         <div className="user-type">{user?.role}</div>
                       </div>
                     </div>
-                    <motion.button
-                      className="mobile-logout-btn"
-                      onClick={() => {
-                        logout();
-                        toggleMenu();
-                      }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      Logout
-                    </motion.button>
+                    <div className="mobile-user-controls">
+                      <motion.div whileTap={{ scale: 0.95 }}>
+                        <Link
+                          to={
+                            user?.role === "creator"
+                              ? "/creator/dashboard"
+                              : "/brand/dashboard"
+                          }
+                          className="mobile-dashboard-btn"
+                          onClick={toggleMenu}
+                        >
+                          Dashboard
+                        </Link>
+                      </motion.div>
+                      <motion.button
+                        className="mobile-logout-btn"
+                        onClick={() => {
+                          logout();
+                          toggleMenu();
+                        }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        Logout
+                      </motion.button>
+                    </div>
                   </motion.div>
                 )}
 
@@ -575,6 +637,17 @@ function Navbar() {
                               fill="currentColor"
                             >
                               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+                            </svg>
+                          );
+                        case "/creator/dashboard":
+                        case "/brand/dashboard":
+                          return (
+                            <svg
+                              className="mobile-nav-icon"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                            >
+                              <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
                             </svg>
                           );
                         case "/brands":

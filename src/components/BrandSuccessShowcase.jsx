@@ -13,50 +13,62 @@ const BrandSuccessShowcase = () => {
     {
       id: 1,
       brand: "Adidas",
-      views: "+2.5M",
+      views: "+1.5M",
       roas: "120%",
-      videoUrl: "/videos/adidas-campaign.mp4",
-      thumbnail: "/images/adidas-campaign.jpg",
+      videoUrl:
+        "https://res.cloudinary.com/dzvtsnpr6/video/upload/f_auto,q_auto,w_800/adidas-campaign_d9fxfi.webm",
+      thumbnail:
+        "https://res.cloudinary.com/dzvtsnpr6/image/upload/f_auto,q_auto,w_800/adidas-campaign-thumbnail.jpg",
     },
     {
       id: 2,
       brand: "Flipkart",
       views: "+1.8M",
       roas: "95%",
-      videoUrl: "/videos/amazon-campaign.mp4",
-      thumbnail: "/images/amazon-campaign.jpg",
+      videoUrl:
+        "https://res.cloudinary.com/dzvtsnpr6/video/upload/f_auto,q_auto,w_800/amazon-campaign_mdt60y.webm",
+      thumbnail:
+        "https://res.cloudinary.com/dzvtsnpr6/image/upload/f_auto,q_auto,w_800/amazon-campaign-thumbnail.jpg",
     },
     {
       id: 3,
-      brand: "Sprite",
-      views: "+3.2M",
+      brand: "Nivea",
+      views: "+1.2M",
       roas: "150%",
-      videoUrl: "/videos/samsung-campaign.mp4",
-      thumbnail: "/images/adidas-campaign.jpg",
+      videoUrl:
+        "https://res.cloudinary.com/dzvtsnpr6/video/upload/f_auto,q_auto,w_800/apple-campaign_pyix41.webm",
+      thumbnail:
+        "https://res.cloudinary.com/dzvtsnpr6/image/upload/f_auto,q_auto,w_800/apple-campaign-thumbnail.jpg",
     },
     {
       id: 4,
       brand: "Coca-Cola",
-      views: "+4.1M",
+      views: "+1.1M",
       roas: "210%",
-      videoUrl: "/videos/cocacola-campaign.mp4",
-      thumbnail: "/images/amazon-campaign.jpg",
+      videoUrl:
+        "https://res.cloudinary.com/dzvtsnpr6/video/upload/f_auto,q_auto,w_800/cocacola-campaign_d93ikv.webm",
+      thumbnail:
+        "https://res.cloudinary.com/dzvtsnpr6/image/upload/f_auto,q_auto,w_800/cocacola-campaign-thumbnail.jpg",
     },
     {
       id: 5,
-      brand: "Nivea",
-      views: "+1.5M",
-      roas: "110%",
-      videoUrl: "/videos/apple-campaign.mp4",
-      thumbnail: "/images/adidas-campaign.jpg",
+      brand: "Nike",
+      views: "+1.9M",
+      roas: "180%",
+      videoUrl:
+        "https://res.cloudinary.com/dzvtsnpr6/video/upload/f_auto,q_auto,w_800/nike-campaign_rwlxcy.webm",
+      thumbnail:
+        "https://res.cloudinary.com/dzvtsnpr6/image/upload/f_auto,q_auto,w_800/nike-campaign-thumbnail.jpg",
     },
     {
       id: 6,
-      brand: "Nike",
-      views: "+2.9M",
-      roas: "180%",
-      videoUrl: "/videos/nike-campaign.mp4",
-      thumbnail: "/images/amazon-campaign.jpg",
+      brand: "Sprite",
+      views: "+1.1M",
+      roas: "110%",
+      videoUrl:
+        "https://res.cloudinary.com/dzvtsnpr6/video/upload/f_auto,q_auto,w_800/samsung-campaign_z6zm8c.webm",
+      thumbnail:
+        "https://res.cloudinary.com/dzvtsnpr6/image/upload/f_auto,q_auto,w_800/samsung-campaign-thumbnail.jpg",
     },
   ];
 

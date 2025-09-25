@@ -40,6 +40,8 @@ const BrandCollaborations = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [totalSlides, setTotalSlides] = useState(0);
 
   const statsInView = useInView(statsRef, { once: true, threshold: 0.3 });
 
@@ -52,11 +54,37 @@ const BrandCollaborations = () => {
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
+      if (window.innerWidth <= 768) {
+        // Calculate total slides for mobile (showing 2 items per slide)
+        setTotalSlides(Math.ceil(brands.length / 2));
+      }
     };
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  // Add scroll listener for mobile carousel
+  useEffect(() => {
+    const carousel = containerRef.current;
+    if (!carousel || !isMobile) return;
+
+    let scrollTimeout;
+    const handleScroll = () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        if (!isDragging) {
+          updateCurrentSlide();
+        }
+      }, 150);
+    };
+
+    carousel.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      carousel.removeEventListener("scroll", handleScroll);
+      clearTimeout(scrollTimeout);
+    };
+  }, [isMobile, isDragging]);
 
   // Create floating particles
   const particles = Array.from({ length: 20 }, (_, i) => ({
@@ -165,30 +193,72 @@ const BrandCollaborations = () => {
   // Touch handlers for mobile carousel
   const handleTouchStart = (e) => {
     setIsDragging(true);
-    setStartX(e.touches[0].pageX - scrollLeft);
+    setStartX(e.touches[0].pageX);
+    setScrollLeft(containerRef.current.scrollLeft);
   };
 
   const handleTouchMove = (e) => {
     if (!isDragging) return;
     e.preventDefault();
-    const x = e.touches[0].pageX - startX;
-    const walk = (x / containerRef.current.offsetWidth) * 100;
-    containerRef.current.scrollLeft = scrollLeft - walk;
+    const x = e.touches[0].pageX;
+    const walk = startX - x;
+    containerRef.current.scrollLeft = scrollLeft + walk;
   };
 
   const handleTouchEnd = () => {
     setIsDragging(false);
-    setScrollLeft(containerRef.current.scrollLeft);
+    updateCurrentSlide();
+  };
+
+  // Update current slide based on scroll position
+  const updateCurrentSlide = () => {
+    if (!containerRef.current) return;
+    const scrollLeft = containerRef.current.scrollLeft;
+    const itemWidth =
+      containerRef.current.querySelector(`.${styles.mobileLogoItem}`)
+        ?.offsetWidth || 200;
+    const gap = 16; // 1rem gap
+    const slideIndex = Math.round(scrollLeft / (itemWidth + gap));
+    setCurrentSlide(Math.min(Math.max(slideIndex, 0), totalSlides - 1));
   };
 
   // Mobile carousel scroll by item width
   const scrollByItem = (direction) => {
     if (!containerRef.current) return;
-    const item = containerRef.current.querySelector(`.${styles.mobileLogoItem}`);
+    const item = containerRef.current.querySelector(
+      `.${styles.mobileLogoItem}`
+    );
     if (!item) return;
     const scrollAmount = item.offsetWidth + 16; // item width + gap
+
+    if (direction === "left" && currentSlide > 0) {
+      setCurrentSlide((prev) => prev - 1);
+    } else if (direction === "right" && currentSlide < totalSlides - 1) {
+      setCurrentSlide((prev) => prev + 1);
+    }
+
     containerRef.current.scrollBy({
       left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
+
+  // Navigate to specific slide
+  const goToSlide = (slideIndex) => {
+    if (!containerRef.current) return;
+    const item = containerRef.current.querySelector(
+      `.${styles.mobileLogoItem}`
+    );
+    if (!item) return;
+
+    const itemWidth = item.offsetWidth;
+    const gap = 16; // 1rem gap in pixels
+    const scrollAmount = slideIndex * (itemWidth + gap);
+
+    setCurrentSlide(slideIndex);
+
+    containerRef.current.scrollTo({
+      left: scrollAmount,
       behavior: "smooth",
     });
   };
@@ -337,23 +407,8 @@ const BrandCollaborations = () => {
           {/* Logo Grid/Carousel */}
           <motion.div className={styles.logoSection} variants={itemVariants}>
             {isMobile ? (
-              // Mobile Swipeable Carousel with Arrows
+              // Mobile Swipeable Carousel with Premium Slider
               <div className={styles.mobileCarouselWrapper}>
-                <button
-                  className={styles.carouselArrowLeft}
-                  aria-label="Scroll left"
-                  onClick={() => scrollByItem("left")}
-                >
-                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                    <path
-                      d="M20 24L12 16L20 8"
-                      stroke="#a855f7"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
                 <div
                   className={styles.mobileCarousel}
                   ref={containerRef}
@@ -378,7 +433,8 @@ const BrandCollaborations = () => {
                               className={styles.logoImage}
                               onError={(e) => {
                                 e.target.style.display = "none";
-                                e.target.nextElementSibling.style.display = "flex";
+                                e.target.nextElementSibling.style.display =
+                                  "flex";
                               }}
                             />
                             <div className={styles.logoFallback}>
@@ -394,21 +450,39 @@ const BrandCollaborations = () => {
                     ))}
                   </div>
                 </div>
-                <button
-                  className={styles.carouselArrowRight}
-                  aria-label="Scroll right"
-                  onClick={() => scrollByItem("right")}
-                >
-                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                    <path
-                      d="M12 8L20 16L12 24"
-                      stroke="#0ea5e9"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
+
+                {/* Premium Slider Controls */}
+                <div className={styles.sliderControls}>
+                  <div className={styles.sliderDots}>
+                    {Array.from({ length: totalSlides }, (_, index) => (
+                      <button
+                        key={index}
+                        className={`${styles.sliderDot} ${
+                          currentSlide === index ? styles.active : ""
+                        }`}
+                        onClick={() => goToSlide(index)}
+                        aria-label={`Go to slide ${index + 1}`}
+                      >
+                        <div className={styles.dotInner}></div>
+                      </button>
+                    ))}
+                  </div>
+                  <div className={styles.sliderProgress}>
+                    <div
+                      className={styles.progressBar}
+                      style={{
+                        width: `${((currentSlide + 1) / totalSlides) * 100}%`,
+                      }}
+                    ></div>
+                  </div>
+                  <div className={styles.sliderInfo}>
+                    <span className={styles.currentSlide}>
+                      {currentSlide + 1}
+                    </span>
+                    <span className={styles.separator}>/</span>
+                    <span className={styles.totalSlides}>{totalSlides}</span>
+                  </div>
+                </div>
               </div>
             ) : (
               // Desktop Grid

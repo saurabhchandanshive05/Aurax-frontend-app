@@ -1,23 +1,25 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { apiClient } from "../utils/apiClient";
-import Particles from "react-tsparticles";
+import instagramAPI from "../utils/instagramAPI";
 import styles from "./CreatorLogin.module.css";
 
 const CreatorLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loginError, setLoginError] = useState("");
+
+  // Instagram test states
+  const [instagramTestLoading, setInstagramTestLoading] = useState(false);
+  const [instagramTestResult, setInstagramTestResult] = useState(null);
+
   const navigate = useNavigate();
   const { login } = useAuth();
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
-
-  const particlesInit = async () => {};
 
   const validate = () => {
     const newErrors = {};
@@ -41,178 +43,101 @@ const CreatorLogin = () => {
 
     try {
       const sanitized = {
-        email: (email || "").trim().toLowerCase(),
+        emailOrPhone: (email || "").trim().toLowerCase(),
         password: (password || "").trim(),
       };
       const resp = await apiClient.login(sanitized);
-      const redirectPath = login(resp.token);
-      navigate(redirectPath);
+
+      if (resp?.success && resp?.token) {
+        const redirectPath = login(resp.token);
+        navigate(redirectPath);
+      } else {
+        throw new Error(resp?.error || "Login failed");
+      }
     } catch (err) {
-      const isAuthError = err && (err.status === 401 || err.status === 403);
+      console.error("Login error:", err);
       setLoginError(
-        isAuthError
-          ? "Invalid email or password. Please try again."
-          : "Login failed. Please try again."
+        err?.error || err?.message || "Login failed. Please try again."
       );
-      console.error("Login error:", err?.status, err?.message || err);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Focus animations
-  useEffect(() => {
-    const inputs = [emailRef.current, passwordRef.current];
+  // Instagram authentication test
+  const handleInstagramTest = async () => {
+    setInstagramTestLoading(true);
+    setInstagramTestResult(null);
 
-    const focusHandler = (e) => {
-      e.target.parentElement.classList.add(styles.inputFocused);
-    };
-
-    const blurHandler = (e) => {
-      if (!e.target.value) {
-        e.target.parentElement.classList.remove(styles.inputFocused);
-      }
-    };
-
-    inputs.forEach((input) => {
-      if (input) {
-        input.addEventListener("focus", focusHandler);
-        input.addEventListener("blur", blurHandler);
-      }
-    });
-
-    return () => {
-      inputs.forEach((input) => {
-        if (input) {
-          input.removeEventListener("focus", focusHandler);
-          input.removeEventListener("blur", blurHandler);
-        }
+    try {
+      const result = await instagramAPI.quickAuthTest();
+      setInstagramTestResult(result);
+    } catch (error) {
+      setInstagramTestResult({
+        success: false,
+        error: error.message,
+        message: "Test failed",
       });
-    };
-  }, []);
+    } finally {
+      setInstagramTestLoading(false);
+    }
+  };
 
   return (
     <div className={styles.loginContainer}>
-      {/* Animated background particles */}
-      <div className={styles.particlesContainer}>
-        <Particles
-          id="tsparticles"
-          init={particlesInit}
-          options={{
-            background: {
-              color: {
-                value: "transparent",
-              },
-            },
-            fpsLimit: 60,
-            particles: {
-              color: {
-                value: "#c084fc",
-              },
-              links: {
-                color: "#e879f9",
-                distance: 150,
-                enable: true,
-                opacity: 0.3,
-                width: 1,
-              },
-              move: {
-                direction: "none",
-                enable: true,
-                outModes: {
-                  default: "bounce",
-                },
-                random: false,
-                speed: 1,
-                straight: false,
-              },
-              number: {
-                density: {
-                  enable: true,
-                  area: 800,
-                },
-                value: 60,
-              },
-              opacity: {
-                value: 0.5,
-              },
-              shape: {
-                type: "circle",
-              },
-              size: {
-                value: { min: 1, max: 3 },
-              },
-            },
-            detectRetina: true,
-          }}
-        />
-      </div>
-
-      {/* Floating neon elements */}
-      <div className={styles.floatingCircleTop}></div>
-      <div className={styles.floatingCircleBottom}></div>
-
-      {/* Glowing orbs */}
-      <div className={styles.glowOrb1}></div>
-      <div className={styles.glowOrb2}></div>
-
-      {/* Login card */}
       <div className={styles.loginCard}>
-        {/* Neon glow effect */}
-        <div className={styles.neonGlow}></div>
+        {/* AURAX Logo - Top Center */}
+        <div className={styles.logoSection}>
+          <div className={styles.auraxLogoContainer}>
+            <img
+              src="https://res.cloudinary.com/dzvtsnpr6/image/upload/v1756973830/Copilot_20250904_134350_fyxhey.webp"
+              alt="AURAX Logo"
+              className={styles.auraxLogo}
+              loading="eager"
+              onLoad={() => console.log("AURAX logo loaded")}
+              onError={(e) =>
+                console.error("Logo failed to load:", e.target.src)
+              }
+            />
+          </div>
+        </div>
 
         <div className={styles.header}>
-          <div className={styles.logoContainer}>
-            <div className={styles.logoGradient}>
-              <div className={styles.logoBg}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className={styles.logoIcon}
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-          <h1 className={styles.title}>Creator Login</h1>
-          <p className={styles.subtitle}>Access your creator dashboard</p>
+          <h1 className={styles.title}>Welcome back, Creator!</h1>
+          <p className={styles.subtitle}>
+            Let's get started on your next masterpiece
+          </p>
         </div>
 
         {loginError && <div className={styles.errorAlert}>{loginError}</div>}
 
         <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={`${styles.inputContainer} ${styles.inputGroup}`}>
+          <div className={styles.inputGroup}>
             <label htmlFor="email" className={styles.inputLabel}>
-              Email Address
+              Email
             </label>
             <input
-              ref={emailRef}
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className={styles.inputField}
+              placeholder="Enter your email"
             />
             {errors.email && <p className={styles.errorText}>{errors.email}</p>}
           </div>
 
-          <div className={`${styles.inputContainer} ${styles.inputGroup}`}>
+          <div className={styles.inputGroup}>
             <label htmlFor="password" className={styles.inputLabel}>
               Password
             </label>
             <input
-              ref={passwordRef}
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className={styles.inputField}
+              placeholder="Enter your password"
             />
             {errors.password && (
               <p className={styles.errorText}>{errors.password}</p>
@@ -222,90 +147,263 @@ const CreatorLogin = () => {
           <div className={styles.optionsContainer}>
             <div className={styles.rememberMe}>
               <input
-                id="remember-me"
+                id="remember"
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
                 className={styles.checkbox}
               />
-              <label htmlFor="remember-me" className={styles.rememberLabel}>
+              <label htmlFor="remember" className={styles.rememberLabel}>
                 Remember me
               </label>
+              <p className={styles.privacyNote}>
+                We'll remember you on this device for 30 days
+              </p>
             </div>
-            <Link to="/coming-soon" className={styles.forgotPassword}>
+            <Link to="/forgot-password" className={styles.forgotPassword}>
               Forgot password?
             </Link>
           </div>
+
+          {/* Progressive disclosure for advanced options */}
+          <div className={styles.advancedToggle}>
+            <button
+              type="button"
+              onClick={() => setShowAdvanced(!showAdvanced)}
+              className={styles.advancedButton}
+            >
+              {showAdvanced ? "Hide" : "Show"} advanced options
+              <svg
+                className={`${styles.toggleIcon} ${
+                  showAdvanced ? styles.rotated : ""
+                }`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="m19 9-7 7-7-7"
+                />
+              </svg>
+            </button>
+          </div>
+
+          {showAdvanced && (
+            <div className={styles.advancedOptions}>
+              <div className={styles.inputGroup}>
+                <label htmlFor="loginMode" className={styles.inputLabel}>
+                  Login Mode
+                </label>
+                <select
+                  id="loginMode"
+                  className={styles.selectField}
+                  defaultValue="standard"
+                >
+                  <option value="standard">Standard</option>
+                  <option value="secure">High Security</option>
+                </select>
+              </div>
+
+              <div className={styles.checkboxGroup}>
+                <input
+                  id="keepSession"
+                  type="checkbox"
+                  className={styles.checkbox}
+                  defaultChecked={true}
+                />
+                <label htmlFor="keepSession" className={styles.checkboxLabel}>
+                  Keep session active across browser tabs
+                </label>
+              </div>
+
+              {/* Instagram API Test Section */}
+              <div className={styles.instagramTestSection}>
+                <div className={styles.testHeader}>
+                  <label className={styles.inputLabel}>
+                    Instagram API Connection Test
+                  </label>
+                  <p className={styles.testDescription}>
+                    Test your Instagram Business account connection before
+                    logging in
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleInstagramTest}
+                  disabled={instagramTestLoading}
+                  className={styles.testButton}
+                >
+                  {instagramTestLoading && (
+                    <svg
+                      className={styles.spinner}
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        opacity="0.25"
+                      />
+                      <path
+                        fill="currentColor"
+                        d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        opacity="0.75"
+                      />
+                    </svg>
+                  )}
+                  <svg
+                    className={styles.instagramIcon}
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                  </svg>
+                  {instagramTestLoading
+                    ? "Testing..."
+                    : "Test Instagram Connection"}
+                </button>
+
+                {/* Instagram test results */}
+                {instagramTestResult && (
+                  <div
+                    className={`${styles.testResult} ${
+                      instagramTestResult.success
+                        ? styles.testSuccess
+                        : styles.testError
+                    }`}
+                  >
+                    <div className={styles.testStatus}>
+                      {instagramTestResult.success ? (
+                        <>
+                          <svg
+                            className={styles.statusIcon}
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                          </svg>
+                          <span>Instagram Connection Successful!</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg
+                            className={styles.statusIcon}
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                          </svg>
+                          <span>Instagram Connection Failed</span>
+                        </>
+                      )}
+                    </div>
+
+                    {instagramTestResult.success &&
+                      instagramTestResult.data && (
+                        <div className={styles.testDetails}>
+                          <p>
+                            <strong>Username:</strong> @
+                            {instagramTestResult.data.username}
+                          </p>
+                          <p>
+                            <strong>Account Type:</strong>{" "}
+                            {instagramTestResult.data.account_type}
+                          </p>
+                          <p>
+                            <strong>Account ID:</strong>{" "}
+                            {instagramTestResult.data.id}
+                          </p>
+                        </div>
+                      )}
+
+                    {!instagramTestResult.success && (
+                      <div className={styles.testErrorDetails}>
+                        <p>
+                          <strong>Error:</strong> {instagramTestResult.error}
+                        </p>
+                        <div className={styles.troubleshooting}>
+                          <strong>Quick fixes:</strong>
+                          <ul>
+                            <li>
+                              Ensure your Instagram account is set to
+                              Business/Creator
+                            </li>
+                            <li>
+                              Check your access token is valid and not expired
+                            </li>
+                            <li>
+                              Verify your account is linked to a Facebook Page
+                            </li>
+                          </ul>
+                          <p className={styles.setupGuideLink}>
+                            Need help?{" "}
+                            <Link to="/help/instagram-setup">
+                              View setup guide →
+                            </Link>
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           <button
             type="submit"
             disabled={isSubmitting}
             className={styles.submitButton}
           >
-            <span className={styles.buttonText}>
-              {isSubmitting ? (
-                <>
-                  <svg
-                    className={styles.spinner}
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className={styles.spinnerCircle}
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className={styles.spinnerPath}
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Signing in...
-                </>
-              ) : (
-                "Sign in as Creator"
-              )}
-            </span>
-            <span className={styles.buttonHover}></span>
+            {isSubmitting && (
+              <svg
+                className={styles.spinner}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  opacity="0.25"
+                />
+                <path
+                  fill="currentColor"
+                  d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  opacity="0.75"
+                />
+              </svg>
+            )}
+            {isSubmitting ? "Signing in..." : "Sign in"}
           </button>
         </form>
 
-        <div className={styles.footer}>
-          <div className={styles.dividerContainer}>
-            <div className={styles.divider}></div>
-            <span className={styles.dividerText}>Or continue with</span>
-          </div>
-
-          <div className={styles.socialButtons}>
-            <button className={styles.socialButton}>
-              <svg
-                className={styles.socialIcon}
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-              </svg>
-            </button>
-            <button className={styles.socialButton}>
-              <svg
-                className={styles.socialIcon}
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
-              </svg>
-            </button>
-          </div>
-
+        <div className={styles.footerLinks}>
           <div className={styles.signupLink}>
             Don't have an account?{" "}
-            <Link to="/signup" className={styles.signupText}>
-              Sign up
+            <Link to="/signup?role=creator" className={styles.signupText}>
+              Sign up here
+            </Link>
+          </div>
+
+          <div className={styles.helpLinks}>
+            <Link to="/help" className={styles.helpLink}>
+              Need help?
+            </Link>
+            {" • "}
+            <Link to="/support" className={styles.helpLink}>
+              Contact support
             </Link>
           </div>
         </div>

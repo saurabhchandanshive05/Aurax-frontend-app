@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aurax Creator Login Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 900px;
+        margin: 50px auto;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+      .test-container {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 30px;
+        margin: 20px 0;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .success {
+        background-color: rgba(40, 167, 69, 0.3);
+        color: #d4edda;
+        border: 1px solid #28a745;
+      }
+      .error {
+        background-color: rgba(220, 53, 69, 0.3);
+        color: #f8d7da;
+        border: 1px solid #dc3545;
+      }
+      .info {
+        background-color: rgba(23, 162, 184, 0.3);
+        color: #d1ecf1;
+        border: 1px solid #17a2b8;
+      }
+      .warning {
+        background-color: rgba(255, 193, 7, 0.3);
+        color: #fff3cd;
+        border: 1px solid #ffc107;
+      }
+      button {
+        padding: 12px 24px;
+        margin: 8px;
+        cursor: pointer;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+      }
+      .btn-primary {
+        background: linear-gradient(45deg, #007bff, #0056b3);
+        color: white;
+      }
+      .btn-success {
+        background: linear-gradient(45deg, #28a745, #1e7e34);
+        color: white;
+      }
+      .btn-warning {
+        background: linear-gradient(45deg, #ffc107, #e0a800);
+        color: black;
+      }
+      .btn-danger {
+        background: linear-gradient(45deg, #dc3545, #c82333);
+        color: white;
+      }
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+      input,
+      select {
+        padding: 10px;
+        margin: 8px;
+        width: 250px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        backdrop-filter: blur(5px);
+      }
+      input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+      }
+      h1,
+      h2,
+      h3 {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      .result-box {
+        margin: 15px 0;
+        padding: 15px;
+        border-radius: 8px;
+        white-space: pre-wrap;
+        font-family: monospace;
+        font-size: 14px;
+      }
+      .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        margin: 5px;
+      }
+      .online {
+        background: #28a745;
+        color: white;
+      }
+      .offline {
+        background: #dc3545;
+        color: white;
+      }
+      .loading {
+        background: #ffc107;
+        color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🚀 AURAX Creator Login Test Suite</h1>
+
+    <div class="test-container">
+      <h3>📡 Backend Connection Test</h3>
+      <div id="connectionStatus">
+        <span class="status-badge loading">Checking...</span>
+      </div>
+      <button class="btn-primary" onclick="testBackendConnection()">
+        Refresh Connection Status
+      </button>
+      <div id="connectionResult" class="result-box"></div>
+    </div>
+
+    <div class="test-container">
+      <h3>👤 Creator Registration Test</h3>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px">
+        <input
+          type="text"
+          id="regUsername"
+          placeholder="Username"
+          value="testcreator123"
+        />
+        <input
+          type="email"
+          id="regEmail"
+          placeholder="Email"
+          value="testcreator@example.com"
+        />
+        <input
+          type="password"
+          id="regPassword"
+          placeholder="Password"
+          value="testpass123"
+        />
+        <select id="regRole">
+          <option value="creator">Creator</option>
+          <option value="brand">Brand</option>
+        </select>
+      </div>
+      <button class="btn-success" onclick="testRegistration()">
+        Test Creator Registration
+      </button>
+      <div id="registrationResult" class="result-box"></div>
+    </div>
+
+    <div class="test-container">
+      <h3>🔐 Creator Login Test</h3>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px">
+        <input
+          type="text"
+          id="loginEmail"
+          placeholder="Email/Phone"
+          value="testcreator@example.com"
+        />
+        <input
+          type="password"
+          id="loginPassword"
+          placeholder="Password"
+          value="testpass123"
+        />
+      </div>
+      <button class="btn-success" onclick="testCreatorLogin()">
+        Test Creator Login
+      </button>
+      <button class="btn-warning" onclick="testCreatorLoginWithExistingUser()">
+        Login with Existing User
+      </button>
+      <div id="loginResult" class="result-box"></div>
+    </div>
+
+    <div class="test-container">
+      <h3>🔒 Protected Route Test</h3>
+      <button class="btn-warning" onclick="testProtectedRoute()">
+        Test Dashboard Access
+      </button>
+      <div id="protectedResult" class="result-box"></div>
+    </div>
+
+    <div class="test-container">
+      <h3>📱 Instagram Integration Test</h3>
+      <button class="btn-warning" onclick="testInstagramOAuth()">
+        Test Instagram OAuth URL
+      </button>
+      <button class="btn-primary" onclick="testInstagramCallback()">
+        Test OAuth Callback
+      </button>
+      <div id="instagramResult" class="result-box"></div>
+    </div>
+
+    <div class="test-container">
+      <h3>🎯 Complete Authentication Flow Test</h3>
+      <button class="btn-primary" onclick="runCompleteTest()">
+        Run Complete Test Suite
+      </button>
+      <div id="completeResult" class="result-box"></div>
+    </div>
+
+    <script>
+      const API_BASE = "http://localhost:5002";
+      let currentToken = localStorage.getItem("testAuthToken");
+
+      // Update connection status on page load
+      window.onload = function () {
+        testBackendConnection();
+      };
+
+      async function testBackendConnection() {
+        const statusDiv = document.getElementById("connectionStatus");
+        const resultDiv = document.getElementById("connectionResult");
+
+        statusDiv.innerHTML =
+          '<span class="status-badge loading">Checking connection...</span>';
+        resultDiv.innerHTML = "Testing backend connectivity...";
+
+        try {
+          const response = await fetch(`${API_BASE}/health`, { timeout: 5000 });
+          const data = await response.json();
+
+          if (response.ok) {
+            statusDiv.innerHTML =
+              '<span class="status-badge online">Backend Online ✅</span>';
+            resultDiv.innerHTML = `<div class="success">✅ Backend is running on port 5002!
+Response: ${JSON.stringify(data, null, 2)}
+Status: ${response.status} ${response.statusText}</div>`;
+          } else {
+            statusDiv.innerHTML =
+              '<span class="status-badge offline">Backend Error ❌</span>';
+            resultDiv.innerHTML = `<div class="error">❌ Backend returned error: ${
+              response.status
+            }
+${JSON.stringify(data, null, 2)}</div>`;
+          }
+        } catch (error) {
+          statusDiv.innerHTML =
+            '<span class="status-badge offline">Backend Offline ❌</span>';
+          resultDiv.innerHTML = `<div class="error">❌ Cannot connect to backend at ${API_BASE}
+Error: ${error.message}
+
+🔧 Troubleshooting:
+1. Make sure backend is running: npm start in backend-copy directory
+2. Check if port 5002 is correct
+3. Verify no CORS issues
+4. Check if any firewall is blocking the connection</div>`;
+        }
+      }
+
+      async function testRegistration() {
+        const resultDiv = document.getElementById("registrationResult");
+        resultDiv.innerHTML =
+          '<div class="info">🔄 Testing creator registration...</div>';
+
+        const userData = {
+          username: document.getElementById("regUsername").value,
+          email: document.getElementById("regEmail").value,
+          password: document.getElementById("regPassword").value,
+          role: document.getElementById("regRole").value,
+        };
+
+        try {
+          const response = await fetch(`${API_BASE}/api/auth/register`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Copy-Environment": "true",
+            },
+            body: JSON.stringify(userData),
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            if (data.token) {
+              currentToken = data.token;
+              localStorage.setItem("testAuthToken", currentToken);
+              resultDiv.innerHTML = `<div class="success">✅ Registration Successful!
+User ID: ${data.userId || data.user?.id}
+Username: ${data.user?.username}
+Role: ${data.user?.role}
+Token: ${data.token.substring(0, 20)}...
+Auto-login: ✅ Enabled
+
+🎉 Ready to test login and dashboard access!</div>`;
+            } else {
+              resultDiv.innerHTML = `<div class="success">✅ Registration Successful!
+User ID: ${data.userId}
+Email verification required
+Check email for verification code</div>`;
+            }
+          } else {
+            resultDiv.innerHTML = `<div class="error">❌ Registration Failed
+Status: ${response.status}
+Error: ${data.message}
+Details: ${JSON.stringify(data, null, 2)}</div>`;
+          }
+        } catch (error) {
+          resultDiv.innerHTML = `<div class="error">❌ Registration Request Failed
+Network Error: ${error.message}
+Make sure backend is running and accessible</div>`;
+        }
+      }
+
+      async function testCreatorLogin() {
+        const resultDiv = document.getElementById("loginResult");
+        resultDiv.innerHTML =
+          '<div class="info">🔄 Testing creator login...</div>';
+
+        const credentials = {
+          emailOrPhone: document.getElementById("loginEmail").value,
+          password: document.getElementById("loginPassword").value,
+        };
+
+        try {
+          const response = await fetch(`${API_BASE}/api/auth/login`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Copy-Environment": "true",
+            },
+            body: JSON.stringify(credentials),
+          });
+
+          const data = await response.json();
+
+          if (data.success && data.token) {
+            currentToken = data.token;
+            localStorage.setItem("testAuthToken", currentToken);
+            resultDiv.innerHTML = `<div class="success">✅ Creator Login Successful!
+User ID: ${data.user.id}
+Username: ${data.user.username}
+Email: ${data.user.email}
+Role: ${data.user.role}
+Token: ${data.token.substring(0, 20)}...
+
+🎯 Login working perfectly!
+✅ Token saved for dashboard testing</div>`;
+          } else {
+            resultDiv.innerHTML = `<div class="error">❌ Login Failed
+Status: ${response.status}
+Error: ${data.message}
+Response: ${JSON.stringify(data, null, 2)}
+
+🔧 Check if:
+- User exists (try registration first)
+- Password is correct
+- Backend auth routes are working</div>`;
+          }
+        } catch (error) {
+          resultDiv.innerHTML = `<div class="error">❌ Login Request Failed
+Network Error: ${error.message}
+API URL: ${API_BASE}/api/auth/login
+
+🔧 Troubleshooting:
+- Verify backend is running
+- Check network connectivity
+- Confirm API endpoint exists</div>`;
+        }
+      }
+
+      async function testCreatorLoginWithExistingUser() {
+        const resultDiv = document.getElementById("loginResult");
+        resultDiv.innerHTML =
+          '<div class="info">🔄 Testing login with pre-existing user...</div>';
+
+        // Try with common test credentials
+        const credentials = {
+          emailOrPhone: "testcreator@example.com",
+          password: "testpass123",
+        };
+
+        try {
+          const response = await fetch(`${API_BASE}/api/auth/login`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Copy-Environment": "true",
+            },
+            body: JSON.stringify(credentials),
+          });
+
+          const data = await response.json();
+
+          if (data.success && data.token) {
+            currentToken = data.token;
+            localStorage.setItem("testAuthToken", currentToken);
+            resultDiv.innerHTML = `<div class="success">✅ Existing User Login Successful!
+User: ${data.user.username} (${data.user.role})
+Email: ${data.user.email}
+Token received and saved ✅
+
+🎉 Authentication system working perfectly!</div>`;
+          } else {
+            resultDiv.innerHTML = `<div class="warning">⚠️ User Not Found
+This means no user exists with these credentials.
+Try registration first, then login.
+
+Response: ${JSON.stringify(data, null, 2)}</div>`;
+          }
+        } catch (error) {
+          resultDiv.innerHTML = `<div class="error">❌ Login test failed: ${error.message}</div>`;
+        }
+      }
+
+      async function testProtectedRoute() {
+        const resultDiv = document.getElementById("protectedResult");
+
+        if (!currentToken) {
+          resultDiv.innerHTML = `<div class="warning">⚠️ No authentication token found
+Please login first to test protected routes</div>`;
+          return;
+        }
+
+        resultDiv.innerHTML =
+          '<div class="info">🔄 Testing protected route access...</div>';
+
+        try {
+          const response = await fetch(`${API_BASE}/api/auth/profile`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${currentToken}`,
+              "Content-Type": "application/json",
+              "X-Copy-Environment": "true",
+            },
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            resultDiv.innerHTML = `<div class="success">✅ Protected Route Access Successful!
+User Profile Data:
+${JSON.stringify(data.user, null, 2)}
+
+🔒 JWT Authentication working correctly!</div>`;
+          } else {
+            resultDiv.innerHTML = `<div class="error">❌ Protected route access failed
+Status: ${response.status}
+Error: ${data.message}
+Token may be invalid or expired</div>`;
+          }
+        } catch (error) {
+          resultDiv.innerHTML = `<div class="error">❌ Protected route test failed
+Error: ${error.message}</div>`;
+        }
+      }
+
+      async function testInstagramOAuth() {
+        const resultDiv = document.getElementById("instagramResult");
+        resultDiv.innerHTML =
+          '<div class="info">🔄 Testing Instagram OAuth URL generation...</div>';
+
+        try {
+          const response = await fetch(`${API_BASE}/api/instagram/oauth/url`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Copy-Environment": "true",
+            },
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            resultDiv.innerHTML = `<div class="success">✅ Instagram OAuth URL Generated!
+Client ID: ${data.clientId}
+Redirect URI: ${data.redirectUri}
+OAuth URL: <a href="${data.url}" target="_blank" style="color: #fff; text-decoration: underline;">Click to test OAuth</a>
+
+📱 Instagram integration ready!</div>`;
+          } else {
+            resultDiv.innerHTML = `<div class="error">❌ Instagram OAuth failed
+Error: ${data.message}</div>`;
+          }
+        } catch (error) {
+          resultDiv.innerHTML = `<div class="error">❌ Instagram OAuth test failed
+Error: ${error.message}</div>`;
+        }
+      }
+
+      async function testInstagramCallback() {
+        const resultDiv = document.getElementById("instagramResult");
+        resultDiv.innerHTML =
+          '<div class="info">🔄 Testing Instagram OAuth callback...</div>';
+
+        try {
+          const response = await fetch(
+            `${API_BASE}/api/instagram/oauth/callback`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-Copy-Environment": "true",
+              },
+              body: JSON.stringify({
+                code: "test_auth_code_123",
+                redirect_uri: "http://localhost:3000/auth/instagram/callback",
+              }),
+            }
+          );
+
+          const data = await response.json();
+
+          if (data.success) {
+            resultDiv.innerHTML = `<div class="success">✅ Instagram OAuth Callback Working!
+Access Token: ${data.access_token}
+User Info: ${JSON.stringify(data.user_info, null, 2)}
+Expires In: ${data.expires_in} seconds
+
+📱 Instagram OAuth flow complete!</div>`;
+          } else {
+            resultDiv.innerHTML = `<div class="error">❌ Instagram OAuth callback failed
+Error: ${data.message}</div>`;
+          }
+        } catch (error) {
+          resultDiv.innerHTML = `<div class="error">❌ Instagram OAuth callback test failed
+Error: ${error.message}</div>`;
+        }
+      }
+
+      async function runCompleteTest() {
+        const resultDiv = document.getElementById("completeResult");
+        resultDiv.innerHTML =
+          '<div class="info">🚀 Running complete authentication test suite...\n\n</div>';
+
+        const tests = [
+          { name: "Backend Connection", fn: testBackendConnection },
+          { name: "User Registration", fn: testRegistration },
+          { name: "User Login", fn: testCreatorLogin },
+          { name: "Protected Route", fn: testProtectedRoute },
+          { name: "Instagram OAuth", fn: testInstagramOAuth },
+        ];
+
+        let results = [];
+
+        for (const test of tests) {
+          try {
+            resultDiv.innerHTML += `🔄 Running ${test.name}...\n`;
+            await test.fn();
+            results.push(`✅ ${test.name}: PASSED`);
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          } catch (error) {
+            results.push(`❌ ${test.name}: FAILED - ${error.message}`);
+          }
+        }
+
+        const passedTests = results.filter((r) => r.includes("✅")).length;
+        const totalTests = results.length;
+
+        resultDiv.innerHTML = `<div class="${
+          passedTests === totalTests ? "success" : "warning"
+        }">
+🎯 Complete Test Results (${passedTests}/${totalTests} passed):
+
+${results.join("\n")}
+
+${
+  passedTests === totalTests
+    ? "🎉 ALL TESTS PASSED! Authentication system is working perfectly!"
+    : "⚠️ Some tests failed. Check individual test sections above for details."
+}
+</div>`;
+      }
+    </script>
+  </body>
+</html>

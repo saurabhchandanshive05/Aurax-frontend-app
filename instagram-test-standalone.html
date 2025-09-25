@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Instagram API Test - Standalone</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .test-container {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 0;
+      }
+      .success {
+        color: #28a745;
+      }
+      .error {
+        color: #dc3545;
+      }
+      .info {
+        color: #17a2b8;
+      }
+      button {
+        background: #e1306c;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #d12962;
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .result-box {
+        background: white;
+        padding: 15px;
+        margin: 10px 0;
+        border-left: 4px solid #e1306c;
+      }
+      .spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #e1306c;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🔍 Instagram API Connection Test</h1>
+    <p>Test your Instagram Business account connection instantly!</p>
+
+    <div class="test-container">
+      <button id="testBtn" onclick="testInstagramConnection()">
+        <span id="btnText">Test Instagram Connection</span>
+      </button>
+      <div id="results"></div>
+    </div>
+
+    <script>
+      const ACCESS_TOKEN =
+        "IGAAcEeAqNxHZABZAE1wZAlYyWThkei12QmlvYVlaejRIQXBrMElyZAE0zX0VFT1VLZAm9oeTZAqeHVJcFJQYjdEVTJ1ZAktvdUQ1MGF6dS1SZA0tENjladVZAUd2VfdFNmSmtWdlQ5Mm5Db3QtSHNmdk9pd3BWX0lMUzAySEVWNy11cGJYWQZDZD";
+      const BASE_URL = "https://graph.instagram.com";
+
+      async function testInstagramConnection() {
+        const testBtn = document.getElementById("testBtn");
+        const btnText = document.getElementById("btnText");
+        const results = document.getElementById("results");
+
+        // Show loading
+        testBtn.disabled = true;
+        btnText.innerHTML = '<span class="spinner"></span> Testing...';
+        results.innerHTML =
+          '<div class="info">🔍 Testing Instagram API connection...</div>';
+
+        try {
+          // Test authentication
+          const response = await fetch(
+            `${BASE_URL}/me?fields=id,username,account_type,media_count&access_token=${ACCESS_TOKEN}`
+          );
+
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error?.message || "Authentication failed");
+          }
+
+          const userData = await response.json();
+
+          // Test profile data
+          const profileResponse = await fetch(
+            `${BASE_URL}/${userData.id}?fields=followers_count,follows_count,media_count,profile_picture_url&access_token=${ACCESS_TOKEN}`
+          );
+          let profileData = {};
+
+          if (profileResponse.ok) {
+            profileData = await profileResponse.json();
+          }
+
+          // Show success results
+          results.innerHTML = `
+                    <div class="result-box">
+                        <div class="success">✅ Instagram Connection Successful!</div>
+                        <br>
+                        <strong>Account Details:</strong><br>
+                        👤 Username: @${userData.username}<br>
+                        🏢 Account Type: ${userData.account_type}<br>
+                        👥 Followers: ${
+                          profileData.followers_count?.toLocaleString() || "N/A"
+                        }<br>
+                        📱 Posts: ${
+                          userData.media_count ||
+                          profileData.media_count ||
+                          "N/A"
+                        }<br>
+                        🆔 Account ID: ${userData.id}<br>
+                        <br>
+                        <div class="info">🎉 Your Instagram integration is ready to use!</div>
+                    </div>
+                `;
+        } catch (error) {
+          // Show error results
+          results.innerHTML = `
+                    <div class="result-box">
+                        <div class="error">❌ Instagram Connection Failed</div>
+                        <br>
+                        <strong>Error:</strong> ${error.message}<br>
+                        <br>
+                        <strong>Troubleshooting:</strong><br>
+                        🔑 Check if your access token is valid<br>
+                        🏢 Ensure Instagram account is Business/Creator<br>
+                        🔗 Verify account is linked to Facebook Page<br>
+                        🌐 Check internet connection<br>
+                    </div>
+                `;
+        } finally {
+          // Reset button
+          testBtn.disabled = false;
+          btnText.textContent = "Test Again";
+        }
+      }
+    </script>
+  </body>
+</html>

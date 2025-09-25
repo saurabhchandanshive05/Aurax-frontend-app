@@ -56,13 +56,13 @@ const BrandsPage = () => {
   const pricingPlans = [
     {
       name: "Starter",
-      price: "$299/month",
+      price: "$XX9/month",
       description: "For small businesses",
       features: ["10 campaigns", "Basic analytics", "Email support"],
     },
     {
       name: "Professional",
-      price: "$799/month",
+      price: "$XXX9/month",
       description: "For growing brands",
       features: [
         "Unlimited campaigns",

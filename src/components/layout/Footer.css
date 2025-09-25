@@ -547,7 +547,7 @@
   align-items: center;
 }
 
-.social-links {
+.aurax-footer .social-links {
   display: flex;
   gap: 1rem;
 }
@@ -755,7 +755,7 @@
     padding: 1.5rem;
   }
 
-  .social-links {
+  .aurax-footer .social-links {
     gap: 0.75rem;
   }
 

@@ -281,6 +281,8 @@
   padding: 4rem 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-container {
@@ -288,6 +290,9 @@
   grid-template-columns: 1fr 400px;
   gap: 4rem;
   align-items: start;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .aurax-contact-card {
@@ -587,7 +592,7 @@
   margin-bottom: 1rem;
 }
 
-.social-links {
+.contact-info .social-links {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -798,6 +803,11 @@
     padding: 1rem;
   }
 
+  .aurax-form-section {
+    padding: 2rem 1rem;
+    margin: 0 auto;
+  }
+
   .aurax-hero-title {
     font-size: clamp(2rem, 8vw, 3rem);
   }
@@ -820,14 +830,22 @@
   .form-container {
     grid-template-columns: 1fr;
     gap: 2rem;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 100%;
   }
 
   .aurax-contact-card {
     padding: 2rem;
+    margin: 0 auto;
+    width: 100%;
+    max-width: none;
   }
 
   .aurax-info-card {
     position: static;
+    margin: 0 auto;
+    width: 100%;
   }
 
   .cta-options {
@@ -849,8 +867,37 @@
 }
 
 @media (max-width: 480px) {
+  .aurax-contact-page {
+    padding: 0;
+    margin: 0;
+  }
+
+  .aurax-hero-section {
+    padding: 1rem 0.5rem;
+  }
+
+  .aurax-form-section {
+    padding: 2rem 0.5rem;
+    margin: 0;
+  }
+
+  .form-container {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+
   .aurax-contact-card {
     padding: 1.5rem;
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .aurax-info-card {
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .aurax-form {
@@ -860,10 +907,21 @@
   .aurax-input,
   .aurax-textarea {
     padding: 0.75rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .aurax-submit-btn {
     padding: 1rem 1.5rem;
     font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .hero-content {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
   }
 }

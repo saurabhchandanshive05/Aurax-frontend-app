@@ -72,7 +72,7 @@ const Footer = () => {
             {/* Contact Information */}
             <div className="contact-section">
               <div className="contact-item">
-                <a href="tel:+919876543210" className="contact-link">
+                <a href="tel:+919923717300" className="contact-link">
                   <div className="contact-icon phone-icon">📞</div>
                   <span>+91 9923717368</span>
                 </a>
@@ -85,7 +85,7 @@ const Footer = () => {
               </div>
               <div className="contact-item">
                 <a
-                  href="https://wa.me/919923717368"
+                  href="https://wa.me/919923717300"
                   className="contact-link whatsapp-link"
                 >
                   <div className="contact-icon whatsapp-icon">💬</div>
@@ -221,7 +221,7 @@ const Footer = () => {
                 <div className="social-glow youtube-glow"></div>
               </a>
               <a
-                href="https://wa.me/919923717368"
+                href="https://wa.me/919923717300"
                 className="social-icon whatsapp"
                 aria-label="WhatsApp"
               >

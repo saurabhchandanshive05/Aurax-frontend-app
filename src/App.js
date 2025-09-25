@@ -47,6 +47,9 @@ const InfluencerDiscovery = React.lazy(() =>
 );
 const DataDrivenGrowth = React.lazy(() => import("./pages/DataDrivenGrowth"));
 const Signup = React.lazy(() => import("./pages/Signup"));
+const ForgotPassword = React.lazy(() => import("./pages/ForgotPassword"));
+const Support = React.lazy(() => import("./pages/Support"));
+const Help = React.lazy(() => import("./pages/Help"));
 const CopyEnvironmentTest = React.lazy(() =>
   import("./pages/CopyEnvironmentTest")
 );
@@ -65,6 +68,9 @@ const DirectDatabaseTest = React.lazy(() =>
 const BackendFix = React.lazy(() => import("./pages/BackendFix"));
 const LoginTestReady = React.lazy(() => import("./pages/LoginTestReady"));
 const TestRoutePage = React.lazy(() => import("./pages/TestRoutePage"));
+const EnhancedLogin = React.lazy(() => import("./pages/EnhancedLogin"));
+const EnhancedLoginTest = React.lazy(() => import("./pages/EnhancedLoginTest"));
+const AuthTest = React.lazy(() => import("./pages/AuthTest"));
 
 // Mobile navigation component
 function MobileNavMenu() {
@@ -275,8 +281,16 @@ function App() {
                     <Route path="/contact" element={<ContactPage />} />
                     <Route path="/brand/login" element={<BrandLogin />} />
                     <Route path="/creator/login" element={<CreatorLogin />} />
+                    <Route
+                      path="/forgot-password"
+                      element={<ForgotPassword />}
+                    />
+                    <Route path="/support" element={<Support />} />
+                    <Route path="/help" element={<Help />} />
                     <Route path="/coming-soon" element={<ComingSoonPage />} />
                     <Route path="/signup" element={<Signup />} />
+                    <Route path="/brand/signup" element={<Signup />} />
+                    <Route path="/creator/signup" element={<Signup />} />
 
                     {/* Copy Environment Test Route */}
                     <Route
@@ -317,7 +331,13 @@ function App() {
                     />
                     <Route path="/backend-fix" element={<BackendFix />} />
                     <Route path="/login-test" element={<LoginTestReady />} />
+                    <Route path="/enhanced-login" element={<EnhancedLogin />} />
+                    <Route
+                      path="/enhanced-login-test"
+                      element={<EnhancedLoginTest />}
+                    />
                     <Route path="/test-route" element={<TestRoutePage />} />
+                    <Route path="/auth-test" element={<AuthTest />} />
 
                     {/* Specialization Routes */}
                     <Route path="/ai-marketing" element={<AIMarketing />} />

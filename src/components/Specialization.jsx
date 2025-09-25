@@ -122,7 +122,7 @@ const Specialization = () => {
       icon: "🔍",
       color: "#ff9e00",
       description: "AI-powered matching with perfect creator partnerships",
-      path: "/influencer-discovery",
+      path: "influencer-discovery",
       video: "",
     },
     {

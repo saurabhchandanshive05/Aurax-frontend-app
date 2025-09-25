@@ -1,124 +1,79 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import styles from "../styles/UGCAutomation.module.css";
 
 const UGCAutomation = () => {
   const navigate = useNavigate();
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    document.title = "UGC Automation | Our Services";
+    document.title = "UGC Automation | AURAX AI";
+    const timer = setTimeout(() => setIsVisible(true), 100);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
     <div className={styles.container}>
       {/* Hero Section */}
-      <motion.section
-        className={styles.hero}
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          UGC Automation
-        </motion.h1>
-        <motion.p
-          className={styles.subtitle}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-        >
-          Automated content creation with human-like authenticity
-        </motion.p>
-      </motion.section>
+      <section className={`${styles.hero} ${isVisible ? styles.visible : ""}`}>
+        <div className={styles.heroContent}>
+          <div className={styles.iconContainer}>
+            <span className={styles.heroIcon}>🤖</span>
+          </div>
+          <h1 className={styles.heroTitle}>UGC Automation</h1>
+          <p className={styles.heroSubtitle}>
+            Automate user-generated content creation and amplify authentic brand
+            engagement at scale
+          </p>
+        </div>
+      </section>
 
-      {/* Content Section */}
-      <motion.section
-        className={styles.content}
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.6 }}
-      >
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-        >
-          Platform-Optimized Content
-        </motion.h2>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.0 }}
-        >
-          Our AI generates automated briefs aligned with trending themes and
-          edits influencer content into platform-specific formats while
-          maintaining brand safety and authenticity.
-        </motion.p>
+      {/* Features Grid */}
+      <section className={styles.features}>
+        <div className={styles.featureGrid}>
+          <div className={styles.featureCard}>
+            <div className={styles.featureIcon}>⚡</div>
+            <h3>Smart Generation</h3>
+            <p>AI-powered content creation that maintains authenticity</p>
+          </div>
+          <div className={styles.featureCard}>
+            <div className={styles.featureIcon}>📊</div>
+            <h3>Performance Analytics</h3>
+            <p>Real-time insights and engagement optimization</p>
+          </div>
+          <div className={styles.featureCard}>
+            <div className={styles.featureIcon}>🔄</div>
+            <h3>Workflow Automation</h3>
+            <p>Streamlined processes from creation to distribution</p>
+          </div>
+        </div>
+      </section>
 
-        <motion.div
-          className={styles.features}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.2 }}
-        >
-          <h3>Key Benefits:</h3>
-          <ul>
-            <motion.li
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 1.4 }}
+      {/* CTA Section */}
+      <section className={styles.cta}>
+        <div className={styles.ctaContent}>
+          <h2 className={styles.ctaTitle}>
+            Ready to Transform Your UGC Strategy?
+          </h2>
+          <p className={styles.ctaDescription}>
+            Join leading brands automating their content creation workflow
+          </p>
+          <div className={styles.ctaButtons}>
+            <button
+              className={styles.primaryButton}
+              onClick={() => navigate("/brand-login")}
             >
-              AI-generated captions and hashtags for maximum reach
-            </motion.li>
-            <motion.li
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 1.5 }}
+              Get Started
+            </button>
+            <button
+              className={styles.secondaryButton}
+              onClick={() => navigate("/")}
             >
-              Automated video editing for cross-platform posting
-            </motion.li>
-            <motion.li
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 1.6 }}
-            >
-              Real-time identification of top-performing UGC
-            </motion.li>
-            <motion.li
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 1.7 }}
-            >
-              Brand safety filters for compliant content
-            </motion.li>
-            <motion.li
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 1.8 }}
-            >
-              Trend-aligned content briefs
-            </motion.li>
-          </ul>
-        </motion.div>
-      </motion.section>
-
-      {/* Back Button */}
-      <motion.button
-        onClick={() => navigate("/specialization")}
-        className={styles.backButton}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 2.0 }}
-        whileHover={{ y: -2 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        ← Back to Specializations
-      </motion.button>
+              ← Back Home
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

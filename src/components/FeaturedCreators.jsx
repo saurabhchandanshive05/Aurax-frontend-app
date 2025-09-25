@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import {
   motion,
   AnimatePresence,
@@ -6,6 +6,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
+import { debounce } from "lodash";
 import styles from "./styles/FeaturedCreators.module.css";
 
 const FeaturedCreators = () => {
@@ -22,161 +23,148 @@ const FeaturedCreators = () => {
   const carouselRef = useRef(null);
   const scrollTimeoutRef = useRef(null);
   const profilePreviewTimeoutRef = useRef(null);
+  const isScrolling = useRef(false);
 
   const influencers = [
     {
       id: 1,
-      name: "Ahsaas Channa",
-      location: "Mumbai, India",
-      image: "/images/sutej-pannu.png",
-      instagramUrl: "https://instagram.com/sutejpannu",
-      youtubeUrl: "https://youtube.com/sutejpannu",
-      bio: "Fashion influencer with 1.2M followers. Known for luxury brand collaborations and style transformations.",
-      categories: ["Fashion", "Lifestyle", "Travel"],
-      followers: "1.2M",
-      engagement: "8.5%",
-      posts: "2.1K",
+      name: "AnitasDigitalDiaryy",
+      location: "Jaipur",
+      image:
+        "https://res.cloudinary.com/dzvtsnpr6/image/upload/v1756719244/Aneeta_wzw8zb.webp",
+      instagramUrl: "https://www.instagram.com/anitasdigitaldiaryy/",
+      youtubeUrl: "",
+      bio: "Fitness | Fashion",
+      categories: ["Fitness", "Fashion"],
+      followers: "50K",
+      engagement: "5.3%",
+      posts: "341",
     },
     {
       id: 2,
-      name: "Aashi Sahni",
-      location: "Delhi, India",
-      image: "/images/priyam-saraswat.png",
-      instagramUrl: "https://instagram.com/priyamsaraswat",
-      youtubeUrl: "https://youtube.com/priyamsaraswat",
-      bio: "Tech reviewer and gadget enthusiast. Specializes in smartphone reviews and tech tutorials.",
-      categories: ["Tech", "Gadgets", "Reviews"],
-      followers: "890K",
-      engagement: "12.3%",
-      posts: "1.8K",
+      name: "Ranveer Allahbadia",
+      location: "Mumbai",
+      image:
+        "https://res.cloudinary.com/dzvtsnpr6/image/upload/v1756719759/ranveer-allahbadia_xkjimx.webp",
+      instagramUrl: "https://www.instagram.com/ranveerallahbadia/",
+      youtubeUrl: "",
+      bio: "Exploring The Unexplored – Discovering darkness & its secrets",
+      categories: ["Health & Fitness", "Entertainment"],
+      followers: "4M–4.27M",
+      engagement: "5.35%",
+      posts: "2.4K",
     },
     {
       id: 3,
-      name: "anitasdigitaldiaryy",
-      location: "Mumbai, India",
-      image: "/images/mumbiker-nikhil.png",
-      instagramUrl: "https://instagram.com/mumbikernikhil",
-      youtubeUrl: "https://youtube.com/mumbikernikhil",
-      bio: "Bike enthusiast and travel vlogger. Creates adventure content and motorcycle reviews.",
-      categories: ["Travel", "Adventure", "Automotive"],
-      followers: "2.1M",
-      engagement: "6.8%",
-      posts: "3.2K",
+      name: "Payal Gaming",
+      location: "Mumbai",
+      image:
+        "https://res.cloudinary.com/dzvtsnpr6/image/upload/v1756719600/Payal-gaming_jqejam.webp",
+      instagramUrl: "https://www.instagram.com/payalgamingg/",
+      youtubeUrl: "",
+      bio: "Mobile Streamer of the Year – iQOO Brand Ambassador",
+      categories: ["Gaming", "Streaming"],
+      followers: "4M",
+      engagement: "",
+      posts: "567",
     },
     {
       id: 4,
-      name: "Amee Alee",
-      location: "Punjab, India",
-      image: "/images/harsh-likhari.png",
-      instagramUrl: "https://instagram.com/harshlikhari",
-      youtubeUrl: "https://youtube.com/harshlikhari",
-      bio: "Comedian and content creator known for relatable skits and funny commentary on daily life.",
-      categories: ["Comedy", "Entertainment", "Social"],
-      followers: "1.5M",
-      engagement: "11.2%",
-      posts: "2.7K",
+      name: "Kusha Kapila",
+      location: "Mumbai",
+      image:
+        "https://res.cloudinary.com/dzvtsnpr6/image/upload/v1756718802/kusha-kapila_hoigv7.webp",
+      instagramUrl: "https://www.instagram.com/kushakapila/",
+      youtubeUrl: "",
+      bio: "Small and stupid repped by @foreverlost3_wanderer",
+      categories: ["Comedy", "Entertainment"],
+      followers: "4.3M",
+      engagement: "4.36%",
+      posts: "2.8K",
     },
     {
       id: 5,
-      name: "Ranveer Allahbadia",
-      location: "Mumbai, India",
-      image: "/images/ranveer-allahbadia.png",
-      instagramUrl: "https://instagram.com/ranveerallahbadia",
-      youtubeUrl: "https://youtube.com/ranveerallahbadia",
-      bio: "Fitness expert and motivational speaker. Focuses on health, wellness, and personal development.",
-      categories: ["Fitness", "Health", "Motivation"],
-      followers: "3.2M",
-      engagement: "9.1%",
-      posts: "4.1K",
-    },
-    {
-      id: 6,
-      name: "Gaurav Taneja",
-      location: "Delhi, India",
-      image: "/images/dolly-singh.png",
-      instagramUrl: "https://instagram.com/dollysingh",
-      youtubeUrl: "https://youtube.com/dollysingh",
-      bio: "Actress and content creator known for character sketches and relatable comedy content.",
-      categories: ["Comedy", "Acting", "Entertainment"],
-      followers: "2.8M",
-      engagement: "7.6%",
-      posts: "1.9K",
-    },
-  ];
-
-  // Duplicate some creators to increase variety without requiring new assets
-  // ...existing code...
-  // Duplicate some creators to increase variety without requiring new assets
-  const extraInfluencers = [
-    {
-      id: 106,
-      name: "Bhuvan Bam",
-      location: "Delhi, India",
-      image: "/images/bhuvan-bam.png",
-      instagramUrl: "https://instagram.com/bhuvan.bam22",
-      youtubeUrl: "https://youtube.com/bbkvines",
-      bio: "Comedian, singer, and YouTube sensation known for BB Ki Vines.",
-      categories: ["Comedy", "Music", "Entertainment"],
-      followers: "16M",
-      engagement: "10.2%",
-      posts: "1.5K",
-    },
-    {
-      id: 102,
-      name: "Dhruv Rathee",
-      location: "Germany / India",
-      image: "/images/dhruv-rathee.png",
-      instagramUrl: "https://instagram.com/dhruvrathee",
-      youtubeUrl: "https://youtube.com/dhruvrathee",
-      bio: "Popular educator and social commentator creating informative videos.",
-      categories: ["Education", "Politics", "Social"],
-      followers: "2.2M",
-      engagement: "8.7%",
-      posts: "900",
-    },
-    {
-      id: 103,
-      name: "Kusha Kapila",
-      location: "Delhi, India",
-      image: "/images/kusha-kapila.png",
-      instagramUrl: "https://instagram.com/kushakapila",
-      youtubeUrl: "https://youtube.com/kushakapila",
-      bio: "Actor, comedian, and digital creator known for her witty sketches.",
-      categories: ["Comedy", "Acting", "Fashion"],
-      followers: "3.5M",
-      engagement: "9.8%",
+      name: "Amya Aela",
+      location: "Mumbai",
+      image:
+        "https://res.cloudinary.com/dzvtsnpr6/image/upload/v1756718598/Amy-aela_h4xrdd.webp",
+      instagramUrl: "https://www.instagram.com/amyaela/",
+      youtubeUrl: "",
+      bio: "Co-Founder @pause.mumbai Podcast – Kindness & Clean Planet",
+      categories: ["Lifestyle", "Social Impact"],
+      followers: "2M",
+      engagement: "1.11%",
       posts: "2.3K",
     },
     {
-      id: 104,
-      name: "Jannat Zubair",
-      location: "Mumbai, India",
-      image: "/images/jannat-zubair.png",
-      instagramUrl: "https://instagram.com/jannatzubair29",
-      youtubeUrl: "https://youtube.com/jannatzubair",
-      bio: "Actress and social media star popular for her music and lifestyle content.",
-      categories: ["Acting", "Music", "Lifestyle"],
-      followers: "45M",
-      engagement: "7.5%",
-      posts: "3.8K",
+      id: 6,
+      name: "Dhruv Rathee",
+      location: "Delhi",
+      image:
+        "https://res.cloudinary.com/dzvtsnpr6/image/upload/v1756718756/dhruv-rathee_fjg5bn.webp",
+      instagramUrl: "https://www.instagram.com/dhruvrathee/",
+      youtubeUrl: "",
+      bio: "YouTube Educator • Striving for a better world",
+      categories: ["Education", "Social Commentary"],
+      followers: "14.4–14.6M",
+      engagement: "6.45%",
+      posts: "826",
+    },
+    {
+      id: 7,
+      name: "Focused Indian",
+      location: "Mumbai",
+      image:
+        "https://res.cloudinary.com/dzvtsnpr6/image/upload/v1756719619/Focused-Indian_l3e5vq.webp",
+      instagramUrl: "https://www.instagram.com/focusedindian/",
+      youtubeUrl: "",
+      bio: "I make films on reels. I post daily vlogs on YouTube. Sports Lunatic. Verified.",
+      categories: ["Comedy", "Vlogging", "Short-form Films"],
+      followers: "2M",
+      engagement: "",
+      posts: "1.4K",
+    },
+    {
+      id: 8,
+      name: "Gaurav Taneja",
+      location: "Delhi",
+      image:
+        "https://res.cloudinary.com/dzvtsnpr6/image/upload/v1756718771/Guarav-Tanej_xhvqt5.webp",
+      instagramUrl: "https://www.instagram.com/taneja.gaurav/",
+      youtubeUrl: "",
+      bio: "Content Creator (Flying Beast)",
+      categories: ["Lifestyle", "Travel", "Fitness"],
+      followers: "3.56M",
+      engagement: "",
+      posts: "2.0K",
     },
   ];
-  // ...existing code...
-  const baseCreators = [...influencers, ...extraInfluencers];
-  const total = baseCreators.length;
-  const extendedCreators = [...baseCreators, ...baseCreators, ...baseCreators];
 
-  // Start from the middle block to allow backward/forward instant wrap
+  // Ensure baseCreators is properly combined
+  const baseCreators = useMemo(() => [...influencers], []);
+  const total = baseCreators.length;
+
+  // Create extended array for infinite scroll
+  const extendedCreators = useMemo(
+    () => [...baseCreators, ...baseCreators, ...baseCreators],
+    [baseCreators]
+  );
+
+  // Start from middle block
   useEffect(() => {
-    setCurrentIndex(total); // center block start
+    setCurrentIndex(total);
+    setVisibleCards(new Set([total - 1, total, total + 1]));
   }, [total]);
 
-  // Lazy loading implementation
+  // Update visible cards calculation
   useEffect(() => {
     const updateVisibleCards = () => {
       const newVisible = new Set();
+      // Show 5 cards at a time (current + 2 on each side)
       for (let i = currentIndex - 2; i <= currentIndex + 2; i++) {
-        if (i >= 0 && i < extendedCreators.length) newVisible.add(i);
+        if (i >= 0 && i < extendedCreators.length) {
+          newVisible.add(i);
+        }
       }
       setVisibleCards(newVisible);
     };
@@ -239,49 +227,130 @@ const FeaturedCreators = () => {
     }, 5000);
   };
 
+  // Optimize card click handler
   const handleCardTap = (creator) => {
-    // Quick scale animation
+    if (isScrolling.current) return;
+
     const cardElement = document.querySelector(
       `[data-creator-id="${creator.id}"]`
     );
-    if (cardElement) {
+    if (!cardElement) return;
+
+    requestAnimationFrame(() => {
       cardElement.style.transform = "scale(1.03)";
       setTimeout(() => {
         cardElement.style.transform = "scale(1)";
       }, 150);
-    }
+    });
   };
 
-  // Touch/swipe handling
-  const handleTouchStart = useRef({ x: 0, time: 0 });
-  const handleTouchEnd = useRef({ x: 0, time: 0 });
+  // Touch/swipe handling with improved tap detection
+  const handleTouchStart = useRef({ x: 0, y: 0, time: 0 });
+  const handleTouchEnd = useRef({ x: 0, y: 0, time: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [touchMoved, setTouchMoved] = useState(false);
+
+  // Prevent body scroll when touching carousel
+  useEffect(() => {
+    const carousel = carouselRef.current;
+
+    const preventBodyScroll = (e) => {
+      if (
+        Math.abs(e.touches[0].clientX - handleTouchStart.current.x) >
+        Math.abs(e.touches[0].clientY - handleTouchStart.current.y)
+      ) {
+        e.preventDefault();
+      }
+    };
+
+    carousel?.addEventListener("touchmove", preventBodyScroll, {
+      passive: false,
+    });
+    return () => carousel?.removeEventListener("touchmove", preventBodyScroll);
+  }, []);
 
   const onTouchStart = (e) => {
+    if (isScrolling.current) return;
+
+    setTouchMoved(false);
+    setIsDragging(false);
+
     handleTouchStart.current = {
       x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
       time: Date.now(),
     };
   };
 
+  const onTouchMove = (e) => {
+    if (!handleTouchStart.current.x) return;
+
+    const deltaX = Math.abs(e.touches[0].clientX - handleTouchStart.current.x);
+    const deltaY = Math.abs(e.touches[0].clientY - handleTouchStart.current.y);
+
+    // If moved more than 5px, consider it movement
+    if (deltaX > 5 || deltaY > 5) {
+      setTouchMoved(true);
+
+      // If horizontal movement is greater than vertical and > 15px, it's a horizontal swipe
+      if (deltaX > deltaY && deltaX > 15) {
+        setIsDragging(true);
+        e.preventDefault(); // Prevent scrolling during horizontal swipe
+      }
+    }
+  };
+
   const onTouchEnd = (e) => {
+    if (isScrolling.current) return;
+
     handleTouchEnd.current = {
       x: e.changedTouches[0].clientX,
+      y: e.changedTouches[0].clientY,
       time: Date.now(),
     };
 
     const deltaX = handleTouchStart.current.x - handleTouchEnd.current.x;
+    const deltaY = handleTouchStart.current.y - handleTouchEnd.current.y;
     const deltaTime =
       handleTouchEnd.current.time - handleTouchStart.current.time;
 
-    // Swipe detection (minimum 50px distance, maximum 500ms duration)
-    if (Math.abs(deltaX) > 50 && deltaTime < 500) {
+    // Only trigger swipe if it was a clear horizontal gesture
+    if (
+      isDragging &&
+      Math.abs(deltaX) > 40 && // Reduced threshold for better responsiveness
+      Math.abs(deltaX) > Math.abs(deltaY) * 1.5 && // Horizontal movement must be 1.5x vertical
+      deltaTime < 600 && // Increased time window
+      Math.abs(deltaX / deltaTime) > 0.2 // Reduced minimum velocity
+    ) {
       if (deltaX > 0) {
         handleScroll("next");
       } else {
         handleScroll("prev");
       }
     }
+
+    // Reset states with a slight delay to prevent accidental clicks
+    setTimeout(() => {
+      setIsDragging(false);
+      setTouchMoved(false);
+    }, 150);
   };
+
+  // Optimize scroll detection with debounce
+  useEffect(() => {
+    const handleScroll = debounce(() => {
+      isScrolling.current = true;
+      setTimeout(() => {
+        isScrolling.current = false;
+      }, 150);
+    }, 16); // ~60fps
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      handleScroll.cancel();
+    };
+  }, []);
 
   // Determine item width in percentage for responsive layout
   const itemWidthPercent =
@@ -301,6 +370,24 @@ const FeaturedCreators = () => {
     }
   };
 
+  const renderCreatorImage = (creator, index) => {
+    if (!visibleCards.has(index)) return null;
+
+    return (
+      <img
+        src={creator.image}
+        alt={creator.name}
+        className={styles.creatorImage}
+        loading={index <= currentIndex + 1 ? "eager" : "lazy"}
+        decoding="async"
+        style={{
+          opacity: visibleCards.has(index) ? 1 : 0,
+          transform: "translateZ(0)",
+        }}
+      />
+    );
+  };
+
   return (
     <section className={styles.featuredSection}>
       <div className={styles.container}>
@@ -313,51 +400,69 @@ const FeaturedCreators = () => {
         </div>
 
         {/* Main Carousel */}
-        <div className={styles.carouselWrapper}>
+        <div
+          className={styles.carouselWrapper}
+          style={{ touchAction: "pan-y pinch-zoom" }}
+        >
           <div
             className={styles.carousel}
             ref={carouselRef}
             onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
           >
             <div
               className={styles.carouselTrack}
               style={{
-                transform: `translateX(-${currentIndex * itemWidthPercent}%)`,
+                transform: `translate3d(-${
+                  currentIndex * itemWidthPercent
+                }%, 0, 0)`,
                 transition: isTransitioning
-                  ? "transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
+                  ? "transform 0.5s cubic-bezier(0.2, 0, 0.2, 1)"
                   : "none",
               }}
               onTransitionEnd={handleTransitionEnd}
             >
               {extendedCreators.map((creator, index) => (
                 <motion.div
-                  key={creator.id}
-                  className={`${styles.creatorCard} ${
-                    index === currentIndex ? styles.active : ""
-                  }`}
+                  key={`${creator.id}-${index}`}
+                  className={styles.creatorCard}
                   data-creator-id={creator.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{
+                  style={{
                     opacity: visibleCards.has(index) ? 1 : 0.3,
-                    y: 0,
-                    scale: index === currentIndex ? 1 : 0.95,
+                    transform: "translateZ(0)",
+                    width: `${itemWidthPercent}%`,
                   }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  onClick={() => handleCardTap(creator)}
-                  onMouseDown={() => handleCardPress(creator)}
-                  onTouchStart={() => handleCardPress(creator)}
-                  whileTap={{ scale: 1.03 }}
-                  whileHover={{ y: -8 }}
+                  onClick={(e) => {
+                    // Prevent click if touch moved or is dragging
+                    if (touchMoved || isDragging) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      return;
+                    }
+                    // Only allow clicks if it's a clean tap
+                    if (!isScrolling.current) {
+                      handleCardPress(creator);
+                    }
+                  }}
                 >
                   {/* Image Container */}
-                  <div className={styles.imageContainer}>
+                  <div
+                    className={styles.imageContainer}
+                    onClick={(e) => {
+                      // Prevent image clicks during swipe
+                      if (touchMoved || isDragging) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }
+                    }}
+                  >
                     {visibleCards.has(index) && (
                       <img
                         src={creator.image}
                         alt={creator.name}
                         className={styles.creatorImage}
-                        loading={visibleCards.has(index) ? "eager" : "lazy"}
+                        loading={index <= currentIndex + 1 ? "eager" : "lazy"}
                       />
                     )}
 
@@ -499,11 +604,22 @@ const FeaturedCreators = () => {
             <button
               key={index}
               className={`${styles.indicator} ${
-                index === currentIndex ? styles.indicatorActive : ""
+                index === currentIndex % influencers.length
+                  ? styles.indicatorActive
+                  : ""
               }`}
               onClick={() => {
-                setCurrentIndex(index);
                 setIsManualScroll(true);
+                setIsTransitioning(true);
+                setCurrentIndex(index);
+
+                // Resume auto-scroll after 10 seconds
+                if (scrollTimeoutRef.current) {
+                  clearTimeout(scrollTimeoutRef.current);
+                }
+                scrollTimeoutRef.current = setTimeout(() => {
+                  setIsManualScroll(false);
+                }, 10000);
               }}
               aria-label={`Go to creator ${index + 1}`}
             />

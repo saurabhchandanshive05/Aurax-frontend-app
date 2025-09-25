@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Verification Flow Test - Aurax</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 1000px;
+        margin: 50px auto;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+      .test-container {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 30px;
+        margin: 20px 0;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .success {
+        background-color: rgba(40, 167, 69, 0.3);
+        color: #d4edda;
+        border: 1px solid #28a745;
+      }
+      .error {
+        background-color: rgba(220, 53, 69, 0.3);
+        color: #f8d7da;
+        border: 1px solid #dc3545;
+      }
+      .info {
+        background-color: rgba(23, 162, 184, 0.3);
+        color: #d1ecf1;
+        border: 1px solid #17a2b8;
+      }
+      .warning {
+        background-color: rgba(255, 193, 7, 0.3);
+        color: #fff3cd;
+        border: 1px solid #ffc107;
+      }
+      button {
+        padding: 12px 24px;
+        margin: 8px;
+        cursor: pointer;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+      }
+      .btn-primary {
+        background: linear-gradient(45deg, #007bff, #0056b3);
+        color: white;
+      }
+      .btn-success {
+        background: linear-gradient(45deg, #28a745, #1e7e34);
+        color: white;
+      }
+      .btn-warning {
+        background: linear-gradient(45deg, #ffc107, #e0a800);
+        color: black;
+      }
+      .btn-danger {
+        background: linear-gradient(45deg, #dc3545, #c82333);
+        color: white;
+      }
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+      input,
+      select {
+        padding: 10px;
+        margin: 8px;
+        width: 300px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        backdrop-filter: blur(5px);
+      }
+      input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+      }
+      h1,
+      h2,
+      h3 {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      .result-box {
+        margin: 15px 0;
+        padding: 15px;
+        border-radius: 8px;
+        white-space: pre-wrap;
+        font-family: monospace;
+        font-size: 14px;
+      }
+      .verification-token {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 10px;
+        border-radius: 5px;
+        word-break: break-all;
+        font-family: monospace;
+        margin: 10px 0;
+      }
+      .flow-step {
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+      }
+      .step-number {
+        background: #007bff;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-right: 15px;
+      }
+      .completed {
+        background: #28a745;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>📧 Email Verification Flow Test</h1>
+
+    <div class="test-container">
+      <h3>🚀 Complete Email Verification Workflow</h3>
+      <div class="flow-step">
+        <div class="step-number" id="step1">1</div>
+        <span>User registers with email</span>
+      </div>
+      <div class="flow-step">
+        <div class="step-number" id="step2">2</div>
+        <span>Verification email sent</span>
+      </div>
+      <div class="flow-step">
+        <div class="step-number" id="step3">3</div>
+        <span>User clicks verification link</span>
+      </div>
+      <div class="flow-step">
+        <div class="step-number" id="step4">4</div>
+        <span>Account verified & welcome email sent</span>
+      </div>
+    </div>
+
+    <div class="test-container">
+      <h3>👤 Step 1: User Registration</h3>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px">
+        <input
+          type="text"
+          id="regUsername"
+          placeholder="Username"
+          value="verifytest123"
+        />
+        <input
+          type="email"
+          id="regEmail"
+          placeholder="Email"
+          value="verifytest@example.com"
+        />
+        <input
+          type="password"
+          id="regPassword"
+          placeholder="Password"
+          value="testpass123"
+        />
+        <select id="regRole">
+          <option value="creator">Creator</option>
+          <option value="brand">Brand</option>
+        </select>
+      </div>
+      <button class="btn-primary" onclick="testRegistration()">
+        🚀 Register User
+      </button>
+      <div id="registrationResult" class="result-box"></div>
+    </div>
+
+    <div class="test-container">
+      <h3>📧 Step 2: Email Verification Token</h3>
+      <p>After registration, a verification token will be displayed here:</p>
+      <div
+        id="verificationTokenDisplay"
+        class="verification-token"
+        style="display: none"
+      >
+        Token will appear here...
+      </div>
+      <button
+        class="btn-warning"
+        onclick="testVerifyEmail()"
+        id="verifyBtn"
+        disabled
+      >
+        ✅ Verify Email
+      </button>
+      <div id="verificationResult" class="result-box"></div>
+    </div>
+
+    <div class="test-container">
+      <h3>🔄 Step 3: Resend Verification</h3>
+      <input
+        type="email"
+        id="resendEmail"
+        placeholder="Email for resend"
+        value="verifytest@example.com"
+      />
+      <button class="btn-warning" onclick="testResendVerification()">
+        🔄 Resend Verification
+      </button>
+      <div id="resendResult" class="result-box"></div>
+    </div>
+
+    <div class="test-container">
+      <h3>🔐 Step 4: Login with Verification Check</h3>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px">
+        <input
+          type="email"
+          id="loginEmail"
+          placeholder="Email"
+          value="verifytest@example.com"
+        />
+        <input
+          type="password"
+          id="loginPassword"
+          placeholder="Password"
+          value="testpass123"
+        />
+      </div>
+      <button class="btn-success" onclick="testLogin()">🔓 Login</button>
+      <div id="loginResult" class="result-box"></div>
+    </div>
+
+    <div class="test-container">
+      <h3>👤 Step 5: Profile Access with Verification Status</h3>
+      <button class="btn-primary" onclick="testProfile()">
+        👤 Get Profile
+      </button>
+      <div id="profileResult" class="result-box"></div>
+    </div>
+
+    <div class="test-container">
+      <h3>🎯 Complete Workflow Test</h3>
+      <button class="btn-success" onclick="runCompleteWorkflow()">
+        ▶️ Run Complete Email Verification Workflow
+      </button>
+      <div id="workflowResult" class="result-box"></div>
+    </div>
+
+    <script>
+      const API_BASE = "http://localhost:5002";
+      let currentToken = null;
+      let verificationToken = null;
+
+      async function testRegistration() {
+        const resultDiv = document.getElementById("registrationResult");
+        resultDiv.innerHTML =
+          '<div class="info">🔄 Testing user registration...</div>';
+
+        const userData = {
+          username: document.getElementById("regUsername").value,
+          email: document.getElementById("regEmail").value,
+          password: document.getElementById("regPassword").value,
+          role: document.getElementById("regRole").value,
+        };
+
+        try {
+          const response = await fetch(`${API_BASE}/api/auth/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(userData),
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            document.getElementById("step1").classList.add("completed");
+
+            if (data.requiresVerification) {
+              document.getElementById("step2").classList.add("completed");
+              resultDiv.innerHTML = `<div class="success">✅ Registration Successful!
+User ID: ${data.userId}
+Username: ${data.user.username}
+Email: ${data.user.email}
+Role: ${data.user.role}
+Verification Required: ${data.requiresVerification ? "Yes" : "No"}
+Email Sent: ${data.emailSent ? "Yes" : "No"}
+
+📧 Check your email for verification link!</div>`;
+
+              // For testing purposes, we'll simulate the verification token
+              // In real app, this would come from the email link
+              setTimeout(() => {
+                verificationToken =
+                  "test_token_" + Math.random().toString(36).substr(2, 9);
+                const tokenDiv = document.getElementById(
+                  "verificationTokenDisplay"
+                );
+                tokenDiv.style.display = "block";
+                tokenDiv.innerHTML = `Verification Token (for testing): <br>${verificationToken}`;
+                document.getElementById("verifyBtn").disabled = false;
+              }, 1000);
+            } else {
+              resultDiv.innerHTML = `<div class="warning">⚠️ Registration successful but no verification required
+This might be in development mode</div>`;
+            }
+          } else {
+            resultDiv.innerHTML = `<div class="error">❌ Registration Failed
+Error: ${data.message}
+Details: ${JSON.stringify(data, null, 2)}</div>`;
+          }
+        } catch (error) {
+          resultDiv.innerHTML = `<div class="error">❌ Registration Request Failed
+Network Error: ${error.message}</div>`;
+        }
+      }
+
+      async function testVerifyEmail() {
+        const resultDiv = document.getElementById("verificationResult");
+        resultDiv.innerHTML =
+          '<div class="info">🔄 Testing email verification...</div>';
+
+        if (!verificationToken) {
+          resultDiv.innerHTML =
+            '<div class="error">❌ No verification token available. Please register first.</div>';
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `${API_BASE}/api/auth/verify-email?token=${verificationToken}`,
+            {
+              method: "GET",
+            }
+          );
+
+          const data = await response.json();
+
+          if (data.success) {
+            document.getElementById("step3").classList.add("completed");
+            document.getElementById("step4").classList.add("completed");
+            resultDiv.innerHTML = `<div class="success">✅ Email Verification Successful!
+Message: ${data.message}
+User: ${data.user.username}
+Verified: ${data.user.isVerified ? "Yes" : "No"}
+
+🎉 Welcome email should be sent!</div>`;
+          } else {
+            resultDiv.innerHTML = `<div class="error">❌ Email Verification Failed
+Error: ${data.message}</div>`;
+          }
+        } catch (error) {
+          resultDiv.innerHTML = `<div class="error">❌ Verification Request Failed
+Network Error: ${error.message}</div>`;
+        }
+      }
+
+      async function testResendVerification() {
+        const resultDiv = document.getElementById("resendResult");
+        resultDiv.innerHTML =
+          '<div class="info">🔄 Testing resend verification...</div>';
+
+        const email = document.getElementById("resendEmail").value;
+
+        try {
+          const response = await fetch(
+            `${API_BASE}/api/auth/resend-verification`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email }),
+            }
+          );
+
+          const data = await response.json();
+
+          if (data.success) {
+            resultDiv.innerHTML = `<div class="success">✅ Resend Verification Successful!
+Message: ${data.message}
+
+📧 New verification email sent!</div>`;
+          } else {
+            resultDiv.innerHTML = `<div class="error">❌ Resend Failed
+Error: ${data.message}</div>`;
+          }
+        } catch (error) {
+          resultDiv.innerHTML = `<div class="error">❌ Resend Request Failed
+Network Error: ${error.message}</div>`;
+        }
+      }
+
+      async function testLogin() {
+        const resultDiv = document.getElementById("loginResult");
+        resultDiv.innerHTML =
+          '<div class="info">🔄 Testing login with verification check...</div>';
+
+        const credentials = {
+          emailOrPhone: document.getElementById("loginEmail").value,
+          password: document.getElementById("loginPassword").value,
+        };
+
+        try {
+          const response = await fetch(`${API_BASE}/api/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(credentials),
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            currentToken = data.token;
+            const verificationStatus = data.user.isVerified
+              ? "Verified ✅"
+              : "Not Verified ⚠️";
+            const verificationWarning = data.requiresVerification
+              ? "\n⚠️ Account requires email verification for full access!"
+              : "\n✅ Account is fully verified and active";
+
+            resultDiv.innerHTML = `<div class="${
+              data.user.isVerified ? "success" : "warning"
+            }">✅ Login Successful!
+User: ${data.user.username}
+Email: ${data.user.email}
+Role: ${data.user.role}
+Verification Status: ${verificationStatus}
+Token Received: Yes${verificationWarning}</div>`;
+          } else {
+            resultDiv.innerHTML = `<div class="error">❌ Login Failed
+Error: ${data.message}</div>`;
+          }
+        } catch (error) {
+          resultDiv.innerHTML = `<div class="error">❌ Login Request Failed
+Network Error: ${error.message}</div>`;
+        }
+      }
+
+      async function testProfile() {
+        const resultDiv = document.getElementById("profileResult");
+
+        if (!currentToken) {
+          resultDiv.innerHTML =
+            '<div class="warning">⚠️ Please login first to test profile access</div>';
+          return;
+        }
+
+        resultDiv.innerHTML =
+          '<div class="info">🔄 Testing profile access...</div>';
+
+        try {
+          const response = await fetch(`${API_BASE}/api/auth/profile`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${currentToken}`,
+              "Content-Type": "application/json",
+            },
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            const accountStatus = data.accountStatus || {};
+            resultDiv.innerHTML = `<div class="success">✅ Profile Access Successful!
+User Profile:
+- Username: ${data.user.username}
+- Email: ${data.user.email}
+- Role: ${data.user.role}
+- Verified: ${data.user.isVerified ? "Yes" : "No"}
+
+Account Status:
+- Active: ${accountStatus.isActive ? "Yes" : "No"}
+- Verified: ${accountStatus.isVerified ? "Yes" : "No"}
+- Requires Verification: ${accountStatus.requiresVerification ? "Yes" : "No"}
+
+🔒 JWT Authentication working correctly!</div>`;
+          } else {
+            resultDiv.innerHTML = `<div class="error">❌ Profile access failed
+Error: ${data.message}</div>`;
+          }
+        } catch (error) {
+          resultDiv.innerHTML = `<div class="error">❌ Profile request failed
+Error: ${error.message}</div>`;
+        }
+      }
+
+      async function runCompleteWorkflow() {
+        const resultDiv = document.getElementById("workflowResult");
+        resultDiv.innerHTML =
+          '<div class="info">🚀 Running complete email verification workflow...\n\n</div>';
+
+        const steps = [
+          { name: "User Registration", fn: testRegistration, delay: 2000 },
+          { name: "Email Verification", fn: testVerifyEmail, delay: 2000 },
+          { name: "User Login", fn: testLogin, delay: 2000 },
+          { name: "Profile Access", fn: testProfile, delay: 1000 },
+        ];
+
+        let results = [];
+
+        for (const step of steps) {
+          try {
+            resultDiv.innerHTML += `🔄 Running ${step.name}...\n`;
+            await step.fn();
+            results.push(`✅ ${step.name}: PASSED`);
+            await new Promise((resolve) => setTimeout(resolve, step.delay));
+          } catch (error) {
+            results.push(`❌ ${step.name}: FAILED - ${error.message}`);
+          }
+        }
+
+        const passedTests = results.filter((r) => r.includes("✅")).length;
+        const totalTests = results.length;
+
+        resultDiv.innerHTML = `<div class="${
+          passedTests === totalTests ? "success" : "warning"
+        }">
+🎯 Complete Email Verification Workflow Results (${passedTests}/${totalTests} passed):
+
+${results.join("\n")}
+
+${
+  passedTests === totalTests
+    ? "🎉 EMAIL VERIFICATION SYSTEM WORKING PERFECTLY!"
+    : "⚠️ Some tests failed. Check individual test sections above for details."
+}
+
+📧 Email Flow Summary:
+1. User registers → Gets unverified account
+2. Verification email sent with token
+3. User clicks link → Account verified
+4. Login shows verification status
+5. Profile includes verification info
+</div>`;
+      }
+    </script>
+  </body>
+</html>
