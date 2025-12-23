@@ -24,6 +24,8 @@ AURAX is a next-generation influencer marketing platform that revolutionizes how
 - **Chart.js** for data visualization
 - **React Router DOM** for seamless navigation
 - **Progressive Web App (PWA)** capabilities
+- **MailerSend Integration** for transactional emails and OTP verification
+- **Secure Authentication** with JWT tokens and password reset flow
 
 ## 🛠️ Tech Stack
 
@@ -59,16 +61,30 @@ AURAX is a next-generation influencer marketing platform that revolutionizes how
    npm install
    ```
 
-3. **Start development server**
+3. **Configure environment**
+
+   ```bash
+   # Copy environment template
+   cp .env.example .env
+   
+   # Edit .env and add your configuration
+   # REACT_APP_API_URL=http://localhost:5002
+   ```
+
+4. **Start development server**
 
    ```bash
    npm start
    ```
 
-4. **Build for production**
+   The app will open at [http://localhost:3000](http://localhost:3000)
+
+5. **Build for production**
    ```bash
    npm run build
    ```
+
+> **Note:** For MailerSend email integration, see [MAILERSEND_INTEGRATION_GUIDE.md](MAILERSEND_INTEGRATION_GUIDE.md)
 
 ## 📁 Project Structure
 
@@ -78,6 +94,8 @@ src/
 │   ├── ai/             # AI-related components
 │   ├── analytics/      # Dashboard analytics
 │   ├── layout/         # Layout components (Navbar, Footer)
+│   ├── OTPVerification.jsx  # OTP input component
+│   ├── PasswordReset.jsx    # Password reset flow
 │   └── ui/             # Generic UI components
 ├── pages/              # Page components
 ├── context/            # React Context providers
@@ -125,9 +143,37 @@ npm run build
 Create a `.env` file in the root directory:
 
 ```env
-REACT_APP_API_BASE_URL=https://your-api-url.com/api
-REACT_APP_ENVIRONMENT=production
+# API Configuration
+REACT_APP_API_URL=http://localhost:5002
+
+# Application Settings
+REACT_APP_NAME=AURAX AI
+REACT_APP_ENVIRONMENT=development
+
+# Feature Flags
+REACT_APP_ENABLE_OTP_VERIFICATION=true
+REACT_APP_ENABLE_PASSWORD_RESET=true
 ```
+
+See `.env.example` for complete configuration options.
+
+### Backend Environment Setup
+
+The backend requires MailerSend configuration. See `../backend-copy/.env.example`:
+
+```env
+# MailerSend Configuration
+MAILERSEND_API_KEY=your_api_key_here
+FROM_EMAIL=noreply@yourdomain.com
+FROM_NAME=AURAX AI
+
+# OTP Settings
+OTP_TTL_SECONDS=900
+MAX_OTP_ATTEMPTS=3
+OTP_RATE_LIMIT=5
+```
+
+For complete MailerSend setup instructions, see [MAILERSEND_INTEGRATION_GUIDE.md](MAILERSEND_INTEGRATION_GUIDE.md).
 
 ## 📱 PWA Features
 

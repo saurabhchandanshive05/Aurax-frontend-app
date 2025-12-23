@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AURAX E2E Authentication Flow Test</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        min-height: 100vh;
+      }
+
+      .container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+
+      h1 {
+        text-align: center;
+        color: #ffffff;
+        margin-bottom: 30px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .status-panel {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px 0;
+        font-family: monospace;
+      }
+
+      .test-controls {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin: 20px 0;
+      }
+
+      button {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px 0 rgba(255, 107, 107, 0.3);
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px 0 rgba(255, 107, 107, 0.4);
+      }
+
+      button:disabled {
+        background: #666;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .success {
+        color: #2ecc71;
+      }
+
+      .error {
+        color: #e74c3c;
+      }
+
+      .info {
+        color: #3498db;
+      }
+
+      .warning {
+        color: #f39c12;
+      }
+
+      .test-result {
+        margin: 10px 0;
+        padding: 10px;
+        border-left: 4px solid #3498db;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+      }
+
+      .manual-steps {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px 0;
+      }
+
+      .manual-steps h3 {
+        color: #ffffff;
+        margin-bottom: 15px;
+      }
+
+      .manual-steps ol {
+        padding-left: 20px;
+      }
+
+      .manual-steps li {
+        margin: 8px 0;
+        line-height: 1.6;
+      }
+
+      .service-status {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px 0;
+      }
+
+      .service {
+        text-align: center;
+        padding: 15px;
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .service.online {
+        border: 2px solid #2ecc71;
+      }
+
+      .service.offline {
+        border: 2px solid #e74c3c;
+      }
+
+      .quick-links {
+        display: flex;
+        gap: 10px;
+        margin: 20px 0;
+      }
+
+      .quick-links a {
+        color: white;
+        text-decoration: none;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 10px 20px;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+      }
+
+      .quick-links a:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🚀 AURAX E2E Authentication Flow Test Suite</h1>
+
+      <div class="service-status">
+        <div id="frontend-status" class="service">
+          <h4>Frontend</h4>
+          <p id="frontend-url">http://localhost:3000</p>
+          <p id="frontend-indicator">Checking...</p>
+        </div>
+        <div id="backend-status" class="service">
+          <h4>Backend</h4>
+          <p id="backend-url">http://localhost:5002</p>
+          <p id="backend-indicator">Checking...</p>
+        </div>
+      </div>
+
+      <div class="quick-links">
+        <a href="http://localhost:3000" target="_blank">Open Frontend</a>
+        <a href="http://localhost:3000/signup" target="_blank"
+          >Registration Page</a
+        >
+        <a href="http://localhost:3000/login" target="_blank">Login Page</a>
+        <a href="http://localhost:5002/health" target="_blank"
+          >Backend Health</a
+        >
+      </div>
+
+      <div class="test-controls">
+        <button onclick="runAutomatedTests()" id="runTestsBtn">
+          🤖 Run Automated Tests
+        </button>
+        <button onclick="checkServices()" id="checkServicesBtn">
+          🔍 Check Services
+        </button>
+        <button onclick="clearResults()" id="clearBtn">🗑️ Clear Results</button>
+        <button onclick="generateTestUser()" id="generateUserBtn">
+          👤 Generate Test User
+        </button>
+      </div>
+
+      <div class="status-panel" id="statusPanel">
+        <div class="info">Welcome to AURAX E2E Testing Suite! 🎉</div>
+        <div class="info">
+          Click "Check Services" to verify both frontend and backend are
+          running.
+        </div>
+      </div>
+
+      <div class="manual-steps">
+        <h3>📚 Manual Testing Checklist</h3>
+        <ol>
+          <li>
+            <strong>Registration Flow:</strong>
+            <ul>
+              <li>
+                Open
+                <a
+                  href="http://localhost:3000"
+                  target="_blank"
+                  style="color: #3498db"
+                  >frontend</a
+                >
+                and navigate to registration
+              </li>
+              <li>Use generated test email below or your own</li>
+              <li>Fill out username, email, and password fields</li>
+              <li>Submit form and verify API call is made</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Email Verification:</strong>
+            <ul>
+              <li>Check sauravaura3@gmail.com inbox for verification email</li>
+              <li>Note the 6-digit verification code</li>
+              <li>Enter code in the verification form</li>
+              <li>Verify success message and UI changes</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Login Flow:</strong>
+            <ul>
+              <li>Navigate to login page</li>
+              <li>Enter registered email and password</li>
+              <li>Verify successful login and token storage</li>
+              <li>Confirm redirect to dashboard</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Edge Cases:</strong>
+            <ul>
+              <li>Test invalid credentials</li>
+              <li>Test expired/invalid verification codes</li>
+              <li>Test duplicate email registration</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+
+      <div id="testUserInfo" class="status-panel" style="display: none">
+        <div class="info">Generated Test User:</div>
+        <div id="testUserDetails"></div>
+      </div>
+
+      <div id="testResults" class="status-panel">
+        <!-- Test results will appear here -->
+      </div>
+    </div>
+
+    <script src="e2e-auth-flow-test.js"></script>
+    <script>
+      let tester = null;
+
+      function log(message, type = "info") {
+        const panel = document.getElementById("statusPanel");
+        const timestamp = new Date().toLocaleTimeString();
+        const div = document.createElement("div");
+        div.className = type;
+        div.innerHTML = `[${timestamp}] ${message}`;
+        panel.appendChild(div);
+        panel.scrollTop = panel.scrollHeight;
+      }
+
+      async function checkServices() {
+        log("🔍 Checking service status...", "info");
+
+        // Check frontend
+        try {
+          const frontendResponse = await fetch("http://localhost:3000");
+          const frontendStatus = document.getElementById("frontend-status");
+          const frontendIndicator =
+            document.getElementById("frontend-indicator");
+
+          if (frontendResponse.ok) {
+            frontendStatus.className = "service online";
+            frontendIndicator.textContent = "✅ Online";
+            log("✅ Frontend is running on http://localhost:3000", "success");
+          } else {
+            frontendStatus.className = "service offline";
+            frontendIndicator.textContent = "❌ Offline";
+            log("❌ Frontend returned error status", "error");
+          }
+        } catch (error) {
+          const frontendStatus = document.getElementById("frontend-status");
+          const frontendIndicator =
+            document.getElementById("frontend-indicator");
+          frontendStatus.className = "service offline";
+          frontendIndicator.textContent = "❌ Offline";
+          log("❌ Frontend is not accessible", "error");
+        }
+
+        // Check backend
+        try {
+          const backendResponse = await fetch("http://localhost:5002/health");
+          const backendStatus = document.getElementById("backend-status");
+          const backendIndicator = document.getElementById("backend-indicator");
+
+          if (backendResponse.ok) {
+            backendStatus.className = "service online";
+            backendIndicator.textContent = "✅ Online";
+            log("✅ Backend is running on http://localhost:5002", "success");
+          } else {
+            backendStatus.className = "service offline";
+            backendIndicator.textContent = "❌ Offline";
+            log("❌ Backend returned error status", "error");
+          }
+        } catch (error) {
+          const backendStatus = document.getElementById("backend-status");
+          const backendIndicator = document.getElementById("backend-indicator");
+          backendStatus.className = "service offline";
+          backendIndicator.textContent = "❌ Offline";
+          log("❌ Backend is not accessible", "error");
+        }
+      }
+
+      async function runAutomatedTests() {
+        const btn = document.getElementById("runTestsBtn");
+        btn.disabled = true;
+        btn.textContent = "🤖 Running Tests...";
+
+        log("🚀 Starting automated test suite...", "info");
+
+        try {
+          tester = new AuraxAuthFlowTester();
+          const report = await tester.runFullTestSuite();
+
+          log("📊 Test suite completed!", "success");
+          log(
+            `✅ Passed: ${report.summary.passedTests}/${report.summary.totalTests}`,
+            "success"
+          );
+          log(`🎯 Success Rate: ${report.summary.successRate}`, "info");
+
+          // Display detailed results
+          const resultsPanel = document.getElementById("testResults");
+          resultsPanel.innerHTML = "<h3>🔍 Detailed Test Results:</h3>";
+
+          report.results.forEach((result, index) => {
+            const resultDiv = document.createElement("div");
+            resultDiv.className = "test-result";
+            const status = result.success ? "✅" : "❌";
+            const statusClass = result.success ? "success" : "error";
+
+            resultDiv.innerHTML = `
+                        <strong class="${statusClass}">${status} ${
+              result.testName
+            }</strong><br>
+                        <span>${result.details}</span>
+                        ${
+                          result.error
+                            ? `<br><span class="error">Error: ${result.error}</span>`
+                            : ""
+                        }
+                    `;
+            resultsPanel.appendChild(resultDiv);
+          });
+        } catch (error) {
+          log(`❌ Test suite failed: ${error.message}`, "error");
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "🤖 Run Automated Tests";
+        }
+      }
+
+      function generateTestUser() {
+        const timestamp = Date.now();
+        const testUser = {
+          email: `test.user.${timestamp}@example.com`,
+          username: `testuser${timestamp}`,
+          password: "TestPassword123!",
+        };
+
+        const panel = document.getElementById("testUserInfo");
+        const details = document.getElementById("testUserDetails");
+
+        details.innerHTML = `
+                <strong>📧 Email:</strong> ${testUser.email}<br>
+                <strong>👤 Username:</strong> ${testUser.username}<br>
+                <strong>🔒 Password:</strong> ${testUser.password}<br>
+                <em>Use these credentials for manual testing</em>
+            `;
+
+        panel.style.display = "block";
+        log("👤 Generated new test user credentials", "success");
+      }
+
+      function clearResults() {
+        document.getElementById("statusPanel").innerHTML = "";
+        document.getElementById("testResults").innerHTML = "";
+        log("🗑️ Results cleared", "info");
+      }
+
+      // Auto-check services on page load
+      window.addEventListener("load", () => {
+        log("🎉 AURAX E2E Test Suite loaded!", "success");
+        log(
+          '🔧 Click "Check Services" to verify both services are running',
+          "info"
+        );
+        checkServices();
+      });
+    </script>
+  </body>
+</html>

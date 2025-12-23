@@ -122,11 +122,15 @@ const Signup = () => {
           setAutoRedirectCountdown((prev) => {
             if (prev <= 1) {
               clearInterval(redirectTimer);
-              setSuccessMessage("🚀 Redirecting to your dashboard...");
+              setSuccessMessage("🚀 Redirecting to setup your profile...");
 
               // Handle login and redirect
               if (resp?.token) {
-                const redirect = login(resp.token);
+                login(resp.token);
+                // Always redirect creators to onboarding after signup
+                const redirect = form.role === "creator" 
+                  ? "/creator/welcome" 
+                  : "/brand/dashboard";
                 navigate(redirect);
               } else {
                 // Fallback if no token - go to login page
@@ -211,7 +215,11 @@ const Signup = () => {
             setAutoRedirectCountdown((prev) => {
               if (prev <= 1) {
                 clearInterval(redirectTimer);
-                const redirect = login(resp.token);
+                login(resp.token);
+                // Always redirect creators to onboarding after signup
+                const redirect = form.role === "creator" 
+                  ? "/creator/welcome" 
+                  : "/brand/dashboard";
                 navigate(redirect);
                 return 0;
               }

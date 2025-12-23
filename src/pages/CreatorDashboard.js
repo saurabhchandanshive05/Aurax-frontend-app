@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import DashboardCard from "../components/dashboard/DashboardCard";
 import CampaignList from "../components/dashboard/CampaignList";
@@ -16,6 +16,7 @@ import InstagramDashboard from "../components/instagram/InstagramDashboard";
 import styles from "./CreatorDashboard.module.css";
 
 const CreatorDashboard = () => {
+  const navigate = useNavigate();
   const [showInstagramSettings, setShowInstagramSettings] =
     React.useState(false);
   const [showInstagramDashboard, setShowInstagramDashboard] =
@@ -24,6 +25,69 @@ const CreatorDashboard = () => {
   const [instagramAccessToken, setInstagramAccessToken] = React.useState("");
   const [showConnectInstagram, setShowConnectInstagram] = React.useState(true);
   const [isConnecting, setIsConnecting] = React.useState(false);
+  const [checkingOnboarding, setCheckingOnboarding] = React.useState(true);
+
+  // Check onboarding status on mount
+  React.useEffect(() => {
+    const checkOnboardingStatus = async () => {
+      try {
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+        
+        if (!token) {
+          navigate('/creator/login');
+          return;
+        }
+
+        const response = await fetch('http://localhost:5002/api/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const responseData = await response.json();
+          
+          // Extract user data (backend returns nested {success: true, user: {...}})
+          const userData = responseData.user || responseData;
+          
+          console.log("🔍 Dashboard onboarding check:", {
+            hasCompletedOnboarding: userData.hasCompletedOnboarding,
+            role: userData.role
+          });
+          
+          // Check if onboarding is complete
+          const hasCompletedOnboarding = userData.hasCompletedOnboarding || 
+                                        (userData.isProfileCompleted && 
+                                         userData.profilesConnected && 
+                                         userData.hasAudienceInfo);
+          
+          if (!hasCompletedOnboarding && userData.role === 'creator') {
+            // Redirect to onboarding if not completed
+            console.log("🔄 Redirecting to onboarding from dashboard...");
+            navigate('/creator/welcome');
+          } else {
+            setCheckingOnboarding(false);
+          }
+        } else if (response.status === 401) {
+          // Token invalid, redirect to login
+          localStorage.removeItem('token');
+          sessionStorage.removeItem('token');
+          navigate('/creator/login');
+        } else {
+          // If API fails, allow access but log error
+          console.error('Failed to check onboarding status');
+          setCheckingOnboarding(false);
+        }
+      } catch (error) {
+        console.error('Error checking onboarding status:', error);
+        // Allow access on error to avoid blocking users
+        setCheckingOnboarding(false);
+      }
+    };
+
+    checkOnboardingStatus();
+  }, [navigate]);
 
   // Instagram OAuth Configuration - Using real app credentials
   const INSTAGRAM_CLIENT_ID = process.env.REACT_APP_INSTAGRAM_CLIENT_ID;
@@ -147,36 +211,19 @@ const CreatorDashboard = () => {
 
   // Initiate Instagram OAuth flow
   const connectInstagram = () => {
-    if (!INSTAGRAM_CLIENT_ID) {
-      alert(
-        "Instagram Client ID not configured. Please check environment variables."
-      );
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+    
+    if (!token) {
+      alert('Please log in first');
       return;
     }
 
     console.log("🚀 Starting Instagram OAuth flow...");
     setIsConnecting(true);
 
-    // Instagram OAuth scopes
-    const scopes = ["user_profile", "user_media"];
-    const state = Date.now().toString(); // Simple state parameter for security
-
-    const instagramAuthUrl = new URL(
-      "https://api.instagram.com/oauth/authorize"
-    );
-    instagramAuthUrl.searchParams.set("client_id", INSTAGRAM_CLIENT_ID);
-    instagramAuthUrl.searchParams.set("redirect_uri", REDIRECT_URI);
-    instagramAuthUrl.searchParams.set("scope", scopes.join(","));
-    instagramAuthUrl.searchParams.set("response_type", "code");
-    instagramAuthUrl.searchParams.set("state", state);
-
-    console.log(
-      "🔗 Redirecting to Instagram OAuth:",
-      instagramAuthUrl.toString()
-    );
-
-    // Redirect to Instagram OAuth
-    window.location.href = instagramAuthUrl.toString();
+    // Redirect to backend Instagram OAuth route with token as query parameter
+    // Backend handles Meta OAuth and callback
+    window.location.href = `http://localhost:5002/api/auth/instagram/login?token=${token}`;
   };
 
   // Disconnect Instagram
@@ -234,6 +281,34 @@ const CreatorDashboard = () => {
       progress: 100,
     },
   ];
+
+  // Show loading state while checking onboarding
+  if (checkingOnboarding) {
+    return (
+      <div className={styles.dashboard}>
+        <div className={styles.container}>
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            minHeight: '100vh',
+            flexDirection: 'column',
+            gap: '1rem'
+          }}>
+            <div style={{
+              border: '4px solid rgba(102, 126, 234, 0.3)',
+              borderTop: '4px solid #667eea',
+              borderRadius: '50%',
+              width: '50px',
+              height: '50px',
+              animation: 'spin 1s linear infinite'
+            }}></div>
+            <p style={{ color: '#666' }}>Loading your dashboard...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.dashboard}>

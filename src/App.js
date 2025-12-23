@@ -25,6 +25,7 @@ const CreatorProfile = React.lazy(() => import("./pages/CreatorProfile"));
 const CampaignManager = React.lazy(() => import("./pages/CampaignManager"));
 const BrandDashboard = React.lazy(() => import("./pages/BrandDashboard"));
 const CreatorDashboard = React.lazy(() => import("./pages/CreatorDashboard"));
+const CreatorOnboarding = React.lazy(() => import("./pages/CreatorOnboarding"));
 const AddTalent = React.lazy(() => import("./pages/AddTalent"));
 const Analytics = React.lazy(() => import("./pages/Analytics"));
 const AdminPanel = React.lazy(() => import("./pages/AdminPanel"));
@@ -71,6 +72,8 @@ const TestRoutePage = React.lazy(() => import("./pages/TestRoutePage"));
 const EnhancedLogin = React.lazy(() => import("./pages/EnhancedLogin"));
 const EnhancedLoginTest = React.lazy(() => import("./pages/EnhancedLoginTest"));
 const AuthTest = React.lazy(() => import("./pages/AuthTest"));
+const ConnectSocials = React.lazy(() => import("./pages/ConnectSocials"));
+const InstagramDashboard = React.lazy(() => import("./pages/InstagramDashboard"));
 
 // Mobile navigation component
 function MobileNavMenu() {
@@ -292,6 +295,12 @@ function App() {
                     <Route path="/brand/signup" element={<Signup />} />
                     <Route path="/creator/signup" element={<Signup />} />
 
+                    {/* Social Connection Route */}
+                    <Route path="/connect-socials" element={<ConnectSocials />} />
+                    
+                    {/* Instagram OAuth Dashboard */}
+                    <Route path="/dashboard" element={<InstagramDashboard />} />
+
                     {/* Copy Environment Test Route */}
                     <Route
                       path="/copy-test"
@@ -366,6 +375,14 @@ function App() {
                       element={
                         <ProtectedRoute role="brand">
                           <BrandDashboard />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/creator/welcome"
+                      element={
+                        <ProtectedRoute role="creator">
+                          <CreatorOnboarding />
                         </ProtectedRoute>
                       }
                     />
