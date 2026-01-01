@@ -9,6 +9,7 @@ import {
 import { initStorage } from "./utils/localStorage.js";
 import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
+import { useStandaloneRoute } from "./components/layout/ConditionalLayout";
 
 // Components
 import Navbar from "./components/layout/Navbar";
@@ -192,6 +193,19 @@ function MobileNavMenu() {
   */
 }
 
+// Layout wrapper component that checks for standalone routes
+function AppLayout({ children }) {
+  const { showNavbar, showFooter } = useStandaloneRoute();
+  
+  return (
+    <>
+      {showNavbar && <Navbar />}
+      {children}
+      {showFooter && <Footer />}
+    </>
+  );
+}
+
 function App() {
   const [backendStatus, setBackendStatus] = useState({
     status: "checking",
@@ -258,18 +272,17 @@ function App() {
                     ? "bg-red-600"
                     : "bg-yellow-600"
                 }`}
-                role="status"
-                aria-live="polite"
-              >
-                <span>{backendStatus.message}</span>
-                <button
-                  onClick={() => setShowStatus(false)}
-                  aria-label="Dismiss status message"
-                >
-                  Dismiss
-                </button>
-              </div>
-            )}
+             AppLayout>
+              <main className="main-content">
+                <ErrorBoundary>
+                  <Suspense
+                    fallback={
+                      <div className="flex items-center justify-center min-h-screen">
+                        <div className="loading-spinner rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                      </div>
+                    }
+                  >
+              )}
 
             <Navbar />
 
@@ -466,8 +479,8 @@ function App() {
               </ErrorBoundary>
             </main>
 
-            <Footer />
-            <BackToTop />
+            </AppLayout>
+ />
 
             {/* Live Notifications removed as requested */}
 
