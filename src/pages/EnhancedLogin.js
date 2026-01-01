@@ -8,7 +8,7 @@ import styles from "./Login.module.css";
 function EnhancedLogin() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, currentUser, isAuthenticated, isLoading } = useAuth();
 
   // Form states
   const [email, setEmail] = useState("");
@@ -29,6 +29,33 @@ function EnhancedLogin() {
   // Get role from URL params (brand/creator)
   const role = searchParams.get("role") || "brand";
   const isCreatorLogin = role === "creator";
+
+  // Redirect if already logged in
+  useEffect(() => {
+    // Don't redirect if currently submitting a login
+    if (isSubmitting) {
+      console.log('⏸️ Login in progress, skipping redirect check');
+      return;
+    }
+    
+    console.log('🔐 Login page check - isAuthenticated:', isAuthenticated, 'currentUser:', currentUser, 'isLoading:', isLoading);
+    
+    // Don't redirect while still loading
+    if (isLoading) {
+      console.log('⏳ Still loading auth state...');
+      return;
+    }
+    
+    if (isAuthenticated && currentUser) {
+      const redirectPath = currentUser.role === "creator"
+        ? "/creator/welcome"
+        : "/brand/dashboard";
+      console.log('✅ Already logged in - redirecting to:', redirectPath);
+      navigate(redirectPath, { replace: true });
+    } else {
+      console.log('❌ Not logged in - showing login page');
+    }
+  }, [isAuthenticated, currentUser, navigate, isLoading, isSubmitting]);
 
   // Clear messages when switching methods
   useEffect(() => {
@@ -158,15 +185,27 @@ function EnhancedLogin() {
       });
 
       if (response.success && response.token) {
+        console.log('✅ Login successful! Response:', response);
+        console.log('👤 User:', response.user);
+        console.log('🔑 Token:', response.token);
+        
+        // Store token using the login function from AuthContext
+        const redirectPath = login(response.token);
+        console.log('🔀 Redirect path:', redirectPath);
+        
+        // Show success message briefly
         setSuccessMessage(
           `Login successful! Welcome back, ${response.user.username}`
         );
-
-        // Store token and redirect
+        
+        // Small delay to ensure state updates propagate
         setTimeout(() => {
-          const redirectPath = login(response.token);
-          navigate(redirectPath);
-        }, 1500);
+          console.log('🚀 Navigating to:', redirectPath);
+          navigate(redirectPath, { replace: true });
+        }, 100);
+      } else {
+        console.error('❌ Login failed - no token in response:', response);
+        setLoginError('Login failed. Please try again.');
       }
     } catch (error) {
       console.error("Login error:", error);

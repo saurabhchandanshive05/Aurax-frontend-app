@@ -7,13 +7,17 @@ const ConnectSocials = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState('idle'); // idle, connecting, analyzing, complete, error
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState(null);
   const [analysisData, setAnalysisData] = useState(null);
-  const [pollingInterval, setPollingInterval] = useState(null);
 
-  const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5002';
+  const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
+  
+  if (!API_BASE_URL) {
+    console.error('REACT_APP_BACKEND_URL not configured');
+  }
 
   useEffect(() => {
     checkUserStatus();
@@ -30,6 +34,7 @@ const ConnectSocials = () => {
       setStatus('analyzing');
       startPolling();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   const getErrorMessage = (errorCode) => {
@@ -47,6 +52,7 @@ const ConnectSocials = () => {
 
   const checkUserStatus = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem('token');
       if (!token) {
         navigate('/login');
@@ -57,19 +63,31 @@ const ConnectSocials = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      if (response.data.success) {
-        setUser(response.data.user);
+      console.log('User data response:', response.data);
+
+      if (response.data.success || response.data.user || response.data.id) {
+        // Handle different response formats
+        const userData = response.data.user || response.data;
+        setUser(userData);
 
         // If already connected, redirect to dashboard
-        if (response.data.user.profilesConnected) {
+        if (userData.profilesConnected) {
           navigate('/dashboard');
         }
+      } else {
+        // If no user data, set a default to prevent infinite loading
+        setUser({ username: 'User', email: '' });
       }
     } catch (err) {
       console.error('Error fetching user:', err);
       if (err.response?.status === 401) {
         navigate('/login');
+      } else {
+        // On error, set minimal user data to allow page to render
+        setUser({ username: 'User', email: '' });
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,8 +124,6 @@ const ConnectSocials = () => {
         console.error('Polling error:', err);
       }
     }, 2000); // Poll every 2 seconds
-
-    setPollingInterval(interval);
     
     // Clear interval on unmount
     return () => clearInterval(interval);
@@ -162,10 +178,24 @@ const ConnectSocials = () => {
     navigate('/connect-socials', { replace: true });
   };
 
+  if (loading) {
+    return (
+      <div className="connect-socials-container">
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!user) {
     return (
       <div className="connect-socials-container">
-        <div className="loading-spinner">Loading...</div>
+        <div className="error-message">
+          <p>Unable to load user data. Please try refreshing the page.</p>
+          <button onClick={() => window.location.reload()}>Refresh</button>
+        </div>
       </div>
     );
   }
@@ -174,7 +204,7 @@ const ConnectSocials = () => {
     <div className="connect-socials-container">
       <div className="connect-socials-card">
         <div className="connect-socials-header">
-          <h1>Welcome to AuraxAI, {user.username}!</h1>
+          <h1>Welcome to AuraxAI, {user.username || user.displayName || 'User'}!</h1>
           <p className="subtitle">Let's connect your Instagram account to get started</p>
         </div>
 

@@ -50,79 +50,17 @@ const CreatorLogin = () => {
       const resp = await apiClient.login(sanitized);
 
       if (resp?.success && resp?.token) {
-        // Store token first
-        login(resp.token);
+        // AuthContext login now fetches full user data and returns correct redirect path
+        console.log("=== LOGIN FLOW ===");
+        console.log("1. Login successful, calling AuthContext login...");
         
-        // Check if user has completed onboarding
-        try {
-          const userResponse = await fetch('http://localhost:5002/api/me', {
-            headers: {
-              'Authorization': `Bearer ${resp.token}`,
-              'Content-Type': 'application/json'
-            }
-          });
-          
-          if (userResponse.ok) {
-            const responseData = await userResponse.json();
-            
-            // Extract user data (backend returns nested {success: true, user: {...}})
-            const userData = responseData.user || responseData;
-            
-            // DEBUG LOGGING
-            console.log("=== LOGIN FLOW DEBUG ===");
-            console.log("1. Raw response from /api/me:", responseData);
-            console.log("2. Extracted user data:", userData);
-            console.log("3. User role:", userData.role);
-            console.log("4. hasCompletedOnboarding flag:", userData.hasCompletedOnboarding);
-            console.log("5. isProfileCompleted flag:", userData.isProfileCompleted);
-            console.log("6. profilesConnected flag:", userData.profilesConnected);
-            console.log("7. hasAudienceInfo flag:", userData.hasAudienceInfo);
-            
-            // Check onboarding status
-            const hasCompletedOnboarding = userData.hasCompletedOnboarding || 
-                                          (userData.isProfileCompleted && 
-                                           userData.profilesConnected && 
-                                           userData.hasAudienceInfo);
-            
-            console.log("8. Calculated hasCompletedOnboarding:", hasCompletedOnboarding);
-            console.log("9. Will redirect to:", !hasCompletedOnboarding && userData.role === 'creator' ? '/creator/welcome' : 
-                       (userData.role === 'creator' ? '/creator/dashboard' : '/brand/dashboard'));
-            console.log("======================");
-            
-            if (!hasCompletedOnboarding && userData.role === 'creator') {
-              // Redirect to onboarding
-              console.log("🔄 Redirecting to onboarding...");
-              navigate('/creator/welcome');
-            } else {
-              // Redirect to dashboard based on role
-              const redirectPath = userData.role === 'creator' 
-                ? '/creator/dashboard' 
-                : '/brand/dashboard';
-              console.log("🔄 Redirecting to dashboard:", redirectPath);
-              navigate(redirectPath);
-            }
-          } else {
-            // Fallback to default redirect if /api/me fails
-            console.log("⚠️ /api/me request failed, status:", userResponse.status);
-            console.log("⚠️ Using fallback redirect logic");
-            const decoded = jwtDecode(resp.token);
-            const redirectPath = decoded.role === 'creator' 
-              ? '/creator/dashboard' 
-              : '/brand/dashboard';
-            console.log("🔄 Fallback redirect to:", redirectPath);
-            navigate(redirectPath);
-          }
-        } catch (fetchError) {
-          console.error('❌ Error fetching user data:', fetchError);
-          console.log("⚠️ Using fallback redirect logic");
-          // Fallback to default redirect
-          const decoded = jwtDecode(resp.token);
-          const redirectPath = decoded.role === 'creator' 
-            ? '/creator/dashboard' 
-            : '/brand/dashboard';
-          console.log("🔄 Fallback redirect to:", redirectPath);
-          navigate(redirectPath);
-        }
+        const redirectPath = await login(resp.token);
+        
+        console.log("2. AuthContext returned redirect path:", redirectPath);
+        console.log("3. Navigating to:", redirectPath);
+        console.log("==================");
+        
+        navigate(redirectPath);
       } else {
         throw new Error(resp?.error || "Login failed");
       }

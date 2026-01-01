@@ -3,10 +3,14 @@ import { copyLogger } from "./copyLogger";
 
 const BASE_URL =
   process.env.NODE_ENV === "production"
-    ? "https://influencer-backend-etq5.onrender.com/api"
+    ? "https://influencer-backend-7.onrender.com/api"
     : process.env.REACT_APP_API_URL
     ? `${process.env.REACT_APP_API_URL}/api`
-    : "http://localhost:5002/api";
+    : undefined;
+
+if (!BASE_URL) {
+  throw new Error('REACT_APP_API_URL environment variable is required');
+}
 
 class APIError extends Error {
   constructor(message, status, details = {}) {

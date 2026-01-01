@@ -1,6 +1,7 @@
 // React component for Email Verification Integration
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext"; // Your auth context
+import { getApiEndpoint } from "../utils/getApiUrl";
 
 const EmailVerificationBanner = () => {
   const { user, token } = useAuth();
@@ -16,7 +17,7 @@ const EmailVerificationBanner = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5002/api/auth/resend-verification",
+        getApiEndpoint("/api/auth/resend-verification"),
         {
           method: "POST",
           headers: {

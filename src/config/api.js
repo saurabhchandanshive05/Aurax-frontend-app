@@ -5,7 +5,7 @@ export const API_CONFIG = {
     process.env.REACT_APP_API_URL ||
     (process.env.NODE_ENV === "production"
       ? "https://influencer-backend-etq5.onrender.com"
-      : "http://localhost:5002"),
+      : undefined),
 
   // Default headers
   headers: {

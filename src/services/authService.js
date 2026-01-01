@@ -1,4 +1,5 @@
 import { API_CONFIG } from '../config/apiConfig';
+import { getApiUrl } from '../utils/getApiUrl';
 
 const login = async (credentials) => {
   try {
@@ -33,9 +34,7 @@ module.exports = {
     port: 3000,
     proxy: {
       '/api': {
-        target: process.env.NODE_ENV === 'production' 
-          ? 'https://influencer-backend-etq5.onrender.com'
-          : 'http://localhost:5002',
+        target: process.env.REACT_APP_API_URL || getApiUrl(),
         changeOrigin: true,
         secure: false,
         pathRewrite: {

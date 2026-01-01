@@ -13,16 +13,20 @@ const CreatorOnboarding = () => {
     location: '',
     phone: ''
   });
-  const [audienceForm, setAudienceForm] = useState({
-    categories: [],
-    contentTypes: [],
-    regions: []
+  const [publicPageForm, setPublicPageForm] = useState({
+    creatorSlug: '',
+    displayName: '',
+    welcomeMessage: '',
+    coverImage: null
   });
-  const [savingAudience, setSavingAudience] = useState(false);
+  const [slugAvailable, setSlugAvailable] = useState(null);
+  const [checkingSlug, setCheckingSlug] = useState(false);
+  const [slugCheckTimeout, setSlugCheckTimeout] = useState(null);
 
   // Fetch creator data on mount
   useEffect(() => {
     fetchCreatorData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchCreatorData = async () => {
@@ -44,6 +48,7 @@ const CreatorOnboarding = () => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log('✅ Creator data fetched successfully:', data);
         setCreatorData(data);
         
         // Initialize forms with existing data
@@ -55,21 +60,27 @@ const CreatorOnboarding = () => {
             phone: data.phone || ''
           });
         }
-
-        if (data.audienceInfo) {
-          setAudienceForm({
-            categories: data.audienceInfo.categories || [],
-            contentTypes: data.audienceInfo.contentTypes || [],
-            regions: data.audienceInfo.regions || []
-          });
-        }
       } else if (response.status === 401) {
-        // Token expired or invalid
-        localStorage.removeItem('token');
-        sessionStorage.removeItem('token');
-        navigate('/creator/login');
+        console.error('❌ 401 Unauthorized - Token might be invalid');
+        // Only redirect if we're absolutely sure the token is invalid
+        // Don't redirect immediately - let the user see the page first
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Error details:', errorData);
+        
+        // Set empty creator data instead of redirecting
+        setCreatorData({
+          username: 'User',
+          email: '',
+          role: 'creator'
+        });
       } else {
-        console.error('Failed to fetch creator data');
+        console.error('Failed to fetch creator data:', response.status);
+        // Set minimal data instead of breaking
+        setCreatorData({
+          username: 'User',
+          email: '',
+          role: 'creator'
+        });
       }
     } catch (error) {
       console.error('Error fetching creator data:', error);
@@ -86,28 +97,25 @@ const CreatorOnboarding = () => {
                                 (creatorData.fullName && creatorData.bio);
     const isInstagramConnected = creatorData.profilesConnected || 
                                   creatorData.isInstagramConnected;
-    const hasAudienceInfo = creatorData.hasAudienceInfo || 
-                            (creatorData.audienceInfo?.categories?.length > 0);
 
     if (!isProfileCompleted) return 1;
     if (!isInstagramConnected) return 2;
-    if (!hasAudienceInfo) return 3;
-    return 4; // All complete
+    return 3; // All complete
   };
 
   const getCompletionStatus = () => {
-    if (!creatorData) return { profile: false, instagram: false, audience: false };
+    if (!creatorData) return { profile: false, instagram: false, publicPage: false };
     
     return {
       profile: creatorData.isProfileCompleted || (creatorData.fullName && creatorData.bio),
       instagram: creatorData.profilesConnected || creatorData.isInstagramConnected,
-      audience: creatorData.hasAudienceInfo || (creatorData.audienceInfo?.categories?.length > 0)
+      publicPage: !!creatorData.creatorSlug && creatorData.isPublicPageActive
     };
   };
 
   const isOnboardingComplete = () => {
     const status = getCompletionStatus();
-    return status.profile && status.instagram && status.audience;
+    return status.profile && status.instagram;
   };
 
   // Handle profile form submission
@@ -171,58 +179,132 @@ const CreatorOnboarding = () => {
     }
   };
 
-  // Handle audience form changes
-  const handleCategoryToggle = (category) => {
-    setAudienceForm(prev => ({
-      ...prev,
-      categories: prev.categories.includes(category)
-        ? prev.categories.filter(c => c !== category)
-        : [...prev.categories, category]
-    }));
-  };
+  // Check slug availability
+  const checkSlugAvailability = async (slug) => {
+    if (!slug || slug.length < 3) {
+      setSlugAvailable(null);
+      return;
+    }
 
-  const handleContentTypeToggle = (type) => {
-    setAudienceForm(prev => ({
-      ...prev,
-      contentTypes: prev.contentTypes.includes(type)
-        ? prev.contentTypes.filter(t => t !== type)
-        : [...prev.contentTypes, type]
-    }));
-  };
-
-  const handleRegionToggle = (region) => {
-    setAudienceForm(prev => ({
-      ...prev,
-      regions: prev.regions.includes(region)
-        ? prev.regions.filter(r => r !== region)
-        : [...prev.regions, region]
-    }));
-  };
-
-  // Save audience information
-  const handleAudienceSave = async () => {
     try {
-      setSavingAudience(true);
+      setCheckingSlug(true);
       const token = localStorage.getItem('token') || sessionStorage.getItem('token');
       
-      const response = await fetch('http://localhost:5002/api/creator/audience', {
+      console.log('🔍 Checking slug availability for:', slug);
+      console.log('🔑 Token exists:', !!token);
+      
+      const response = await fetch(
+        `http://localhost:5002/api/creator/check-slug?slug=${encodeURIComponent(slug)}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      console.log('📡 Response status:', response.status, response.statusText);
+      
+      const data = await response.json();
+      console.log('📦 Slug check response data:', data);
+      
+      if (response.ok && data.success) {
+        setSlugAvailable(data.available);
+        console.log(data.available ? '✅ Slug is AVAILABLE' : '❌ Slug is TAKEN');
+      } else {
+        console.error('❌ Slug check failed:', data);
+        setSlugAvailable(null);
+      }
+    } catch (error) {
+      console.error('💥 Error checking slug:', error);
+      console.error('Error details:', error.message);
+      setSlugAvailable(null);
+    } finally {
+      setCheckingSlug(false);
+      console.log('🏁 Slug check completed. slugAvailable:', slugAvailable);
+    }
+  };
+
+  // Handle slug input change
+  const handleSlugChange = (value) => {
+    const cleanSlug = value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+    setPublicPageForm({ ...publicPageForm, creatorSlug: cleanSlug });
+    
+    // Clear previous timeout
+    if (slugCheckTimeout) {
+      clearTimeout(slugCheckTimeout);
+    }
+    
+    // Reset availability status while typing
+    setSlugAvailable(null);
+    
+    // Debounce check
+    if (cleanSlug.length >= 3) {
+      const timeout = setTimeout(() => {
+        checkSlugAvailability(cleanSlug);
+      }, 800);
+      setSlugCheckTimeout(timeout);
+    } else {
+      setSlugAvailable(null);
+    }
+  };
+
+  // Save public page
+  const handlePublicPageSave = async () => {
+    try {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      
+      if (!publicPageForm.creatorSlug) {
+        alert('Please enter a creator slug');
+        return;
+      }
+
+      if (slugAvailable === false) {
+        alert('This slug is already taken. Please choose another one.');
+        return;
+      }
+
+      const response = await fetch('http://localhost:5002/api/creator/public-page', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(audienceForm)
+        body: JSON.stringify({
+          creatorSlug: publicPageForm.creatorSlug,
+          displayName: publicPageForm.displayName || creatorData.username,
+          welcomeMessage: publicPageForm.welcomeMessage || 'Welcome to my official APP',
+          coverImage: publicPageForm.coverImage
+        })
       });
 
+      console.log('📡 Response status:', response.status);
+      
       if (response.ok) {
+        const data = await response.json();
+        console.log('✅ Success response:', data);
+        alert(
+          `🎉 Success! Your page is live at:\n\n${data.publicUrl}\n\n` +
+          `Copy this link and add it to your Instagram bio!`
+        );
         fetchCreatorData(); // Refresh data
       } else {
-        console.error('Failed to save audience info');
+        const errorText = await response.text();
+        console.error('❌ Error response:', errorText);
+        let errorMessage;
+        try {
+          const error = JSON.parse(errorText);
+          errorMessage = error.message || error.error || 'Failed to create public page';
+        } catch (e) {
+          errorMessage = errorText || 'Failed to create public page';
+        }
+        console.error('❌ Error message:', errorMessage);
+        alert(errorMessage);
       }
     } catch (error) {
-      console.error('Error saving audience info:', error);
-    } finally {
-      setSavingAudience(false);
+      console.error('💥 Exception creating public page:', error);
+      console.error('Error details:', error.message, error.stack);
+      alert(`Failed to create public page: ${error.message}`);
     }
   };
 
@@ -255,9 +337,6 @@ const CreatorOnboarding = () => {
 
   const currentStep = getCurrentStep();
   const completionStatus = getCompletionStatus();
-  const categories = ['Fashion', 'Tech', 'Beauty', 'Gaming', 'Food', 'Fitness', 'Travel', 'Lifestyle'];
-  const contentTypes = ['Reels', 'Posts', 'Stories', 'Videos', 'IGTV', 'Live'];
-  const regions = ['North America', 'Europe', 'Asia', 'South America', 'Africa', 'Australia', 'India'];
 
   return (
     <div className="onboarding-container">
@@ -277,7 +356,7 @@ const CreatorOnboarding = () => {
             <div className="step-circle">
               {currentStep > 1 ? '✓' : '1'}
             </div>
-            <span className="step-label">Account Created</span>
+            <span className="step-label">Profile Setup</span>
           </div>
           <div className="progress-line"></div>
           
@@ -285,20 +364,12 @@ const CreatorOnboarding = () => {
             <div className="step-circle">
               {currentStep > 2 ? '✓' : '2'}
             </div>
-            <span className="step-label">Profile Setup</span>
-          </div>
-          <div className="progress-line"></div>
-          
-          <div className={`progress-step ${currentStep >= 3 ? 'active' : ''} ${currentStep > 3 ? 'completed' : ''}`}>
-            <div className="step-circle">
-              {currentStep > 3 ? '✓' : '3'}
-            </div>
             <span className="step-label">Connect Instagram</span>
           </div>
           <div className="progress-line"></div>
           
-          <div className={`progress-step ${currentStep >= 4 ? 'active' : ''}`}>
-            <div className="step-circle">4</div>
+          <div className={`progress-step ${currentStep >= 3 ? 'active' : ''}`}>
+            <div className="step-circle">3</div>
             <span className="step-label">Ready to Go</span>
           </div>
         </div>
@@ -392,75 +463,122 @@ const CreatorOnboarding = () => {
             </div>
           </div>
 
-          {/* Card 3: Content & Audience */}
-          <div className="onboarding-card onboarding-card-wide">
+          {/* Card 3: Create Public Page */}
+          <div className="onboarding-card">
             <div className="card-header">
-              <h3>🎯 Content & Audience</h3>
-              <span className={`status-pill ${completionStatus.audience ? 'completed' : 'pending'}`}>
-                {completionStatus.audience ? 'Completed' : 'Pending'}
+              <h3>🔗 Create Your Public Page</h3>
+              <span className={`status-pill ${completionStatus.publicPage ? 'completed' : 'pending'}`}>
+                {completionStatus.publicPage ? 'Created' : 'Pending'}
               </span>
             </div>
             <div className="card-body">
-              <p>Tell us about your content niche and target audience.</p>
+              <p>Get your unique link to share with fans and start monetizing!</p>
               
-              {/* Categories */}
-              <div className="form-section">
-                <label>Content Categories</label>
-                <div className="checkbox-group">
-                  {categories.map(category => (
-                    <label key={category} className="checkbox-item">
-                      <input
-                        type="checkbox"
-                        checked={audienceForm.categories.includes(category)}
-                        onChange={() => handleCategoryToggle(category)}
-                      />
-                      <span>{category}</span>
-                    </label>
-                  ))}
+              {!completionStatus.publicPage && (
+                <div className="info-box">
+                  <p>💡 <strong>Tip:</strong> Choose a slug that's short, memorable, and matches your brand. 
+                  Minimum 3 characters, only lowercase letters, numbers, and hyphens.</p>
                 </div>
+              )}
+              
+              <div className="slug-preview">
+                <strong>Your Link:</strong>
+                <div className="link-display">
+                  <span className="link-prefix">auraxai.in/creator/</span>
+                  <input 
+                    type="text" 
+                    value={publicPageForm.creatorSlug}
+                    onChange={(e) => handleSlugChange(e.target.value)}
+                    placeholder="yourname"
+                    className="slug-input"
+                    disabled={completionStatus.publicPage}
+                  />
+                  {checkingSlug && <span className="slug-status checking">⏳</span>}
+                  {!checkingSlug && slugAvailable === true && <span className="slug-status available">✓</span>}
+                  {!checkingSlug && slugAvailable === false && <span className="slug-status taken">✗</span>}
+                </div>
+                {publicPageForm.creatorSlug.length > 0 && publicPageForm.creatorSlug.length < 3 && (
+                  <p className="slug-error">⚠️ Slug must be at least 3 characters long</p>
+                )}
+                {slugAvailable === false && (
+                  <p className="slug-error">❌ This slug is already taken. Try another one!</p>
+                )}
+                {slugAvailable === true && (
+                  <p className="slug-success">✅ Great! This slug is available!</p>
+                )}
+                {checkingSlug && (
+                  <p className="slug-checking">🔍 Checking availability...</p>
+                )}
+              </div>
+              
+              <div className="form-group">
+                <label>Display Name</label>
+                <input
+                  type="text"
+                  value={publicPageForm.displayName}
+                  onChange={(e) => setPublicPageForm({...publicPageForm, displayName: e.target.value})}
+                  placeholder={creatorData.username || "How your name appears"}
+                  disabled={completionStatus.publicPage}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Welcome Message</label>
+                <textarea
+                  value={publicPageForm.welcomeMessage}
+                  onChange={(e) => setPublicPageForm({...publicPageForm, welcomeMessage: e.target.value})}
+                  placeholder="Welcome to my official APP..."
+                  rows="3"
+                  disabled={completionStatus.publicPage}
+                />
               </div>
 
-              {/* Content Types */}
-              <div className="form-section">
-                <label>Content Types</label>
-                <div className="checkbox-group">
-                  {contentTypes.map(type => (
-                    <label key={type} className="checkbox-item">
-                      <input
-                        type="checkbox"
-                        checked={audienceForm.contentTypes.includes(type)}
-                        onChange={() => handleContentTypeToggle(type)}
-                      />
-                      <span>{type}</span>
-                    </label>
-                  ))}
+              {completionStatus.publicPage && creatorData.creatorSlug && (
+                <div className="public-link-display">
+                  <p className="page-live-text"><strong>Your public page is live</strong></p>
+                  <div className="page-actions">
+                    <a 
+                      href={`/creator/${creatorData.creatorSlug}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="btn-view-page"
+                    >
+                      View Your Page →
+                    </a>
+                    <button 
+                      className="btn-copy-link"
+                      onClick={() => {
+                        navigator.clipboard.writeText(`https://auraxai.in/creator/${creatorData.creatorSlug}`);
+                        alert('Link copied to clipboard!');
+                      }}
+                    >
+                      📋 Copy Link
+                    </button>
+                  </div>
+                  <a 
+                    href={`https://auraxai.in/creator/${creatorData.creatorSlug}`}
+                    className="page-url-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    auraxai.in/creator/{creatorData.creatorSlug}
+                  </a>
                 </div>
-              </div>
-
-              {/* Regions */}
-              <div className="form-section">
-                <label>Target Regions</label>
-                <div className="checkbox-group">
-                  {regions.map(region => (
-                    <label key={region} className="checkbox-item">
-                      <input
-                        type="checkbox"
-                        checked={audienceForm.regions.includes(region)}
-                        onChange={() => handleRegionToggle(region)}
-                      />
-                      <span>{region}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
+              )}
             </div>
             <div className="card-footer">
               <button 
                 className="btn-primary" 
-                onClick={handleAudienceSave}
-                disabled={savingAudience || audienceForm.categories.length === 0}
+                onClick={handlePublicPageSave}
+                disabled={
+                  completionStatus.publicPage || 
+                  !publicPageForm.creatorSlug || 
+                  publicPageForm.creatorSlug.length < 3 ||
+                  slugAvailable !== true ||
+                  checkingSlug
+                }
               >
-                {savingAudience ? 'Saving...' : 'Save Preferences'}
+                {completionStatus.publicPage ? '✓ Page Created' : 'Create Public Page'}
               </button>
             </div>
           </div>
@@ -468,30 +586,38 @@ const CreatorOnboarding = () => {
 
         {/* Completion Summary & Dashboard Button */}
         <div className="completion-summary">
-          <div className="summary-items">
-            <div className="summary-item">
-              <span className="summary-label">Profile</span>
-              <span className="summary-icon">{completionStatus.profile ? '✅' : '⭕'}</span>
+          <div className="summary-content">
+            <div className="summary-header">
+              <h3>Setup Progress</h3>
+              <div className="progress-count">
+                {[completionStatus.profile, completionStatus.instagram, completionStatus.publicPage].filter(Boolean).length}/3 Complete
+              </div>
             </div>
-            <div className="summary-item">
-              <span className="summary-label">Instagram</span>
-              <span className="summary-icon">{completionStatus.instagram ? '✅' : '⭕'}</span>
-            </div>
-            <div className="summary-item">
-              <span className="summary-label">Audience</span>
-              <span className="summary-icon">{completionStatus.audience ? '✅' : '⭕'}</span>
+            <div className="summary-items">
+              <div className="summary-item">
+                <span className="summary-icon">{completionStatus.profile ? '✅' : '⭕'}</span>
+                <span className="summary-label">Profile</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-icon">{completionStatus.instagram ? '✅' : '⭕'}</span>
+                <span className="summary-label">Instagram</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-icon">{completionStatus.publicPage ? '✅' : '⭕'}</span>
+                <span className="summary-label">Public Page</span>
+              </div>
             </div>
           </div>
           
           <button 
-            className={`btn-dashboard ${isOnboardingComplete() ? 'btn-primary' : 'btn-secondary'}`}
+            className="btn-go-dashboard"
             onClick={handleGoToDashboard}
           >
-            {isOnboardingComplete() ? '🚀 Go to Dashboard' : '⏭️ Skip to Dashboard'}
+            {isOnboardingComplete() ? 'Go to Dashboard →' : 'Skip to Dashboard →'}
           </button>
           
           {!isOnboardingComplete() && (
-            <p className="skip-message">You can complete these steps later from your dashboard.</p>
+            <p className="skip-message">You can complete these steps later</p>
           )}
         </div>
       </div>

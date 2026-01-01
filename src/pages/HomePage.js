@@ -8,11 +8,32 @@ import ContactUs from "../components/ContactUs";
 import SmartSearch from "../components/ui/SmartSearch";
 import PWAInstallPrompt from "../components/pwa/PWAInstallPrompt";
 import { FloatingActionButton } from "../components/ui/MicroInteractions";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import { motion } from "framer-motion";
 
 const HomePage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { currentUser, isLoading } = useAuth();
+
+  useEffect(() => {
+    // Redirect authenticated users to their dashboard
+    if (!isLoading && currentUser) {
+      console.log('🏠 User is logged in on homepage, redirecting to dashboard...');
+      
+      if (currentUser.role === 'creator') {
+        // Check if minimal profile is completed
+        if (currentUser.minimalProfileCompleted) {
+          navigate('/creator/dashboard', { replace: true });
+        } else {
+          navigate('/creator/welcome', { replace: true });
+        }
+      } else if (currentUser.role === 'brand') {
+        navigate('/brand/dashboard', { replace: true });
+      }
+    }
+  }, [currentUser, isLoading, navigate]);
 
   useEffect(() => {
     // Scroll to services section if navigated from Services link

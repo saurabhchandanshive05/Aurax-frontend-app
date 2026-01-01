@@ -25,6 +25,9 @@ const CreatorProfile = React.lazy(() => import("./pages/CreatorProfile"));
 const CampaignManager = React.lazy(() => import("./pages/CampaignManager"));
 const BrandDashboard = React.lazy(() => import("./pages/BrandDashboard"));
 const CreatorDashboard = React.lazy(() => import("./pages/CreatorDashboard"));
+const CreatorDashboardNew = React.lazy(() => import("./pages/CreatorDashboardNew"));
+const MinimalWelcome = React.lazy(() => import("./pages/MinimalWelcome"));
+const PublicPageSetup = React.lazy(() => import("./pages/PublicPageSetup"));
 const CreatorOnboarding = React.lazy(() => import("./pages/CreatorOnboarding"));
 const AddTalent = React.lazy(() => import("./pages/AddTalent"));
 const Analytics = React.lazy(() => import("./pages/Analytics"));
@@ -58,6 +61,7 @@ const TestImageLoad = React.lazy(() => import("./pages/TestImageLoad"));
 const ComprehensiveTest = React.lazy(() => import("./pages/ComprehensiveTest"));
 const QuickAPITest = React.lazy(() => import("./pages/QuickAPITest"));
 const BackendStatus = React.lazy(() => import("./pages/BackendStatus"));
+const PublicCreatorPage = React.lazy(() => import("./pages/PublicCreatorPage"));
 const DeploymentGuide = React.lazy(() => import("./pages/DeploymentGuide"));
 const CopyDashboard = React.lazy(() => import("./pages/CopyDashboard"));
 const CopyEnvironmentStatus = React.lazy(() =>
@@ -198,6 +202,13 @@ function App() {
   useEffect(() => {
     initStorage();
 
+    // Clear browser navigation cache on app load to prevent route persistence
+    if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
+      console.log('🔄 Page reloaded - clearing navigation state');
+      // Clear any stale navigation state
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
     let timeoutId;
 
     const checkBackendConnection = async () => {
@@ -278,6 +289,9 @@ function App() {
                     <Route path="/brands" element={<BrandsPage />} />
                     <Route path="/creators" element={<CreatorDirectory />} />
                     <Route path="/creators/:id" element={<CreatorProfile />} />
+                    
+                    {/* Public Creator Page - Fan-facing monetization page */}
+                    <Route path="/creator/:slug" element={<PublicCreatorPage />} />
                     <Route path="/campaigns" element={<CampaignManager />} />
                     <Route path="/analytics" element={<Analytics />} />
                     <Route path="/careers" element={<CareersPage />} />
@@ -298,8 +312,8 @@ function App() {
                     {/* Social Connection Route */}
                     <Route path="/connect-socials" element={<ConnectSocials />} />
                     
-                    {/* Instagram OAuth Dashboard */}
-                    <Route path="/dashboard" element={<InstagramDashboard />} />
+                    {/* Creator Dashboard - Main dashboard after Instagram OAuth */}
+                    <Route path="/dashboard" element={<CreatorDashboardNew />} />
 
                     {/* Copy Environment Test Route */}
                     <Route
@@ -382,12 +396,36 @@ function App() {
                       path="/creator/welcome"
                       element={
                         <ProtectedRoute role="creator">
+                          <MinimalWelcome />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/creator/public-page-setup"
+                      element={
+                        <ProtectedRoute role="creator" requireMinimalProfile={true}>
+                          <PublicPageSetup />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/creator/welcome-old"
+                      element={
+                        <ProtectedRoute role="creator">
                           <CreatorOnboarding />
                         </ProtectedRoute>
                       }
                     />
                     <Route
                       path="/creator/dashboard"
+                      element={
+                        <ProtectedRoute role="creator" requireMinimalProfile={true}>
+                          <CreatorDashboardNew />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/creator/dashboard-old"
                       element={
                         <ProtectedRoute role="creator">
                           <CreatorDashboard />
