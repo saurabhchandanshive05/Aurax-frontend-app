@@ -14,8 +14,8 @@ class CopyLogger {
       details: {
         ...details,
         database: "influencer_copy",
-        backend: "https://influencer-backend-etq5.onrender.com",
-        frontend: "https://aaurax.netlify.app",
+        backend: "https://influencer-backend-7.onrender.com",
+        frontend: window.location.origin,
       },
     };
     this.logs.push(logEntry);
@@ -116,10 +116,19 @@ class CopyLogger {
       "frontend-copy",
       "localhost",
       "127.0.0.1",
-      "aaurax.netlify.app", // Add your production domain
+      "aaurax.netlify.app",
+      "www.auraxai.in",
+      "auraxai.in",
     ];
 
+    // In production, allow all domains (security handled by backend CORS)
+    if (process.env.NODE_ENV === "production") {
+      return true;
+    }
+
     if (!allowedDomains.includes(currentDomain)) {
+      console.warn("Domain not in allowed list:", currentDomain);
+      console.warn("Allowed domains:", allowedDomains);
       throw new Error("NOT IN COPY ENVIRONMENT");
     }
 
