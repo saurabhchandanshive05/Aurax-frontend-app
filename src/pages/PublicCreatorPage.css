@@ -1713,3 +1713,28 @@
     font-size: 14px;
   }
 }
+
+/* ========== MINIMAL AURAX BRANDING FOOTER ========== */
+.aurax-branding-footer {
+  text-align: center;
+  padding: 20px;
+  background: transparent;
+  color: #999;
+  font-size: 13px;
+  margin-top: 60px;
+}
+
+.aurax-branding-footer span {
+  margin-right: 6px;
+}
+
+.aurax-branding-footer a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.aurax-branding-footer a:hover {
+  color: #764ba2;
+}

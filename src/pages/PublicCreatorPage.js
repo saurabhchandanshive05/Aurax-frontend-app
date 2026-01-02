@@ -649,6 +649,14 @@ const PublicCreatorPage = () => {
           </div>
         </div>
       )}
+      
+      {/* Minimal Aurax Branding Footer */}
+      <div className="aurax-branding-footer">
+        <span>Powered by</span>
+        <a href="https://www.auraxai.in" target="_blank" rel="noopener noreferrer">
+          AURAX
+        </a>
+      </div>
     </div>
   );
 };
