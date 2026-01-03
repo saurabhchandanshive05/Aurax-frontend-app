@@ -52,7 +52,32 @@ export const apiClient = {
       });
 
       const response = await fetch(url, config);
-      const responseData = await response.json().catch(() => ({}));
+      
+      // Check content type before parsing
+      const contentType = response.headers.get("content-type");
+      const isJSON = contentType && contentType.includes("application/json");
+      
+      let responseData;
+      if (isJSON) {
+        try {
+          responseData = await response.json();
+        } catch (jsonError) {
+          console.error("Failed to parse JSON response:", jsonError);
+          responseData = { 
+            message: "Invalid JSON response from server",
+            status: response.status 
+          };
+        }
+      } else {
+        // If not JSON, get text response (likely HTML error page)
+        const textResponse = await response.text();
+        console.error("Non-JSON response received:", textResponse.substring(0, 200));
+        responseData = { 
+          message: `Server returned ${response.status} error. Please check if the API endpoint is correct.`,
+          status: response.status,
+          htmlError: true
+        };
+      }
 
       if (!response.ok) {
         copyLogger.logAPICall(

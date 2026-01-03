@@ -23,8 +23,21 @@ export const useStandaloneRoute = () => {
     /^\/creator\/[^/]+$/,  // /creator/:slug pattern (but not /creator/login, /creator/dashboard)
   ];
   
+  // Routes that should NEVER be standalone (always show header/footer)
+  const alwaysShowHeaderFooter = [
+    /^\/creator\/login$/,
+    /^\/creator\/signup$/,
+    /^\/creator\/dashboard/,
+    /^\/creator\/welcome/,
+  ];
+  
+  // Check if route should always show header/footer
+  const shouldAlwaysShow = alwaysShowHeaderFooter.some(pattern => 
+    pattern.test(location.pathname)
+  );
+  
   // Check if current path matches any standalone route pattern
-  const isStandalone = standaloneRoutes.some(pattern => 
+  const isStandalone = !shouldAlwaysShow && standaloneRoutes.some(pattern => 
     pattern.test(location.pathname)
   );
   

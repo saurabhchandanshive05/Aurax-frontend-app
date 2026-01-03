@@ -616,6 +616,15 @@ const CreatorDashboardNew = () => {
         </nav>
 
         <div className="sidebar-footer-new">
+          <button 
+            onClick={() => navigate('/')} 
+            className="home-link"
+            style={{ marginBottom: '8px', border: 'none', background: 'transparent', cursor: 'pointer', color: '#888', transition: 'color 0.2s' }}
+            onMouseOver={(e) => e.target.style.color = '#fff'}
+            onMouseOut={(e) => e.target.style.color = '#888'}
+          >
+            🏠 Back to Home
+          </button>
           <a href="/creator/welcome" className="settings-link">⚙️ Settings</a>
           <button onClick={handleLogout} className="logout-link">🚪 Logout</button>
         </div>

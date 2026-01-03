@@ -339,17 +339,17 @@ const PublicCreatorPage = () => {
         </section>
       )}
 
-      {/* Exclusive Content Preview */}
-      <section className="content-section">
-        <h2 className="section-title">Exclusive Content</h2>
-        <p className="section-subtitle">
-          {isSubscribed 
-            ? 'Access your exclusive content below' 
-            : 'Subscribe to unlock exclusive photos, videos, and more'}
-        </p>
-        <div className="content-grid">
-          {content && content.length > 0 ? (
-            content.map((item, index) => (
+      {/* Exclusive Content Preview - Only show if creator has content */}
+      {content && content.length > 0 && (
+        <section className="content-section">
+          <h2 className="section-title">Exclusive Content</h2>
+          <p className="section-subtitle">
+            {isSubscribed 
+              ? 'Access your exclusive content below' 
+              : 'Subscribe to unlock exclusive photos, videos, and more'}
+          </p>
+          <div className="content-grid">
+            {content.map((item, index) => (
               <div 
                 key={index} 
                 className={`content-card ${!isSubscribed ? 'locked' : ''}`}
@@ -384,27 +384,10 @@ const PublicCreatorPage = () => {
                   </span>
                 </div>
               </div>
-            ))
-          ) : (
-            // Placeholder content cards
-            [...Array(6)].map((_, index) => (
-              <div key={index} className="content-card locked" onClick={() => handleSubscribeClick(creator.subscriptionPlans?.[0])}>
-                <div className="content-thumbnail">
-                  <div className="thumbnail-placeholder"></div>
-                  <div className="content-lock">
-                    <div className="lock-icon">🔒</div>
-                    <p>Subscribe to unlock</p>
-                  </div>
-                </div>
-                <div className="content-info">
-                  <span className="content-date">Exclusive content</span>
-                  <span className="content-type">Coming soon</span>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </section>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Paid Services - ALWAYS SHOW */}
       <section className="services-section">
