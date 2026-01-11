@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { apiClient } from "../utils/apiClient";
 import instagramAPI from "../utils/instagramAPI";
@@ -21,6 +21,7 @@ const CreatorLogin = () => {
 
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [searchParams] = useSearchParams();
 
   const validate = () => {
     const newErrors = {};
@@ -50,6 +51,17 @@ const CreatorLogin = () => {
       const resp = await apiClient.login(sanitized);
 
       if (resp?.success && resp?.token) {
+        // Validate that user has creator role (but allow admin access)
+        const userRole = resp.user?.role;
+        const userRoles = resp.user?.roles || [];
+        const isCreator = userRole === 'creator' || userRoles.includes('creator');
+        const isAdmin = userRole === 'admin' || userRoles.includes('admin');
+        
+        if (!isCreator && !isAdmin) {
+          setLoginError("Access denied. This portal is for creators only. Please use the appropriate login portal.");
+          return;
+        }
+        
         // AuthContext login now fetches full user data and returns correct redirect path
         console.log("=== LOGIN FLOW ===");
         console.log("1. Login successful, calling AuthContext login...");
@@ -57,10 +69,23 @@ const CreatorLogin = () => {
         const redirectPath = await login(resp.token);
         
         console.log("2. AuthContext returned redirect path:", redirectPath);
-        console.log("3. Navigating to:", redirectPath);
-        console.log("==================");
         
-        navigate(redirectPath);
+        // Check for CTA intent in URL params
+        const returnUrl = searchParams.get('returnUrl');
+        const ctaAction = searchParams.get('action');
+        const campaignId = searchParams.get('campaignId');
+        
+        if (returnUrl && ctaAction) {
+          console.log("3. CTA intent detected - action:", ctaAction, "returnUrl:", returnUrl);
+          // Redirect back to original page with action preserved
+          const decodedReturnUrl = decodeURIComponent(returnUrl);
+          navigate(`${decodedReturnUrl}?resumeAction=${ctaAction}${campaignId ? `&campaignId=${campaignId}` : ''}`);
+        } else {
+          console.log("3. No CTA intent, navigating to:", redirectPath);
+          navigate(redirectPath);
+        }
+        
+        console.log("==================");
       } else {
         throw new Error(resp?.error || "Login failed");
       }

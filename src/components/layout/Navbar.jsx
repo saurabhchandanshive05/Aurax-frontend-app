@@ -166,14 +166,12 @@ function Navbar() {
                   {item.label}
                 </Link>
               </motion.div>
-            ))}
-
-            {/* Features Dropdown */}
+            ))}            {/* Features Dropdown */}
             <motion.div
               className="nav-dropdown"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
               whileHover="hover"
             >
               <motion.span
@@ -250,6 +248,25 @@ function Navbar() {
                   </motion.div>
                 ))}
               </motion.div>
+            </motion.div>
+
+            {/* LIVE Campaigns Link */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              onHoverStart={() => setHoveredItem('/live/campaigns')}
+              onHoverEnd={() => setHoveredItem(null)}
+            >
+              <Link
+                to="/live/campaigns"
+                className={`aurax-nav-link live-link ${
+                  isActive('/live/campaigns') ? 'active' : ''
+                }`}
+              >
+                <span className="live-dot"></span>
+                LIVE
+              </Link>
             </motion.div>
 
             {/* Auth Actions */}
@@ -719,6 +736,33 @@ function Navbar() {
                       </motion.div>
                     );
                   })}
+
+                  {/* LIVE Campaigns Link - Mobile */}
+                  <motion.div
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 0.8 }}
+                  >
+                    <Link
+                      to="/live/campaigns"
+                      className={`mobile-nav-link live-link-mobile ${
+                        isActive('/live/campaigns') ? 'active' : ''
+                      }`}
+                      onClick={toggleMenu}
+                    >
+                      <div className="mobile-nav-content">
+                        <svg
+                          className="mobile-nav-icon"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                        >
+                          <circle cx="12" cy="12" r="8" />
+                        </svg>
+                        <span className="mobile-nav-text">LIVE Campaigns</span>
+                      </div>
+                      <span className="live-badge-mobile">LIVE</span>
+                    </Link>
+                  </motion.div>
 
                   {/* Mobile Features Section */}
                   <motion.div

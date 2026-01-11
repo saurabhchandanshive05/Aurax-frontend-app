@@ -48,11 +48,16 @@ export function AuthProvider({ children }) {
             id: userData.id || userData._id,
             email: userData.email,
             role: userData.role,
+            roles: userData.roles || [], // Multi-role support
             name: userData.username || userData.fullName,
             minimalProfileCompleted: userData.minimalProfileCompleted || false,
             fullName: userData.fullName,
             creatorType: userData.creatorType,
-            instagramUsername: userData.instagramUsername
+            instagramUsername: userData.instagramUsername,
+            // Include onboarding/review status fields
+            reviewStatus: userData.reviewStatus,
+            isApproved: userData.isApproved,
+            onboardingStep: userData.onboardingStep
           };
           
           console.log('✅ Setting current user with full data:', user);
@@ -129,11 +134,16 @@ export function AuthProvider({ children }) {
           id: userData.id || userData._id,
           email: userData.email,
           role: userData.role,
+          roles: userData.roles || [], // Multi-role support
           name: userData.username || userData.fullName,
           minimalProfileCompleted: userData.minimalProfileCompleted || false,
           fullName: userData.fullName,
           creatorType: userData.creatorType,
-          instagramUsername: userData.instagramUsername
+          instagramUsername: userData.instagramUsername,
+          // Include onboarding/review status fields
+          reviewStatus: userData.reviewStatus,
+          isApproved: userData.isApproved,
+          onboardingStep: userData.onboardingStep
         };
         
         console.log('👤 Setting current user with complete data:', user);
@@ -146,17 +156,51 @@ export function AuthProvider({ children }) {
           return savedRedirect;
         }
 
-        // Determine redirect based on actual profile completion
-        if (user.role === "creator" && !user.minimalProfileCompleted) {
-          console.log('🔀 Redirecting to welcome (profile incomplete)');
-          return "/creator/welcome";
-        } else if (user.role === "creator") {
-          console.log('🔀 Redirecting to dashboard (profile complete)');
-          return "/creator/dashboard";
-        } else {
+        // Determine redirect based on roles (prioritize admin)
+        const hasAdminRole = user.roles.includes('admin') || user.role === 'admin';
+        const hasCreatorRole = user.roles.includes('creator') || user.role === 'creator';
+        const hasBrandRole = user.role === 'brand';
+        
+        console.log('📊 User roles:', { hasAdminRole, hasCreatorRole, hasBrandRole, role: user.role, roles: user.roles });
+        
+        // Admin users go to admin dashboard (even if they're also creators)
+        if (hasAdminRole) {
+          console.log('🔀 Redirecting to admin dashboard (admin role detected)');
+          return "/admin/campaigns";
+        }
+        
+        // For creators, check onboarding status from userData (already fetched)
+        if (hasCreatorRole) {
+          const { reviewStatus, isApproved } = userData;
+          
+          console.log('📊 Creator onboarding status:', { reviewStatus, isApproved });
+          
+          // Redirect based on onboarding state
+          if (reviewStatus === 'approved' && isApproved) {
+            console.log('🔀 Redirecting to dashboard (approved)');
+            return "/creator/dashboard";
+          } else if (reviewStatus === 'pending') {
+            console.log('🔀 Redirecting to under review (pending)');
+            return "/creator/under-review";
+          } else if (reviewStatus === 'rejected') {
+            console.log('🔀 Redirecting to rejected screen');
+            return "/creator/rejected";
+          } else {
+            // reviewStatus is null/undefined or 'not_submitted'
+            console.log('🔀 Redirecting to welcome (not submitted)');
+            return "/creator/welcome";
+          }
+        }
+        
+        // Brand users go to brand dashboard
+        if (hasBrandRole) {
           console.log('🔀 Redirecting to brand dashboard');
           return "/brand/dashboard";
         }
+        
+        // Fallback
+        console.log('🔀 Redirecting to home (no specific role matched)');
+        return "/";
       } else {
         // Fallback to JWT decode if API fails
         const decoded = jwtDecode(token);
@@ -206,6 +250,8 @@ export function AuthProvider({ children }) {
     setCurrentUser(null);
     setHasChecked(false); // Reset to allow re-checking on next login
     console.log('✅ Logged out successfully');
+    // Force full page reload to homepage to clear all state
+    window.location.replace('/');
   };
 
   const refreshUser = async () => {

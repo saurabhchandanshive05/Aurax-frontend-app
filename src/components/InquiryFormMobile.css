@@ -1,0 +1,676 @@
+/* ========================================
+   AURAX INQUIRY FORM - MOBILE FIRST
+   Purpose-Driven, Step-Based Design
+   ======================================== */
+
+/* Container */
+.inquiryMobileContainer {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0d0d1f 0%, #1a1a2e 100%);
+  padding: 0;
+}
+
+/* ========================================
+   PROGRESS BAR
+   ======================================== */
+.progressBar {
+  position: sticky;
+  top: 0;
+  background: #0d0d1f;
+  padding: 16px 20px;
+  z-index: 100;
+  border-bottom: 1px solid #2d3748;
+}
+
+.progressTrack {
+  height: 4px;
+  background: #2d3748;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.progressLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #a0aec0;
+  font-weight: 600;
+}
+
+/* ========================================
+   PURPOSE SELECTION (Step 1)
+   ======================================== */
+.purposeSelection {
+  padding: 40px 20px;
+}
+
+.purposeTitle {
+  font-size: 28px;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 12px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.purposeSubtitle {
+  font-size: 15px;
+  color: #a0aec0;
+  margin: 0 0 32px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.purposeCards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.purposeCard {
+  background: #1a1a2e;
+  border: 2px solid #2d3748;
+  border-radius: 16px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.purposeCard:active {
+  transform: scale(0.98);
+}
+
+.purposeCard.selected {
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.purposeCard.selected::before {
+  content: '✓';
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.purposeIcon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.purposeCardTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 8px;
+}
+
+.purposeCardDesc {
+  font-size: 14px;
+  color: #a0aec0;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.purposeCardBadge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #48bb78;
+  background: rgba(72, 187, 120, 0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-top: 12px;
+  border: 1px solid rgba(72, 187, 120, 0.2);
+}
+
+.purposeCardNote {
+  font-size: 12px;
+  color: #718096;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+/* ========================================
+   FORM CONTENT (Steps 2+)
+   ======================================== */
+.formContent {
+  padding: 24px 20px 120px;
+}
+
+.formSection {
+  background: #1a1a2e;
+  border: 1px solid #2d3748;
+  border-radius: 16px;
+  padding: 24px 20px;
+  margin-bottom: 16px;
+}
+
+.formSectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.formSectionDesc {
+  font-size: 14px;
+  color: #a0aec0;
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup:last-child {
+  margin-bottom: 0;
+}
+
+.formLabel {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 8px;
+}
+
+.formLabel .required {
+  color: #fc8181;
+  margin-left: 2px;
+}
+
+.formInput,
+.formTextarea,
+.formSelect {
+  width: 100%;
+  padding: 14px 16px;
+  background: #2d3748;
+  border: 2px solid #4a5568;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  outline: none;
+  transition: all 0.2s ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.formInput:focus,
+.formTextarea:focus,
+.formSelect:focus {
+  border-color: #667eea;
+  background: #374151;
+}
+
+.formInput::placeholder,
+.formTextarea::placeholder {
+  color: #718096;
+}
+
+.formTextarea {
+  min-height: 120px;
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.formSelect {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a0aec0' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+/* Platform Checkboxes */
+.platformCheckboxes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #2d3748;
+  border: 2px solid #4a5568;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  color: white;
+  font-weight: 600;
+}
+
+.checkboxLabel:active {
+  transform: scale(0.97);
+}
+
+.checkboxLabel input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 2px solid #4a5568;
+  background: #2d3748;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checkboxLabel input[type="checkbox"]:checked {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: #667eea;
+}
+
+.checkboxLabel:has(input:checked) {
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
+}
+
+/* Help Text */
+.formHelp {
+  font-size: 13px;
+  color: #a0aec0;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* Info Box */
+.infoBox {
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.infoBox.warning {
+  background: rgba(246, 173, 85, 0.1);
+  border-color: rgba(246, 173, 85, 0.3);
+}
+
+.infoBox.success {
+  background: rgba(72, 187, 120, 0.1);
+  border-color: rgba(72, 187, 120, 0.3);
+}
+
+.infoBoxTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #667eea;
+  margin: 0 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.infoBox.warning .infoBoxTitle {
+  color: #f6ad55;
+}
+
+.infoBox.success .infoBoxTitle {
+  color: #48bb78;
+}
+
+.infoBoxContent {
+  font-size: 13px;
+  color: #e2e8f0;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.infoBoxContent ul {
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+
+.infoBoxContent li {
+  margin-bottom: 4px;
+}
+
+/* ========================================
+   BOTTOM ACTION BAR (Sticky)
+   ======================================== */
+.bottomActionBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, transparent 0%, #0d0d1f 30%);
+  padding: 16px 20px 20px;
+  z-index: 100;
+  border-top: 1px solid #2d3748;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 12px;
+}
+
+.btnBack,
+.btnNext,
+.btnSubmit {
+  flex: 1;
+  padding: 16px 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btnBack {
+  background: #2d3748;
+  color: white;
+  border: 2px solid #4a5568;
+}
+
+.btnNext,
+.btnSubmit {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btnBack:active,
+.btnNext:active,
+.btnSubmit:active {
+  transform: scale(0.97);
+}
+
+.btnBack:disabled,
+.btnNext:disabled,
+.btnSubmit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnSubmit.loading {
+  position: relative;
+  color: transparent;
+}
+
+.btnSubmit.loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   SUCCESS/ERROR STATES
+   ======================================== */
+.inquiryResult {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.resultIcon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+}
+
+.resultIcon.success {
+  background: rgba(72, 187, 120, 0.2);
+  border: 3px solid #48bb78;
+}
+
+.resultIcon.error {
+  background: rgba(252, 129, 129, 0.2);
+  border: 3px solid #fc8181;
+}
+
+.resultTitle {
+  font-size: 24px;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 12px;
+}
+
+.resultDesc {
+  font-size: 16px;
+  color: #a0aec0;
+  margin: 0 0 32px;
+  line-height: 1.6;
+}
+
+.resultActions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.resultBtn {
+  width: 100%;
+  padding: 16px 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resultBtn.primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.resultBtn.secondary {
+  background: #2d3748;
+  color: white;
+  border: 2px solid #4a5568;
+}
+
+.resultBtn:active {
+  transform: scale(0.98);
+}
+
+/* ========================================
+   EXISTING INQUIRY STATUS
+   ======================================== */
+.existingInquiryStatus {
+  padding: 40px 20px;
+}
+
+.statusCard {
+  background: #1a1a2e;
+  border: 2px solid;
+  border-radius: 16px;
+  padding: 24px 20px;
+  margin-bottom: 24px;
+}
+
+.statusCard.pending {
+  border-color: #f6ad55;
+}
+
+.statusCard.approved {
+  border-color: #48bb78;
+}
+
+.statusCard.rejected {
+  border-color: #fc8181;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.statusBadge.pending {
+  background: rgba(246, 173, 85, 0.2);
+  color: #f6ad55;
+}
+
+.statusBadge.approved {
+  background: rgba(72, 187, 120, 0.2);
+  color: #48bb78;
+}
+
+.statusBadge.rejected {
+  background: rgba(252, 129, 129, 0.2);
+  color: #fc8181;
+}
+
+.statusTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 12px;
+}
+
+.statusDesc {
+  font-size: 15px;
+  color: #a0aec0;
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+
+.statusDetails {
+  background: #2d3748;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.statusDetailRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 8px 0;
+  border-bottom: 1px solid #4a5568;
+}
+
+.statusDetailRow:last-child {
+  border-bottom: none;
+}
+
+.statusDetailLabel {
+  font-size: 13px;
+  color: #a0aec0;
+  font-weight: 600;
+}
+
+.statusDetailValue {
+  font-size: 14px;
+  color: white;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* ========================================
+   LOADING SCREEN
+   ======================================== */
+.loadingScreen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 20px;
+}
+
+.loadingSpinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(102, 126, 234, 0.2);
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loadingText {
+  font-size: 16px;
+  color: #a0aec0;
+  font-weight: 600;
+}
+
+/* ========================================
+   DESKTOP BREAKPOINT (min-width: 768px)
+   ======================================== */
+@media (min-width: 768px) {
+  .inquiryMobileContainer {
+    padding: 40px;
+  }
+
+  .purposeSelection,
+  .formContent,
+  .inquiryResult,
+  .existingInquiryStatus {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .platformCheckboxes {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .bottomActionBar {
+    padding: 20px 40px 24px;
+  }
+
+  .actionButtons {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .resultActions {
+    flex-direction: row;
+  }
+
+  .resultBtn {
+    flex: 1;
+  }
+}

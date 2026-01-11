@@ -28,7 +28,9 @@ export const useStandaloneRoute = () => {
     /^\/creator\/login$/,
     /^\/creator\/signup$/,
     /^\/creator\/dashboard/,
-    /^\/creator\/welcome/,
+    /^\/creator\/welcome$/,
+    /^\/creator\/profile-setup$/,
+    /^\/creator\/under-review$/,
   ];
   
   // Check if route should always show header/footer

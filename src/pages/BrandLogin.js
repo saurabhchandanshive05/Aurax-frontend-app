@@ -41,6 +41,17 @@ const BrandLogin = () => {
         password: (password || "").trim(),
       };
       const resp = await apiClient.login(sanitized);
+      
+      // Validate that user has brand role
+      const userRole = resp.user?.role;
+      const userRoles = resp.user?.roles || [];
+      const isBrand = userRole === 'brand' || userRoles.includes('brand');
+      
+      if (!isBrand) {
+        setLoginError("Access denied. This portal is for brands only. Please use the appropriate login portal.");
+        return;
+      }
+      
       const redirectPath = login(resp.token);
       navigate(redirectPath);
     } catch (err) {

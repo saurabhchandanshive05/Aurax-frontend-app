@@ -7,9 +7,10 @@ import {
   useLocation,
 } from "react-router-dom";
 import { initStorage } from "./utils/localStorage.js";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { useStandaloneRoute } from "./components/layout/ConditionalLayout";
+import GlobalLoadingScreen from "./components/GlobalLoadingScreen";
 
 // Components
 import Navbar from "./components/layout/Navbar";
@@ -35,6 +36,7 @@ const Analytics = React.lazy(() => import("./pages/Analytics"));
 const AdminPanel = React.lazy(() => import("./pages/AdminPanel"));
 const BrandLogin = React.lazy(() => import("./pages/BrandLogin"));
 const CreatorLogin = React.lazy(() => import("./pages/CreatorLogin"));
+const UnifiedLogin = React.lazy(() => import("./pages/UnifiedLogin"));
 const ComingSoonPage = React.lazy(() => import("./pages/ComingSoonPage"));
 const AboutPage = React.lazy(() => import("./pages/AboutPage"));
 const BrandsPage = React.lazy(() => import("./pages/BrandsPage"));
@@ -63,6 +65,10 @@ const ComprehensiveTest = React.lazy(() => import("./pages/ComprehensiveTest"));
 const QuickAPITest = React.lazy(() => import("./pages/QuickAPITest"));
 const BackendStatus = React.lazy(() => import("./pages/BackendStatus"));
 const PublicCreatorPage = React.lazy(() => import("./pages/PublicCreatorPage"));
+const LiveCampaigns = React.lazy(() => import("./pages/public/LiveCampaignsMobile"));
+const CampaignDetail = React.lazy(() => import("./pages/public/CampaignDetail"));
+const InquiryForm = React.lazy(() => import("./components/InquiryFormMobile"));
+const LoginRedirect = React.lazy(() => import("./pages/LoginRedirect"));
 const DeploymentGuide = React.lazy(() => import("./pages/DeploymentGuide"));
 const CopyDashboard = React.lazy(() => import("./pages/CopyDashboard"));
 const CopyEnvironmentStatus = React.lazy(() =>
@@ -79,6 +85,14 @@ const EnhancedLoginTest = React.lazy(() => import("./pages/EnhancedLoginTest"));
 const AuthTest = React.lazy(() => import("./pages/AuthTest"));
 const ConnectSocials = React.lazy(() => import("./pages/ConnectSocials"));
 const InstagramDashboard = React.lazy(() => import("./pages/InstagramDashboard"));
+
+// Creator Onboarding Flow
+const WelcomeScreen = React.lazy(() => import("./pages/creator/WelcomeScreen"));
+const ProfileSetup = React.lazy(() => import("./pages/creator/ProfileSetup"));
+const UnderReview = React.lazy(() => import("./pages/creator/UnderReview"));
+
+// Admin Components
+const CampaignCurator = React.lazy(() => import("./pages/admin/CampaignCurator"));
 
 // Mobile navigation component
 function MobileNavMenu() {
@@ -206,6 +220,17 @@ function AppLayout({ children }) {
   );
 }
 
+// Auth gate component - prevents any rendering until auth is fully resolved
+function AuthGate({ children }) {
+  const { isLoading } = useAuth();
+  
+  if (isLoading) {
+    return <GlobalLoadingScreen message="Verifying authentication..." />;
+  }
+  
+  return children;
+}
+
 function App() {
   const [backendStatus, setBackendStatus] = useState({
     status: "checking",
@@ -259,21 +284,22 @@ function App() {
     <ThemeProvider>
       <AuthProvider>
         <Router>
-          <div className="flex flex-col min-h-screen font-sans bg-[#0d0d1f] text-white overflow-x-hidden">
-            <CustomCursor />
+          <AuthGate>
+            <div className="flex flex-col min-h-screen font-sans bg-[#0d0d1f] text-white overflow-x-hidden">
+              <CustomCursor />
 
-            {/* Backend status banner */}
-            {showStatus && (
-              <div
-                className={`status-banner ${
-                  backendStatus.status === "connected"
-                    ? "bg-green-600"
-                    : backendStatus.status === "error"
-                    ? "bg-red-600"
-                    : "bg-yellow-600"
-                }`}
-              >
-                {backendStatus.message}
+              {/* Backend status banner */}
+              {showStatus && (
+                <div
+                  className={`status-banner ${
+                    backendStatus.status === "connected"
+                      ? "bg-green-600"
+                      : backendStatus.status === "error"
+                      ? "bg-red-600"
+                      : "bg-yellow-600"
+                  }`}
+                >
+                  {backendStatus.message}
               </div>
             )}
 
@@ -295,14 +321,27 @@ function App() {
                     <Route path="/creators" element={<CreatorDirectory />} />
                     <Route path="/creators/:id" element={<CreatorProfile />} />
                     
+                    {/* Public LIVE Campaign Board */}
+                    <Route path="/live/campaigns" element={<LiveCampaigns />} />
+                    <Route path="/live/campaigns/:id" element={<CampaignDetail />} />
+                    
+                    {/* Inquiry Form - Gated actions verification */}
+                    <Route path="/inquiry/form" element={<InquiryForm />} />
+                    
                     {/* Public Creator Page - Fan-facing monetization page */}
                     <Route path="/creator/:slug" element={<PublicCreatorPage />} />
                     <Route path="/campaigns" element={<CampaignManager />} />
                     <Route path="/analytics" element={<Analytics />} />
                     <Route path="/careers" element={<CareersPage />} />
                     <Route path="/contact" element={<ContactPage />} />
+                    
+                    {/* Canonical public login entry point - forwards to creator login */}
+                    <Route path="/login" element={<LoginRedirect />} />
+                    
+                    {/* Legacy login routes for backward compatibility */}
                     <Route path="/brand/login" element={<BrandLogin />} />
                     <Route path="/creator/login" element={<CreatorLogin />} />
+                    
                     <Route
                       path="/forgot-password"
                       element={<ForgotPassword />}
@@ -316,6 +355,32 @@ function App() {
 
                     {/* Social Connection Route */}
                     <Route path="/connect-socials" element={<ConnectSocials />} />
+                    
+                    {/* Creator Onboarding Flow - Protected for creators only */}
+                    <Route 
+                      path="/creator/welcome" 
+                      element={
+                        <ProtectedRoute role="creator">
+                          <WelcomeScreen />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/creator/profile-setup" 
+                      element={
+                        <ProtectedRoute role="creator">
+                          <ProfileSetup />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/creator/under-review" 
+                      element={
+                        <ProtectedRoute role="creator">
+                          <UnderReview />
+                        </ProtectedRoute>
+                      } 
+                    />
                     
                     {/* Creator Dashboard - Main dashboard after Instagram OAuth */}
                     <Route path="/dashboard" element={<CreatorDashboardNew />} />
@@ -453,6 +518,14 @@ function App() {
                         </ProtectedRoute>
                       }
                     />
+                    <Route
+                      path="/admin/campaigns"
+                      element={
+                        <ProtectedRoute role="admin">
+                          <CampaignCurator />
+                        </ProtectedRoute>
+                      }
+                    />
 
                     {/* Redirects */}
                     <Route
@@ -491,7 +564,10 @@ function App() {
                 Recheck Backend
               </button>
             )}
+
+            <BackToTop />
           </div>
+          </AuthGate>
         </Router>
       </AuthProvider>
     </ThemeProvider>
