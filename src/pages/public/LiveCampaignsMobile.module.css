@@ -1,0 +1,681 @@
+/* ========================================
+   AURAX LIVE CAMPAIGNS - MOBILE FIRST
+   ======================================== */
+
+/* Container - Full viewport on mobile */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0d0d1f 0%, #1a1a2e 100%);
+  padding: 0;
+  position: relative;
+}
+
+/* ========================================
+   FILTER PANEL (Mobile: Slide-Up)
+   ======================================== */
+.filterPanelOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 998;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.filterPanelOverlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.filterPanel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #1a1a2e;
+  border-radius: 24px 24px 0 0;
+  padding: 24px 20px 32px;
+  z-index: 999;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.filterPanel.open {
+  transform: translateY(0);
+}
+
+.filterPanelHandle {
+  width: 40px;
+  height: 4px;
+  background: #4a5568;
+  border-radius: 2px;
+  margin: 0 auto 20px;
+}
+
+.filterPanelTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 20px;
+}
+
+.filterGroup {
+  margin-bottom: 24px;
+}
+
+.filterLabel {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #a0aec0;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filterSelect {
+  width: 100%;
+  padding: 14px 16px;
+  background: #2d3748;
+  border: 2px solid #4a5568;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.filterSelect:focus {
+  border-color: #667eea;
+  background: #374151;
+}
+
+.filterApply {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: transform 0.2s ease;
+}
+
+.filterApply:active {
+  transform: scale(0.98);
+}
+
+/* ========================================
+   HERO SECTION (Mobile Compact)
+   ======================================== */
+.hero {
+  padding: 60px 20px 24px;
+  text-align: center;
+}
+
+.heroTitle {
+  font-size: 28px;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 8px;
+  line-height: 1.2;
+}
+
+.heroHighlight {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.heroSubtitle {
+  font-size: 15px;
+  color: #a0aec0;
+  margin: 0 0 20px;
+  font-weight: 500;
+}
+
+.heroStats {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.statCard {
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  border-radius: 12px;
+  padding: 12px 20px;
+  min-width: 100px;
+}
+
+.statNumber {
+  font-size: 24px;
+  font-weight: 800;
+  color: #667eea;
+  margin-bottom: 4px;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: #a0aec0;
+  font-weight: 600;
+}
+
+/* ========================================
+   VIEW SWITCHER (Mobile: Tabs)
+   ======================================== */
+.viewSwitcher {
+  display: flex;
+  gap: 8px;
+  padding: 0 20px 16px;
+  position: sticky;
+  top: 0;
+  background: linear-gradient(180deg, #0d0d1f 0%, transparent 100%);
+  z-index: 10;
+  padding-top: 16px;
+}
+
+.viewTab {
+  flex: 1;
+  padding: 12px 16px;
+  background: #2d3748;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  color: #a0aec0;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.viewTab.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: transparent;
+}
+
+.filterTrigger {
+  padding: 12px 16px;
+  background: #2d3748;
+  border: 2px solid #4a5568;
+  border-radius: 12px;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filterTrigger:active {
+  transform: scale(0.95);
+  background: #374151;
+}
+
+/* ========================================
+   CAMPAIGN FEED (Vertical, Text-First)
+   ======================================== */
+.campaignFeed {
+  padding: 0 20px 100px;
+}
+
+.feedCard {
+  background: #1a1a2e;
+  border: 1px solid #2d3748;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  transition: all 0.2s ease;
+}
+
+.feedCard:active {
+  transform: scale(0.99);
+  background: #1f1f33;
+}
+
+/* Trust Header - Always Visible */
+.trustHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #2d3748;
+}
+
+.verifiedLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #48bb78;
+  background: rgba(72, 187, 120, 0.1);
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+.verifiedIcon {
+  width: 14px;
+  height: 14px;
+  color: #48bb78;
+}
+
+.handPickedLabel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #f6ad55;
+  background: rgba(246, 173, 85, 0.1);
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+/* Poster Identity - Human Focus */
+.posterIdentity {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.posterAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+}
+
+.posterInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.posterName {
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.posterRole {
+  font-size: 13px;
+  color: #a0aec0;
+  font-weight: 500;
+  line-height: 1.4;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.posterCompany {
+  font-size: 13px;
+  color: #718096;
+  font-weight: 600;
+}
+
+.timeAgo {
+  font-size: 12px;
+  color: #718096;
+  margin-top: 4px;
+  display: block;
+}
+
+/* Campaign Content */
+.campaignIntent {
+  font-size: 17px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.campaignDescription {
+  font-size: 15px;
+  color: #cbd5e0;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.campaignDescription.collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.seeMoreBtn {
+  background: none;
+  border: none;
+  color: #667eea;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 0;
+  cursor: pointer;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.seeMoreBtn:active {
+  color: #764ba2;
+}
+
+/* Campaign Highlights - Compact */
+.campaignHighlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.highlight {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #e2e8f0;
+  background: #2d3748;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.highlightIcon {
+  font-size: 14px;
+}
+
+.highlightLabel {
+  color: #a0aec0;
+  margin-right: 2px;
+}
+
+/* Tags */
+.feedTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tag {
+  font-size: 12px;
+  color: #a0aec0;
+  background: rgba(102, 126, 234, 0.1);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+/* Action Buttons */
+.feedActions {
+  display: flex;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid #2d3748;
+}
+
+.feedActionBtn {
+  flex: 1;
+  padding: 12px 16px;
+  background: #2d3748;
+  border: 2px solid #4a5568;
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.feedActionBtn:active {
+  transform: scale(0.97);
+  background: #374151;
+}
+
+.feedActionBtn.primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: transparent;
+}
+
+/* Contacting Indicator */
+.contactingIndicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #48bb78;
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: rgba(72, 187, 120, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(72, 187, 120, 0.2);
+}
+
+.contactingIndicator strong {
+  font-weight: 700;
+}
+
+/* ========================================
+   LOADING & EMPTY STATES
+   ======================================== */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(102, 126, 234, 0.2);
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loadingText {
+  font-size: 15px;
+  color: #a0aec0;
+  font-weight: 600;
+}
+
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.emptyIcon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.empty h3 {
+  font-size: 20px;
+  color: white;
+  margin: 0 0 8px;
+  font-weight: 700;
+}
+
+.empty p {
+  font-size: 15px;
+  color: #a0aec0;
+  margin: 0;
+}
+
+/* ========================================
+   STICKY BOTTOM CTA BAR (Mobile)
+   ======================================== */
+.bottomCtaBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, transparent 0%, #0d0d1f 30%);
+  padding: 16px 20px 20px;
+  z-index: 100;
+  border-top: 1px solid #2d3748;
+}
+
+.ctaBarContent {
+  display: flex;
+  gap: 8px;
+}
+
+.ctaBarBtn {
+  flex: 1;
+  padding: 14px 16px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.ctaBarBtn.secondary {
+  background: #2d3748;
+  color: white;
+  border: 2px solid #4a5568;
+}
+
+.ctaBarBtn.primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.ctaBarBtn:active {
+  transform: scale(0.97);
+}
+
+/* ========================================
+   INFINITE SCROLL LOADER
+   ======================================== */
+.infiniteLoader {
+  padding: 24px 20px;
+  text-align: center;
+}
+
+.infiniteLoader .spinner {
+  width: 32px;
+  height: 32px;
+  border-width: 3px;
+  margin: 0 auto;
+}
+
+.endMessage {
+  text-align: center;
+  padding: 24px 20px 40px;
+}
+
+.endMessage p {
+  font-size: 15px;
+  color: #a0aec0;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ========================================
+   DESKTOP BREAKPOINT (min-width: 768px)
+   ======================================== */
+@media (min-width: 768px) {
+  .container {
+    padding: 0 40px;
+  }
+
+  .campaignFeed {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .filterPanel {
+    position: relative;
+    transform: none;
+    border-radius: 16px;
+    margin-bottom: 24px;
+    max-height: none;
+  }
+
+  .filterPanelOverlay {
+    display: none;
+  }
+
+  .filterPanelHandle {
+    display: none;
+  }
+
+  .viewSwitcher {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .bottomCtaBar {
+    padding: 20px 40px 24px;
+  }
+
+  .ctaBarContent {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .campaignFeed {
+    max-width: 800px;
+  }
+
+  .viewSwitcher {
+    max-width: 800px;
+  }
+
+  .ctaBarContent {
+    max-width: 800px;
+  }
+}
