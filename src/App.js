@@ -93,6 +93,7 @@ const UnderReview = React.lazy(() => import("./pages/creator/UnderReview"));
 
 // Admin Components
 const CampaignCurator = React.lazy(() => import("./pages/admin/CampaignCurator"));
+const BrandIntelligence = React.lazy(() => import("./pages/admin/BrandIntelligence"));
 
 // Mobile navigation component
 function MobileNavMenu() {
@@ -523,6 +524,14 @@ function App() {
                       element={
                         <ProtectedRoute role="admin">
                           <CampaignCurator />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/brand-intelligence"
+                      element={
+                        <ProtectedRoute role="admin">
+                          <BrandIntelligence />
                         </ProtectedRoute>
                       }
                     />
