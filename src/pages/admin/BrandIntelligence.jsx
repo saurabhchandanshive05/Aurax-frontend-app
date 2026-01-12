@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
+import AdminNav from "../../components/admin/AdminNav";
 import styles from "./BrandIntelligence.module.css";
 
 /**
@@ -11,8 +14,27 @@ import styles from "./BrandIntelligence.module.css";
  */
 
 const BrandIntelligenceDashboard = () => {
+  const navigate = useNavigate();
+  const { currentUser, isAuthenticated, isLoading } = useAuth();
+  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Auth check
+  useEffect(() => {
+    if (isLoading) return;
+    
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    
+    const hasAdminRole = currentUser?.roles?.includes('admin') || currentUser?.role === 'admin';
+    if (!hasAdminRole) {
+      navigate('/');
+      return;
+    }
+  }, [isAuthenticated, currentUser, isLoading, navigate]);
   
   // Data states
   const [stats, setStats] = useState(null);
@@ -143,12 +165,17 @@ const BrandIntelligenceDashboard = () => {
     return colors[bucket] || "gray";
   };
   
-  if (loading) {
+  if (loading || isLoading) {
     return (
-      <div className={styles.container}>
-        <div className={styles.loading}>
-          <div className={styles.spinner}></div>
-          <p>Loading Brand Intelligence...</p>
+      <div className={styles.pageWrapper}>
+        <AdminNav />
+        <div className={styles.mainContent}>
+          <div className={styles.container}>
+            <div className={styles.loading}>
+              <div className={styles.spinner}></div>
+              <p>Loading Brand Intelligence...</p>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -156,18 +183,26 @@ const BrandIntelligenceDashboard = () => {
   
   if (error) {
     return (
-      <div className={styles.container}>
-        <div className={styles.error}>
-          <h2>⚠️ Error</h2>
-          <p>{error}</p>
-          <button onClick={fetchDashboardData}>Retry</button>
+      <div className={styles.pageWrapper}>
+        <AdminNav />
+        <div className={styles.mainContent}>
+          <div className={styles.container}>
+            <div className={styles.error}>
+              <h2>⚠️ Error</h2>
+              <p>{error}</p>
+              <button onClick={fetchDashboardData}>Retry</button>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
   
   return (
-    <div className={styles.container}>
+    <div className={styles.pageWrapper}>
+      <AdminNav />
+      <div className={styles.mainContent}>
+        <div className={styles.container}>
       {/* Header */}
       <div className={styles.header}>
         <div>
@@ -517,6 +552,8 @@ const BrandIntelligenceDashboard = () => {
           </div>
         </div>
       )}
+        </div>
+      </div>
     </div>
   );
 };

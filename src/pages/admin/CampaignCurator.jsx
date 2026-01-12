@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import AdminNav from '../../components/admin/AdminNav';
 import styles from './CampaignCurator.module.css';
 
 const CampaignCurator = () => {
@@ -260,29 +261,37 @@ const CampaignCurator = () => {
   // Show loading while auth is being checked
   if (isLoading) {
     return (
-      <div className={styles.curatorContainer}>
-        <div style={{ textAlign: 'center', padding: '100px 20px' }}>
-          <h2>Loading...</h2>
-          <p>Verifying admin access...</p>
+      <div className={styles.pageWrapper}>
+        <AdminNav />
+        <div className={styles.mainContent}>
+          <div className={styles.curatorContainer}>
+            <div style={{ textAlign: 'center', padding: '100px 20px' }}>
+              <h2>Loading...</h2>
+              <p>Verifying admin access...</p>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={styles.curatorContainer}>
-      <div className={styles.curatorHeader}>
-        <div>
-          <h1>Campaign Curator</h1>
-          <p>AURAX LIVE - Admin Dashboard</p>
-        </div>
-        <button 
-          className={styles.addBtn}
-          onClick={() => setShowForm(!showForm)}
-        >
-          {showForm ? 'Cancel' : '+ Add Campaign'}
-        </button>
-      </div>
+    <div className={styles.pageWrapper}>
+      <AdminNav />
+      <div className={styles.mainContent}>
+        <div className={styles.curatorContainer}>
+          <div className={styles.curatorHeader}>
+            <div>
+              <h1>Campaign Curator</h1>
+              <p>AURAX LIVE - Admin Dashboard</p>
+            </div>
+            <button 
+              className={styles.addBtn}
+              onClick={() => setShowForm(!showForm)}
+            >
+              {showForm ? 'Cancel' : '+ Add Campaign'}
+            </button>
+          </div>
 
       {error && (
         <div className={`${styles.alert} ${styles.error}`}>
@@ -781,6 +790,8 @@ const CampaignCurator = () => {
               </div>
             </div>
           ))}
+        </div>
+      </div>
         </div>
       </div>
     </div>

@@ -1,7 +1,21 @@
+/* Page Layout */
+.pageWrapper {
+  display: flex;
+  min-height: 100vh;
+  background: #f3f4f6;
+}
+
+.mainContent {
+  flex: 1;
+  margin-left: 280px;
+  min-height: 100vh;
+  background: #ffffff;
+}
+
 .curatorContainer {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 120px 20px 40px;
+  padding: 40px 20px;
 }
 
 .curatorHeader {
@@ -353,7 +367,7 @@
 /* Responsive */
 @media (max-width: 768px) {
   .curatorContainer {
-    padding: 100px 15px 30px;
+    padding: 20px 15px;
   }
 
   .curatorHeader {
@@ -377,5 +391,14 @@
   .submitBtn,
   .cancelBtn {
     width: 100%;
+  }
+  
+  /* Mobile: Remove sidebar margin */
+  .mainContent {
+    margin-left: 0;
+  }
+  
+  .pageWrapper {
+    flex-direction: column;
   }
 }

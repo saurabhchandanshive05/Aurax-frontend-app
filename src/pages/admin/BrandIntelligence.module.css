@@ -1,5 +1,18 @@
 /* Brand Intelligence Dashboard Styles */
 
+/* Page Layout */
+.pageWrapper {
+  display: flex;
+  min-height: 100vh;
+  background: #f3f4f6;
+}
+
+.mainContent {
+  flex: 1;
+  margin-left: 280px;
+  min-height: 100vh;
+}
+
 .container {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -603,5 +616,14 @@
   
   .modalContent {
     padding: 24px;
+  }
+  
+  /* Mobile: Remove sidebar margin */
+  .mainContent {
+    margin-left: 0;
+  }
+  
+  .pageWrapper {
+    flex-direction: column;
   }
 }

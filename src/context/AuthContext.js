@@ -166,7 +166,7 @@ export function AuthProvider({ children }) {
         // Admin users go to admin dashboard (even if they're also creators)
         if (hasAdminRole) {
           console.log('🔀 Redirecting to admin dashboard (admin role detected)');
-          return "/admin/campaigns";
+          return "/admin/brand-intelligence";
         }
         
         // For creators, check onboarding status from userData (already fetched)

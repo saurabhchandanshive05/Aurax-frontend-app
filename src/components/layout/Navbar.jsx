@@ -59,6 +59,8 @@ function Navbar() {
     { path: "/about", label: "About" },
     ...(isAuthenticated && user?.role === "creator"
       ? [{ path: "/creator/dashboard", label: "Dashboard" }]
+      : isAuthenticated && (user?.role === "admin" || user?.roles?.includes("admin"))
+      ? [{ path: "/admin/brand-intelligence", label: "Dashboard" }]
       : isAuthenticated && user?.role === "brand"
       ? [{ path: "/brand/dashboard", label: "Dashboard" }]
       : []),
@@ -321,7 +323,9 @@ function Navbar() {
                   >
                     <Link
                       to={
-                        user?.role === "creator"
+                        user?.roles?.includes("admin") || user?.role === "admin"
+                          ? "/admin/brand-intelligence"
+                          : user?.role === "creator"
                           ? "/creator/dashboard"
                           : "/brand/dashboard"
                       }
@@ -602,7 +606,9 @@ function Navbar() {
                       <motion.div whileTap={{ scale: 0.95 }}>
                         <Link
                           to={
-                            user?.role === "creator"
+                            user?.roles?.includes("admin") || user?.role === "admin"
+                              ? "/admin/brand-intelligence"
+                              : user?.role === "creator"
                               ? "/creator/dashboard"
                               : "/brand/dashboard"
                           }
@@ -658,6 +664,9 @@ function Navbar() {
                           );
                         case "/creator/dashboard":
                         case "/brand/dashboard":
+                        case "/admin/brand-intelligence":
+                        case "/admin/campaigns":
+                        case "/admin/creators":
                           return (
                             <svg
                               className="mobile-nav-icon"
