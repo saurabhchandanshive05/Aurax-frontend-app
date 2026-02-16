@@ -15,29 +15,22 @@ const WelcomeScreen = () => {
     const { reviewStatus, isApproved, role, roles } = currentUser;
     const hasAdminRole = roles?.includes('admin') || role === 'admin';
     const hasCreatorRole = roles?.includes('creator') || role === 'creator';
-    
-    console.log('📊 WelcomeScreen - checking user status:', { role, roles, hasAdminRole, hasCreatorRole, reviewStatus, isApproved });
-    
     // If admin, redirect to admin dashboard
     if (hasAdminRole) {
-      console.log('🔀 Admin user, redirecting to admin dashboard');
       navigate('/admin/campaigns', { replace: true });
       return;
     }
     
     // If not a creator, redirect to brand dashboard
     if (!hasCreatorRole) {
-      console.log('🔀 Not a creator, redirecting to brand dashboard');
       navigate('/brand/dashboard', { replace: true });
       return;
     }
     
     // If creator with approved profile, redirect to dashboard
     if (reviewStatus === 'approved' && isApproved) {
-      console.log('✅ Profile already approved - redirecting to creator dashboard');
       navigate('/creator/dashboard', { replace: true });
     } else if (reviewStatus === 'pending') {
-      console.log('⏳ Profile pending - redirecting to under-review');
       navigate('/creator/under-review', { replace: true });
     }
     // If reviewStatus is null/undefined or 'rejected', stay on welcome page

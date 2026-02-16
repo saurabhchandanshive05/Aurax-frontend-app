@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import AdminNav from "../../components/admin/AdminNav";
+import CreatorDatabase from "./CreatorDatabase";
+import CreatorContactList from "./CreatorContactList";
 import styles from "./BrandIntelligence.module.css";
 
 /**
@@ -75,6 +77,7 @@ const BrandIntelligenceDashboard = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
+      setError(null); // Clear any previous errors
       const token = localStorage.getItem("token");
       
       const headers = {
@@ -82,14 +85,37 @@ const BrandIntelligenceDashboard = () => {
       };
       
       const [statsRes, trendingRes, industriesRes] = await Promise.all([
-        axios.get(`${API_URL}/api/brand-intelligence/stats`, { headers }),
-        axios.get(`${API_URL}/api/brand-intelligence/brands/trending`, { headers }),
-        axios.get(`${API_URL}/api/brand-intelligence/industries`, { headers }),
+        axios.get(`${API_URL}/api/brand-intelligence/stats`, { headers }).catch(err => {
+          console.error("Stats fetch failed:", err);
+          return { data: { success: true, data: {
+            total_brands: 0,
+            high_intent_brands: 0,
+            active_this_week: 0,
+            new_advertisers: 0,
+            scaling_brands: 0,
+            top_industries: []
+          }}};
+        }),
+        axios.get(`${API_URL}/api/brand-intelligence/brands/trending`, { headers }).catch(err => {
+          console.error("Trending brands fetch failed:", err);
+          return { data: { success: true, data: [] }};
+        }),
+        axios.get(`${API_URL}/api/brand-intelligence/industries`, { headers }).catch(err => {
+          console.error("Industries fetch failed:", err);
+          return { data: { success: true, data: [] }};
+        }),
       ]);
       
-      setStats(statsRes.data.data);
-      setTrendingBrands(trendingRes.data.data);
-      setIndustries(industriesRes.data.data);
+      setStats(statsRes.data.data || {
+        total_brands: 0,
+        high_intent_brands: 0,
+        active_this_week: 0,
+        new_advertisers: 0,
+        scaling_brands: 0,
+        top_industries: []
+      });
+      setTrendingBrands(trendingRes.data.data || []);
+      setIndustries(industriesRes.data.data || []);
       
       setLoading(false);
     } catch (err) {
@@ -235,6 +261,18 @@ const BrandIntelligenceDashboard = () => {
           onClick={() => setActiveTab("trending")}
         >
           🔥 Trending
+        </button>
+        <button
+          className={activeTab === "creators" ? styles.tabActive : ""}
+          onClick={() => setActiveTab("creators")}
+        >
+          👥 Creator Database
+        </button>
+        <button
+          className={activeTab === "contacts" ? styles.tabActive : ""}
+          onClick={() => setActiveTab("contacts")}
+        >
+          📧 Contact List
         </button>
       </div>
       
@@ -550,6 +588,20 @@ const BrandIntelligenceDashboard = () => {
               </div>
             )}
           </div>
+        </div>
+      )}
+      
+      {/* Creator Database Tab */}
+      {activeTab === "creators" && (
+        <div className={styles.creatorDatabaseSection}>
+          <CreatorDatabase key="creator-db-tab" />
+        </div>
+      )}
+      
+      {/* Contact List Tab */}
+      {activeTab === "contacts" && (
+        <div className={styles.contactListSection}>
+          <CreatorContactList key="contact-list-tab" />
         </div>
       )}
         </div>

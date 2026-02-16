@@ -48,13 +48,18 @@ const CreatorLogin = () => {
       const redirectPath = login(resp.token);
       navigate(redirectPath);
     } catch (err) {
-      const isAuthError = err && (err.status === 401 || err.status === 403);
-      setLoginError(
-        isAuthError
-          ? "Invalid email or password. Please try again."
-          : "Login failed. Please try again."
-      );
       console.error("Login error:", err?.status, err?.message || err);
+      
+      const errorMessage = err.response?.data?.error || err.response?.data?.message;
+      const isAuthError = err && (err.status === 401 || err.status === 403);
+      
+      if (errorMessage === "Invalid credentials" || isAuthError) {
+        setLoginError("Invalid email or password. Please try again.");
+      } else if (errorMessage) {
+        setLoginError(errorMessage);
+      } else {
+        setLoginError("An unexpected error occurred. Please try again later.");
+      }
     } finally {
       setIsSubmitting(false);
     }

@@ -14,7 +14,6 @@ const QuickAPITest = () => {
       type
     };
     setLogs(prev => [newLog, ...prev.slice(0, 19)]); // Keep last 20 logs
-    console.log(`[API-TEST-${type.toUpperCase()}]`, message);
   };
 
   // Test 1: Direct Backend Health Check

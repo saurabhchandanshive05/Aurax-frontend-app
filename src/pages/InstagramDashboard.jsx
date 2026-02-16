@@ -18,7 +18,6 @@ const InstagramDashboard = () => {
     const token = searchParams.get('token');
     
     if (authStatus === 'success' && token) {
-      console.log('✅ OAuth successful! Storing token...');
       // Store JWT token in localStorage
       localStorage.setItem('auth_token', token);
       
@@ -49,7 +48,6 @@ const InstagramDashboard = () => {
 
       if (response.data.success) {
         setProfile(response.data);
-        console.log('✅ Profile loaded:', response.data);
       }
     } catch (err) {
       console.error('Failed to load profile:', err);

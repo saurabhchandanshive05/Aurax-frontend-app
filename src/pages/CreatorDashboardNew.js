@@ -57,12 +57,6 @@ const CreatorDashboardNew = () => {
         setCreatorData(userData);
         
         // Debug Instagram connection status
-        console.log('📊 Dashboard data fetched:', {
-          hasInstagram: !!userData.instagram,
-          instagramConnected: userData.instagram?.connected || userData.instagramConnected,
-          instagramUsername: userData.instagram?.username || userData.instagramUsername
-        });
-        
         // If Instagram is connected, fetch fresh profile data from Graph API
         if (userData.instagram?.connected || userData.instagramConnected) {
           fetchInstagramProfile();
@@ -86,8 +80,6 @@ const CreatorDashboardNew = () => {
   const fetchInstagramProfile = async () => {
     try {
       setLoadingInstagramData(true);
-      console.log('📸 Fetching Instagram profile data from Graph API...');
-      
       // Get the access token from the database
       const response = await apiClient.request('/instagram/profile', {
         method: 'GET',
@@ -95,8 +87,6 @@ const CreatorDashboardNew = () => {
       
       if (response.success) {
         setInstagramProfile(response);
-        console.log('✅ Instagram profile data loaded:', response.profile);
-        
         // Update stats with Instagram followers
         setStats(prev => ({
           ...prev,
@@ -123,8 +113,6 @@ const CreatorDashboardNew = () => {
       logout();
       
       // Show success message
-      console.log('✅ Logged out successfully');
-      
       // Redirect to home
       navigate('/', { replace: true });
     }
@@ -256,7 +244,6 @@ const CreatorDashboardNew = () => {
   const handleInstagramConnect = () => {
     // Prevent double-clicks
     if (isConnectingInstagram) {
-      console.log('Instagram connection already in progress...');
       return;
     }
     
@@ -297,14 +284,6 @@ const CreatorDashboardNew = () => {
 
   const renderInstagram = () => {
     // Debug logging for Instagram connection state
-    console.log('🎨 Rendering Instagram section:', {
-      'instagram.connected': creatorData?.instagram?.connected,
-      'instagramConnected': creatorData?.instagramConnected,
-      'isConnectingInstagram': isConnectingInstagram,
-      'instagram.username': creatorData?.instagram?.username,
-      'Should show connected UI': creatorData?.instagram?.connected || creatorData?.instagramConnected
-    });
-    
     return (
       <div className="dashboard-instagram-new">
         <h2>📱 Connect Instagram</h2>

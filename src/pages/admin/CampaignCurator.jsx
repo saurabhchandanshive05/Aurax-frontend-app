@@ -12,6 +12,7 @@ const CampaignCurator = () => {
   const [success, setSuccess] = useState('');
   const [campaigns, setCampaigns] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [editingCampaign, setEditingCampaign] = useState(null);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -21,6 +22,11 @@ const CampaignCurator = () => {
     posterRole: '',
     company: '',
     isVerified: false,
+    
+    // Creator visual fields
+    profilePicture: '',
+    linkedinVerified: false,
+    linkedinUrl: '',
     
     // Campaign details
     title: '',
@@ -61,28 +67,63 @@ const CampaignCurator = () => {
   useEffect(() => {
     // Wait for auth to finish loading
     if (isLoading) {
-      console.log('⏳ CampaignCurator - Auth still loading, waiting...');
       return;
     }
 
     if (!isAuthenticated || !currentUser) {
-      console.log('🚫 CampaignCurator - Not authenticated, redirecting to login');
       navigate('/login', { replace: true });
       return;
     }
 
     const hasAdminRole = currentUser?.roles?.includes('admin') || currentUser?.role === 'admin';
-    console.log('📊 CampaignCurator - Checking admin access:', { hasAdminRole, roles: currentUser?.roles, role: currentUser?.role });
-
     if (!hasAdminRole) {
-      console.log('🚫 CampaignCurator - Not admin, redirecting to home');
       navigate('/', { replace: true });
       return;
     }
-
-    console.log('✅ CampaignCurator - Admin access confirmed, fetching campaigns');
     fetchCampaigns();
   }, [isAuthenticated, currentUser, isLoading, navigate]);
+
+  const handleEdit = (campaign) => {
+    setEditingCampaign(campaign);
+    setFormData({
+      brandName: campaign.brandName || '',
+      posterName: campaign.posterName || '',
+      posterRole: campaign.posterRole || '',
+      company: campaign.company || '',
+      isVerified: campaign.isVerified || false,
+      profilePicture: campaign.profilePicture || '',
+      linkedinVerified: campaign.linkedinVerified || false,
+      linkedinUrl: campaign.linkedinUrl || '',
+      title: campaign.title || '',
+      intent: campaign.intent || '',
+      description: campaign.description || '',
+      objective: campaign.objective || '',
+      deliverables: campaign.deliverables?.join('\n') || '',
+      budget: `${campaign.budget?.min || ''}-${campaign.budget?.max || ''}`,
+      platform: campaign.platform || '',
+      category: campaign.category?.join(', ') || '',
+      locations: campaign.locations?.join(', ') || '',
+      followerRange: campaign.followerRange || { min: '', max: '' },
+      avgViews: campaign.avgViews || '',
+      creatorsNeeded: campaign.creatorsNeeded || 1,
+      gender: campaign.gender || 'Any',
+      ageRange: campaign.ageRange || { min: '', max: '' },
+      timeline: campaign.timeline || '',
+      deadline: campaign.deadline ? new Date(campaign.deadline).toISOString().split('T')[0] : '',
+      isHandPicked: campaign.isHandPicked || false,
+      contactVerified: campaign.contactVerified || false,
+      sourceType: campaign.source?.type || 'manual',
+      sourceUrl: campaign.source?.url || '',
+      contactPerson: campaign.source?.contactPerson || '',
+      contactMethod: campaign.source?.contactMethod || '',
+      rawText: campaign.source?.rawText || '',
+      sourceNotes: campaign.source?.notes || '',
+      moderationNotes: campaign.moderationNotes || '',
+      status: campaign.status || 'live'
+    });
+    setShowForm(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const fetchCampaigns = async () => {
     try {
@@ -139,13 +180,39 @@ const CampaignCurator = () => {
         company: formData.company,
         isVerified: formData.isVerified,
         
+        // Creator visual fields
+        profilePicture: formData.profilePicture,
+        linkedinVerified: formData.linkedinVerified,
+        linkedinUrl: formData.linkedinUrl,
+        
         title: formData.title,
         intent: formData.intent,
         description: formData.description || 'Details will be shared with shortlisted creators',
         objective: formData.objective,
         deliverables: formData.deliverables.split(',').map(d => d.trim()).filter(Boolean),
         
-        budget: formData.budget,
+        budget: (() => {
+          // Parse budget string like "18k-30k", "18000-30000", or "18k" into {min, max, currency}
+          if (typeof formData.budget === 'string' && formData.budget.trim()) {
+            // Match range format: "18k-30k" or "18000-30000"
+            const rangeMatch = formData.budget.match(/(\d+)(k)?\s*-\s*(\d+)(k)?/i);
+            if (rangeMatch) {
+              const min = parseInt(rangeMatch[1]) * (rangeMatch[2] ? 1000 : 1);
+              const max = parseInt(rangeMatch[3]) * (rangeMatch[4] ? 1000 : 1);
+              return { min, max, currency: 'INR' };
+            }
+            // Single value like "18k" or "18000"
+            const singleMatch = formData.budget.match(/(\d+)(k)?/i);
+            if (singleMatch) {
+              const value = parseInt(singleMatch[1]) * (singleMatch[2] ? 1000 : 1);
+              return { min: value, max: Math.round(value * 1.5), currency: 'INR' };
+            }
+          }
+          // Already an object or empty
+          return formData.budget && typeof formData.budget === 'object' 
+            ? formData.budget 
+            : { min: 0, max: 0, currency: 'INR' };
+        })(),
         platform: formData.platform,
         category: formData.category.split(',').map(c => c.trim()).filter(Boolean),
         locations: formData.locations.split(',').map(l => l.trim()).filter(Boolean),
@@ -154,7 +221,10 @@ const CampaignCurator = () => {
           min: parseInt(formData.followerRange.min) || 0,
           max: parseInt(formData.followerRange.max) || 0
         },
-        avgViews: formData.avgViews,
+        avgViews: {
+          min: parseInt(formData.avgViews) || 0,
+          max: parseInt(formData.avgViews) * 1.5 || 0
+        },
         creatorsNeeded: parseInt(formData.creatorsNeeded) || 1,
         gender: formData.gender,
         ageRange: {
@@ -180,8 +250,14 @@ const CampaignCurator = () => {
         contactVerified: formData.contactVerified
       };
 
-      const response = await fetch('http://localhost:5002/api/admin/campaigns', {
-        method: 'POST',
+      const url = editingCampaign 
+        ? `http://localhost:5002/api/admin/campaigns/${editingCampaign._id}`
+        : 'http://localhost:5002/api/admin/campaigns';
+      
+      const method = editingCampaign ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method: method,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -191,14 +267,30 @@ const CampaignCurator = () => {
 
       const data = await response.json();
       
+      if (!response.ok) {
+        console.error('❌ Campaign save failed:', {
+          status: response.status,
+          error: data.error,
+          details: data.details,
+          validation: data.validation
+        });
+        
+        // Show specific error message
+        const errorMsg = data.details || data.error || 'Failed to save campaign';
+        setError(editingCampaign ? `Failed to update campaign: ${errorMsg}` : `Failed to create campaign: ${errorMsg}`);
+        return;
+      }
+      
       if (data.success) {
-        setSuccess('Campaign published successfully!');
+        setSuccess(editingCampaign ? 'Campaign updated successfully!' : 'Campaign published successfully!');
         setShowForm(false);
+        setEditingCampaign(null);
         fetchCampaigns();
         
         // Reset form
         setFormData({
           brandName: '', posterName: '', posterRole: '', company: '', isVerified: false,
+          profilePicture: '', linkedinVerified: false, linkedinUrl: '',
           title: '', intent: '', description: '', objective: '', deliverables: '',
           budget: '', platform: '', category: '', locations: '',
           followerRange: { min: '', max: '' }, avgViews: '', creatorsNeeded: 1,
@@ -208,10 +300,11 @@ const CampaignCurator = () => {
           rawText: '', sourceNotes: '', moderationNotes: '', status: 'live'
         });
       } else {
-        setError(data.error || 'Failed to create campaign');
+        setError(data.error || data.details || 'Failed to save campaign');
       }
     } catch (err) {
-      setError('Network error: ' + err.message);
+      console.error('❌ Network error saving campaign:', err);
+      setError('Network error: Unable to connect to server. Please check your connection.');
     } finally {
       setLoading(false);
     }
@@ -307,7 +400,7 @@ const CampaignCurator = () => {
 
       {showForm && (
         <div className={styles.formContainer}>
-          <h2>Add New Campaign</h2>
+          <h2>{editingCampaign ? 'Edit Campaign' : 'Add New Campaign'}</h2>
           <form onSubmit={handleSubmit} className={styles.campaignForm}>
             {/* Source Information */}
             <div className={styles.section}>
@@ -385,6 +478,59 @@ const CampaignCurator = () => {
                   rows={2}
                   placeholder="Internal notes about this source..."
                 />
+              </div>
+            </div>
+
+            {/* Creator Visual Information */}
+            <div className={styles.section}>
+              <h3>👤 Creator Visual Information</h3>
+              <div className={styles.formGrid}>
+                <div className={styles.formGroup}>
+                  <label>Profile Picture URL</label>
+                  <input
+                    type="url"
+                    name="profilePicture"
+                    value={formData.profilePicture}
+                    onChange={handleInputChange}
+                    placeholder="https://example.com/avatar.jpg"
+                  />
+                  {formData.profilePicture && (
+                    <div className={styles.imagePreview}>
+                      <img 
+                        src={formData.profilePicture} 
+                        alt="Preview" 
+                        className={styles.avatarPreview}
+                        onError={(e) => { e.target.style.display = 'none'; }}
+                      />
+                    </div>
+                  )}
+                  <small className={styles.fieldHelp}>Enter URL of creator's profile picture (will be displayed as circular avatar)</small>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>LinkedIn Profile URL</label>
+                  <input
+                    type="url"
+                    name="linkedinUrl"
+                    value={formData.linkedinUrl}
+                    onChange={handleInputChange}
+                    placeholder="https://www.linkedin.com/in/username"
+                  />
+                  <small className={styles.fieldHelp}>Link to creator's LinkedIn profile (opens in new tab)</small>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      name="linkedinVerified"
+                      checked={formData.linkedinVerified}
+                      onChange={handleInputChange}
+                    />
+                    <span>LinkedIn Verified</span>
+                  </label>
+                  <small className={styles.fieldHelp}>Shows LinkedIn badge with link on campaign card</small>
+                </div>
               </div>
             </div>
 
@@ -718,7 +864,10 @@ const CampaignCurator = () => {
             <div className={styles.formActions}>
               <button 
                 type="button" 
-                onClick={() => setShowForm(false)}
+                onClick={() => {
+                  setShowForm(false);
+                  setEditingCampaign(null);
+                }}
                 className={styles.cancelBtn}
               >
                 Cancel
@@ -728,7 +877,7 @@ const CampaignCurator = () => {
                 disabled={loading}
                 className={styles.submitBtn}
               >
-                {loading ? 'Publishing...' : 'Publish Campaign'}
+                {loading ? (editingCampaign ? 'Updating...' : 'Publishing...') : (editingCampaign ? 'Update Campaign' : 'Publish Campaign')}
               </button>
             </div>
           </form>
@@ -742,15 +891,67 @@ const CampaignCurator = () => {
           {campaigns.map(campaign => (
             <div key={campaign._id} className={styles.campaignCard}>
               <div className={styles.cardHeader}>
-                <div>
-                  <h3>{campaign.title}</h3>
-                  <p className={styles.company}>{campaign.company} • {campaign.posterName}</p>
+                <div className={styles.headerLeft}>
+                  {campaign.profilePicture ? (
+                    <img 
+                      src={campaign.profilePicture} 
+                      alt={campaign.posterName}
+                      className={styles.creatorAvatar}
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                  ) : (
+                    <div className={styles.avatarPlaceholder}>
+                      {campaign.posterName?.charAt(0)?.toUpperCase() || '?'}
+                    </div>
+                  )}
+                  <div>
+                    <h3>{campaign.title}</h3>
+                    <p className={styles.company}>
+                      {campaign.company} • {campaign.posterName}
+                      {(campaign.linkedinVerified || true) && (
+                        <div className={styles.linkedinBadgeContainer}>
+                          {campaign.linkedinUrl ? (
+                            <a 
+                              href={campaign.linkedinUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={styles.linkedinLogo}
+                              title="LinkedIn Profile"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              {/* Clean LinkedIn Logo - Blue only, no white fill */}
+                              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="24" height="24" rx="2" fill="#0077B5"/>
+                                <path d="M7 9h2v8H7V9zm1-3c.7 0 1.3.6 1.3 1.3S8.7 8.6 8 8.6 6.7 8 6.7 7.3 7.3 6 8 6zm3 3h2v1.1c.3-.5 1-.1 1.9-1.1 2 0 2.4 1.3 2.4 3V17h-2v-4c0-.8 0-1.8-1.1-1.8-1.1 0-1.3.9-1.3 1.8v4h-2V9z" fill="white"/>
+                              </svg>
+                            </a>
+                          ) : (
+                            <span 
+                              className={`${styles.linkedinLogo} ${styles.linkedinLogoDisabled}`}
+                              title="LinkedIn Verified (Profile link not available)"
+                            >
+                              {/* Clean LinkedIn Logo - Blue only, no white fill */}
+                              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="24" height="24" rx="2" fill="#0077B5"/>
+                                <path d="M7 9h2v8H7V9zm1-3c.7 0 1.3.6 1.3 1.3S8.7 8.6 8 8.6 6.7 8 6.7 7.3 7.3 6 8 6zm3 3h2v1.1c.3-.5 1-.1 1.9-1.1 2 0 2.4 1.3 2.4 3V17h-2v-4c0-.8 0-1.8-1.1-1.8-1.1 0-1.3.9-1.3 1.8v4h-2V9z" fill="white"/>
+                              </svg>
+                            </span>
+                          )}
+                          {/* Separate Verification Shield */}
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className={`${styles.verificationShield} ${!campaign.linkedinUrl ? styles.verificationShieldDisabled : ''}`}>
+                            <path d="M12 1L21 4v7c0 5.55-3.84 10.74-9 12-5.16-1.26-9-6.45-9-12V4l9-3z" fill="#10B981"/>
+                            <path d="M10 12.5l2 2 4-4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                      )}
+                    </p>
+                  </div>
                 </div>
                 <div className={styles.badges}>
                   {campaign.isHandPicked && (
                     <span className={`${styles.badge} ${styles.handpicked}`}>Hand Picked</span>
                   )}
-                  {campaign.contactVerified?.default && (
+                  {campaign.contactVerified && (
                     <span className={`${styles.badge} ${styles.verified}`}>Verified</span>
                   )}
                   <span className={`${styles.badge} ${styles[campaign.status]}`}>
@@ -764,7 +965,8 @@ const CampaignCurator = () => {
                   <strong>Platform:</strong> {campaign.platform}
                 </div>
                 <div className={styles.detail}>
-                  <strong>Budget:</strong> {campaign.budget?.currency || '$'}{campaign.budget?.min || 0} - {campaign.budget?.currency || '$'}{campaign.budget?.max || 0}
+                  <strong>Budget:</strong> {campaign.budget?.currency === 'INR' ? '₹' : '$'}
+                  {(campaign.budget?.min || 0).toLocaleString()} - {(campaign.budget?.max || 0).toLocaleString()}
                 </div>
                 <div className={styles.detail}>
                   <strong>Source:</strong> {campaign.source?.type || 'manual'}
@@ -775,6 +977,13 @@ const CampaignCurator = () => {
               </div>
 
               <div className={styles.cardActions}>
+                <button 
+                  onClick={() => handleEdit(campaign)}
+                  className={`${styles.actionBtn} ${styles.edit}`}
+                  title="Edit campaign"
+                >
+                  ✏️ Edit
+                </button>
                 <button 
                   onClick={() => handleToggleHandPicked(campaign._id)}
                   className={styles.actionBtn}

@@ -6,11 +6,7 @@ const BASE_URL =
     ? "https://influencer-backend-7.onrender.com/api"
     : process.env.REACT_APP_API_URL
     ? `${process.env.REACT_APP_API_URL}/api`
-    : undefined;
-
-if (!BASE_URL) {
-  throw new Error('REACT_APP_API_URL environment variable is required');
-}
+    : "http://localhost:5002/api"; // Default fallback for development
 
 class APIError extends Error {
   constructor(message, status, details = {}) {

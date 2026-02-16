@@ -18,7 +18,6 @@ const BackendStatus = () => {
       type,
     };
     setLogs((prev) => [newLog, ...prev.slice(0, 19)]);
-    console.log(`[BACKEND-STATUS-${type.toUpperCase()}]`, message);
   };
 
   // Test 1: Check if backend-copy.onrender.com is reachable

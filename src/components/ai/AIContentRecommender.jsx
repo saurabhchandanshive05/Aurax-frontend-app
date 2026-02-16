@@ -115,7 +115,7 @@ const AIContentRecommender = ({ creatorData }) => {
   ];
 
   const handleRecommendationClick = (recommendation) => {
-    console.log("Recommendation selected:", recommendation);
+
   };
 
   const containerVariants = {

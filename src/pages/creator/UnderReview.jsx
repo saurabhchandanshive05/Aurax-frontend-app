@@ -12,7 +12,6 @@ const UnderReview = () => {
   useEffect(() => {
     // Redirect to login if user is not authenticated
     if (!authLoading && !currentUser) {
-      console.log('🚫 User not authenticated, redirecting to login');
       navigate('/creator/login', { replace: true });
       return;
     }

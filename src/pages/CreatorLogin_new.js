@@ -44,9 +44,15 @@ const CreatorLogin = () => {
       navigate(redirectPath);
     } catch (err) {
       console.error("Login error:", err);
-      setLoginError(
-        err.response?.data?.message || "Login failed. Please try again."
-      );
+      const errorMessage = err.response?.data?.error || err.response?.data?.message;
+      
+      if (errorMessage === "Invalid credentials") {
+        setLoginError("Invalid email or password. Please try again.");
+      } else if (errorMessage) {
+        setLoginError(errorMessage);
+      } else {
+        setLoginError("An unexpected error occurred. Please try again later.");
+      }
     } finally {
       setIsSubmitting(false);
     }

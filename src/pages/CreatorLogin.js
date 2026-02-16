@@ -63,12 +63,7 @@ const CreatorLogin = () => {
         }
         
         // AuthContext login now fetches full user data and returns correct redirect path
-        console.log("=== LOGIN FLOW ===");
-        console.log("1. Login successful, calling AuthContext login...");
-        
         const redirectPath = await login(resp.token);
-        
-        console.log("2. AuthContext returned redirect path:", redirectPath);
         
         // Check for CTA intent in URL params
         const returnUrl = searchParams.get('returnUrl');
@@ -76,24 +71,26 @@ const CreatorLogin = () => {
         const campaignId = searchParams.get('campaignId');
         
         if (returnUrl && ctaAction) {
-          console.log("3. CTA intent detected - action:", ctaAction, "returnUrl:", returnUrl);
           // Redirect back to original page with action preserved
           const decodedReturnUrl = decodeURIComponent(returnUrl);
           navigate(`${decodedReturnUrl}?resumeAction=${ctaAction}${campaignId ? `&campaignId=${campaignId}` : ''}`);
         } else {
-          console.log("3. No CTA intent, navigating to:", redirectPath);
           navigate(redirectPath);
         }
-        
-        console.log("==================");
       } else {
         throw new Error(resp?.error || "Login failed");
       }
     } catch (err) {
       console.error("Login error:", err);
-      setLoginError(
-        err?.error || err?.message || "Login failed. Please try again."
-      );
+      const errorMessage = err?.error || err?.response?.data?.error || err?.response?.data?.message || err?.message;
+      
+      if (errorMessage === "Invalid credentials") {
+        setLoginError("Invalid email or password. Please try again.");
+      } else if (errorMessage) {
+        setLoginError(errorMessage);
+      } else {
+        setLoginError("An unexpected error occurred. Please try again later.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -129,7 +126,6 @@ const CreatorLogin = () => {
               alt="AURAX Logo"
               className={styles.auraxLogo}
               loading="eager"
-              onLoad={() => console.log("AURAX logo loaded")}
               onError={(e) =>
                 console.error("Logo failed to load:", e.target.src)
               }

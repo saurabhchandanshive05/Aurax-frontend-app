@@ -3,12 +3,13 @@
   display: flex;
   min-height: 100vh;
   background: #f3f4f6;
+  padding-top: 70px; /* Space for navbar */
 }
 
 .mainContent {
   flex: 1;
   margin-left: 280px;
-  min-height: 100vh;
+  min-height: calc(100vh - 70px);
   background: #ffffff;
 }
 
@@ -400,5 +401,142 @@
   
   .pageWrapper {
     flex-direction: column;
+    padding-top: 70px; /* Keep navbar space on mobile */
+  }
+  
+  /* Mobile: Stack action buttons */
+  .cardActions {
+    flex-direction: column;
+  }
+  
+  .actionBtn {
+    width: 100%;
+  }
+  
+  /* Mobile: Adjust header left for smaller screens */
+  .headerLeft {
+    gap: 10px;
+  }
+  
+  .creatorAvatar,
+  .avatarPlaceholder {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
   }
 }
+
+/* Creator Avatar Styles */
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.creatorAvatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #E5E5E5;
+  flex-shrink: 0;
+}
+
+.avatarPlaceholder {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* LinkedIn Badge Container */
+.linkedinBadgeContainer {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 8px;
+  padding: 3px 6px;
+  background: rgba(0, 119, 181, 0.08);
+  border-radius: 6px;
+  border: 1px solid rgba(0, 119, 181, 0.2);
+}
+
+/* Clean LinkedIn Logo */
+.linkedinLogo {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.linkedinLogo:hover {
+  background: rgba(0, 119, 181, 0.1);
+  transform: scale(1.05);
+}
+
+.linkedinLogoDisabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.linkedinLogoDisabled:hover {
+  background: none;
+  transform: none;
+}
+
+/* Separate Verification Shield */
+.verificationShield {
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  transition: opacity 0.2s;
+}
+
+.verificationShieldDisabled {
+  opacity: 0.6;
+}
+
+/* Image Preview in Form */
+.imagePreview {
+  margin-top: 10px;
+  padding: 10px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #E5E5E5;
+  display: flex;
+  justify-content: center;
+}
+
+.avatarPreview {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #E5E5E5;
+}
+
+.fieldHelp {
+  display: block;
+  color: #666;
+  font-size: 0.8rem;
+  margin-top: 5px;
+}
+
+/* Edit Button Style */
+.actionBtn.edit {
+  color: #10B981;
+  border-color: #10B981;
+}
+
+.actionBtn.edit:hover {
+  background: #10B981;
+  color: white;}

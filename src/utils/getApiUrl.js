@@ -26,13 +26,11 @@ export const getApiUrl = () => {
   const localNetworkPattern = /^(192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.)\d+\.\d+$/;
   if (localNetworkPattern.test(currentHostname)) {
     const backendUrl = `http://${currentHostname}:5002`;
-    console.log('📱 Mobile access detected - Using backend:', backendUrl);
     return backendUrl;
   }
 
   // Default to localhost for local development
   const defaultUrl = process.env.REACT_APP_API_URL || 'http://localhost:5002';
-  console.log('🖥️  Local access - Using backend:', defaultUrl);
   return defaultUrl.replace(/\/$/, '');
 };
 

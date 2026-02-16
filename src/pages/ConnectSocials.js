@@ -62,9 +62,6 @@ const ConnectSocials = () => {
       const response = await axios.get(`${API_BASE_URL}/api/me`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-
-      console.log('User data response:', response.data);
-
       if (response.data.success || response.data.user || response.data.id) {
         // Handle different response formats
         const userData = response.data.user || response.data;
@@ -141,9 +138,6 @@ const ConnectSocials = () => {
         setStatus('error');
         return;
       }
-      
-      console.log('🔐 Connecting Instagram with token...');
-      
       // Redirect to backend Instagram OAuth route with token as query parameter
       // Backend will redirect to Meta OAuth page
       window.location.href = `${API_BASE_URL}/api/auth/instagram/login?token=${token}`;

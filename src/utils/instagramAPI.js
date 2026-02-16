@@ -137,10 +137,7 @@ class InstagramAPIService {
               };
             }
           } catch (error) {
-            console.warn(
-              `Failed to fetch insights for media ${media.id}:`,
-              error.message
-            );
+            
             return {
               ...media,
               insights: {},
@@ -312,44 +309,19 @@ class InstagramAPIService {
   async testConnection() {
     try {
       copyLogger.log("INSTAGRAM_CONNECTION_TEST_INITIATED");
-      console.log("🔍 Testing Instagram API connection...");
-
       // Test 1: Basic API connectivity
-      console.log("📡 Testing API connectivity...");
       const testResponse = await fetch(`${this.baseURL}`, { method: "HEAD" });
       if (!testResponse.ok) {
         throw new Error("Instagram API endpoint unreachable");
       }
-      console.log("✅ Instagram API endpoint is reachable");
-
       // Test 2: Token validation
-      console.log("🔑 Validating access token...");
       const authTest = await this.authenticate();
-      console.log("✅ Authentication successful:", {
-        username: authTest.username,
-        accountType: authTest.account_type,
-        mediaCount: authTest.media_count,
-      });
-
       // Test 3: Profile data access
-      console.log("👤 Testing profile data access...");
       const profile = await this.getProfileMetrics();
-      console.log("✅ Profile data retrieved:", {
-        followers: profile.followers_count,
-        following: profile.follows_count,
-        posts: profile.media_count,
-      });
-
       // Test 4: Media access (try to get just 1 post)
-      console.log("📱 Testing media access...");
       try {
         const mediaTest = await this.getMediaInsights(1);
-        console.log("✅ Media access successful:", {
-          postsRetrieved: mediaTest.data.length,
-          hasInsights: mediaTest.data[0]?.insights ? "Yes" : "No",
-        });
       } catch (mediaError) {
-        console.log("⚠️ Media insights may be limited:", mediaError.message);
         // This might fail if account doesn't have business access
       }
 

@@ -36,7 +36,7 @@ const Analytics = React.lazy(() => import("./pages/Analytics"));
 const AdminPanel = React.lazy(() => import("./pages/AdminPanel"));
 const BrandLogin = React.lazy(() => import("./pages/BrandLogin"));
 const CreatorLogin = React.lazy(() => import("./pages/CreatorLogin"));
-const UnifiedLogin = React.lazy(() => import("./pages/UnifiedLogin"));
+// const UnifiedLogin = React.lazy(() => import("./pages/UnifiedLogin")); // Unused
 const ComingSoonPage = React.lazy(() => import("./pages/ComingSoonPage"));
 const AboutPage = React.lazy(() => import("./pages/AboutPage"));
 const BrandsPage = React.lazy(() => import("./pages/BrandsPage"));
@@ -84,7 +84,7 @@ const EnhancedLogin = React.lazy(() => import("./pages/EnhancedLogin"));
 const EnhancedLoginTest = React.lazy(() => import("./pages/EnhancedLoginTest"));
 const AuthTest = React.lazy(() => import("./pages/AuthTest"));
 const ConnectSocials = React.lazy(() => import("./pages/ConnectSocials"));
-const InstagramDashboard = React.lazy(() => import("./pages/InstagramDashboard"));
+// const InstagramDashboard = React.lazy(() => import("./pages/InstagramDashboard")); // Unused
 
 // Creator Onboarding Flow
 const WelcomeScreen = React.lazy(() => import("./pages/creator/WelcomeScreen"));
@@ -94,6 +94,9 @@ const UnderReview = React.lazy(() => import("./pages/creator/UnderReview"));
 // Admin Components
 const CampaignCurator = React.lazy(() => import("./pages/admin/CampaignCurator"));
 const BrandIntelligence = React.lazy(() => import("./pages/admin/BrandIntelligence"));
+const InstagramInfluencerProfiles = React.lazy(() => import("./pages/admin/InstagramInfluencerProfiles"));
+const CreatorDatabase = React.lazy(() => import("./pages/admin/CreatorDatabase"));
+const AdminCreatorProfile = React.lazy(() => import("./pages/admin/CreatorProfile"));
 
 // Mobile navigation component
 function MobileNavMenu() {
@@ -244,7 +247,6 @@ function App() {
 
     // Clear browser navigation cache on app load to prevent route persistence
     if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
-      console.log('🔄 Page reloaded - clearing navigation state');
       // Clear any stale navigation state
       window.history.replaceState({}, document.title, window.location.pathname);
     }
@@ -532,6 +534,30 @@ function App() {
                       element={
                         <ProtectedRoute role="admin">
                           <BrandIntelligence />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/influencers"
+                      element={
+                        <ProtectedRoute role="admin">
+                          <InstagramInfluencerProfiles />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/brand-intelligence/creators"
+                      element={
+                        <ProtectedRoute role="admin">
+                          <CreatorDatabase />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/brand-intelligence/creators/:id"
+                      element={
+                        <ProtectedRoute role="admin">
+                          <AdminCreatorProfile />
                         </ProtectedRoute>
                       }
                     />

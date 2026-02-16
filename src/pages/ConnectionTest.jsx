@@ -12,7 +12,6 @@ export default function ConnectionTest() {
           throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         setStatus("connected");
-        console.log("Backend response:", data);
       } catch (err) {
         setStatus("failed");
         setError(err.message);

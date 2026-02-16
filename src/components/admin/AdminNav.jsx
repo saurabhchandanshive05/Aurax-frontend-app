@@ -46,6 +46,14 @@ const AdminNav = () => {
         </NavLink>
 
         <NavLink 
+          to="/admin/influencers" 
+          className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
+        >
+          <span className={styles.icon}>📸</span>
+          <span>Instagram Profiles</span>
+        </NavLink>
+
+        <NavLink 
           to="/admin/creators" 
           className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
         >

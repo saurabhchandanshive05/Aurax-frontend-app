@@ -56,7 +56,6 @@ const PublicPageSetup = () => {
         
         // If public page already exists, redirect to dashboard
         if (user.creatorSlug && user.isPublicPageActive) {
-          console.log('✅ Public page already exists, redirecting to dashboard');
           navigate('/creator/dashboard');
           return;
         }
@@ -183,9 +182,6 @@ const PublicPageSetup = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-
-      console.log('📤 Creating public page with data:', formData);
-
       const response = await fetch(getApiEndpoint('/api/creator/public-page'), {
         method: 'POST',
         headers: {
@@ -207,8 +203,6 @@ const PublicPageSetup = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('✅ Public page created successfully:', data);
-        
         // Show success and redirect to dashboard
         alert('🎉 Your public creator page is now live!');
         navigate('/creator/dashboard');

@@ -21,7 +21,6 @@ export const useStandaloneRoute = () => {
   // Routes that should be standalone (no header/footer)
   const standaloneRoutes = [
     /^\/creator\/[^/]+$/,  // /creator/:slug pattern (but not /creator/login, /creator/dashboard)
-    /^\/admin\//,          // All admin routes (have their own sidebar navigation)
   ];
   
   // Routes that should NEVER be standalone (always show header/footer)

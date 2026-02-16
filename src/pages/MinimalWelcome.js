@@ -28,18 +28,13 @@ const MinimalWelcome = () => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    console.log('🎯 MinimalWelcome mounted, currentUser:', currentUser);
     checkProfileStatus();
   }, []);
 
   const checkProfileStatus = async () => {
     try {
-      console.log('🔍 Checking profile status in MinimalWelcome...');
       const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-      console.log('🔑 Token found:', !!token);
-      
       if (!token) {
-        console.log('❌ No token, redirecting to login');
         navigate('/creator/login');
         return;
       }
@@ -53,24 +48,13 @@ const MinimalWelcome = () => {
 
       if (response.ok) {
         const responseData = await response.json();
-        console.log('✅ MinimalWelcome got API response:', responseData);
         // Handle nested user object (API returns {success: true, user: {...}})
         const data = responseData.user || responseData;
-        console.log('📊 Extracted user data:', {
-          minimalProfileCompleted: data.minimalProfileCompleted,
-          fullName: data.fullName,
-          creatorType: data.creatorType
-        });
-        
         // If minimal profile is already completed, redirect to dashboard
         if (data.minimalProfileCompleted) {
-          console.log('✅ Profile already completed, redirecting to dashboard');
           navigate('/creator/dashboard');
           return;
         }
-
-        console.log('⚠️ Profile not completed, showing welcome form');
-
         // Pre-fill form with any existing data
         setFormData({
           displayName: data.fullName || data.username || '',
@@ -118,14 +102,6 @@ const MinimalWelcome = () => {
     try {
       setSaving(true);
       const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-
-      console.log('📤 Sending minimal profile data:', {
-        fullName: formData.displayName,
-        creatorType: formData.creatorType,
-        instagramUsername: formData.instagramUsername.replace('@', ''),
-        location: formData.location
-      });
-
       const response = await fetch(getApiEndpoint('/api/creator/minimal-profile'), {
         method: 'POST',
         headers: {
@@ -139,18 +115,10 @@ const MinimalWelcome = () => {
           location: formData.location
         })
       });
-
-      console.log('📥 Response status:', response.status);
-
       if (response.ok) {
         const data = await response.json();
-        console.log('✅ Profile saved successfully:', data);
-        console.log('🔄 Calling refreshUser to update context...');
-        
         // Refresh user data in AuthContext
         await refreshUser();
-        
-        console.log('✅ User refreshed, navigating to dashboard...');
         // Redirect to dashboard
         navigate('/creator/dashboard');
       } else {

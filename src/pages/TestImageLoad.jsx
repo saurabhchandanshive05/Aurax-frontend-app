@@ -31,8 +31,6 @@ const TestImageLoad = () => {
               src={src}
               alt={`Test ${index}`}
               style={{ width: "200px", height: "120px", objectFit: "cover" }}
-              onLoad={() => console.log(`✅ Loaded: ${src}`)}
-              onError={() => console.log(`❌ Failed: ${src}`)}
             />
           </div>
         ))}
@@ -51,8 +49,6 @@ const TestImageLoad = () => {
               style={{ width: "200px", height: "120px" }}
               controls
               muted
-              onLoadedData={() => console.log(`✅ Video loaded: ${src}`)}
-              onError={() => console.log(`❌ Video failed: ${src}`)}
             />
           </div>
         ))}

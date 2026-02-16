@@ -1,0 +1,248 @@
+name: Security Audit & Checks
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run daily security scan at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  security-audit:
+    name: Security Vulnerability Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Full history for secret scanning
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      # ==================================
+      # DEPENDENCY SCANNING
+      # ==================================
+      
+      - name: Install dependencies
+        run: |
+          cd backend-copy
+          npm ci
+      
+      - name: NPM Audit (Production)
+        run: |
+          cd backend-copy
+          npm audit --production --audit-level=moderate
+        continue-on-error: true
+      
+      - name: Check for known vulnerabilities
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: './backend-copy'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+      
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
+      
+      # ==================================
+      # SECRET SCANNING
+      # ==================================
+      
+      - name: Install gitleaks
+        run: |
+          wget https://github.com/gitleaks/gitleaks/releases/download/v8.18.0/gitleaks_8.18.0_linux_x64.tar.gz
+          tar -xzf gitleaks_8.18.0_linux_x64.tar.gz
+          chmod +x gitleaks
+          sudo mv gitleaks /usr/local/bin/
+      
+      - name: Run gitleaks - Secret Detection
+        run: |
+          gitleaks detect --source . --verbose --report-format json --report-path gitleaks-report.json
+        continue-on-error: true
+      
+      - name: Upload gitleaks report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: gitleaks-report
+          path: gitleaks-report.json
+      
+      # ==================================
+      # STATIC CODE ANALYSIS
+      # ==================================
+      
+      - name: Run ESLint Security Plugin
+        run: |
+          cd backend-copy
+          npm install --save-dev eslint-plugin-security
+          npx eslint --plugin security --rule 'security/*: error' . || true
+        continue-on-error: true
+      
+      - name: Run Semgrep - SAST
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/nodejs
+            p/owasp-top-ten
+      
+      # ==================================
+      # DEPENDENCY LICENSE CHECK
+      # ==================================
+      
+      - name: Check dependency licenses
+        run: |
+          cd backend-copy
+          npx license-checker --summary
+        continue-on-error: true
+      
+      # ==================================
+      # DOCKER SECURITY (if applicable)
+      # ==================================
+      
+      - name: Scan Dockerfile (if exists)
+        if: hashFiles('backend-copy/Dockerfile') != ''
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'config'
+          scan-ref: './backend-copy/Dockerfile'
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+      
+      # ==================================
+      # CUSTOM SECURITY CHECKS
+      # ==================================
+      
+      - name: Check for hardcoded secrets in code
+        run: |
+          echo "Checking for common secret patterns..."
+          ! grep -r -E "(api_key|apikey|api-key|secret|password|token).*=.*['\"]([a-zA-Z0-9]{20,})['\"]" backend-copy --include="*.js" --exclude-dir=node_modules || (echo "⚠️  Potential hardcoded secrets found" && exit 1)
+      
+      - name: Verify .env files are gitignored
+        run: |
+          if git ls-files | grep -E "(\.env$|\.env\.local$|\.env\.production$)"; then
+            echo "❌ .env files found in git history!"
+            exit 1
+          fi
+          echo "✅ No .env files in repository"
+      
+      - name: Check for TODO security items
+        run: |
+          grep -r "TODO.*security\|FIXME.*security\|XXX.*security" backend-copy --include="*.js" || echo "No security TODOs found"
+      
+      # ==================================
+      # SECURITY TEST SUITE
+      # ==================================
+      
+      - name: Run security tests
+        run: |
+          cd backend-copy
+          if [ -f "tests/security.test.js" ]; then
+            npm test -- tests/security.test.js
+          else
+            echo "⚠️  No security tests found"
+          fi
+        continue-on-error: true
+      
+      # ==================================
+      # REPORT GENERATION
+      # ==================================
+      
+      - name: Generate security report
+        if: always()
+        run: |
+          echo "# 🛡️ Security Audit Report" > security-report.md
+          echo "" >> security-report.md
+          echo "**Date:** $(date)" >> security-report.md
+          echo "**Branch:** ${{ github.ref }}" >> security-report.md
+          echo "**Commit:** ${{ github.sha }}" >> security-report.md
+          echo "" >> security-report.md
+          echo "## Checks Performed" >> security-report.md
+          echo "- ✅ NPM Audit" >> security-report.md
+          echo "- ✅ Trivy Vulnerability Scan" >> security-report.md
+          echo "- ✅ Gitleaks Secret Detection" >> security-report.md
+          echo "- ✅ Semgrep SAST" >> security-report.md
+          echo "- ✅ Hardcoded Secret Check" >> security-report.md
+          echo "- ✅ .env File Check" >> security-report.md
+      
+      - name: Upload security report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: security-report
+          path: security-report.md
+      
+      # ==================================
+      # NOTIFICATIONS
+      # ==================================
+      
+      - name: Notify on security issues
+        if: failure()
+        run: |
+          echo "::warning::Security vulnerabilities detected! Review the artifacts."
+
+  codeql-analysis:
+    name: CodeQL Security Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: javascript
+          queries: security-and-quality
+      
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+
+  security-headers-check:
+    name: Security Headers Validation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Check for Helmet configuration
+        run: |
+          if grep -q "helmet()" backend-copy/server.js; then
+            echo "✅ Helmet security headers configured"
+          else
+            echo "⚠️  Helmet not found in server.js"
+            exit 1
+          fi
+      
+      - name: Check for CORS configuration
+        run: |
+          if grep -q "cors(" backend-copy/server.js; then
+            echo "✅ CORS configured"
+          else
+            echo "⚠️  CORS not found in server.js"
+            exit 1
+          fi
+      
+      - name: Check for rate limiting
+        run: |
+          if grep -q "rateLimit\|rate-limit" backend-copy/server.js; then
+            echo "✅ Rate limiting configured"
+          else
+            echo "⚠️  Rate limiting not found"
+            exit 1
+          fi

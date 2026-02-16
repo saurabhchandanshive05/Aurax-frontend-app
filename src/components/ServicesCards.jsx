@@ -81,7 +81,7 @@ function ServicesCards() {
   }, []);
 
   const handleBrandClick = (brand) => {
-    console.log("Opening case study for", brand.name);
+
   };
 
   const brands = [

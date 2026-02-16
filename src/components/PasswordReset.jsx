@@ -76,7 +76,6 @@ const PasswordReset = ({ onClose, onSuccess }) => {
         setStep(2);
         // Show development OTP if available
         if (response.data.otp) {
-          console.log('🔐 Development OTP:', response.data.otp);
         }
       } else {
         setError(response.data.message || 'Failed to send reset code');
@@ -109,7 +108,6 @@ const PasswordReset = ({ onClose, onSuccess }) => {
       });
 
       if (response.data.otp) {
-        console.log('🔐 Development OTP (resent):', response.data.otp);
       }
     } catch (err) {
       console.error('Resend OTP error:', err);

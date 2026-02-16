@@ -16,13 +16,11 @@ function PasswordResetPage() {
   const navigate = useNavigate();
 
   const handleSuccess = () => {
-    console.log('Password reset successful!');
     // Redirect to login page
     navigate('/login');
   };
 
   const handleClose = () => {
-    console.log('Password reset cancelled');
     // Go back to previous page or login
     navigate('/login');
   };
@@ -182,8 +180,6 @@ function RegistrationPage() {
  * Example 4: Testing OTP Flow (Development Mode)
  */
 async function testOTPFlow() {
-  console.log('Starting OTP test...');
-
   // Step 1: Register user
   const registerResponse = await fetch('/api/auth/register', {
     method: 'POST',
@@ -196,12 +192,8 @@ async function testOTPFlow() {
   });
 
   const registerData = await registerResponse.json();
-  console.log('Registration response:', registerData);
-
   // In development mode, OTP is in the response
   const otp = registerData.otp;
-  console.log('OTP received:', otp);
-
   // Step 2: Verify OTP
   const verifyResponse = await fetch('/api/auth/verify-otp', {
     method: 'POST',
@@ -214,8 +206,6 @@ async function testOTPFlow() {
   });
 
   const verifyData = await verifyResponse.json();
-  console.log('Verification response:', verifyData);
-
   // Step 3: Test password reset
   const resetResponse = await fetch('/api/auth/forgot-password', {
     method: 'POST',
@@ -226,9 +216,6 @@ async function testOTPFlow() {
   });
 
   const resetData = await resetResponse.json();
-  console.log('Password reset response:', resetData);
-  console.log('Reset OTP:', resetData.otp);
-
   // Step 4: Reset password
   const newPasswordResponse = await fetch('/api/auth/reset-password', {
     method: 'POST',
@@ -241,7 +228,6 @@ async function testOTPFlow() {
   });
 
   const newPasswordData = await newPasswordResponse.json();
-  console.log('Password reset complete:', newPasswordData);
 }
 
 /**

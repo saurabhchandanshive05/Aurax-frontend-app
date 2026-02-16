@@ -80,7 +80,9 @@ const BrandSuccessShowcase = () => {
     const video = videoRefs.current[id];
     if (video) {
       if (video.paused) {
-        video.play().catch((e) => console.log("Autoplay prevented:", e));
+        video.play().catch(() => {
+          // Autoplay failed - this is expected and can be ignored
+        });
         setPlayingStates((prev) => ({ ...prev, [id]: true }));
       } else {
         video.pause();

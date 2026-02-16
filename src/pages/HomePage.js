@@ -20,8 +20,7 @@ const HomePage = () => {
   useEffect(() => {
     // Redirect authenticated users to their dashboard
     if (!isLoading && currentUser) {
-      console.log('🏠 User is logged in on homepage, redirecting to dashboard...');
-      
+
       if (currentUser.role === 'creator') {
         // Check if minimal profile is completed
         if (currentUser.minimalProfileCompleted) {
@@ -48,12 +47,12 @@ const HomePage = () => {
   }, [location.state]);
 
   const handleQuickSearch = (query, category) => {
-    console.log("Search:", query, category);
+
     // Implement search functionality
   };
 
   const handleResultSelect = (result) => {
-    console.log("Selected:", result);
+
     // Navigate to selected result
   };
 
@@ -91,7 +90,7 @@ const HomePage = () => {
         }
         onClick={() => {
           // Open chat/support
-          console.log("Opening support chat");
+
         }}
         tooltip="Need help? Chat with us!"
         position="bottom-right"

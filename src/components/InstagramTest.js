@@ -16,7 +16,6 @@ const InstagramTest = () => {
       }
 
       // Test 2: Test Instagram profile endpoint
-      console.log('🧪 Testing Instagram profile endpoint...');
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/instagram/profile`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -59,8 +58,6 @@ const InstagramTest = () => {
         alert('Please log in first');
         return;
       }
-
-      console.log('🚀 Getting Instagram auth URL...');
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/instagram/auth-url`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -70,7 +67,6 @@ const InstagramTest = () => {
       const data = await response.json();
       
       if (data.success && data.authUrl) {
-        console.log('🔗 Redirecting to Instagram OAuth...');
         window.location.href = data.authUrl;
       } else {
         alert('Failed to get Instagram auth URL: ' + (data.message || 'Unknown error'));

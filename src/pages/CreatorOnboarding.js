@@ -48,7 +48,6 @@ const CreatorOnboarding = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('✅ Creator data fetched successfully:', data);
         setCreatorData(data);
         
         // Initialize forms with existing data
@@ -152,8 +151,6 @@ const CreatorOnboarding = () => {
       alert('Please log in first');
       return;
     }
-    
-    console.log('🔐 Connecting Instagram with token...');
     // Redirect to backend Instagram OAuth route with token as query parameter
     window.location.href = `http://localhost:5002/api/auth/instagram/login?token=${token}`;
   };
@@ -189,10 +186,6 @@ const CreatorOnboarding = () => {
     try {
       setCheckingSlug(true);
       const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-      
-      console.log('🔍 Checking slug availability for:', slug);
-      console.log('🔑 Token exists:', !!token);
-      
       const response = await fetch(
         `http://localhost:5002/api/creator/check-slug?slug=${encodeURIComponent(slug)}`,
         {
@@ -202,15 +195,9 @@ const CreatorOnboarding = () => {
           }
         }
       );
-
-      console.log('📡 Response status:', response.status, response.statusText);
-      
       const data = await response.json();
-      console.log('📦 Slug check response data:', data);
-      
       if (response.ok && data.success) {
         setSlugAvailable(data.available);
-        console.log(data.available ? '✅ Slug is AVAILABLE' : '❌ Slug is TAKEN');
       } else {
         console.error('❌ Slug check failed:', data);
         setSlugAvailable(null);
@@ -221,7 +208,6 @@ const CreatorOnboarding = () => {
       setSlugAvailable(null);
     } finally {
       setCheckingSlug(false);
-      console.log('🏁 Slug check completed. slugAvailable:', slugAvailable);
     }
   };
 
@@ -277,12 +263,8 @@ const CreatorOnboarding = () => {
           coverImage: publicPageForm.coverImage
         })
       });
-
-      console.log('📡 Response status:', response.status);
-      
       if (response.ok) {
         const data = await response.json();
-        console.log('✅ Success response:', data);
         alert(
           `🎉 Success! Your page is live at:\n\n${data.publicUrl}\n\n` +
           `Copy this link and add it to your Instagram bio!`

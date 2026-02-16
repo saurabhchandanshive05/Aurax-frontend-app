@@ -34,15 +34,11 @@ function EnhancedLogin() {
   useEffect(() => {
     // Don't redirect if currently submitting a login
     if (isSubmitting) {
-      console.log('⏸️ Login in progress, skipping redirect check');
       return;
     }
     
-    console.log('🔐 Login page check - isAuthenticated:', isAuthenticated, 'currentUser:', currentUser, 'isLoading:', isLoading);
-    
     // Don't redirect while still loading
     if (isLoading) {
-      console.log('⏳ Still loading auth state...');
       return;
     }
     
@@ -50,10 +46,7 @@ function EnhancedLogin() {
       const redirectPath = currentUser.role === "creator"
         ? "/creator/welcome"
         : "/brand/dashboard";
-      console.log('✅ Already logged in - redirecting to:', redirectPath);
       navigate(redirectPath, { replace: true });
-    } else {
-      console.log('❌ Not logged in - showing login page');
     }
   }, [isAuthenticated, currentUser, navigate, isLoading, isSubmitting]);
 
@@ -185,13 +178,8 @@ function EnhancedLogin() {
       });
 
       if (response.success && response.token) {
-        console.log('✅ Login successful! Response:', response);
-        console.log('👤 User:', response.user);
-        console.log('🔑 Token:', response.token);
-        
         // Store token using the login function from AuthContext
         const redirectPath = login(response.token);
-        console.log('🔀 Redirect path:', redirectPath);
         
         // Show success message briefly
         setSuccessMessage(
@@ -200,12 +188,11 @@ function EnhancedLogin() {
         
         // Small delay to ensure state updates propagate
         setTimeout(() => {
-          console.log('🚀 Navigating to:', redirectPath);
           navigate(redirectPath, { replace: true });
         }, 100);
       } else {
         console.error('❌ Login failed - no token in response:', response);
-        setLoginError('Login failed. Please try again.');
+        setLoginError('An unexpected error occurred. Please try again later.');
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -218,10 +205,15 @@ function EnhancedLogin() {
       } else if (error.status === 403) {
         setLoginError("Please verify your email before logging in");
       } else {
-        setLoginError(
-          error.response?.data?.message ||
-            "Login failed. Please check your credentials."
-        );
+        const errorMessage = error.response?.data?.error || error.response?.data?.message;
+        
+        if (errorMessage === "Invalid credentials") {
+          setLoginError("Invalid email or password. Please try again.");
+        } else if (errorMessage) {
+          setLoginError(errorMessage);
+        } else {
+          setLoginError("An unexpected error occurred. Please try again later.");
+        }
       }
     } finally {
       setIsSubmitting(false);

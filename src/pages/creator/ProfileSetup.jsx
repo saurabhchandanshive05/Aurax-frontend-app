@@ -66,22 +66,16 @@ const ProfileSetup = () => {
     
     const { reviewStatus, isApproved, role, roles } = currentUser;
     const hasAdminRole = roles?.includes('admin') || role === 'admin';
-    
-    console.log('📊 ProfileSetup - checking user status:', { role, roles, hasAdminRole, reviewStatus, isApproved });
-    
     // If admin, redirect to admin dashboard
     if (hasAdminRole) {
-      console.log('🔀 Admin user, redirecting to admin dashboard');
       navigate('/admin/campaigns', { replace: true });
       return;
     }
     
     // Redirect based on review status
     if (reviewStatus === 'approved' && isApproved) {
-      console.log('✅ Profile approved - redirecting to dashboard');
       navigate('/creator/dashboard', { replace: true });
     } else if (reviewStatus === 'pending') {
-      console.log('⏳ Profile pending - redirecting to under-review');
       navigate('/creator/under-review', { replace: true });
     }
     // If reviewStatus is null, undefined, or 'rejected', stay on this page to allow (re)submission
@@ -108,7 +102,6 @@ const ProfileSetup = () => {
         ...prev,
         creatorUsername: currentUser.username
       }));
-      console.log('✅ Pre-filled username from signup:', currentUser.username);
     }
   }, [currentUser]);
 

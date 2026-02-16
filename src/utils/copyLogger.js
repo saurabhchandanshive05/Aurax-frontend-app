@@ -20,7 +20,7 @@ class CopyLogger {
     };
     this.logs.push(logEntry);
     // Console log for development - Fixed syntax
-    console.log("[COPY-ENV]:", details);
+
     // Store in localStorage for persistence
     const storedLogs = JSON.parse(
       localStorage.getItem("copyEnvironmentLogs") || "[]"
@@ -129,14 +129,11 @@ class CopyLogger {
     // Allow local network IPs for mobile testing (192.168.x.x, 10.x.x.x, 172.16-31.x.x)
     const localNetworkPattern = /^(192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.)\d+\.\d+$/;
     if (localNetworkPattern.test(currentDomain)) {
-      console.log("✅ Local network IP detected:", currentDomain);
+
       return true;
     }
 
     if (!allowedDomains.includes(currentDomain)) {
-      console.warn("Domain not in allowed list:", currentDomain);
-      console.warn("Allowed domains:", allowedDomains);
-      console.warn("💡 Tip: Use localhost or your local network IP (e.g., 192.168.1.x)");
       throw new Error("NOT IN COPY ENVIRONMENT");
     }
 

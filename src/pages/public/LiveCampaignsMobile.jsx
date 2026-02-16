@@ -25,7 +25,6 @@ const LiveCampaignsMobile = () => {
   useEffect(() => {
     const resumeAction = searchParams.get('resumeAction');
     if (resumeAction) {
-      console.log('🔄 Resuming CTA action after login:', resumeAction);
       searchParams.delete('resumeAction');
       setSearchParams(searchParams);
       handleCTAClick(resumeAction, null);
@@ -136,8 +135,6 @@ const LiveCampaignsMobile = () => {
   };
 
   const handleCTAClick = async (action, event) => {
-    console.log('🔥 Button clicked!', action, event);
-    
     if (event) {
       event.preventDefault();
       event.stopPropagation();
@@ -145,7 +142,6 @@ const LiveCampaignsMobile = () => {
     
     const token = localStorage.getItem('token');
     if (!token) {
-      console.log('No token found, redirecting to login');
       const returnUrl = encodeURIComponent(window.location.pathname);
       const ctaAction = encodeURIComponent(action);
       navigate(`/creator/login?returnUrl=${returnUrl}&action=${ctaAction}`);
@@ -163,12 +159,9 @@ const LiveCampaignsMobile = () => {
       const { inquirerVerified } = response.data.user;
       
       if ((action === 'chat' || action === 'call' || action === 'post') && !inquirerVerified) {
-        console.log('User not verified, redirecting to inquiry form');
         navigate(`/inquiry/form?purpose=${action === 'post' ? 'campaign' : 'connect'}`);
         return;
       }
-      
-      console.log('User verified, proceeding with action:', action);
       switch(action) {
         case 'chat':
           navigate('/contact?type=chat');
@@ -180,7 +173,6 @@ const LiveCampaignsMobile = () => {
           navigate('/campaigns/create');
           break;
         default:
-          console.log('Unknown action:', action);
           break;
       }
     } catch (error) {
@@ -357,6 +349,42 @@ const LiveCampaignsMobile = () => {
                     <div className={styles.posterInfo}>
                       <div className={styles.posterName}>
                         {campaign.posterName}
+                        {(campaign.linkedinVerified || true) && (
+                          <div className={styles.linkedinBadgeContainer}>
+                            {campaign.linkedinUrl ? (
+                              <a 
+                                href={campaign.linkedinUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={styles.linkedinLogo}
+                                title="LinkedIn Profile"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                {/* Clean LinkedIn Logo - Blue only, no white fill */}
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <rect width="24" height="24" rx="2" fill="#0077B5"/>
+                                  <path d="M7 9h2v8H7V9zm1-3c.7 0 1.3.6 1.3 1.3S8.7 8.6 8 8.6 6.7 8 6.7 7.3 7.3 6 8 6zm3 3h2v1.1c.3-.5 1-.1 1.9-1.1 2 0 2.4 1.3 2.4 3V17h-2v-4c0-.8 0-1.8-1.1-1.8-1.1 0-1.3.9-1.3 1.8v4h-2V9z" fill="white"/>
+                                </svg>
+                              </a>
+                            ) : (
+                              <span 
+                                className={`${styles.linkedinLogo} ${styles.linkedinLogoDisabled}`}
+                                title="LinkedIn Profile"
+                              >
+                                {/* Clean LinkedIn Logo - Blue only, no white fill */}
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <rect width="24" height="24" rx="2" fill="#0077B5"/>
+                                  <path d="M7 9h2v8H7V9zm1-3c.7 0 1.3.6 1.3 1.3S8.7 8.6 8 8.6 6.7 8 6.7 7.3 7.3 6 8 6zm3 3h2v1.1c.3-.5 1-.1 1.9-1.1 2 0 2.4 1.3 2.4 3V17h-2v-4c0-.8 0-1.8-1.1-1.8-1.1 0-1.3.9-1.3 1.8v4h-2V9z" fill="white"/>
+                                </svg>
+                              </span>
+                            )}
+                            {/* Separate Verification Shield */}
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className={`${styles.verificationShield} ${!campaign.linkedinUrl ? styles.verificationShieldDisabled : ''}`}>
+                              <path d="M12 1L21 4v7c0 5.55-3.84 10.74-9 12-5.16-1.26-9-6.45-9-12V4l9-3z" fill="#10B981"/>
+                              <path d="M10 12.5l2 2 4-4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          </div>
+                        )}
                       </div>
                       <span className={styles.posterRole}>
                         {campaign.posterRole}

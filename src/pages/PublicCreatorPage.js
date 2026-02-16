@@ -118,7 +118,6 @@ const PublicCreatorPage = () => {
     const planDuration = plan.duration || 'month';
 
     // TODO: Implement payment integration (Razorpay/Stripe)
-    console.log('Proceeding to checkout with plan:', plan);
     alert(`Payment integration coming soon!\nPlan: ${planName}\nPrice: ₹${planPrice}/${planDuration}`);
     
     // After successful payment, reload page to update subscription status

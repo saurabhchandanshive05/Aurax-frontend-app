@@ -18,7 +18,6 @@ const ComprehensiveTest = () => {
       type,
     };
     setLogs((prev) => [newLog, ...prev]);
-    console.log(`[TEST-${type.toUpperCase()}]`, message);
   };
 
   const updateTestResult = (testName, result, details = null) => {

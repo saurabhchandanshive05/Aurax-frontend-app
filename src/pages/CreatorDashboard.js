@@ -48,12 +48,7 @@ const CreatorDashboard = () => {
           
           // Extract user data (backend returns nested {success: true, user: {...}})
           const userData = responseData.user || responseData;
-          
-          console.log("🔍 Dashboard onboarding check:", {
-            hasCompletedOnboarding: userData.hasCompletedOnboarding,
-            role: userData.role
-          });
-          
+
           // Check if onboarding is complete
           const hasCompletedOnboarding = userData.hasCompletedOnboarding || 
                                         (userData.isProfileCompleted && 
@@ -62,7 +57,7 @@ const CreatorDashboard = () => {
           
           if (!hasCompletedOnboarding && userData.role === 'creator') {
             // Redirect to onboarding if not completed
-            console.log("🔄 Redirecting to onboarding from dashboard...");
+
             navigate('/creator/welcome');
           } else {
             setCheckingOnboarding(false);
@@ -93,16 +88,11 @@ const CreatorDashboard = () => {
     process.env.REACT_APP_REDIRECT_URI ||
     "http://localhost:3000/auth/instagram/callback";
 
-  console.log("🔧 Instagram OAuth Config:", {
-    clientId: INSTAGRAM_CLIENT_ID,
-    redirectUri: REDIRECT_URI,
-  });
-
   // Check for Instagram access token on component mount
   React.useEffect(() => {
     const storedToken = localStorage.getItem("instagram_access_token");
     if (storedToken) {
-      console.log("📱 Found stored Instagram token");
+
       setInstagramAccessToken(storedToken);
       setInstagramConnected(true);
       setShowConnectInstagram(false);
@@ -122,7 +112,7 @@ const CreatorDashboard = () => {
       alert(`Instagram connection failed: ${errorDescription || error}`);
       setIsConnecting(false);
     } else if (code) {
-      console.log("🔄 Processing Instagram OAuth callback...");
+
       handleInstagramCallback(code);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,13 +127,13 @@ const CreatorDashboard = () => {
       const data = await response.json();
 
       if (!data.success || !data.valid) {
-        console.log("⚠️ Stored Instagram token is invalid, clearing...");
+
         localStorage.removeItem("instagram_access_token");
         setInstagramAccessToken("");
         setInstagramConnected(false);
         setShowConnectInstagram(true);
       } else {
-        console.log(`✅ Instagram token valid for @${data.user_info.username}`);
+
       }
     } catch (error) {
       console.error("❌ Token validation failed:", error);
@@ -155,7 +145,6 @@ const CreatorDashboard = () => {
     setIsConnecting(true);
 
     try {
-      console.log("🔄 Exchanging OAuth code for access token...");
 
       const response = await fetch("/api/instagram/oauth/token", {
         method: "POST",
@@ -169,10 +158,6 @@ const CreatorDashboard = () => {
       const data = await response.json();
 
       if (data.success && data.access_token) {
-        console.log("🎉 Instagram OAuth successful!");
-        console.log(
-          `📱 Connected: @${data.user_info.username} (${data.user_info.account_type})`
-        );
 
         setInstagramAccessToken(data.access_token);
         setInstagramConnected(true);
@@ -217,7 +202,6 @@ const CreatorDashboard = () => {
       return;
     }
 
-    console.log("🚀 Starting Instagram OAuth flow...");
     setIsConnecting(true);
 
     // Redirect to backend Instagram OAuth route with token as query parameter
@@ -237,7 +221,6 @@ const CreatorDashboard = () => {
         `Disconnect ${username}? You'll need to reconnect to access Instagram features.`
       )
     ) {
-      console.log("🔌 Disconnecting Instagram...");
 
       setInstagramAccessToken("");
       setInstagramConnected(false);
@@ -485,7 +468,6 @@ const CreatorDashboard = () => {
             >
               <AIContentRecommender
                 creatorData={{ id: 1, name: "Sarah" }}
-                onRecommendationSelect={(rec) => console.log("Selected:", rec)}
               />
             </motion.div>
 

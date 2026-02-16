@@ -109,7 +109,7 @@ function Navbar() {
                   loading="eager"
                   crossOrigin="anonymous"
                   onError={(e) => {
-                    console.log("Navbar logo failed to load:", e.target.src);
+
                     // Try original URL without transformations
                     if (e.target.src.includes("w_64,h_64")) {
                       e.target.src =
@@ -121,7 +121,7 @@ function Navbar() {
                     }
                   }}
                   onLoad={() => {
-                    console.log("AURAX navbar logo loaded successfully");
+
                   }}
                 />
                 <div className="icon-glow-effect" />

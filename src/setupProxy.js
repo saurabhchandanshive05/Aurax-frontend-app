@@ -9,7 +9,6 @@ module.exports = function (app) {
       secure: false,
       logLevel: "debug",
       onProxyReq: (proxyReq, req) => {
-        console.log(`[COPY-PROXY] ${proxyReq.method} ${proxyReq.path}`);
         // Add copy environment headers
         proxyReq.setHeader("X-Copy-Environment", "true");
         proxyReq.setHeader("X-Database", "influencer_copy");

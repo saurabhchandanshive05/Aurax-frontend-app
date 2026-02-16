@@ -13,7 +13,7 @@ class InstagramSchedulerService {
   // Start the automated daily sync
   startDailySync(scheduledTime = "09:00") {
     if (this.isRunning) {
-      console.warn("Instagram sync scheduler is already running");
+      
       return;
     }
 
@@ -37,8 +37,6 @@ class InstagramSchedulerService {
         this.performScheduledSync();
       }, this.syncInterval);
     }, initialDelay);
-
-    console.log(`Instagram insights sync scheduled for ${scheduledTime} daily`);
   }
 
   // Stop the automated sync
@@ -55,7 +53,6 @@ class InstagramSchedulerService {
     this.isRunning = false;
 
     copyLogger.log("INSTAGRAM_SCHEDULER_STOPPED");
-    console.log("Instagram sync scheduler stopped");
   }
 
   // Calculate delay until next scheduled time
