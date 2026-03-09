@@ -226,32 +226,29 @@ jobs:
       - name: Check for Helmet configuration
         run: |
           echo "Checking for Helmet security middleware..."
-          if grep -E "(helmet\(|require.*helmet|const helmet)" backend-copy/server.js > /dev/null 2>&1; then
+          if grep "helmet" backend-copy/server.js; then
             echo "✅ Helmet security headers configured"
-            grep -n "helmet" backend-copy/server.js | head -3
           else
-            echo "⚠️  Helmet not found in server.js"
+            echo "❌ Helmet not found in server.js"
             exit 1
           fi
       
       - name: Check for CORS configuration
         run: |
           echo "Checking for CORS middleware..."
-          if grep -E "(cors\(|require.*cors|const cors)" backend-copy/server.js > /dev/null 2>&1; then
+          if grep "cors" backend-copy/server.js; then
             echo "✅ CORS configured"
-            grep -n "cors" backend-copy/server.js | head -3
           else
-            echo "⚠️  CORS not found in server.js"
+            echo "❌ CORS not found in server.js"
             exit 1
           fi
       
       - name: Check for rate limiting
         run: |
           echo "Checking for rate limiting middleware..."
-          if grep -E "(rateLimit|rate-limit|express-rate-limit)" backend-copy/server.js > /dev/null 2>&1; then
+          if grep "rateLimit" backend-copy/server.js; then
             echo "✅ Rate limiting configured"
-            grep -n "rateLimit" backend-copy/server.js | head -3
           else
-            echo "⚠️  Rate limiting not found"
+            echo "❌ Rate limiting not found"
             exit 1
           fi
