@@ -2,10 +2,20 @@ import React, { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import styles from "./BrandSuccessShowcase/BrandSuccessShowcase.module.css";
 
+// Phones get a 480px-wide, eco-quality Cloudinary rendition; desktop keeps the original URL
+const isMobileViewport = () =>
+  typeof window !== "undefined" &&
+  typeof window.matchMedia === "function" &&
+  window.matchMedia("(max-width: 767px)").matches;
+
+const videoSrcFor = (url, mobile) =>
+  mobile ? url.replace("/video/upload/f_auto,q_auto,w_800/", "/video/upload/f_auto,q_auto:eco,w_480/") : url;
+
 const BrandSuccessShowcase = () => {
   const containerRef = useRef(null);
   const innerContainerRef = useRef(null);
   const videoRefs = useRef({});
+  const [isMobileVideo] = useState(isMobileViewport);
   const [autoScroll, setAutoScroll] = useState(true);
   const [playingStates, setPlayingStates] = useState({});
 
@@ -227,7 +237,7 @@ const BrandSuccessShowcase = () => {
                     preload="none"
                     poster={campaign.thumbnail}
                   >
-                    <source src={campaign.videoUrl} type="video/mp4" />
+                    <source src={videoSrcFor(campaign.videoUrl, isMobileVideo)} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
 

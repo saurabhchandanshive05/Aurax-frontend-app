@@ -85,16 +85,16 @@ function ServicesCards() {
   };
 
   const brands = [
-    { id: 1, name: "UNOVA", logo: "/logos/Groww.png" },
-    { id: 2, name: "greencure", logo: "/logos/greencure.png" },
-    { id: 3, name: "Relevel", logo: "/logos/relevel.png" },
-    { id: 4, name: "ekacare", logo: "/logos/ekacare.png" },
-    { id: 5, name: "gamezy", logo: "/logos/gamezy.png" },
-    { id: 6, name: "HEALTHORE", logo: "/logos/healthore.png" },
-    { id: 7, name: "Baidyanath", logo: "/logos/baidyanath.png" },
-    { id: 8, name: "KUKU", logo: "/logos/kuku.png" },
-    { id: 9, name: "mpllearn", logo: "/logos/mpllearn.png" },
-    { id: 10, name: "PRODUCTS", logo: "/logos/products.png" },
+    { id: 1, name: "UNOVA", logo: "/logos/Groww.webp" },
+    { id: 2, name: "greencure", logo: "/logos/greencure.webp" },
+    { id: 3, name: "Relevel", logo: "/logos/relevel.webp" },
+    { id: 4, name: "ekacare", logo: "/logos/ekacare.webp" },
+    { id: 5, name: "gamezy", logo: "/logos/gamezy.webp" },
+    { id: 6, name: "HEALTHORE", logo: "/logos/healthore.webp" },
+    { id: 7, name: "Baidyanath", logo: "/logos/baidyanath.webp" },
+    { id: 8, name: "KUKU", logo: "/logos/kuku.webp" },
+    { id: 9, name: "mpllearn", logo: "/logos/mpllearn.webp" },
+    { id: 10, name: "PRODUCTS", logo: "/logos/products.webp" },
   ];
 
   return (
@@ -123,10 +123,15 @@ function ServicesCards() {
                   data-brand-card
                   onClick={() => handleBrandClick(brand)}
                 >
-                  <div
-                    className={styles.brandLogo}
-                    style={{ backgroundImage: `url(${brand.logo})` }}
-                  >
+                  <div className={styles.brandLogo}>
+                    <img
+                      src={brand.logo}
+                      alt={brand.name}
+                      className={styles.brandLogoImg}
+                      loading="lazy"
+                      decoding="async"
+                      draggable="false"
+                    />
                     <div className={styles.glowEffect}></div>
                     <div className={styles.shimmerEffect}></div>
                   </div>

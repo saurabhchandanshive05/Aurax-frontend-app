@@ -129,49 +129,49 @@ const BrandCollaborations = () => {
   const brands = [
     {
       name: "Amazon Beauty",
-      logo: "/images/brands/amazon-beauty.png",
+      logo: "/images/brands/amazon-beauty.webp",
       path: "/campaigns/amazon-beauty",
       campaign: "AI-Powered Beauty Campaign",
     },
     {
       name: "Astrotalk",
-      logo: "/images/brands/plum.png",
+      logo: "/images/brands/plum.webp",
       path: "/campaigns/plum",
       campaign: "Celebs recommend Astrotalk",
     },
     {
       name: "Mamaearth",
-      logo: "/images/brands/mamaearth.png",
+      logo: "/images/brands/mamaearth.webp",
       path: "/campaigns/mamaearth",
       campaign: "Natural Parenting Solutions",
     },
     {
       name: "Hotstar",
-      logo: "/images/brands/jiocinema.png",
+      logo: "/images/brands/jiocinema.webp",
       path: "/campaigns/jiocinema",
       campaign: "Streaming Experience Redefined",
     },
     {
       name: "Lakme",
-      logo: "/images/brands/dot-key.png",
+      logo: "/images/brands/dot-key.webp",
       path: "/campaigns/dot-key",
       campaign: "Skincare Personalization",
     },
     {
       name: "Minimalist ",
-      logo: "/images/brands/liquid-iv.png",
+      logo: "/images/brands/liquid-iv.webp",
       path: "/campaigns/liquid-iv",
       campaign: "Minimalist Campaign",
     },
     {
       name: "Ghar Soap",
-      logo: "/images/brands/ponds.png",
+      logo: "/images/brands/ponds.webp",
       path: "/campaigns/ponds",
       campaign: "Age-Defying Skincare",
     },
     {
       name: "Boat",
-      logo: "/images/brands/wishcare.png",
+      logo: "/images/brands/wishcare.webp",
       path: "/campaigns/wishcare",
       campaign: "Boat Lifestyle Innovation",
     },
@@ -431,6 +431,8 @@ const BrandCollaborations = () => {
                               src={brand.logo}
                               alt={brand.name}
                               className={styles.logoImage}
+                              loading="lazy"
+                              decoding="async"
                               onError={(e) => {
                                 e.target.style.display = "none";
                                 e.target.nextElementSibling.style.display =
@@ -512,6 +514,8 @@ const BrandCollaborations = () => {
                           src={brand.logo}
                           alt={brand.name}
                           className={styles.logoImage}
+                          loading="lazy"
+                          decoding="async"
                           onError={(e) => {
                             e.target.style.display = "none";
                             e.target.nextElementSibling.style.display = "flex";
