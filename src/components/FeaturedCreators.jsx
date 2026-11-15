@@ -6,8 +6,14 @@ import {
   useTransform,
 } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
-import { debounce } from "lodash";
+import debounce from "lodash/debounce";
 import styles from "./styles/FeaturedCreators.module.css";
+
+// Serve card-sized, auto-format/quality images from Cloudinary instead of the original upload
+const optimizeImage = (url) =>
+  typeof url === "string" && url.includes("/image/upload/") && !url.includes("/image/upload/f_auto")
+    ? url.replace("/image/upload/", "/image/upload/f_auto,q_auto,c_limit,w_800/")
+    : url;
 
 const FeaturedCreators = () => {
   const { currentTheme } = useTheme();
@@ -19,6 +25,9 @@ const FeaturedCreators = () => {
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [isManualScroll, setIsManualScroll] = useState(false);
   const [visibleCards, setVisibleCards] = useState(new Set([0, 1, 2]));
+  const [loadedImages, setLoadedImages] = useState(() => new Set());
+  const markImageLoaded = (src) =>
+    setLoadedImages((prev) => (prev.has(src) ? prev : new Set(prev).add(src)));
 
   const carouselRef = useRef(null);
   const scrollTimeoutRef = useRef(null);
@@ -457,12 +466,23 @@ const FeaturedCreators = () => {
                       }
                     }}
                   >
-                    {visibleCards.has(index) && (
+                    {!loadedImages.has(creator.image) && (
+                      <div className={styles.imageSkeleton} aria-hidden="true" />
+                    )}
+                    {(visibleCards.has(index) || loadedImages.has(creator.image)) && (
                       <img
-                        src={creator.image}
+                        src={optimizeImage(creator.image)}
                         alt={creator.name}
-                        className={styles.creatorImage}
+                        className={`${styles.creatorImage} ${
+                          loadedImages.has(creator.image) ? "" : styles.imageLoading
+                        }`}
                         loading={index <= currentIndex + 1 ? "eager" : "lazy"}
+                        fetchpriority={
+                          Math.abs(index - currentIndex) <= 1 ? "high" : "auto"
+                        }
+                        decoding="async"
+                        onLoad={() => markImageLoaded(creator.image)}
+                        onError={() => markImageLoaded(creator.image)}
                       />
                     )}
 
@@ -672,7 +692,7 @@ const FeaturedCreators = () => {
 
               <div className={styles.profilePreviewContent}>
                 <img
-                  src={selectedCreator.image}
+                  src={optimizeImage(selectedCreator.image)}
                   alt={selectedCreator.name}
                   className={styles.profilePreviewImage}
                 />

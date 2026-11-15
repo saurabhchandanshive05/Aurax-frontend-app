@@ -1,8 +1,10 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback, Suspense, lazy } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
-import HeroScene from "./HeroScene";
 import styles from "./styles/Hero.module.css";
+
+// three.js scene is desktop-only: load it on demand so mobile never downloads it
+const HeroScene = lazy(() => import("./HeroScene"));
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -25,7 +27,9 @@ const Hero = () => {
   const [timeOfDay, setTimeOfDay] = useState("day");
   const [aiMessage, setAiMessage] = useState("Initializing Neural Grid...");
   const [avatarIndex, setAvatarIndex] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.innerWidth < 768
+  );
   const ctaRef = useRef(null);
   const heroRef = useRef(null);
 
@@ -299,7 +303,9 @@ const Hero = () => {
       {/* 3D Scene for desktop */}
       {!isMobile && (
         <div className={styles.sceneContainer}>
-          <HeroScene />
+          <Suspense fallback={null}>
+            <HeroScene />
+          </Suspense>
         </div>
       )}
 

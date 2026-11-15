@@ -72,6 +72,30 @@ const BrandSuccessShowcase = () => {
     },
   ];
 
+  // Load and play videos only while they are on screen, so they don't
+  // compete with above-the-fold images on page load
+  useEffect(() => {
+    const videos = Object.values(videoRefs.current).filter(Boolean);
+    if (!videos.length || typeof IntersectionObserver === "undefined") {
+      videos.forEach((v) => v.play().catch(() => {}));
+      return undefined;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(({ target, isIntersecting }) => {
+          if (isIntersecting) {
+            target.play().catch(() => {});
+          } else if (!target.paused) {
+            target.pause();
+          }
+        });
+      },
+      { rootMargin: "200px 0px" }
+    );
+    videos.forEach((v) => observer.observe(v));
+    return () => observer.disconnect();
+  }, []);
+
   // Create duplicated campaigns for seamless looping
   const duplicatedCampaigns = [...campaigns, ...campaigns];
 
@@ -199,8 +223,8 @@ const BrandSuccessShowcase = () => {
                     className={styles.video}
                     muted
                     loop
-                    autoPlay
                     playsInline
+                    preload="none"
                     poster={campaign.thumbnail}
                   >
                     <source src={campaign.videoUrl} type="video/mp4" />
