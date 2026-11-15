@@ -8,7 +8,7 @@ Use these credentials to login to the creator dashboard:
 
 ```
 Email: test@copy.example.com
-Password: TestPassword123!
+Password: <REDACTED>
 ```
 
 ### **Alternative Accounts:**
@@ -16,11 +16,11 @@ Password: TestPassword123!
 ```
 Brand Account:
 Email: brand@copy.example.com
-Password: BrandPass123!
+Password: <REDACTED>
 
 Admin Account:
 Email: admin@copy.example.com
-Password: AdminPass123!
+Password: <REDACTED>
 ```
 
 ## 📱 Steps to Access Instagram Testing:
@@ -34,7 +34,7 @@ Password: AdminPass123!
 
 ### **Method 2: Test After Login (Better UX)**
 
-1. Login with: `test@copy.example.com` / `TestPassword123!`
+1. Login with: `<test-email>` / `<test-password>`
 2. Go to creator dashboard
 3. Find Instagram insights section
 4. Click settings icon (⚙️) for Instagram test options
@@ -94,5 +94,5 @@ npm start
 
 **Then Login for Full Dashboard:**
 
-1. Use `test@copy.example.com` / `TestPassword123!`
+1. Use `<test-email>` / `<test-password>`
 2. Access full Instagram analytics dashboard

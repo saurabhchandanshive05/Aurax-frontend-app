@@ -57,32 +57,11 @@ const Signup = React.lazy(() => import("./pages/Signup"));
 const ForgotPassword = React.lazy(() => import("./pages/ForgotPassword"));
 const Support = React.lazy(() => import("./pages/Support"));
 const Help = React.lazy(() => import("./pages/Help"));
-const CopyEnvironmentTest = React.lazy(() =>
-  import("./pages/CopyEnvironmentTest")
-);
-const TestImageLoad = React.lazy(() => import("./pages/TestImageLoad"));
-const ComprehensiveTest = React.lazy(() => import("./pages/ComprehensiveTest"));
-const QuickAPITest = React.lazy(() => import("./pages/QuickAPITest"));
-const BackendStatus = React.lazy(() => import("./pages/BackendStatus"));
 const PublicCreatorPage = React.lazy(() => import("./pages/PublicCreatorPage"));
 const LiveCampaigns = React.lazy(() => import("./pages/public/LiveCampaignsMobile"));
 const CampaignDetail = React.lazy(() => import("./pages/public/CampaignDetail"));
 const InquiryForm = React.lazy(() => import("./components/InquiryFormMobile"));
 const LoginRedirect = React.lazy(() => import("./pages/LoginRedirect"));
-const DeploymentGuide = React.lazy(() => import("./pages/DeploymentGuide"));
-const CopyDashboard = React.lazy(() => import("./pages/CopyDashboard"));
-const CopyEnvironmentStatus = React.lazy(() =>
-  import("./pages/CopyEnvironmentStatus")
-);
-const DirectDatabaseTest = React.lazy(() =>
-  import("./pages/DirectDatabaseTest")
-);
-const BackendFix = React.lazy(() => import("./pages/BackendFix"));
-const LoginTestReady = React.lazy(() => import("./pages/LoginTestReady"));
-const TestRoutePage = React.lazy(() => import("./pages/TestRoutePage"));
-const EnhancedLogin = React.lazy(() => import("./pages/EnhancedLogin"));
-const EnhancedLoginTest = React.lazy(() => import("./pages/EnhancedLoginTest"));
-const AuthTest = React.lazy(() => import("./pages/AuthTest"));
 const ConnectSocials = React.lazy(() => import("./pages/ConnectSocials"));
 // const InstagramDashboard = React.lazy(() => import("./pages/InstagramDashboard")); // Unused
 
@@ -387,53 +366,6 @@ function App() {
                     
                     {/* Creator Dashboard - Main dashboard after Instagram OAuth */}
                     <Route path="/dashboard" element={<CreatorDashboardNew />} />
-
-                    {/* Copy Environment Test Route */}
-                    <Route
-                      path="/copy-test"
-                      element={<CopyEnvironmentTest />}
-                    />
-
-                    {/* Image Load Test Route */}
-                    <Route path="/test-images" element={<TestImageLoad />} />
-
-                    {/* Comprehensive Test Route */}
-                    <Route
-                      path="/comprehensive-test"
-                      element={<ComprehensiveTest />}
-                    />
-
-                    {/* Quick API Test Route */}
-                    <Route path="/quick-api-test" element={<QuickAPITest />} />
-
-                    {/* Backend Status Route */}
-                    <Route path="/backend-status" element={<BackendStatus />} />
-
-                    {/* Deployment Guide Route */}
-                    <Route
-                      path="/deployment-guide"
-                      element={<DeploymentGuide />}
-                    />
-
-                    {/* Copy Dashboard Route */}
-                    <Route path="/copy-dashboard" element={<CopyDashboard />} />
-                    <Route
-                      path="/copy-status"
-                      element={<CopyEnvironmentStatus />}
-                    />
-                    <Route
-                      path="/direct-db-test"
-                      element={<DirectDatabaseTest />}
-                    />
-                    <Route path="/backend-fix" element={<BackendFix />} />
-                    <Route path="/login-test" element={<LoginTestReady />} />
-                    <Route path="/enhanced-login" element={<EnhancedLogin />} />
-                    <Route
-                      path="/enhanced-login-test"
-                      element={<EnhancedLoginTest />}
-                    />
-                    <Route path="/test-route" element={<TestRoutePage />} />
-                    <Route path="/auth-test" element={<AuthTest />} />
 
                     {/* Specialization Routes */}
                     <Route path="/ai-marketing" element={<AIMarketing />} />

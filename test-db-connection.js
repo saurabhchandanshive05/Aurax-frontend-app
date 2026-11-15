@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 
 const MONGODB_URI =
-  "mongodb+srv://sourabhchandanshive:KK8jFQalvAHgwb4P@cluster0.jgx4opz.mongodb.net/influencer_copy?retryWrites=true&w=majority&appName=cluster0";
+  "mongodb+srv://<USER>:<PASSWORD>@<CLUSTER_HOST>/<DB_NAME>";
 
 async function testDatabaseConnection() {
   console.log("🔍 Testing MongoDB Connection to influencer_copy database...");

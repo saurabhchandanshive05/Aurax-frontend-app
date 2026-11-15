@@ -12,6 +12,7 @@ import InstagramInsights from "../components/instagram/InstagramInsights";
 import InstagramSyncSettings from "../components/instagram/InstagramSyncSettings";
 import InstagramDashboard from "../components/instagram/InstagramDashboard";
 import styles from "./CreatorDashboard.module.css";
+import { redirectToInstagramOAuth } from "../utils/getApiUrl";
 
 const CreatorDashboard = () => {
   const navigate = useNavigate();
@@ -204,9 +205,10 @@ const CreatorDashboard = () => {
 
     setIsConnecting(true);
 
-    // Redirect to backend Instagram OAuth route with token as query parameter
-    // Backend handles Meta OAuth and callback
-    window.location.href = `http://localhost:5002/api/auth/instagram/login?token=${token}`;
+    redirectToInstagramOAuth(token).catch((error) => {
+      console.error('Instagram connect error:', error);
+      setIsConnecting(false);
+    });
   };
 
   // Disconnect Instagram

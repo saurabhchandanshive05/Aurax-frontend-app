@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import './ConnectSocials.css';
+import { redirectToInstagramOAuth } from '../utils/getApiUrl';
 
 const ConnectSocials = () => {
   const navigate = useNavigate();
@@ -138,9 +139,7 @@ const ConnectSocials = () => {
         setStatus('error');
         return;
       }
-      // Redirect to backend Instagram OAuth route with token as query parameter
-      // Backend will redirect to Meta OAuth page
-      window.location.href = `${API_BASE_URL}/api/auth/instagram/login?token=${token}`;
+      await redirectToInstagramOAuth(token);
     } catch (err) {
       console.error('Instagram connect error:', err);
       setError('Failed to initiate Instagram connection. Please try again.');

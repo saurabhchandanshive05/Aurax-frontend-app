@@ -143,7 +143,7 @@ META_PAGE_ACCESS_TOKEN=
 # INSTAGRAM GRAPH API (Influencer Profiles)
 # ==============================================================================
 META_PAGE_ID=123456789012345
-META_PAGE_ACCESS_TOKEN=EAAGm0PX4ZCBAO1iZAXYourVeryLongTokenHereZBZD
+META_PAGE_ACCESS_TOKEN=<META_ACCESS_TOKEN>
 ```
 
 **Save the file** (Ctrl+S or Cmd+S)

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { apiClient } from '../utils/apiClient';
-import { getApiEndpoint } from '../utils/getApiUrl';
+import { getApiEndpoint, redirectToInstagramOAuth } from '../utils/getApiUrl';
 import './CreatorDashboardNew.css';
 
 const CreatorDashboardNew = () => {
@@ -241,7 +241,7 @@ const CreatorDashboardNew = () => {
   );
 
   // Instagram connection handlers
-  const handleInstagramConnect = () => {
+  const handleInstagramConnect = async () => {
     // Prevent double-clicks
     if (isConnectingInstagram) {
       return;
@@ -252,9 +252,12 @@ const CreatorDashboardNew = () => {
     // Get token for authentication
     const token = localStorage.getItem('token');
     
-    // Redirect to backend Instagram OAuth endpoint
-    // Backend handles everything: Meta redirect, callback, data saving
-    window.location.href = `${getApiEndpoint('/api/auth/instagram/login')}?token=${token}`;
+    try {
+      await redirectToInstagramOAuth(token);
+    } catch (error) {
+      console.error('Instagram connect error:', error);
+      setIsConnectingInstagram(false);
+    }
   };
 
   const handleInstagramDisconnect = async () => {

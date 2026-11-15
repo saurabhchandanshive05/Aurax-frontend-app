@@ -32,7 +32,7 @@ Configure in Render dashboard (**DO NOT commit these**):
 ```
 PORT=10000
 NODE_ENV=production
-MONGODB_URI=mongodb+srv://[username]:[password]@cluster0.jgx4opz.mongodb.net/...
+MONGODB_URI=mongodb+srv://<USER>:<PASSWORD>@<CLUSTER_HOST>/<DB_NAME>
 JWT_SECRET=[generate-secure-secret]
 FRONTEND_URL=https://aaurax.netlify.app
 BACKEND_URL=https://influencer-backend-7.onrender.com

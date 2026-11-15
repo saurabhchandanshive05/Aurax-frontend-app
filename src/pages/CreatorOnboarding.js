@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CreatorOnboarding.css';
+import { redirectToInstagramOAuth } from '../utils/getApiUrl';
 
 const CreatorOnboarding = () => {
   const navigate = useNavigate();
@@ -151,8 +152,9 @@ const CreatorOnboarding = () => {
       alert('Please log in first');
       return;
     }
-    // Redirect to backend Instagram OAuth route with token as query parameter
-    window.location.href = `http://localhost:5002/api/auth/instagram/login?token=${token}`;
+    redirectToInstagramOAuth(token).catch((error) => {
+      console.error('Instagram connect error:', error);
+    });
   };
 
   // Handle Instagram stats refresh

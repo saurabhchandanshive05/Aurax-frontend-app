@@ -362,7 +362,7 @@ FRONTEND_URL=https://your-app.netlify.app
 ALLOWED_ORIGINS=https://your-app.netlify.app,https://your-backend.onrender.com
 
 # ✅ Database
-MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/influencer?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://<USER>:<PASSWORD>@<CLUSTER_HOST>/<DB_NAME>
 
 # ✅ Authentication
 JWT_SECRET=your-strong-random-secret-here-min-32-chars

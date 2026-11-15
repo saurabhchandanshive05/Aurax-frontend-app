@@ -39,7 +39,7 @@
 
 ```
 Example token (200+ characters):
-EAAGm0PX4ZCpsBO7y8e5RwZBZAP3ZC1k0ZBZCQd8DtZAJmTWVS5...
+<META_ACCESS_TOKEN>
 ```
 
 ---
@@ -66,7 +66,7 @@ notepad backend-copy\.env
 META_AD_LIBRARY_ACCESS_TOKEN=
 
 # Change to:
-META_AD_LIBRARY_ACCESS_TOKEN=EAAGm0PX4ZCpsBO7y8e5RwZBZAP3ZC1k0ZBZCQd8...
+META_AD_LIBRARY_ACCESS_TOKEN=<META_ACCESS_TOKEN>
 ```
 
 ### 2C. Save the file
@@ -108,7 +108,7 @@ node test-meta-api.js
 
 🧪 TEST 1: Environment Configuration
 ────────────────────────────────────────────────────────────
-✅ Token Present: Token configured (EAAGm0PX4ZCpsBO7y8e...)
+✅ Token Present: Token configured (<META_ACCESS_TOKEN>)
 ✅ API Version: Using Meta Graph API v19.0
 ✅ Token Format: Token format looks valid
 

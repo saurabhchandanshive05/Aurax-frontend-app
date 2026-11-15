@@ -28,7 +28,7 @@ In the "Meta App" dropdown at the top:
 2. Find the line: `META_AD_LIBRARY_ACCESS_TOKEN=`
 3. Paste your token after the `=` sign:
    ```env
-   META_AD_LIBRARY_ACCESS_TOKEN=EAAGm0PX4ZCpsBO7y8e...
+   META_AD_LIBRARY_ACCESS_TOKEN=<META_ACCESS_TOKEN>
    ```
 4. Save the file
 

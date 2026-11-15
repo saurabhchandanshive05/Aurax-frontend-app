@@ -21,7 +21,7 @@ Copy these variables to your Render dashboard:
 
 ```bash
 # ===== DATABASE =====
-MONGODB_URI=mongodb+srv://username:password@cluster0.jgx4opz.mongodb.net/influencer_production?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://<USER>:<PASSWORD>@<CLUSTER_HOST>/<DB_NAME>
 
 # ===== SECURITY =====
 JWT_SECRET=<generate-64-char-random-string>

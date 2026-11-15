@@ -6,7 +6,7 @@ class InstagramAPIService {
   constructor() {
     this.accessToken =
       process.env.REACT_APP_INSTAGRAM_ACCESS_TOKEN ||
-      "IGAAcEeAqNxHZABZAE1wZAlYyWThkei12QmlvYVlaejRIQXBrMElyZAE0zX0VFT1VLZAm9oeTZAqeHVJcFJQYjdEVTJ1ZAktvdUQ1MGF6dS1SZA0tENjladVZAUd2VfdFNmSmtWdlQ5Mm5Db3QtSHNmdk9pd3BWX0lMUzAySEVWNy11cGJYWQZDZD";
+      "";
     this.baseURL = "https://graph.instagram.com";
     this.userId = "me"; // Will be updated dynamically
   }

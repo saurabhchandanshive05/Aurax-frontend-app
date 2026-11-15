@@ -135,7 +135,7 @@ IS_PRODUCTION=true
 PORT=5002
 
 # Database (get from MongoDB Atlas)
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/aurax?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://<USER>:<PASSWORD>@<CLUSTER_HOST>/<DB_NAME>
 
 # Generate NEW secrets!
 JWT_SECRET=<paste_64_char_secret>

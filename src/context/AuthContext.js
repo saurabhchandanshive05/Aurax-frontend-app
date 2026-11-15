@@ -1,8 +1,14 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
 import { getApiEndpoint } from "../utils/getApiUrl";
 
 const AuthContext = createContext();
+
+const clearStoredTokens = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("authToken");
+  sessionStorage.removeItem("token");
+  sessionStorage.removeItem("authToken");
+};
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
@@ -60,37 +66,15 @@ export function AuthProvider({ children }) {
 
           setCurrentUser(user);
         } else {
-          // Token invalid, decode from JWT as fallback
-          const decoded = jwtDecode(token);
-
-          const user = {
-            id: decoded.id || decoded._id || decoded.sub,
-            email: decoded.email,
-            role: decoded.role,
-            name: decoded.name || decoded.username,
-            minimalProfileCompleted: false
-          };
-          
-          setCurrentUser(user);
+          // Never trust a decoded JWT; only the server can validate it
+          if (response.status === 401 || response.status === 403) {
+            clearStoredTokens();
+          }
+          setCurrentUser(null);
         }
       } catch (error) {
         console.error("Error checking auth:", error);
-        // Try JWT decode as last resort
-        try {
-          const decoded = jwtDecode(token);
-          const user = {
-            id: decoded.id || decoded._id || decoded.sub,
-            email: decoded.email,
-            role: decoded.role,
-            name: decoded.name || decoded.username,
-            minimalProfileCompleted: false
-          };
-          setCurrentUser(user);
-        } catch (decodeError) {
-          localStorage.removeItem("token");
-          localStorage.removeItem("authToken");
-          setCurrentUser(null);
-        }
+        setCurrentUser(null);
       }
     } else {
 
@@ -190,50 +174,22 @@ export function AuthProvider({ children }) {
 
         return "/";
       } else {
-        // Fallback to JWT decode if API fails
-        const decoded = jwtDecode(token);
-
-        const user = {
-          id: decoded.id || decoded._id || decoded.sub,
-          email: decoded.email,
-          role: decoded.role,
-          name: decoded.name || decoded.username,
-          minimalProfileCompleted: false
-        };
-        
-        setCurrentUser(user);
-        
-        // Check for saved redirect even in fallback
-        if (savedRedirect) {
-          localStorage.removeItem('redirectAfterLogin');
-          return savedRedirect;
-        }
-        
-        const redirectPath = decoded.role === "creator"
-          ? "/creator/welcome"
-          : "/brand/dashboard";
-        
-        return redirectPath;
+        // Session could not be verified by the server - do not trust the JWT
+        clearStoredTokens();
+        setCurrentUser(null);
+        return "/";
       }
     } catch (error) {
       console.error('❌ Error during login:', error);
-      
-      // Check for saved redirect even in error case
-      if (savedRedirect) {
-        localStorage.removeItem('redirectAfterLogin');
-        return savedRedirect;
-      }
-      
+      clearStoredTokens();
+      setCurrentUser(null);
       return "/";
     }
   };
 
   const logout = () => {
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("authToken");
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("authToken");
+    clearStoredTokens();
     setCurrentUser(null);
     setHasChecked(false); // Reset to allow re-checking on next login
 

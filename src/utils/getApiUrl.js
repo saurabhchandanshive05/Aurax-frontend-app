@@ -66,4 +66,21 @@ export const getInstagramCallbackUrl = () => {
   return `${getApiUrl()}/api/auth/instagram/callback`;
 };
 
-export default { getApiUrl, getApiEndpoint, isApiUrlConfigured, getInstagramCallbackUrl };
+/**
+ * Start Instagram OAuth without exposing the JWT in a URL.
+ * Requests the Meta auth URL with the token in the Authorization header,
+ * then redirects the browser to it.
+ * @param {string} token - JWT
+ */
+export const redirectToInstagramOAuth = async (token) => {
+  const response = await fetch(getApiEndpoint('/api/instagram/auth-url'), {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || !data.authUrl) {
+    throw new Error(data.message || 'Failed to get Instagram auth URL');
+  }
+  window.location.href = data.authUrl;
+};
+
+export default { getApiUrl, getApiEndpoint, isApiUrlConfigured, getInstagramCallbackUrl, redirectToInstagramOAuth };
