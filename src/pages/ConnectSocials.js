@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import './ConnectSocials.css';
-import { redirectToInstagramOAuth } from '../utils/getApiUrl';
+import { getApiUrl, redirectToInstagramOAuth } from '../utils/getApiUrl';
 
 const ConnectSocials = () => {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ const ConnectSocials = () => {
   const [error, setError] = useState(null);
   const [analysisData, setAnalysisData] = useState(null);
 
-  const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
+  const API_BASE_URL = getApiUrl();
   
   if (!API_BASE_URL) {
     console.error('REACT_APP_BACKEND_URL not configured');

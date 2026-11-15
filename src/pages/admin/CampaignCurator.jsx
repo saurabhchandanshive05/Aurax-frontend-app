@@ -1,3 +1,4 @@
+import { getApiUrl } from '../../utils/getApiUrl';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -128,7 +129,7 @@ const CampaignCurator = () => {
   const fetchCampaigns = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5002/api/admin/campaigns', {
+      const response = await fetch(`${getApiUrl()}/api/admin/campaigns`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -251,8 +252,8 @@ const CampaignCurator = () => {
       };
 
       const url = editingCampaign 
-        ? `http://localhost:5002/api/admin/campaigns/${editingCampaign._id}`
-        : 'http://localhost:5002/api/admin/campaigns';
+        ? `${getApiUrl()}/api/admin/campaigns/${editingCampaign._id}`
+        : `${getApiUrl()}/api/admin/campaigns`;
       
       const method = editingCampaign ? 'PUT' : 'POST';
 
@@ -315,7 +316,7 @@ const CampaignCurator = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5002/api/admin/campaigns/${id}`, {
+      const response = await fetch(`${getApiUrl()}/api/admin/campaigns/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -335,7 +336,7 @@ const CampaignCurator = () => {
   const handleToggleHandPicked = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5002/api/admin/campaigns/${id}/hand-pick`, {
+      const response = await fetch(`${getApiUrl()}/api/admin/campaigns/${id}/hand-pick`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`

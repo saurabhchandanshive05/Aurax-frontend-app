@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CreatorOnboarding.css';
-import { redirectToInstagramOAuth } from '../utils/getApiUrl';
+import { getApiUrl, redirectToInstagramOAuth } from '../utils/getApiUrl';
 
 const CreatorOnboarding = () => {
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ const CreatorOnboarding = () => {
         return;
       }
 
-      const response = await fetch('http://localhost:5002/api/me', {
+      const response = await fetch(`${getApiUrl()}/api/me`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -123,7 +123,7 @@ const CreatorOnboarding = () => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token');
       
-      const response = await fetch('http://localhost:5002/api/creator/profile', {
+      const response = await fetch(`${getApiUrl()}/api/creator/profile`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -162,7 +162,7 @@ const CreatorOnboarding = () => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token');
       
-      const response = await fetch('http://localhost:5002/api/instagram/refresh', {
+      const response = await fetch(`${getApiUrl()}/api/instagram/refresh`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -189,7 +189,7 @@ const CreatorOnboarding = () => {
       setCheckingSlug(true);
       const token = localStorage.getItem('token') || sessionStorage.getItem('token');
       const response = await fetch(
-        `http://localhost:5002/api/creator/check-slug?slug=${encodeURIComponent(slug)}`,
+        `${getApiUrl()}/api/creator/check-slug?slug=${encodeURIComponent(slug)}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -252,7 +252,7 @@ const CreatorOnboarding = () => {
         return;
       }
 
-      const response = await fetch('http://localhost:5002/api/creator/public-page', {
+      const response = await fetch(`${getApiUrl()}/api/creator/public-page`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

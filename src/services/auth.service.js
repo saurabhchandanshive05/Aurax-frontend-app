@@ -6,7 +6,7 @@ export const authService = {
    */
   async initiateLogin() {
     try {
-      const response = await apiClient.get('/auth/instagram/login');
+      const response = await apiClient.get('/auth/instagram/login?mode=json');
       if (response.data.authUrl) {
         window.location.href = response.data.authUrl;
       }

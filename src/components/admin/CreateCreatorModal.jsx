@@ -1,3 +1,4 @@
+import { getApiUrl } from '../../utils/getApiUrl';
 import React, { useState } from 'react';
 import axios from 'axios';
 import './CreateCreatorModal.css';
@@ -163,7 +164,7 @@ const CreateCreatorModal = ({ isOpen, onClose, onSuccess }) => {
       };
 
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5002'}/api/admin/creators`,
+        `${getApiUrl()}/api/admin/creators`,
         creatorData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

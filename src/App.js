@@ -7,6 +7,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { initStorage } from "./utils/localStorage.js";
+import { getApiEndpoint } from "./utils/getApiUrl";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { useStandaloneRoute } from "./components/layout/ConditionalLayout";
@@ -234,7 +235,7 @@ function App() {
 
     const checkBackendConnection = async () => {
       try {
-        const response = await fetch("/api/test");
+        const response = await fetch(getApiEndpoint("/api/test"));
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -365,7 +366,14 @@ function App() {
                     />
                     
                     {/* Creator Dashboard - Main dashboard after Instagram OAuth */}
-                    <Route path="/dashboard" element={<CreatorDashboardNew />} />
+                    <Route
+                      path="/dashboard"
+                      element={
+                        <ProtectedRoute role="creator" requireMinimalProfile={true}>
+                          <CreatorDashboardNew />
+                        </ProtectedRoute>
+                      }
+                    />
 
                     {/* Specialization Routes */}
                     <Route path="/ai-marketing" element={<AIMarketing />} />

@@ -1,3 +1,4 @@
+import { getApiUrl } from '../utils/getApiUrl';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -15,7 +16,7 @@ const RoleSelectionModal = ({ onClose }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5002'}/api/auth/select-role`,
+        `${getApiUrl()}/api/auth/select-role`,
         { action },
         {
           headers: {

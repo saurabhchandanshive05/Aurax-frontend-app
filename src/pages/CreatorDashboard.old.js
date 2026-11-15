@@ -12,7 +12,7 @@ import InstagramInsights from "../components/instagram/InstagramInsights";
 import InstagramSyncSettings from "../components/instagram/InstagramSyncSettings";
 import InstagramDashboard from "../components/instagram/InstagramDashboard";
 import styles from "./CreatorDashboard.module.css";
-import { redirectToInstagramOAuth } from "../utils/getApiUrl";
+import { getApiUrl, redirectToInstagramOAuth } from '../utils/getApiUrl';
 
 const CreatorDashboard = () => {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ const CreatorDashboard = () => {
           return;
         }
 
-        const response = await fetch('http://localhost:5002/api/me', {
+        const response = await fetch(`${getApiUrl()}/api/me`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'

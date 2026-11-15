@@ -1,10 +1,11 @@
+import { getApiUrl } from '../utils/getApiUrl';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import './InquiryFormMobile.css';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5002';
+const API_URL = getApiUrl();
 
 const PURPOSES = {
   CONNECT_CREATORS: 'connect-creators',

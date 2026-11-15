@@ -1,3 +1,4 @@
+import { getApiUrl } from '../../utils/getApiUrl';
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import './CreatorImportModal.css';
@@ -52,7 +53,7 @@ const CreatorImportModal = ({ isOpen, onClose, onImportSuccess }) => {
 
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5002'}/api/admin/import/creators`,
+        `${getApiUrl()}/api/admin/import/creators`,
         formData,
         {
           headers: {

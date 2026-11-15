@@ -58,7 +58,7 @@ const InstagramTest = () => {
         alert('Please log in first');
         return;
       }
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/instagram/auth-url`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/instagram/login?mode=json`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

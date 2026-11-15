@@ -1,12 +1,13 @@
 // Centralized API Client with Error Handling and Authentication
 import { copyLogger } from "./copyLogger";
+import { getApiUrl } from './getApiUrl';
 
 const BASE_URL =
   process.env.NODE_ENV === "production"
     ? "https://influencer-backend-7.onrender.com/api"
     : process.env.REACT_APP_API_URL
     ? `${process.env.REACT_APP_API_URL}/api`
-    : "http://localhost:5002/api"; // Default fallback for development
+    : `${getApiUrl()}/api`; // Default fallback for development
 
 class APIError extends Error {
   constructor(message, status, details = {}) {

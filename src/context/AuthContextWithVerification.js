@@ -1,3 +1,4 @@
+import { getApiUrl } from '../utils/getApiUrl';
 // Updated AuthContext with email verification support
 import React, { createContext, useContext, useState, useEffect } from "react";
 
@@ -27,7 +28,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUserProfile = async () => {
     try {
-      const response = await fetch("http://localhost:5002/api/auth/profile", {
+      const response = await fetch(`${getApiUrl()}/api/auth/profile`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -52,7 +53,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      const response = await fetch("http://localhost:5002/api/auth/login", {
+      const response = await fetch(`${getApiUrl()}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,7 +90,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const response = await fetch("http://localhost:5002/api/auth/register", {
+      const response = await fetch(`${getApiUrl()}/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -136,7 +137,7 @@ export const AuthProvider = ({ children }) => {
   const resendVerificationEmail = async (email) => {
     try {
       const response = await fetch(
-        "http://localhost:5002/api/auth/resend-verification",
+        `${getApiUrl()}/api/auth/resend-verification`,
         {
           method: "POST",
           headers: {

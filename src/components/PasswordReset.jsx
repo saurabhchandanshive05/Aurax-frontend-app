@@ -1,3 +1,4 @@
+import { getApiUrl } from '../utils/getApiUrl';
 import React, { useState } from 'react';
 import axios from 'axios';
 import OTPVerification from './OTPVerification';
@@ -27,7 +28,7 @@ const PasswordReset = ({ onClose, onSuccess }) => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const apiBaseUrl = process.env.REACT_APP_API_URL || 'http://localhost:5002';
+  const apiBaseUrl = getApiUrl();
 
   // Password strength calculation
   const getPasswordStrength = (password) => {

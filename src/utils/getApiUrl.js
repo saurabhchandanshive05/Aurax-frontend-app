@@ -73,7 +73,7 @@ export const getInstagramCallbackUrl = () => {
  * @param {string} token - JWT
  */
 export const redirectToInstagramOAuth = async (token) => {
-  const response = await fetch(getApiEndpoint('/api/instagram/auth-url'), {
+  const response = await fetch(getApiEndpoint('/api/auth/instagram/login?mode=json'), {
     headers: { Authorization: `Bearer ${token}` },
   });
   const data = await response.json().catch(() => ({}));

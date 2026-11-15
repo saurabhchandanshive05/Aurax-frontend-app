@@ -1,3 +1,4 @@
+import { getApiUrl } from '../../utils/getApiUrl';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './CreatorContactList.css';
@@ -19,7 +20,7 @@ const CreatorContactList = () => {
       const token = localStorage.getItem('token');
       
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5002'}/api/admin/creators`,
+        `${getApiUrl()}/api/admin/creators`,
         {
           headers: { Authorization: `Bearer ${token}` },
           params: { limit: 1000, sortBy: 'name', sortOrder: 'asc' }

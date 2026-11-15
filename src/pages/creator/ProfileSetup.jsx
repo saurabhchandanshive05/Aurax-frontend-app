@@ -1,3 +1,4 @@
+import { getApiUrl } from '../../utils/getApiUrl';
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -205,7 +206,7 @@ const ProfileSetup = () => {
       // Filter out empty portfolio links
       const cleanedPortfolioLinks = formData.portfolioLinks.filter(link => link.trim());
       
-      const response = await fetch("http://localhost:5002/api/onboarding/creator-profile", {
+      const response = await fetch(`${getApiUrl()}/api/onboarding/creator-profile`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

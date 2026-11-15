@@ -1,3 +1,4 @@
+import { getApiUrl } from '../../utils/getApiUrl';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -43,7 +44,7 @@ const CreatorProfile = () => {
         return;
       }
 
-      const response = await axios.get(`http://localhost:5002/api/admin/creators/${id}`, {
+      const response = await axios.get(`${getApiUrl()}/api/admin/creators/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -111,7 +112,7 @@ const CreatorProfile = () => {
         manuallyUpdatedBy: 'admin'
       };
       const response = await axios.patch(
-        `http://localhost:5002/api/admin/creators/${id}`,
+        `${getApiUrl()}/api/admin/creators/${id}`,
         updates,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -158,7 +159,7 @@ const CreatorProfile = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `http://localhost:5002/api/admin/creators/${id}/sync`,
+        `${getApiUrl()}/api/admin/creators/${id}/sync`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

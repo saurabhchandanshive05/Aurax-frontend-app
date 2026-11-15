@@ -1,3 +1,4 @@
+import { getApiUrl } from '../../utils/getApiUrl';
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -119,7 +120,7 @@ const BrandIntelligenceEnhanced = () => {
   const [showNoResultsCTA, setShowNoResultsCTA] = useState(false);
   const [aiProvider, setAiProvider] = useState('ollama'); // 'openai' | 'ollama' | 'paddleocr'
   
-  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5002";
+  const API_URL = getApiUrl();
   
   // Fetch initial data
   useEffect(() => {

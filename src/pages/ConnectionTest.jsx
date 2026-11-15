@@ -1,3 +1,4 @@
+import { getApiUrl } from '../utils/getApiUrl';
 import { useEffect, useState } from "react";
 
 export default function ConnectionTest() {
@@ -40,7 +41,7 @@ export default function ConnectionTest() {
         }}
       >
         {status === "connected" && (
-          <p>✅ Successfully connected to backend at: http://localhost:5001</p>
+          <p>✅ Successfully connected to backend at: {getApiUrl()}</p>
         )}
         {status === "failed" && (
           <>
@@ -59,11 +60,11 @@ export default function ConnectionTest() {
             <li>
               Test backend directly:
               <a
-                href="http://localhost:5001/api/test"
+                href={`${getApiUrl()}/api/test`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                http://localhost:5001/api/test
+                {`${getApiUrl()}/api/test`}
               </a>
             </li>
             <li>Check browser console for errors (F12 → Console)</li>

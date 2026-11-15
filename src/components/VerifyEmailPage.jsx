@@ -1,3 +1,4 @@
+import { getApiUrl } from '../utils/getApiUrl';
 // Email verification page component
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
@@ -27,7 +28,7 @@ const VerifyEmailPage = () => {
   const verifyEmail = async (verificationToken) => {
     try {
       const response = await fetch(
-        `http://localhost:5002/api/auth/verify-email?token=${verificationToken}`,
+        `${getApiUrl()}/api/auth/verify-email?token=${verificationToken}`,
         {
           method: "GET",
         }
@@ -66,7 +67,7 @@ const VerifyEmailPage = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5002/api/auth/resend-verification",
+        `${getApiUrl()}/api/auth/resend-verification`,
         {
           method: "POST",
           headers: {

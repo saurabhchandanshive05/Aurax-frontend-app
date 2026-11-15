@@ -1,9 +1,10 @@
+import { getApiUrl } from '../../utils/getApiUrl';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import styles from './CampaignDetail.module.css';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5002';
+const API_URL = getApiUrl();
 
 const CampaignDetail = () => {
   const { id } = useParams();
@@ -91,7 +92,7 @@ const CampaignDetail = () => {
     // Check if user is verified for inquirer actions
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5002'}/api/auth/user-status`,
+        `${getApiUrl()}/api/auth/user-status`,
         {
           headers: { Authorization: `Bearer ${token}` }
         }

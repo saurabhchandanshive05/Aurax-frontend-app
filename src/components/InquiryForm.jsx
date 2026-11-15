@@ -1,3 +1,4 @@
+import { getApiUrl } from '../utils/getApiUrl';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
@@ -28,7 +29,7 @@ const InquiryForm = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5002'}/api/inquiry/status`,
+        `${getApiUrl()}/api/inquiry/status`,
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -106,7 +107,7 @@ const InquiryForm = () => {
       }
 
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5002'}/api/inquiry/submit`,
+        `${getApiUrl()}/api/inquiry/submit`,
         {
           ...formData,
           purpose: purpose

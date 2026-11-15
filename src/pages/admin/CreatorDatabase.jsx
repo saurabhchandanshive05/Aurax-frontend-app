@@ -1,3 +1,4 @@
+import { getApiUrl } from '../../utils/getApiUrl';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -47,7 +48,7 @@ const CreatorDatabase = () => {
       };
 
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5002'}/api/admin/creators`,
+        `${getApiUrl()}/api/admin/creators`,
         {
           headers: { Authorization: `Bearer ${token}` },
           params
@@ -78,7 +79,7 @@ const CreatorDatabase = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5002'}/api/admin/creators/stats`,
+        `${getApiUrl()}/api/admin/creators/stats`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 

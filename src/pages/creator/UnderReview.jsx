@@ -1,3 +1,4 @@
+import { getApiUrl } from '../../utils/getApiUrl';
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -31,7 +32,7 @@ const UnderReview = () => {
   const fetchOnboardingStatus = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5002/api/onboarding/status", {
+      const response = await fetch(`${getApiUrl()}/api/onboarding/status`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }

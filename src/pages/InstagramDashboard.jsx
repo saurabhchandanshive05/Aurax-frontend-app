@@ -1,3 +1,4 @@
+import { getApiUrl } from '../utils/getApiUrl';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
@@ -10,7 +11,7 @@ const InstagramDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5002';
+  const API_BASE_URL = getApiUrl();
 
   useEffect(() => {
     // Check if coming back from OAuth

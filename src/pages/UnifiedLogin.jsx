@@ -1,3 +1,4 @@
+import { getApiUrl } from '../utils/getApiUrl';
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -36,7 +37,7 @@ const UnifiedLogin = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5002'}/api/auth/login`,
+        `${getApiUrl()}/api/auth/login`,
         {
           email: email.trim().toLowerCase(),
           password: password.trim(),

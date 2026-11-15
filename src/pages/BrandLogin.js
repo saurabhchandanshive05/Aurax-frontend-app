@@ -52,7 +52,7 @@ const BrandLogin = () => {
         return;
       }
       
-      const redirectPath = login(resp.token);
+      const redirectPath = await login(resp.token);
       navigate(redirectPath);
     } catch (err) {
       console.error("Login error:", err);
