@@ -77,6 +77,7 @@ const BrandIntelligence = React.lazy(() => import("./pages/admin/BrandIntelligen
 const InstagramInfluencerProfiles = React.lazy(() => import("./pages/admin/InstagramInfluencerProfiles"));
 const CreatorDatabase = React.lazy(() => import("./pages/admin/CreatorDatabase"));
 const AdminCreatorProfile = React.lazy(() => import("./pages/admin/CreatorProfile"));
+const CreatorReview = React.lazy(() => import("./pages/admin/CreatorReview"));
 
 // Mobile navigation component
 function MobileNavMenu() {
@@ -482,6 +483,14 @@ function App() {
                       element={
                         <ProtectedRoute role="admin">
                           <InstagramInfluencerProfiles />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/creators"
+                      element={
+                        <ProtectedRoute role="admin">
+                          <CreatorReview />
                         </ProtectedRoute>
                       }
                     />

@@ -5,6 +5,16 @@ import { useAuth } from "../../context/AuthContext";
 import AuraLogo from "../AuraLogo";
 import "./Navbar.css";
 
+// Mobile drawer entrance animation: short stagger so links appear immediately
+const mobileListVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.03, delayChildren: 0.06 } },
+};
+const mobileItemVariants = {
+  hidden: { opacity: 0, x: 12 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.2 } },
+};
+
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -53,11 +63,18 @@ function Navbar() {
     [location]
   );
 
+  // True while already inside a creator, brand or admin dashboard area
+  const isOnDashboard = /^\/(admin|dashboard)(\/|$)|^\/(creator|brand)\/dashboard(\/|$)/.test(
+    location.pathname
+  );
+
   // Navigation items - dynamic based on authentication
   const navItems = [
     { path: "/", label: "Home" },
     { path: "/about", label: "About" },
-    ...(isAuthenticated && user?.role === "creator"
+    ...(isOnDashboard
+      ? []
+      : isAuthenticated && user?.role === "creator"
       ? [{ path: "/creator/dashboard", label: "Dashboard" }]
       : isAuthenticated && (user?.role === "admin" || user?.roles?.includes("admin"))
       ? [{ path: "/admin/brand-intelligence", label: "Dashboard" }]
@@ -317,6 +334,7 @@ function Navbar() {
                   </div>
                 </div>
                 <motion.div className="user-controls">
+                  {!isOnDashboard && (
                   <motion.div
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -334,6 +352,7 @@ function Navbar() {
                       Dashboard
                     </Link>
                   </motion.div>
+                  )}
                   <motion.button
                     className="logout-btn"
                     onClick={logout}
@@ -504,47 +523,37 @@ function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.25 }}
               onClick={toggleMenu}
             />
 
-            {/* Mobile Drawer - Optimized */}
-            <motion.div
+            {/* Mobile Drawer */}
+            <motion.aside
               className="mobile-drawer"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Main navigation"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{
-                type: "tween",
-                ease: "easeInOut",
-                duration: 0.3,
-              }}
+              transition={{ type: "tween", ease: [0.32, 0.72, 0, 1], duration: 0.32 }}
             >
-              {/* Simplified Background Effects */}
               <div className="mobile-drawer-background">
                 <div className="bg-gradient-1"></div>
                 <div className="bg-gradient-2"></div>
               </div>
+
               <div className="mobile-content">
-                {/* Mobile Header */}
-                <motion.div
-                  className="mobile-header"
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                >
-                  <span className="mobile-title">Navigation</span>
+                {/* Compact header */}
+                <div className="mobile-header">
+                  <span className="mobile-title">Menu</span>
                   <motion.button
                     className="mobile-close"
                     onClick={toggleMenu}
                     whileTap={{ scale: 0.9 }}
+                    aria-label="Close menu"
                   >
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                       <path
                         d="M18 6L6 18M6 6l12 12"
                         stroke="currentColor"
@@ -554,254 +563,208 @@ function Navbar() {
                       />
                     </svg>
                   </motion.button>
-                </motion.div>
+                </div>
 
-                {/* Mobile Auth Actions - moved above nav links */}
-                {!isAuthenticated ? (
+                {/* Scrollable navigation (primary links first) */}
+                <nav className="mobile-scroll" aria-label="Mobile navigation">
                   <motion.div
-                    className="mobile-auth-actions"
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.8 }}
+                    className="mobile-nav-links"
+                    initial="hidden"
+                    animate="show"
+                    variants={mobileListVariants}
                   >
-                    <motion.div whileTap={{ scale: 0.95 }}>
+                    {navItems.map((item) => {
+                      const getIcon = (path) => {
+                        switch (path) {
+                          case "/":
+                            return (
+                              <svg
+                                className="mobile-nav-icon"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                              >
+                                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                              </svg>
+                            );
+                          case "/about":
+                            return (
+                              <svg
+                                className="mobile-nav-icon"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                              >
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+                              </svg>
+                            );
+                          case "/creator/dashboard":
+                          case "/brand/dashboard":
+                          case "/admin/brand-intelligence":
+                          case "/admin/campaigns":
+                          case "/admin/creators":
+                            return (
+                              <svg
+                                className="mobile-nav-icon"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                              >
+                                <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                              </svg>
+                            );
+                          case "/brands":
+                            return (
+                              <svg
+                                className="mobile-nav-icon"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                              >
+                                <path d="M20 6h-2.18c.11-.31.18-.65.18-1a2.996 2.996 0 0 0-5.5-1.65l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1z" />
+                              </svg>
+                            );
+                          case "/creators":
+                            return (
+                              <svg
+                                className="mobile-nav-icon"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                              >
+                                <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A3.996 3.996 0 0 0 16.06 6c-.8 0-1.54.37-2.01.97l-.91 1.11c-.33.4-.26 1.01.15 1.34.41.33 1.01.26 1.34-.15L15.5 8.5l1.46 4.37L12 15.5V22h-2v-6.5L7.5 13 5 16v6H3v-6.36c0-.8.31-1.56.87-2.13l3.58-3.58a1.499 1.499 0 0 1 2.12 0L12 12.36V9.5l-.87-.87A1.499 1.499 0 0 1 12 7.5c.4 0 .78.16 1.06.44l2.44 2.44L16 18v4h4z" />
+                              </svg>
+                            );
+                          default:
+                            return null;
+                        }
+                      };
+                      return (
+                        <motion.div key={item.path} variants={mobileItemVariants}>
+                          <Link
+                            to={item.path}
+                            className={`mobile-nav-link ${
+                              isActive(item.path) ? "active" : ""
+                            }`}
+                            aria-current={isActive(item.path) ? "page" : undefined}
+                            onClick={toggleMenu}
+                          >
+                            <div className="mobile-nav-content">
+                              {getIcon(item.path)}
+                              <span className="mobile-nav-text">{item.label}</span>
+                            </div>
+                          </Link>
+                        </motion.div>
+                      );
+                    })}
+
+                    {/* LIVE Campaigns Link - Mobile */}
+                    <motion.div variants={mobileItemVariants}>
                       <Link
-                        to="/brand/login"
-                        className="aurax-button-brand"
+                        to="/live/campaigns"
+                        className={`mobile-nav-link live-link-mobile ${
+                          isActive("/live/campaigns") ? "active" : ""
+                        }`}
                         onClick={toggleMenu}
                       >
-                        <span>Brand Login</span>
-                      </Link>
-                    </motion.div>
-                    <motion.div whileTap={{ scale: 0.95 }}>
-                      <Link
-                        to="/creator/login"
-                        className="aurax-button-creator"
-                        onClick={toggleMenu}
-                      >
-                        <span>Creator Login</span>
+                        <div className="mobile-nav-content">
+                          <svg
+                            className="mobile-nav-icon"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <circle cx="12" cy="12" r="8" />
+                          </svg>
+                          <span className="mobile-nav-text">LIVE Campaigns</span>
+                        </div>
+                        <span className="live-badge-mobile">LIVE</span>
                       </Link>
                     </motion.div>
                   </motion.div>
-                ) : (
+
+                  {/* Features - compact two-column grid */}
                   <motion.div
-                    className="mobile-user-actions"
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.8 }}
+                    className="mobile-features-section"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.25, delay: 0.2 }}
                   >
-                    <div className="mobile-user-info">
-                      <motion.div
-                        className="user-badge"
-                        whileTap={{ scale: 0.9 }}
-                      >
-                        {user?.name?.charAt(0) || "U"}
-                      </motion.div>
-                      <div>
-                        <div className="user-name">{user?.name}</div>
-                        <div className="user-type">{user?.role}</div>
-                      </div>
-                    </div>
-                    <div className="mobile-user-controls">
-                      <motion.div whileTap={{ scale: 0.95 }}>
+                    <div className="mobile-section-title">Features</div>
+                    <div className="mobile-feature-grid">
+                      {featureItems.map((item) => (
                         <Link
-                          to={
-                            user?.roles?.includes("admin") || user?.role === "admin"
-                              ? "/admin/brand-intelligence"
-                              : user?.role === "creator"
-                              ? "/creator/dashboard"
-                              : "/brand/dashboard"
-                          }
-                          className="mobile-dashboard-btn"
-                          onClick={toggleMenu}
-                        >
-                          Dashboard
-                        </Link>
-                      </motion.div>
-                      <motion.button
-                        className="mobile-logout-btn"
-                        onClick={() => {
-                          logout();
-                          toggleMenu();
-                        }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        Logout
-                      </motion.button>
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* Mobile Navigation Links */}
-                <motion.div
-                  className="mobile-nav-links"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 1.0 }}
-                >
-                  {navItems.map((item, index) => {
-                    const getIcon = (path) => {
-                      switch (path) {
-                        case "/":
-                          return (
-                            <svg
-                              className="mobile-nav-icon"
-                              viewBox="0 0 24 24"
-                              fill="currentColor"
-                            >
-                              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-                            </svg>
-                          );
-                        case "/about":
-                          return (
-                            <svg
-                              className="mobile-nav-icon"
-                              viewBox="0 0 24 24"
-                              fill="currentColor"
-                            >
-                              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
-                            </svg>
-                          );
-                        case "/creator/dashboard":
-                        case "/brand/dashboard":
-                        case "/admin/brand-intelligence":
-                        case "/admin/campaigns":
-                        case "/admin/creators":
-                          return (
-                            <svg
-                              className="mobile-nav-icon"
-                              viewBox="0 0 24 24"
-                              fill="currentColor"
-                            >
-                              <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
-                            </svg>
-                          );
-                        case "/brands":
-                          return (
-                            <svg
-                              className="mobile-nav-icon"
-                              viewBox="0 0 24 24"
-                              fill="currentColor"
-                            >
-                              <path d="M20 6h-2.18c.11-.31.18-.65.18-1a2.996 2.996 0 0 0-5.5-1.65l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1z" />
-                            </svg>
-                          );
-                        case "/creators":
-                          return (
-                            <svg
-                              className="mobile-nav-icon"
-                              viewBox="0 0 24 24"
-                              fill="currentColor"
-                            >
-                              <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A3.996 3.996 0 0 0 16.06 6c-.8 0-1.54.37-2.01.97l-.91 1.11c-.33.4-.26 1.01.15 1.34.41.33 1.01.26 1.34-.15L15.5 8.5l1.46 4.37L12 15.5V22h-2v-6.5L7.5 13 5 16v6H3v-6.36c0-.8.31-1.56.87-2.13l3.58-3.58a1.499 1.499 0 0 1 2.12 0L12 12.36V9.5l-.87-.87A1.499 1.499 0 0 1 12 7.5c.4 0 .78.16 1.06.44l2.44 2.44L16 18v4h4z" />
-                            </svg>
-                          );
-                        default:
-                          return null;
-                      }
-                    };
-
-                    return (
-                      <motion.div
-                        key={item.path}
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5, delay: 0.1 * index + 0.4 }}
-                      >
-                        <Link
+                          key={item.path}
                           to={item.path}
-                          className={`mobile-nav-link ${
+                          className={`mobile-feature-link ${
                             isActive(item.path) ? "active" : ""
                           }`}
                           onClick={toggleMenu}
                         >
-                          <div className="mobile-nav-content">
-                            {getIcon(item.path)}
-                            <span className="mobile-nav-text">
-                              {item.label}
-                            </span>
-                          </div>
-                          {isActive(item.path) && (
-                            <motion.div
-                              className="mobile-active-indicator"
-                              layoutId="mobileActiveIndicator"
-                            />
-                          )}
-                          <motion.div
-                            className="mobile-nav-arrow"
-                            initial={{ x: -10, opacity: 0 }}
-                            animate={
-                              isActive(item.path)
-                                ? { x: 0, opacity: 1 }
-                                : { x: -10, opacity: 0 }
-                            }
-                            transition={{ duration: 0.3 }}
-                          >
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-                            </svg>
-                          </motion.div>
-                        </Link>
-                      </motion.div>
-                    );
-                  })}
-
-                  {/* LIVE Campaigns Link - Mobile */}
-                  <motion.div
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.8 }}
-                  >
-                    <Link
-                      to="/live/campaigns"
-                      className={`mobile-nav-link live-link-mobile ${
-                        isActive('/live/campaigns') ? 'active' : ''
-                      }`}
-                      onClick={toggleMenu}
-                    >
-                      <div className="mobile-nav-content">
-                        <svg
-                          className="mobile-nav-icon"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                        >
-                          <circle cx="12" cy="12" r="8" />
-                        </svg>
-                        <span className="mobile-nav-text">LIVE Campaigns</span>
-                      </div>
-                      <span className="live-badge-mobile">LIVE</span>
-                    </Link>
-                  </motion.div>
-
-                  {/* Mobile Features Section */}
-                  <motion.div
-                    className="mobile-features-section"
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 1.2 }}
-                    style={{ marginBottom: 0 }} // Remove extra margin below features
-                  >
-                    <div className="mobile-section-title">Features</div>
-                    {featureItems.map((item, index) => (
-                      <motion.div
-                        key={item.path}
-                        initial={{ opacity: 0, x: 30 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: 0.1 * index + 1.3 }}
-                      >
-                        <Link
-                          to={item.path}
-                          className="mobile-feature-link"
-                          onClick={toggleMenu}
-                        >
                           {item.label}
                         </Link>
-                      </motion.div>
-                    ))}
+                      ))}
+                    </div>
                   </motion.div>
-                </motion.div>
+                </nav>
+
+                {/* Pinned footer: auth / account actions always visible */}
+                <div className="mobile-drawer-footer">
+                  {!isAuthenticated ? (
+                    <div className="mobile-auth-row">
+                      <Link
+                        to="/brand/login"
+                        className="mobile-login-btn brand"
+                        onClick={toggleMenu}
+                      >
+                        Brand Login
+                      </Link>
+                      <Link
+                        to="/creator/login"
+                        className="mobile-login-btn creator"
+                        onClick={toggleMenu}
+                      >
+                        Creator Login
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="mobile-user-actions">
+                      <div className="mobile-user-info">
+                        <div className="user-badge">
+                          {user?.name?.charAt(0) || "U"}
+                        </div>
+                        <div className="mobile-user-meta">
+                          <div className="user-name">{user?.name}</div>
+                          <div className="user-type">{user?.role}</div>
+                        </div>
+                      </div>
+                      <div className="mobile-user-controls">
+                        {!isOnDashboard && (
+                          <Link
+                            to={
+                              user?.roles?.includes("admin") || user?.role === "admin"
+                                ? "/admin/brand-intelligence"
+                                : user?.role === "creator"
+                                ? "/creator/dashboard"
+                                : "/brand/dashboard"
+                            }
+                            className="mobile-dashboard-btn"
+                            onClick={toggleMenu}
+                          >
+                            Dashboard
+                          </Link>
+                        )}
+                        <button
+                          type="button"
+                          className="mobile-logout-btn"
+                          onClick={() => {
+                            logout();
+                            toggleMenu();
+                          }}
+                        >
+                          Logout
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-            </motion.div>
+            </motion.aside>
           </>
         )}
       </AnimatePresence>
