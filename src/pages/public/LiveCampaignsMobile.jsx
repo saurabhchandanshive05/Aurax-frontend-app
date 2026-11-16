@@ -274,7 +274,7 @@ const LiveCampaignsMobile = () => {
     
     try {
       const response = await axios.get(
-        `${API_URL}/api/auth/user-status`,
+        `${API_URL}/api/role/user-status`,
         {
           headers: { Authorization: `Bearer ${token}` }
         }

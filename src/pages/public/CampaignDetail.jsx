@@ -92,7 +92,7 @@ const CampaignDetail = () => {
     // Check if user is verified for inquirer actions
     try {
       const response = await axios.get(
-        `${getApiUrl()}/api/auth/user-status`,
+        `${getApiUrl()}/api/role/user-status`,
         {
           headers: { Authorization: `Bearer ${token}` }
         }
