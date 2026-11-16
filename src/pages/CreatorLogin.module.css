@@ -3,12 +3,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--ax-night);
   padding: 20px;
 }
 
 .loginCard {
-  background: white;
+  background: var(--ax-dusk);
   padding: 40px;
   border-radius: 10px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
@@ -32,19 +32,19 @@
 .logoIcon {
   height: 60px;
   width: 60px;
-  color: #667eea;
+  color: var(--ax-cyan);
   margin-bottom: 20px;
 }
 
 .title {
   font-size: 28px;
   font-weight: 700;
-  color: #333;
+  color: var(--ax-text);
   margin-bottom: 8px;
 }
 
 .subtitle {
-  color: #666;
+  color: var(--ax-text-2);
   font-size: 16px;
 }
 
@@ -72,25 +72,25 @@
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
-  color: #374151;
+  color: var(--ax-text);
   font-size: 14px;
 }
 
 .inputField {
   width: 100%;
   padding: 12px 16px;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--ax-line-strong);
   border-radius: 8px;
   font-size: 16px;
   transition: border-color 0.3s ease;
-  background: white;
-  color: #111827;
+  background: var(--ax-dusk);
+  color: var(--ax-text);
 }
 
 .inputField:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--ax-cyan);
+  box-shadow: 0 0 0 3px rgba(79, 209, 232, 0.1);
 }
 
 .errorText {
@@ -114,35 +114,35 @@
 .checkbox {
   height: 16px;
   width: 16px;
-  color: #667eea;
-  border-color: #d1d5db;
+  color: var(--ax-cyan);
+  border-color: var(--ax-line-strong);
   border-radius: 4px;
-  background-color: white;
+  background-color: var(--ax-dusk);
 }
 
 .rememberLabel {
   margin-left: 8px;
-  color: #374151;
+  color: var(--ax-text);
   font-size: 14px;
 }
 
 .forgotPassword {
-  color: #667eea;
+  color: var(--ax-cyan);
   font-size: 14px;
   text-decoration: none;
   font-weight: 500;
 }
 
 .forgotPassword:hover {
-  color: #5a67d8;
+  color: var(--ax-cyan);
   text-decoration: underline;
 }
 
 .submitButton {
   width: 100%;
   padding: 12px 24px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
   font-weight: 600;
   border: none;
   border-radius: 8px;
@@ -156,7 +156,7 @@
 
 .submitButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 12px rgba(79, 209, 232, 0.4);
 }
 
 .submitButton:active {
@@ -188,18 +188,18 @@
 .signupLink {
   margin-top: 30px;
   text-align: center;
-  color: #6b7280;
+  color: var(--ax-text-3);
   font-size: 14px;
 }
 
 .signupText {
-  color: #667eea;
+  color: var(--ax-cyan);
   font-weight: 600;
   text-decoration: none;
 }
 
 .signupText:hover {
-  color: #5a67d8;
+  color: var(--ax-cyan);
   text-decoration: underline;
 }
 
@@ -221,7 +221,7 @@
 /* Privacy note for Remember Me */
 .privacyNote {
   font-size: 12px;
-  color: #888;
+  color: var(--ax-text-3);
   margin: 4px 0 0 0;
   font-style: italic;
 }
@@ -235,7 +235,7 @@
 .advancedButton {
   background: none;
   border: none;
-  color: #667eea;
+  color: var(--ax-cyan);
   font-size: 14px;
   cursor: pointer;
   display: flex;
@@ -248,7 +248,7 @@
 }
 
 .advancedButton:hover {
-  color: #5a67d8;
+  color: var(--ax-cyan);
 }
 
 .toggleIcon {
@@ -262,11 +262,11 @@
 }
 
 .advancedOptions {
-  background: #f8fafc;
+  background: var(--ax-night);
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--ax-line-strong);
   animation: slideDown 0.3s ease-out;
 }
 
@@ -284,17 +284,17 @@
 .selectField {
   width: 100%;
   padding: 12px 16px;
-  border: 2px solid #e1e5e9;
+  border: 2px solid var(--ax-line-strong);
   border-radius: 8px;
   font-size: 16px;
   transition: border-color 0.3s ease;
-  background-color: white;
+  background-color: var(--ax-dusk);
 }
 
 .selectField:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--ax-cyan);
+  box-shadow: 0 0 0 3px rgba(79, 209, 232, 0.1);
 }
 
 .checkboxGroup {
@@ -306,7 +306,7 @@
 
 .checkboxLabel {
   font-size: 14px;
-  color: #333;
+  color: var(--ax-text);
   cursor: pointer;
 }
 
@@ -317,24 +317,24 @@
 }
 
 .signupLink {
-  color: #6b7280;
+  color: var(--ax-text-3);
   font-size: 14px;
   margin-bottom: 10px;
 }
 
 .helpLinks {
   font-size: 13px;
-  color: #888;
+  color: var(--ax-text-3);
 }
 
 .helpLink {
-  color: #667eea;
+  color: var(--ax-cyan);
   text-decoration: none;
   font-weight: 500;
 }
 
 .helpLink:hover {
-  color: #5a67d8;
+  color: var(--ax-cyan);
   text-decoration: underline;
 }
 
@@ -355,20 +355,21 @@
   width: 60px; /* Round blue circle container */
   height: 60px; /* Round blue circle container */
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3),
-    0 0 0 1px rgba(102, 126, 234, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  background: var(--ax-action);
+  box-shadow: 0 8px 32px rgba(79, 209, 232, 0.3),
+    0 0 0 1px rgba(79, 209, 232, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(102, 126, 234, 0.2);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   animation: logoScale 1s ease-out 0.2s both;
   overflow: hidden; /* Keep logo within container */
+  color: var(--ax-action-ink);
 }
 
 .auraxLogoContainer:hover {
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4),
-    0 0 0 1px rgba(102, 126, 234, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: 0 12px 40px rgba(79, 209, 232, 0.4),
+    0 0 0 1px rgba(79, 209, 232, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .auraxLogo {
@@ -470,11 +471,7 @@
   align-items: center;
   gap: 12px;
   padding: 12px 20px;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(248, 250, 252, 0.9) 100%
-  );
+  background: var(--ax-night);
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.4);
@@ -506,22 +503,15 @@
 }
 
 .auraxBrandText {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI",
-    "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--ax-font-ui);
   font-size: 24px;
   font-weight: 700;
   letter-spacing: -0.5px;
-  background: linear-gradient(
-    135deg,
-    #1f2937 0%,
-    #374151 30%,
-    #4b5563 60%,
-    #6366f1 100%
-  );
+  background: var(--ax-aura-linear);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  color: #1f2937; /* Fallback */
+  color: var(--ax-text); /* Fallback */
 }
 
 /* Premium fade-in animation */
@@ -577,7 +567,7 @@
 .instagramTestSection {
   margin-top: 20px;
   padding: 20px;
-  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  background: var(--ax-night);
   border: 2px solid #e1e8ed;
   border-radius: 12px;
   position: relative;
@@ -609,7 +599,7 @@
 
 .testDescription {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--ax-text-3);
   margin: 5px 0 0 0;
   line-height: 1.4;
 }
@@ -671,13 +661,13 @@
 }
 
 .testSuccess {
-  background-color: #f0fdf4;
+  background-color: var(--ax-night);
   border-color: #22c55e;
   color: #166534;
 }
 
 .testError {
-  background-color: #fef2f2;
+  background-color: var(--ax-night);
   border-color: #ef4444;
   color: #991b1b;
 }
@@ -814,3 +804,9 @@
     height: 16px;
   }
 }
+
+/* Aura: inside AuthFrame */
+.loginCard { border: 1px solid var(--ax-line); box-shadow: none; }
+.optionsContainer { flex-wrap: wrap; gap: 8px 16px; align-items: flex-start; }
+.rememberMe { flex-wrap: wrap; }
+.privacyNote { flex-basis: 100%; }

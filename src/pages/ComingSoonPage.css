@@ -3,9 +3,9 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0c0c2e, #1a1a40);
+  background: var(--ax-night);
   padding: 2rem;
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: var(--ax-font-ui);
 }
 
 .coming-soon-content {
@@ -23,7 +23,7 @@
   font-size: 3.5rem;
   font-weight: 800;
   margin-bottom: 1.5rem;
-  background: linear-gradient(90deg, #8a2be2, #da70d6, #00bfff);
+  background: var(--ax-aura-linear);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
@@ -76,10 +76,11 @@
 .progress-fill {
   height: 100%;
   width: 70%;
-  background: linear-gradient(90deg, #007bff, #00bfff);
+  background: linear-gradient(90deg, var(--ax-action), #00bfff);
   border-radius: 10px;
   position: relative;
   animation: pulse 2s infinite;
+  color: var(--ax-action-ink);
 }
 
 @keyframes pulse {

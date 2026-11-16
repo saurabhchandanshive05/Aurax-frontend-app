@@ -6,7 +6,7 @@
   justify-content: center;
   overflow: hidden;
   padding: 20px;
-  font-family: "Outfit", sans-serif;
+  font-family: var(--ax-font-ui);
 }
 
 .gradientBackground {

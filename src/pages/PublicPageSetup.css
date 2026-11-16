@@ -1,6 +1,6 @@
 .public-page-setup {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--ax-night);
   padding: 40px 20px;
   display: flex;
   justify-content: center;
@@ -10,7 +10,7 @@
 .setup-container {
   max-width: 700px;
   width: 100%;
-  background: white;
+  background: var(--ax-dusk);
   border-radius: 20px;
   padding: 40px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.3);
@@ -23,12 +23,12 @@
 
 .setup-header h1 {
   font-size: 32px;
-  color: #333;
+  color: var(--ax-text);
   margin-bottom: 10px;
 }
 
 .setup-header p {
-  color: #666;
+  color: var(--ax-text-2);
   font-size: 16px;
 }
 
@@ -46,7 +46,7 @@
   left: 25%;
   right: 25%;
   height: 2px;
-  background: #ddd;
+  background: var(--ax-dusk-2);
   z-index: 0;
 }
 
@@ -64,30 +64,30 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #f0f0f0;
-  color: #999;
+  background: var(--ax-night);
+  color: var(--ax-text-3);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  border: 2px solid #ddd;
+  border: 2px solid var(--ax-line-strong);
   transition: all 0.3s ease;
 }
 
 .step-label {
   font-size: 12px;
-  color: #999;
+  color: var(--ax-text-3);
   font-weight: 500;
 }
 
 .step.active .step-number {
-  background: #667eea;
-  color: white;
-  border-color: #667eea;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
+  border-color: var(--ax-cyan);
 }
 
 .step.active .step-label {
-  color: #667eea;
+  color: var(--ax-cyan);
 }
 
 .step.completed .step-number {
@@ -121,7 +121,7 @@
 
 .step-content h2 {
   font-size: 24px;
-  color: #333;
+  color: var(--ax-text);
   margin-bottom: 25px;
 }
 
@@ -132,7 +132,7 @@
 .form-group label {
   display: block;
   font-weight: 600;
-  color: #333;
+  color: var(--ax-text);
   margin-bottom: 8px;
   font-size: 14px;
 }
@@ -142,7 +142,7 @@
 .form-group textarea {
   width: 100%;
   padding: 12px 16px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--ax-line-strong);
   border-radius: 10px;
   font-size: 15px;
   transition: all 0.3s ease;
@@ -153,8 +153,8 @@
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--ax-cyan);
+  box-shadow: 0 0 0 3px rgba(79, 209, 232, 0.1);
 }
 
 .form-group input.error,
@@ -166,24 +166,24 @@
 .url-input-wrapper {
   display: flex;
   align-items: center;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--ax-line-strong);
   border-radius: 10px;
   overflow: hidden;
   transition: all 0.3s ease;
 }
 
 .url-input-wrapper:focus-within {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--ax-cyan);
+  box-shadow: 0 0 0 3px rgba(79, 209, 232, 0.1);
 }
 
 .url-prefix {
-  background: #f5f5f5;
+  background: var(--ax-night);
   padding: 12px 16px;
-  color: #666;
+  color: var(--ax-text-2);
   font-size: 14px;
   white-space: nowrap;
-  border-right: 2px solid #e0e0e0;
+  border-right: 2px solid var(--ax-line-strong);
 }
 
 .url-input-wrapper input {
@@ -194,7 +194,7 @@
 
 .field-hint {
   font-size: 13px;
-  color: #999;
+  color: var(--ax-text-3);
   margin-top: 6px;
 }
 
@@ -222,8 +222,8 @@
 .btn-submit {
   flex: 1;
   padding: 14px 24px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
   border: none;
   border-radius: 10px;
   font-size: 16px;
@@ -235,7 +235,7 @@
 .btn-next:hover,
 .btn-submit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 10px 25px rgba(79, 209, 232, 0.3);
 }
 
 .btn-next:disabled,
@@ -248,8 +248,8 @@
 .btn-back {
   flex: 0 0 auto;
   padding: 14px 24px;
-  background: #f5f5f5;
-  color: #666;
+  background: var(--ax-night);
+  color: var(--ax-text-2);
   border: none;
   border-radius: 10px;
   font-size: 16px;
@@ -259,7 +259,7 @@
 }
 
 .btn-back:hover {
-  background: #e0e0e0;
+  background: var(--ax-dusk-2);
 }
 
 .preview-box {
@@ -267,17 +267,17 @@
   padding: 20px;
   background: #f9f9f9;
   border-radius: 12px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--ax-line-strong);
 }
 
 .preview-box h3 {
   font-size: 18px;
-  color: #333;
+  color: var(--ax-text);
   margin-bottom: 15px;
 }
 
 .page-preview {
-  background: white;
+  background: var(--ax-dusk);
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
@@ -285,7 +285,7 @@
 
 .preview-cover {
   height: 150px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--ax-action);
   position: relative;
   display: flex;
   align-items: flex-end;
@@ -293,13 +293,14 @@
   padding-bottom: 30px;
   background-size: cover;
   background-position: center;
+  color: var(--ax-action-ink);
 }
 
 .preview-avatar {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  border: 4px solid white;
+  border: 4px solid var(--ax-line-strong);
   object-fit: cover;
   position: absolute;
   bottom: -40px;
@@ -312,25 +313,25 @@
 
 .preview-content h2 {
   font-size: 22px;
-  color: #333;
+  color: var(--ax-text);
   margin-bottom: 5px;
 }
 
 .preview-category {
-  color: #667eea;
+  color: var(--ax-cyan);
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 10px;
 }
 
 .preview-instagram {
-  color: #666;
+  color: var(--ax-text-2);
   font-size: 14px;
   margin-bottom: 15px;
 }
 
 .preview-bio {
-  color: #666;
+  color: var(--ax-text-2);
   font-size: 14px;
   line-height: 1.6;
 }

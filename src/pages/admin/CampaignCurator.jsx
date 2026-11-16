@@ -2,7 +2,6 @@ import { getApiUrl } from '../../utils/getApiUrl';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import AdminNav from '../../components/admin/AdminNav';
 import styles from './CampaignCurator.module.css';
 
 const CampaignCurator = () => {
@@ -356,7 +355,6 @@ const CampaignCurator = () => {
   if (isLoading) {
     return (
       <div className={styles.pageWrapper}>
-        <AdminNav />
         <div className={styles.mainContent}>
           <div className={styles.curatorContainer}>
             <div style={{ textAlign: 'center', padding: '100px 20px' }}>
@@ -371,13 +369,12 @@ const CampaignCurator = () => {
 
   return (
     <div className={styles.pageWrapper}>
-      <AdminNav />
       <div className={styles.mainContent}>
         <div className={styles.curatorContainer}>
           <div className={styles.curatorHeader}>
             <div>
               <h1>Campaign Curator</h1>
-              <p>AURAX LIVE - Admin Dashboard</p>
+              <p>Create, verify and publish campaigns on the LIVE board.</p>
             </div>
             <button 
               className={styles.addBtn}
@@ -405,7 +402,7 @@ const CampaignCurator = () => {
           <form onSubmit={handleSubmit} className={styles.campaignForm}>
             {/* Source Information */}
             <div className={styles.section}>
-              <h3>🔍 Source Information (Internal Only)</h3>
+              <h3>Source Information (Internal Only)</h3>
               <div className={styles.formGrid}>
                 <div className={styles.formGroup}>
                   <label>Source Type *</label>
@@ -484,7 +481,7 @@ const CampaignCurator = () => {
 
             {/* Creator Visual Information */}
             <div className={styles.section}>
-              <h3>👤 Creator Visual Information</h3>
+              <h3>Creator Visual Information</h3>
               <div className={styles.formGrid}>
                 <div className={styles.formGroup}>
                   <label>Profile Picture URL</label>
@@ -537,7 +534,7 @@ const CampaignCurator = () => {
 
             {/* Brand Information */}
             <div className={styles.section}>
-              <h3>🏢 Brand Information</h3>
+              <h3>Brand Information</h3>
               <div className={styles.formGrid}>
                 <div className={styles.formGroup}>
                   <label>Brand Name</label>
@@ -601,7 +598,7 @@ const CampaignCurator = () => {
 
             {/* Campaign Details */}
             <div className={styles.section}>
-              <h3>📝 Campaign Details</h3>
+              <h3>Campaign Details</h3>
               <div className={styles.formGroup}>
                 <label>Campaign Title *</label>
                 <input
@@ -667,7 +664,7 @@ const CampaignCurator = () => {
 
             {/* Highlights */}
             <div className={styles.section}>
-              <h3>💰 Highlights</h3>
+              <h3>Highlights</h3>
               <div className={styles.formGrid}>
                 <div className={styles.formGroup}>
                   <label>Budget *</label>
@@ -725,7 +722,7 @@ const CampaignCurator = () => {
 
             {/* Requirements */}
             <div className={styles.section}>
-              <h3>📊 Requirements</h3>
+              <h3>Requirements</h3>
               <div className={styles.formGrid}>
                 <div className={styles.formGroup}>
                   <label>Follower Range Min</label>
@@ -810,7 +807,7 @@ const CampaignCurator = () => {
 
             {/* Admin Options */}
             <div className={styles.section}>
-              <h3>⚙️ Admin Options</h3>
+              <h3>Admin Options</h3>
               <div className={styles.formGrid}>
                 <div className={styles.formGroup}>
                   <label>Status</label>
@@ -983,7 +980,7 @@ const CampaignCurator = () => {
                   className={`${styles.actionBtn} ${styles.edit}`}
                   title="Edit campaign"
                 >
-                  ✏️ Edit
+                  Edit
                 </button>
                 <button 
                   onClick={() => handleToggleHandPicked(campaign._id)}

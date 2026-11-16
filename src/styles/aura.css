@@ -1,0 +1,186 @@
+/* ==========================================================================
+   Aura component layer: small, shared primitives built on tokens.css
+   ========================================================================== */
+
+/* ---- App frame ---- */
+.ax-app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--ax-night);
+  color: var(--ax-text);
+  font-family: var(--ax-font-ui);
+  overflow-x: hidden;
+}
+
+/* ---- Buttons ---- */
+.ax-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ax-s2);
+  min-height: 44px;
+  padding: 0 var(--ax-s5);
+  border: 1px solid transparent;
+  border-radius: var(--ax-r-sm);
+  font: 600 var(--ax-fs-sm) / 1 var(--ax-font-ui);
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--ax-dur-fast) var(--ax-ease),
+    border-color var(--ax-dur-fast) var(--ax-ease),
+    transform var(--ax-dur-fast) var(--ax-ease);
+}
+.ax-btn:active { transform: translateY(1px); }
+.ax-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.ax-btn--primary { background: var(--ax-action); color: var(--ax-action-ink); }
+.ax-btn--primary:hover { background: var(--ax-action-hover); }
+.ax-btn--ghost { background: transparent; color: var(--ax-text); border-color: var(--ax-line-strong); }
+.ax-btn--ghost:hover { background: var(--ax-dusk); border-color: var(--ax-cyan); }
+.ax-btn--danger { background: transparent; color: var(--ax-coral); border-color: rgba(255, 107, 107, 0.4); }
+.ax-btn--danger:hover { background: rgba(255, 107, 107, 0.12); }
+
+/* ---- Aura ring: the signature element ---- */
+.ax-ring {
+  --ring-size: 48px;
+  --ring-fill: 100;          /* 0-100, set inline from real data */
+  position: relative;
+  width: var(--ring-size);
+  height: var(--ring-size);
+  border-radius: 50%;
+  background:
+    conic-gradient(from 210deg, #4fd1e8, #8b7cf6, #f06bb4 calc(var(--ring-fill) * 1%), var(--ax-line) 0);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.ax-ring::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--ax-night);
+}
+.ax-ring > * { position: relative; }
+
+/* ---- Route loader (Suspense fallback) ---- */
+.ax-loader {
+  display: grid;
+  place-items: center;
+  min-height: 60vh;
+}
+.ax-loader__ring {
+  --ring-size: 44px;
+  animation: ax-spin 900ms linear infinite;
+}
+.ax-loader__ring.ax-ring {
+  background: conic-gradient(from 0deg, transparent 0 25%, #4fd1e8, #8b7cf6, #f06bb4);
+}
+@keyframes ax-spin { to { transform: rotate(360deg); } }
+
+/* ---- Error screen ---- */
+.ax-error {
+  display: grid;
+  place-items: center;
+  min-height: 70vh;
+  padding: var(--ax-s5) var(--ax-s4);
+}
+.ax-error__panel {
+  max-width: 460px;
+  width: 100%;
+  padding: var(--ax-s6);
+  background: var(--ax-dusk);
+  border: 1px solid var(--ax-line);
+  border-radius: var(--ax-r-lg);
+}
+.ax-error__title {
+  font-size: var(--ax-fs-xl);
+  margin-bottom: var(--ax-s3);
+}
+.ax-error__text {
+  color: var(--ax-text-2);
+  line-height: var(--ax-lh-body);
+  margin-bottom: var(--ax-s5);
+}
+.ax-error__detail {
+  font-size: var(--ax-fs-xs);
+  color: var(--ax-text-3);
+  margin: calc(var(--ax-s3) * -1) 0 var(--ax-s5);
+  word-break: break-word;
+}
+.ax-error__actions { display: flex; gap: var(--ax-s3); flex-wrap: wrap; }
+
+/* ---- Backend status banner ---- */
+.ax-status {
+  position: fixed;
+  right: var(--ax-s4);
+  bottom: var(--ax-s4);
+  z-index: 1100;
+  max-width: calc(100vw - 32px);
+  padding: var(--ax-s2) var(--ax-s4);
+  font-size: var(--ax-fs-xs);
+  font-weight: 600;
+  border: 1px solid var(--ax-line-strong);
+  border-radius: var(--ax-r-pill);
+  background: var(--ax-dusk);
+  color: var(--ax-text);
+  box-shadow: var(--ax-shadow-float);
+  pointer-events: none;
+}
+@media (max-width: 960px) {
+  .ax-status { bottom: 84px; }
+}
+.ax-status--ok { color: var(--ax-signal); }
+.ax-status--error { color: var(--ax-coral); }
+.ax-status--checking { color: var(--ax-marigold); }
+
+.ax-recheck {
+  position: fixed;
+  right: var(--ax-s4);
+  bottom: 72px;
+  z-index: 50;
+  box-shadow: var(--ax-shadow-float);
+}
+
+/* ---- Visually hidden (screen-reader only) ---- */
+.ax-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- Marketing navbar sign-in buttons (override design-system.css) ---- */
+.aurax-button-brand,
+.aurax-button-creator {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: var(--ax-r-sm);
+  font: 600 var(--ax-fs-sm)/1 var(--ax-font-ui);
+  text-decoration: none;
+  box-shadow: none;
+  animation: none;
+}
+.aurax-button-brand {
+  background: transparent;
+  color: var(--ax-text);
+  border: 1px solid var(--ax-line-strong);
+}
+.aurax-button-brand:hover { border-color: var(--ax-cyan); background: var(--ax-dusk); }
+.aurax-button-creator {
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
+  border: 1px solid transparent;
+}
+.aurax-button-creator:hover { background: var(--ax-action-hover); }
+.aurax-button-brand::before,
+.aurax-button-creator::before,
+.aurax-button-brand::after,
+.aurax-button-creator::after { display: none; }

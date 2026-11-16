@@ -1,10 +1,9 @@
 /* src/index.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 /* Import Design System */
+@import "./styles/tokens.css";
 @import "./styles/design-system.css";
+@import "./styles/aura.css";
 
 /* Performance optimizations for smooth scrolling */
 html {
@@ -36,13 +35,11 @@ html {
 
 body {
   margin: 0;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: var(--ax-font-ui);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #0d0d1f;
-  color: white;
+  background-color: var(--ax-night);
+  color: var(--ax-text);
   overflow-x: hidden;
   min-height: 100vh;
   display: flex;
@@ -110,14 +107,41 @@ p {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0d0d1f;
+  background: var(--ax-night-deep);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #ec0d0d;
+  background: var(--ax-dusk-2);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #c00c0c;
+  background: var(--ax-violet);
 }
+
+/* ---- Aura base layer ---- */
+h1, h2, h3 {
+  font-family: var(--ax-font-display);
+  letter-spacing: -0.015em;
+  line-height: var(--ax-lh-tight);
+}
+
+::selection {
+  background: rgba(79, 209, 232, 0.35);
+  color: var(--ax-text);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ax-cyan);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

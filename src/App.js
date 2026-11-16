@@ -11,6 +11,9 @@ import { getApiEndpoint } from "./utils/getApiUrl";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { useStandaloneRoute } from "./components/layout/ConditionalLayout";
+import AppShell, { FocusShell } from "./components/layout/AppShell";
+import { MotionConfig } from "framer-motion";
+import { shellFor, isFocusRoute } from "./components/layout/appNav";
 import GlobalLoadingScreen from "./components/GlobalLoadingScreen";
 
 // Components
@@ -193,7 +196,13 @@ function MobileNavMenu() {
 // Layout wrapper component that checks for standalone routes
 function AppLayout({ children }) {
   const { showNavbar, showFooter } = useStandaloneRoute();
-  
+  const { pathname } = useLocation();
+  const area = shellFor(pathname);
+
+  // Signed-in product areas get the app shell instead of the marketing chrome.
+  if (area) return <AppShell area={area}>{children}</AppShell>;
+  if (isFocusRoute(pathname)) return <FocusShell>{children}</FocusShell>;
+
   return (
     <>
       {showNavbar && <Navbar />}
@@ -263,23 +272,25 @@ function App() {
   }, []);
 
   return (
+    <MotionConfig reducedMotion="user">
     <ThemeProvider>
       <AuthProvider>
         <Router>
           <AuthGate>
-            <div className="flex flex-col min-h-screen font-sans bg-[#0d0d1f] text-white overflow-x-hidden">
+            <div className="ax-app">
               <CustomCursor />
 
               {/* Backend status banner */}
               {showStatus && (
                 <div
-                  className={`status-banner ${
+                  className={`ax-status ${
                     backendStatus.status === "connected"
-                      ? "bg-green-600"
+                      ? "ax-status--ok"
                       : backendStatus.status === "error"
-                      ? "bg-red-600"
-                      : "bg-yellow-600"
+                      ? "ax-status--error"
+                      : "ax-status--checking"
                   }`}
+                  role="status"
                 >
                   {backendStatus.message}
               </div>
@@ -290,8 +301,9 @@ function App() {
                 <ErrorBoundary>
                   <Suspense
                     fallback={
-                      <div className="flex items-center justify-center min-h-screen">
-                        <div className="loading-spinner rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                      <div className="ax-loader" role="status">
+                        <div className="ax-ring ax-loader__ring" aria-hidden="true"></div>
+                        <span className="ax-sr-only">Loading page</span>
                       </div>
                     }
                   >
@@ -535,7 +547,7 @@ function App() {
             {/* Recheck backend button */}
             {!showStatus && backendStatus.status === "error" && (
               <button
-                className="fixed bottom-16 right-4 bg-red-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-red-700 z-50"
+                className="ax-btn ax-btn--danger ax-recheck"
                 onClick={() => {
                   setShowStatus(true);
                   // Reload the page to re-run backend connection check
@@ -553,6 +565,7 @@ function App() {
         </Router>
       </AuthProvider>
     </ThemeProvider>
+    </MotionConfig>
   );
 }
 

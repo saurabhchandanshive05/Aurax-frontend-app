@@ -54,8 +54,7 @@
 }
 
 .brandName {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI",
-    "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--ax-font-ui);
   font-size: 24px;
   font-weight: 600;
   color: #ffffff;
@@ -228,8 +227,7 @@
 }
 
 .brandText {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI",
-    "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--ax-font-ui);
   font-size: 18px;
   font-weight: 500;
   color: #ffffff;
@@ -909,8 +907,7 @@
 
 /* Updated logo text styles for AURA AI */
 .brandText {
-  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, sans-serif;
+  font-family: var(--ax-font-ui);
   font-weight: 700;
   font-size: 1.25rem;
   line-height: 1.2;
@@ -923,8 +920,7 @@
 }
 
 .aiText {
-  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, sans-serif;
+  font-family: var(--ax-font-ui);
   font-weight: 600;
   font-size: 0.9rem;
   line-height: 1.2;
@@ -1259,7 +1255,7 @@
 }
 
 .centralLetter {
-  font-family: "Segoe UI", "Poppins", "Inter", sans-serif;
+  font-family: var(--ax-font-ui);
   font-size: 26px;
   font-weight: 700;
   color: #ffffff;
@@ -1336,7 +1332,7 @@
 .logoText {
   display: flex;
   align-items: center;
-  font-family: "Segoe UI", "Poppins", "Inter", sans-serif;
+  font-family: var(--ax-font-ui);
   font-weight: 600;
   font-size: 18px;
   line-height: 1;

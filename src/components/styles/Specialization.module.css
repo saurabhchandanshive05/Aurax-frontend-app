@@ -55,7 +55,7 @@
 .sectionTitle {
   font-size: 3rem;
   font-weight: 800;
-  background: linear-gradient(90deg, #5b77ff, #00d2ff, #ec4899);
+  background: var(--ax-aura-linear);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -258,8 +258,8 @@
 }
 
 .primaryCta {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #fff;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
   border: none;
   padding: 0.75rem 1.25rem;
   border-radius: 12px;
@@ -332,8 +332,8 @@
 }
 
 .cardCta {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #fff;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
   border: none;
   padding: 0.5rem 0.9rem;
   border-radius: 999px;

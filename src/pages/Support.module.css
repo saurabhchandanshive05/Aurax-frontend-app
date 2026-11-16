@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: var(--ax-night);
   padding: 40px 20px;
 }
 
@@ -12,14 +12,14 @@
 .title {
   font-size: 3rem;
   font-weight: 700;
-  color: #333;
+  color: var(--ax-text);
   text-align: center;
   margin-bottom: 16px;
 }
 
 .subtitle {
   font-size: 1.25rem;
-  color: #666;
+  color: var(--ax-text-2);
   text-align: center;
   margin-bottom: 60px;
   max-width: 600px;
@@ -35,7 +35,7 @@
 }
 
 .supportCard {
-  background: white;
+  background: var(--ax-dusk);
   padding: 40px;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -52,26 +52,26 @@
   width: 60px;
   height: 60px;
   margin: 0 auto 20px;
-  color: #4f46e5;
+  color: var(--ax-cyan);
 }
 
 .supportCard h3 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #333;
+  color: var(--ax-text);
   margin-bottom: 12px;
 }
 
 .supportCard p {
-  color: #666;
+  color: var(--ax-text-2);
   margin-bottom: 24px;
   line-height: 1.6;
 }
 
 .button {
   display: inline-block;
-  background: #4f46e5;
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
   padding: 12px 24px;
   border-radius: 8px;
   text-decoration: none;
@@ -87,7 +87,7 @@
 }
 
 .commonIssues {
-  background: white;
+  background: var(--ax-dusk);
   padding: 40px;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -97,7 +97,7 @@
 .commonIssues h2 {
   font-size: 2rem;
   font-weight: 600;
-  color: #333;
+  color: var(--ax-text);
   margin-bottom: 30px;
   text-align: center;
 }
@@ -108,7 +108,7 @@
 }
 
 .faqItem {
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--ax-line-strong);
   padding: 20px 0;
 }
 
@@ -118,19 +118,19 @@
 
 .faqItem summary {
   font-weight: 600;
-  color: #333;
+  color: var(--ax-text);
   cursor: pointer;
   padding: 8px 0;
   font-size: 1.1rem;
 }
 
 .faqItem summary:hover {
-  color: #4f46e5;
+  color: var(--ax-cyan);
 }
 
 .faqItem p {
   margin-top: 12px;
-  color: #666;
+  color: var(--ax-text-2);
   line-height: 1.6;
   padding-left: 20px;
 }
@@ -141,7 +141,7 @@
 }
 
 .homeLink {
-  color: #4f46e5;
+  color: var(--ax-cyan);
   text-decoration: none;
   font-weight: 500;
   font-size: 1.1rem;

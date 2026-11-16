@@ -2,7 +2,7 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
-  background: #ffffff;
+  background: var(--ax-dusk);
   min-height: 100vh;
 }
 
@@ -18,13 +18,13 @@
 .database-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--ax-text);
   margin-bottom: 0.5rem;
 }
 
 .database-subtitle {
   font-size: 1.1rem;
-  color: #666;
+  color: var(--ax-text-2);
   line-height: 1.6;
   max-width: 800px;
 }
@@ -38,10 +38,10 @@
 }
 
 .stat-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--ax-action);
   padding: 1.5rem;
   border-radius: 12px;
-  color: white;
+  color: var(--ax-action-ink);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -58,7 +58,7 @@
 
 /* Search and Filters */
 .search-filter-section {
-  background: #f8f9fa;
+  background: var(--ax-night);
   padding: 1.5rem;
   border-radius: 12px;
   margin-bottom: 2rem;
@@ -73,7 +73,7 @@
 .search-input {
   flex: 1;
   padding: 0.875rem 1.25rem;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--ax-line-strong);
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.2s;
@@ -81,14 +81,14 @@
 
 .search-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--ax-cyan);
+  box-shadow: 0 0 0 3px rgba(79, 209, 232, 0.1);
 }
 
 .search-button {
   padding: 0.875rem 2rem;
-  background: #667eea;
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
   border: none;
   border-radius: 8px;
   font-size: 1rem;
@@ -100,7 +100,7 @@
 .search-button:hover {
   background: #5568d3;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(79, 209, 232, 0.3);
 }
 
 .filter-chips {
@@ -112,23 +112,23 @@
 
 .filter-select {
   padding: 0.625rem 1rem;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--ax-line-strong);
   border-radius: 8px;
   font-size: 0.9rem;
-  background: white;
+  background: var(--ax-dusk);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .filter-select:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--ax-cyan);
 }
 
 .clear-filters-btn {
   padding: 0.625rem 1.25rem;
   background: transparent;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--ax-line-strong);
   border-radius: 8px;
   font-size: 0.9rem;
   cursor: pointer;
@@ -152,15 +152,15 @@
   align-items: center;
   gap: 1.5rem;
   padding: 1.5rem;
-  background: white;
-  border: 2px solid #f0f0f0;
+  background: var(--ax-dusk);
+  border: 2px solid var(--ax-line-strong);
   border-radius: 12px;
   transition: all 0.3s;
   cursor: pointer;
 }
 
 .creator-card:hover {
-  border-color: #667eea;
+  border-color: var(--ax-cyan);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transform: translateY(-2px);
 }
@@ -171,10 +171,11 @@
   height: 80px;
   border-radius: 50%;
   overflow: hidden;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--ax-action);
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--ax-action-ink);
 }
 
 .creator-avatar img {
@@ -201,7 +202,7 @@
 .creator-name {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--ax-text);
   margin: 0;
   display: flex;
   align-items: center;
@@ -214,8 +215,8 @@
   justify-content: center;
   width: 20px;
   height: 20px;
-  background: #667eea;
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
   border-radius: 50%;
   font-size: 12px;
   font-weight: bold;
@@ -223,7 +224,7 @@
 
 .creator-username {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--ax-text-2);
   margin: 0.25rem 0 0 0;
 }
 
@@ -232,7 +233,7 @@
   gap: 1rem;
   margin-bottom: 0.75rem;
   font-size: 0.9rem;
-  color: #666;
+  color: var(--ax-text-2);
 }
 
 .meta-item {
@@ -250,10 +251,10 @@
 
 .tag {
   padding: 0.25rem 0.75rem;
-  background: #f0f0f0;
+  background: var(--ax-night);
   border-radius: 20px;
   font-size: 0.85rem;
-  color: #666;
+  color: var(--ax-text-2);
 }
 
 .category-tag {
@@ -273,7 +274,7 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.9rem;
-  color: #666;
+  color: var(--ax-text-2);
   font-weight: 600;
 }
 
@@ -302,23 +303,23 @@
 }
 
 .primary-btn {
-  background: #667eea;
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
 }
 
 .primary-btn:hover {
   background: #5568d3;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(79, 209, 232, 0.3);
 }
 
 .secondary-btn {
-  background: #f0f0f0;
-  color: #333;
+  background: var(--ax-night);
+  color: var(--ax-text);
 }
 
 .secondary-btn:hover {
-  background: #e0e0e0;
+  background: var(--ax-dusk-2);
 }
 
 /* Loading State */
@@ -328,14 +329,14 @@
   align-items: center;
   justify-content: center;
   padding: 4rem;
-  color: #666;
+  color: var(--ax-text-2);
 }
 
 .spinner {
   width: 50px;
   height: 50px;
-  border: 4px solid #f0f0f0;
-  border-top-color: #667eea;
+  border: 4px solid var(--ax-line-strong);
+  border-top-color: var(--ax-cyan);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 1rem;
@@ -349,7 +350,7 @@
 .empty-state {
   text-align: center;
   padding: 4rem;
-  color: #999;
+  color: var(--ax-text-3);
   font-size: 1.1rem;
 }
 
@@ -365,8 +366,8 @@
 
 .pagination-btn {
   padding: 0.75rem 1.5rem;
-  background: #667eea;
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
   border: none;
   border-radius: 8px;
   font-size: 0.9rem;
@@ -381,14 +382,14 @@
 }
 
 .pagination-btn:disabled {
-  background: #ccc;
+  background: var(--ax-dusk-2);
   cursor: not-allowed;
   opacity: 0.5;
 }
 
 .pagination-info {
   font-size: 0.95rem;
-  color: #666;
+  color: var(--ax-text-2);
   font-weight: 500;
 }
 
@@ -436,3 +437,6 @@
     width: 100%;
   }
 }
+
+/* ---- Aura: inside the app shell ---- */
+.creator-database { max-width: none; padding: 0; background: transparent; }

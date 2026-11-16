@@ -5,6 +5,7 @@ import { apiClient } from "../utils/apiClient";
 import instagramAPI from "../utils/instagramAPI";
 import { jwtDecode } from "jwt-decode";
 import styles from "./CreatorLogin.module.css";
+import AuthFrame from "../components/layout/AuthFrame";
 
 const CreatorLogin = () => {
   const [email, setEmail] = useState("");
@@ -116,7 +117,7 @@ const CreatorLogin = () => {
   };
 
   return (
-    <div className={styles.loginContainer}>
+    <AuthFrame audience="creator">
       <div className={styles.loginCard}>
         {/* AURAX Logo - Top Center */}
         <div className={styles.logoSection}>
@@ -134,9 +135,9 @@ const CreatorLogin = () => {
         </div>
 
         <div className={styles.header}>
-          <h1 className={styles.title}>Welcome back, Creator!</h1>
+          <h1 className={styles.title}>Creator log in</h1>
           <p className={styles.subtitle}>
-            Let's get started on your next masterpiece
+            Manage your page, content and brand campaigns.
           </p>
         </div>
 
@@ -439,7 +440,7 @@ const CreatorLogin = () => {
           </div>
         </div>
       </div>
-    </div>
+    </AuthFrame>
   );
 };
 

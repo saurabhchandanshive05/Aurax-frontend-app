@@ -1,7 +1,7 @@
 /* Mobile-First Welcome Screen */
 .welcomeContainer {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--ax-night);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,7 +13,7 @@
 .contentWrapper {
   width: 100%;
   max-width: 480px;
-  background: white;
+  background: var(--ax-dusk);
   border-radius: 24px;
   padding: 32px 24px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -34,12 +34,13 @@
   width: 80px;
   height: 80px;
   margin: 0 auto;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--ax-action);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 24px rgba(79, 209, 232, 0.4);
+  color: var(--ax-action-ink);
 }
 
 .logoImage {
@@ -57,7 +58,7 @@
 .welcomeTitle {
   font-size: 28px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--ax-text);
   text-align: center;
   margin-bottom: 12px;
   line-height: 1.2;
@@ -65,14 +66,14 @@
 
 .welcomeSubtitle {
   font-size: 16px;
-  color: #6b7280;
+  color: var(--ax-text-3);
   text-align: center;
   margin-bottom: 32px;
   line-height: 1.5;
 }
 
 .whyBox {
-  background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
+  background: var(--ax-night);
   border-radius: 16px;
   padding: 20px;
   margin-bottom: 24px;
@@ -84,8 +85,8 @@
 .whyIcon {
   width: 32px;
   height: 32px;
-  background: #667eea;
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -99,20 +100,20 @@
 .whyTitle {
   font-size: 16px;
   font-weight: 600;
-  color: #1a1a2e;
+  color: var(--ax-text);
   margin-bottom: 6px;
 }
 
 .whyText {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--ax-text-3);
   line-height: 1.5;
   margin: 0;
 }
 
 .timelineBox {
-  background: white;
-  border: 2px solid #e5e7eb;
+  background: var(--ax-dusk);
+  border: 2px solid var(--ax-line-strong);
   border-radius: 16px;
   padding: 20px;
   margin-bottom: 32px;
@@ -121,7 +122,7 @@
 .timelineTitle {
   font-size: 16px;
   font-weight: 600;
-  color: #1a1a2e;
+  color: var(--ax-text);
   margin-bottom: 16px;
 }
 
@@ -140,8 +141,8 @@
 .stepNumber {
   width: 28px;
   height: 28px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -160,21 +161,21 @@
 
 .stepContent strong {
   font-size: 15px;
-  color: #1a1a2e;
+  color: var(--ax-text);
   font-weight: 600;
 }
 
 .stepContent span {
   font-size: 13px;
-  color: #9ca3af;
+  color: var(--ax-text-3);
 }
 
 .ctaSection { margin-bottom: 24px; }
 
 .primaryCta {
   width: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
   border: none;
   border-radius: 12px;
   padding: 16px 24px;
@@ -186,7 +187,7 @@
   justify-content: center;
   gap: 8px;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(79, 209, 232, 0.3);
   margin-bottom: 8px;
 }
 
@@ -201,7 +202,7 @@
 
 .ctaHelper {
   font-size: 13px;
-  color: #9ca3af;
+  color: var(--ax-text-3);
   text-align: center;
   margin: 0;
 }
@@ -212,7 +213,7 @@
   justify-content: center;
   gap: 12px;
   padding: 16px 0;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--ax-line-strong);
 }
 
 .trustItem {
@@ -220,7 +221,7 @@
   align-items: center;
   gap: 6px;
   font-size: 13px;
-  color: #6b7280;
+  color: var(--ax-text-3);
 }
 
 .trustIcon { font-size: 16px; }
@@ -236,7 +237,7 @@
 .secondaryBtn {
   background: none;
   border: none;
-  color: #667eea;
+  color: var(--ax-cyan);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -252,7 +253,7 @@
   .logoImage { width: 75px; height: 75px; }
   .welcomeTitle { font-size: 36px; }
   .desktopOnly { display: block; }
-  .whyBox, .timelineBox { display: none; }
+
   
   .cardsContainer {
     display: grid;
@@ -262,8 +263,8 @@
   }
   
   .valueCard {
-    background: white;
-    border: 2px solid #e5e7eb;
+    background: var(--ax-dusk);
+    border: 2px solid var(--ax-line-strong);
     border-radius: 16px;
     padding: 24px;
     text-align: center;
@@ -271,12 +272,12 @@
   }
   
   .valueCard:hover {
-    border-color: #667eea;
-    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+    border-color: var(--ax-cyan);
+    box-shadow: 0 8px 24px rgba(79, 209, 232, 0.15);
     transform: translateY(-4px);
   }
   
   .cardIcon { font-size: 40px; margin-bottom: 16px; }
-  .cardTitle { font-size: 18px; font-weight: 600; color: #1a1a2e; margin-bottom: 8px; }
-  .cardDescription { font-size: 14px; color: #6b7280; line-height: 1.6; }
+  .cardTitle { font-size: 18px; font-weight: 600; color: var(--ax-text); margin-bottom: 8px; }
+  .cardDescription { font-size: 14px; color: var(--ax-text-3); line-height: 1.6; }
 }

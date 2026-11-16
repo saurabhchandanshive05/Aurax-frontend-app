@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { apiClient } from "../utils/apiClient";
+import AuthFrame from "../components/layout/AuthFrame";
 
 // Add CSS animations
 const animationStyles = `
@@ -267,7 +268,7 @@ const Signup = () => {
         style={{
           width: 80,
           height: 80,
-          background: "linear-gradient(135deg, #3b82f6, #2563eb)",
+          background: "var(--ax-action)",
           borderRadius: "50%",
           display: "flex",
           alignItems: "center",
@@ -569,8 +570,8 @@ const Signup = () => {
             style={{
               display: "inline-block",
               padding: "15px 30px",
-              background: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
-              color: "#fff",
+              background: "var(--ax-action)",
+              color: "var(--ax-action-ink)",
               textDecoration: "none",
               borderRadius: 12,
               fontWeight: 700,
@@ -686,21 +687,13 @@ const Signup = () => {
   );
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "24px",
-      }}
-    >
+    <AuthFrame audience="signup">
       <div
         style={{
           width: "100%",
           maxWidth: showSuccessScreen || verificationSent ? 500 : 420,
-          background: "rgba(20,20,40,0.6)",
-          border: "1px solid rgba(255,255,255,0.08)",
+          background: "var(--ax-dusk)",
+          border: "1px solid var(--ax-line)",
           borderRadius: 16,
           padding: showSuccessScreen || verificationSent ? 0 : 24,
           boxShadow: "0 10px 30px rgba(0,0,0,0.35)",
@@ -720,7 +713,7 @@ const Signup = () => {
             <p style={{ opacity: 0.8, marginBottom: 16 }}>
               {verificationSent
                 ? "Complete your registration by entering the verification code below"
-                : "Join Aurax and connect with top creators and brands"}
+                : "Pick creator or brand below. You can sign in right after verifying your email."}
             </p>
 
             {submitError && (
@@ -793,8 +786,8 @@ const Signup = () => {
                           display: "inline-block",
                           padding: "12px 24px",
                           background:
-                            "linear-gradient(90deg, #2563eb, #1d4ed8)",
-                          color: "#fff",
+                            "var(--ax-action)",
+                          color: "var(--ax-action-ink)",
                           textDecoration: "none",
                           borderRadius: 8,
                           fontWeight: 600,
@@ -1005,8 +998,8 @@ const Signup = () => {
                   borderRadius: 12,
                   background: submitting
                     ? "#26324a"
-                    : "linear-gradient(90deg,#2563eb,#22d3ee)",
-                  color: "#fff",
+                    : "var(--ax-action)",
+                  color: "var(--ax-action-ink)",
                   border: 0,
                   cursor: submitting ? "not-allowed" : "pointer",
                   fontWeight: 600,
@@ -1189,7 +1182,7 @@ const Signup = () => {
           </>
         )}
       </div>
-    </div>
+    </AuthFrame>
   );
 };
 

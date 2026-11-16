@@ -13,8 +13,7 @@
   );
   color: white;
   padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 3vw, 2rem);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
-    sans-serif;
+  font-family: var(--ax-font-ui);
   overflow-x: hidden;
 }
 

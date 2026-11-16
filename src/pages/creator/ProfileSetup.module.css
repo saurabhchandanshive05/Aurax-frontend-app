@@ -1,7 +1,7 @@
 /* Setup Container */
 .setupContainer {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: var(--ax-night);
   padding: 2rem;
   display: flex;
   justify-content: center;
@@ -11,7 +11,7 @@
 .setupCard {
   max-width: 900px;
   width: 100%;
-  background: white;
+  background: var(--ax-dusk);
   border-radius: 20px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   margin: 2rem auto;
@@ -33,19 +33,20 @@
 .header {
   text-align: center;
   padding: 3rem 2rem 2rem;
-  border-bottom: 2px solid #f0f0f0;
+  border-bottom: 2px solid var(--ax-line-strong);
 }
 
 .logoCircle {
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--ax-action);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 1.5rem;
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 6px 20px rgba(79, 209, 232, 0.3);
+  color: var(--ax-action-ink);
 }
 
 .logoText {
@@ -58,13 +59,13 @@
 .title {
   font-size: 2.25rem;
   font-weight: 700;
-  color: #1a202c;
+  color: var(--ax-text);
   margin-bottom: 0.75rem;
 }
 
 .subtitle {
   font-size: 1.1rem;
-  color: #718096;
+  color: var(--ax-text-3);
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
@@ -82,7 +83,7 @@
 .sectionTitle {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--ax-text);
   margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
@@ -103,8 +104,8 @@
 
 .optionalBadge {
   display: inline-block;
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--ax-action) 0%, var(--ax-action) 100%);
+  color: var(--ax-action-ink);
   font-size: 0.75rem;
   font-weight: 700;
   padding: 0.25rem 0.75rem;
@@ -129,7 +130,7 @@
   display: block;
   font-size: 1rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--ax-text);
   margin-bottom: 0.5rem;
 }
 
@@ -137,7 +138,7 @@
   display: block;
   font-size: 0.85rem;
   font-weight: 400;
-  color: #a0aec0;
+  color: var(--ax-text-3);
   margin-top: 0.25rem;
 }
 
@@ -147,11 +148,11 @@
 .textarea {
   width: 100%;
   padding: 0.875rem 1rem;
-  border: 2px solid #e2e8f0;
+  border: 2px solid var(--ax-line-strong);
   border-radius: 10px;
   font-size: 1rem;
-  color: #2d3748;
-  background: white;
+  color: var(--ax-text);
+  background: var(--ax-dusk);
   transition: all 0.2s ease;
 }
 
@@ -159,8 +160,8 @@
 .select:focus,
 .textarea:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--ax-cyan);
+  box-shadow: 0 0 0 3px rgba(79, 209, 232, 0.1);
 }
 
 .inputError {
@@ -221,10 +222,10 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.25rem;
-  background: #f7fafc;
-  border: 2px dashed #cbd5e0;
+  background: var(--ax-night);
+  border: 2px dashed var(--ax-line-strong);
   border-radius: 10px;
-  color: #667eea;
+  color: var(--ax-cyan);
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
@@ -233,8 +234,8 @@
 }
 
 .addButton:hover {
-  background: #edf2f7;
-  border-color: #667eea;
+  background: var(--ax-night);
+  border-color: var(--ax-cyan);
 }
 
 /* Checkboxes and Radio */
@@ -251,20 +252,20 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.875rem 1rem;
-  background: #f7fafc;
-  border: 2px solid #e2e8f0;
+  background: var(--ax-night);
+  border: 2px solid var(--ax-line-strong);
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 0.95rem;
-  color: #2d3748;
+  color: var(--ax-text);
 }
 
 .checkboxLabel:hover,
 .radioLabel:hover,
 .toggleLabel:hover {
-  background: #edf2f7;
-  border-color: #cbd5e0;
+  background: var(--ax-night);
+  border-color: var(--ax-line-strong);
 }
 
 .checkbox,
@@ -272,7 +273,7 @@
   width: 20px;
   height: 20px;
   cursor: pointer;
-  accent-color: #667eea;
+  accent-color: var(--ax-cyan);
 }
 
 .radioGroup {
@@ -307,21 +308,21 @@
   justify-content: center;
   gap: 0.75rem;
   padding: 1.25rem 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
   border: none;
   border-radius: 12px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 16px rgba(79, 209, 232, 0.4);
   margin-bottom: 1rem;
 }
 
 .submitButton:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 6px 24px rgba(79, 209, 232, 0.5);
 }
 
 .submitButton:active:not(:disabled) {
@@ -337,7 +338,7 @@
   width: 20px;
   height: 20px;
   border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
+  border-top-color: var(--ax-line-strong);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -359,7 +360,7 @@
 .disclaimer {
   text-align: center;
   font-size: 0.9rem;
-  color: #a0aec0;
+  color: var(--ax-text-3);
   line-height: 1.6;
 }
 
@@ -404,3 +405,6 @@
     gap: 0.5rem;
   }
 }
+
+/* Aura: the focus shell header already shows the brand mark */
+.logoCircle { display: none; }

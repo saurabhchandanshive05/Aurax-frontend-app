@@ -1,0 +1,83 @@
+/* ==========================================================================
+   AURAX "Aura" design tokens
+   One source of truth for colour, type, space, shape, depth and motion.
+   ========================================================================== */
+:root {
+  /* ---- Colour: base ---- */
+  --ax-night: #15122e;          /* page background (deep indigo, not black) */
+  --ax-night-deep: #0f0c24;     /* recessed areas, footer */
+  --ax-dusk: #211d45;           /* raised surfaces, rails */
+  --ax-dusk-2: #2a2555;         /* hover / selected surface */
+  --ax-line: rgba(196, 188, 255, 0.12);       /* hairline borders */
+  --ax-line-strong: rgba(196, 188, 255, 0.24);
+
+  /* ---- Colour: text ---- */
+  --ax-text: #f3f1ff;
+  --ax-text-2: #c9c4e8;          /* secondary text, 9.8:1 on night */
+  --ax-text-3: #9a94c2;          /* tertiary / meta, 5.6:1 on night */
+
+  /* ---- Colour: accents ---- */
+  --ax-cyan: #4fd1e8;            /* interactive, focus (from the logo orb) */
+  --ax-cyan-ink: #0b2a33;        /* text on cyan */
+  --ax-marigold: #f4b740;        /* money, earnings, highlights */
+  --ax-marigold-ink: #2e1f00;
+  --ax-violet: #8b7cf6;
+  --ax-rose: #f06bb4;
+  --ax-signal: #3dd68c;          /* success */
+  --ax-coral: #ff6b6b;           /* error / destructive */
+
+  /* The signature: used only for aura rings and the brand mark */
+  --ax-aura: conic-gradient(from 210deg, #4fd1e8, #8b7cf6, #f06bb4, #4fd1e8);
+  --ax-aura-linear: linear-gradient(120deg, #4fd1e8 0%, #8b7cf6 52%, #f06bb4 100%);
+
+  /* Primary action fill (cyan on night reads as interactive, 10:1 with ink) */
+  --ax-action: var(--ax-cyan);
+  --ax-action-hover: #7fdff0;
+  --ax-action-ink: var(--ax-cyan-ink);
+
+  /* ---- Type ---- */
+  --ax-font-display: "Bricolage Grotesque", "Instrument Sans", system-ui, sans-serif;
+  --ax-font-ui: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Scale: 1.25 (major third) from 16px */
+  --ax-fs-xs: 0.8rem;     /* 12.8 */
+  --ax-fs-sm: 0.875rem;   /* 14 */
+  --ax-fs-md: 1rem;       /* 16 */
+  --ax-fs-lg: 1.25rem;    /* 20 */
+  --ax-fs-xl: 1.5625rem;  /* 25 */
+  --ax-fs-2xl: 1.953rem;  /* 31 */
+  --ax-fs-3xl: 2.441rem;  /* 39 */
+  --ax-fs-4xl: 3.052rem;  /* 49 */
+  --ax-lh-tight: 1.15;
+  --ax-lh-body: 1.55;
+
+  /* ---- Space (4px base) ---- */
+  --ax-s1: 4px;
+  --ax-s2: 8px;
+  --ax-s3: 12px;
+  --ax-s4: 16px;
+  --ax-s5: 24px;
+  --ax-s6: 32px;
+  --ax-s7: 48px;
+  --ax-s8: 64px;
+
+  /* ---- Shape: radius scales with element size ---- */
+  --ax-r-xs: 6px;    /* chips, inputs inner */
+  --ax-r-sm: 10px;   /* buttons, inputs */
+  --ax-r-md: 14px;   /* panels */
+  --ax-r-lg: 20px;   /* hero surfaces */
+  --ax-r-pill: 999px;
+
+  /* ---- Depth: borders first, shadow only for floating layers ---- */
+  --ax-shadow-float: 0 18px 48px rgba(6, 4, 20, 0.55);
+  --ax-focus: 0 0 0 3px rgba(79, 209, 232, 0.55);
+
+  /* ---- Motion ---- */
+  --ax-ease: cubic-bezier(0.2, 0, 0, 1);
+  --ax-dur-fast: 140ms;
+  --ax-dur: 220ms;
+
+  /* ---- Layout ---- */
+  --ax-rail-w: 248px;
+  --ax-topbar-h: 64px;
+  --ax-content-max: 1240px;
+}

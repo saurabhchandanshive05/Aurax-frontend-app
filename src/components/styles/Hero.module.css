@@ -3,24 +3,7 @@
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient(
-      135deg,
-      #0a0a0f 0%,
-      #1a1a2e 25%,
-      #16213e 50%,
-      #0f3460 75%,
-      #1a1a2e 100%
-    ),
-    radial-gradient(
-      circle at 30% 30%,
-      rgba(102, 126, 234, 0.15) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 70% 70%,
-      rgba(245, 101, 101, 0.1) 0%,
-      transparent 50%
-    );
+  background: var(--ax-night);
   color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -193,8 +176,8 @@
   border: 1px solid rgba(102, 126, 234, 0.3);
   max-width: calc(100vw - 3rem);
   z-index: 15;
-  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 0 1px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 8px 32px rgba(79, 209, 232, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 0 1px rgba(79, 209, 232, 0.1);
 }
 
 .aiIcon {
@@ -280,7 +263,7 @@
   font-size: 0.875rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15),
+  box-shadow: 0 8px 32px rgba(79, 209, 232, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   text-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
 }
@@ -351,8 +334,8 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #ffffff;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
   border: none;
   border-radius: 16px;
   padding: 1.25rem 2.5rem;
@@ -360,7 +343,7 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4),
+  box-shadow: 0 12px 40px rgba(79, 209, 232, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   position: relative;
@@ -386,8 +369,8 @@
 .primaryCta:hover {
   background: linear-gradient(135deg, #7c8aed 0%, #8a5aa5 100%);
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 16px 50px rgba(102, 126, 234, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 0 1px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 16px 50px rgba(79, 209, 232, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 0 1px rgba(79, 209, 232, 0.3);
 }
 
 .primaryCta:hover::before {
@@ -414,7 +397,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: inset 0 0 0 1px rgba(102, 126, 234, 0.2);
+  box-shadow: inset 0 0 0 1px rgba(79, 209, 232, 0.2);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -426,8 +409,8 @@
   );
   border-color: rgba(102, 126, 234, 0.7);
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2),
-    inset 0 0 0 1px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 8px 32px rgba(79, 209, 232, 0.2),
+    inset 0 0 0 1px rgba(79, 209, 232, 0.3);
 }
 
 /* Stats section */
@@ -465,7 +448,7 @@
   border: 1px solid rgba(102, 126, 234, 0.3);
   border-radius: 20px;
   transition: all 0.3s ease;
-  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15),
+  box-shadow: 0 8px 32px rgba(79, 209, 232, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   position: relative;
   overflow: hidden;
@@ -489,8 +472,8 @@
 .statCardInner:hover {
   transform: translateY(-8px) scale(1.02);
   border-color: rgba(102, 126, 234, 0.5);
-  box-shadow: 0 16px 50px rgba(102, 126, 234, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 1px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 16px 50px rgba(79, 209, 232, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 1px rgba(79, 209, 232, 0.2);
   background: linear-gradient(
     135deg,
     rgba(102, 126, 234, 0.15) 0%,
@@ -844,3 +827,61 @@
     animation: none;
   }
 }
+
+/* ==========================================================================
+   Aura overrides: quieter, type-led hero with real numbers
+   ========================================================================== */
+.badge {
+  background: transparent;
+  border: 1px solid var(--ax-line-strong);
+  box-shadow: none;
+}
+.badgeText { color: var(--ax-text-2); font-weight: 600; letter-spacing: 0.01em; }
+
+.modernHeadline {
+  font-family: var(--ax-font-display);
+  font-size: clamp(2.4rem, 6.4vw, 4.6rem);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  color: var(--ax-text);
+  text-wrap: balance;
+}
+.modernSubheadline { color: var(--ax-text-2); max-width: 54ch; margin-left: auto; margin-right: auto; }
+
+.primaryCta { border-radius: var(--ax-r-sm); box-shadow: none; }
+.primaryCta:hover { background: var(--ax-action-hover); }
+.primaryCta::before { display: none; }
+.secondaryCta {
+  border-radius: var(--ax-r-sm);
+  border: 1px solid var(--ax-line-strong);
+  color: var(--ax-text);
+}
+.secondaryCta:hover { background: var(--ax-dusk); border-color: var(--ax-cyan); }
+
+/* Live numbers: one strip, linked to the LIVE board */
+a.statsSection { display: block; color: inherit; text-decoration: none; }
+.statsGrid { display: flex; justify-content: center; gap: 0; }
+.statCard {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  padding: 0 var(--ax-s6);
+  min-width: 0;
+}
+.statCard + .statCard { border-left: 1px solid var(--ax-line-strong); }
+.statCard:hover { transform: none; }
+.statValue {
+  font-family: var(--ax-font-display);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 800;
+  color: var(--ax-marigold);
+  font-variant-numeric: tabular-nums;
+}
+.statLabel { color: var(--ax-text-2); font-weight: 500; }
+.featureItem { background: transparent; border-color: var(--ax-line); }
+.featureCheck { color: var(--ax-signal); background: transparent; }
+.mainContent { padding-top: calc(90px + var(--ax-s6)); }
+.headerSection { max-width: 880px; }
+.statCardInner { background: transparent; border: 0; box-shadow: none; padding: 0; }

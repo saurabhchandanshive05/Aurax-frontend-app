@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import CreateCreatorModal from '../../components/admin/CreateCreatorModal';
 import './CreatorDatabase.css';
+import Icon from '../../components/ui/Icon';
 
 const CreatorDatabase = () => {
   const navigate = useNavigate();
@@ -163,7 +164,7 @@ const CreatorDatabase = () => {
               e.target.style.boxShadow = '0 4px 14px rgba(124, 58, 237, 0.3)';
             }}
           >
-            <span style={{ fontSize: '22px' }}>➕</span>
+            <Icon name="plus" size={18} />
             Create New Creator
           </button>
         </div>
@@ -198,7 +199,7 @@ const CreatorDatabase = () => {
             className="search-input"
           />
           <button type="submit" className="search-button">
-            🔍 Search
+            Search
           </button>
         </form>
 
@@ -285,7 +286,7 @@ const CreatorDatabase = () => {
                 <div className="creator-meta">
                   {creator.location && (
                     <span className="meta-item">
-                      📍 {creator.location}
+                      {creator.location}
                     </span>
                   )}
                 </div>
@@ -312,12 +313,12 @@ const CreatorDatabase = () => {
                   )}
                   {creator.engagement > 0 && (
                     <div className="social-stat">
-                      <span>📊 {creator.engagement}% ER</span>
+                      <span>{creator.engagement}% ER</span>
                     </div>
                   )}
                   {creator.campaigns > 0 && (
                     <div className="social-stat">
-                      <span>🎯 {creator.campaigns} campaigns</span>
+                      <span>{creator.campaigns} campaigns</span>
                     </div>
                   )}
                 </div>
@@ -334,7 +335,7 @@ const CreatorDatabase = () => {
                   onClick={() => handleQuickChat(creator)}
                   className="action-btn secondary-btn"
                 >
-                  💬 Quick Chat
+                  Quick Chat
                 </button>
               </div>
             </div>

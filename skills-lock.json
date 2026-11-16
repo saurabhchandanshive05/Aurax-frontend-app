@@ -1,0 +1,389 @@
+{
+  "version": 2,
+  "skills": {
+    "agents-md": {
+      "source": "getsentry/skills",
+      "sourceType": "github",
+      "skillPath": "skills/agents-md/SKILL.md",
+      "computedHash": "bdbf286bbd18b88533f295852e98aabf5577593b74c623a669d4f9985db7e226"
+    },
+    "banner-design": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/banner-design/SKILL.md",
+      "computedHash": "4b22f6f48afc6fcd72e6f3ae106a4dca11b33b88221efded1f5c62d8f9afb50d"
+    },
+    "beautify-github-readme": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/Visual/beautify-github-readme/SKILL.md",
+      "computedHash": "4c54df5cfe44ef7ad78cbc7e09832cb5500c1d73510584452b4df86d55a891a4"
+    },
+    "brand": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/brand/SKILL.md",
+      "computedHash": "d5619310b76bd204efd2f8b3832f72b5a2899712be0ab94d1b4b671271419c54"
+    },
+    "campaign-report": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/Marketing-Ops/campaign-report/SKILL.md",
+      "computedHash": "88a76204c644f14c0c939b4d52af7b34cdc21d6e7f9fdffd9eb8816488e6b603"
+    },
+    "cinemagraph": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/Visual/cinemagraph/SKILL.md",
+      "computedHash": "b903ad1e5343784a84a550987d084bf5dbec4a27bfa7059fa2267c9cf049b922"
+    },
+    "code-review": {
+      "source": "getsentry/skills",
+      "sourceType": "github",
+      "skillPath": "skills/code-review/SKILL.md",
+      "computedHash": "e2be8ab4ce217593fed7953de72064b9f596c3671f7f6458257d4aefb3dc96e0"
+    },
+    "code-simplifier": {
+      "source": "getsentry/skills",
+      "sourceType": "github",
+      "skillPath": "skills/code-simplifier/SKILL.md",
+      "computedHash": "5d7c3f26d04fda382c378cbf1447037ef53a3ef929dd4e09d72005861d8e6a59"
+    },
+    "competitor-intel": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/Marketing-Ops/competitor-intel/SKILL.md",
+      "computedHash": "2f24c8090cae5188c50a4008ab9f0113cc9f867780da73e6b75d7380940c4057"
+    },
+    "content-audit": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/Marketing-Ops/content-audit/SKILL.md",
+      "computedHash": "e3c8144ffd3553c8925bd50f629892d9898ed6994b6b600742ec504cf55050a9"
+    },
+    "content-strategy": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/Marketing-Ops/content-strategy/SKILL.md",
+      "computedHash": "6267be1a996dc5be9965ff53b528c0c3dc87b316d691eed94b1721aa049d1c47"
+    },
+    "copy-deslop": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/Writing/copy-deslop/SKILL.md",
+      "computedHash": "3d76983cb629031e9ba8551bfdff7bd6b9a6016eac0968530fb46237c592d2f8"
+    },
+    "copy-longform": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/Writing/copy-longform/SKILL.md",
+      "computedHash": "2bf5045e7a291db37f0fc6ee827848159c25af8a913e10eeb0a0be8f4aaf750c"
+    },
+    "cro": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/Marketing-Ops/cro/SKILL.md",
+      "computedHash": "80233f083f055af1bfa0d89ebd68e39c9bcbe25f6e038ff006232b3fee1afe1e"
+    },
+    "customer-research": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/Marketing-Ops/customer-research/SKILL.md",
+      "computedHash": "1e8affac5c479760b49a60fe6af3fe68677325e682e1016281aeb685a503b398"
+    },
+    "design": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/design/SKILL.md",
+      "computedHash": "52615ebb7dc66ad7cb627ca8c91da4067b966c2f640a4beaa6856234372e21d0"
+    },
+    "design-system": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/design-system/SKILL.md",
+      "computedHash": "9efdc106c73d8d298b5a90d55c56995840a37f754fb9d498d14e6562bdaadc23"
+    },
+    "frontend-design-anti-slop": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/Visual/frontend-design-anti-slop/SKILL.md",
+      "computedHash": "65720d1449a876dd448c4c6b8a8a1d6f7361b1bd4bce31090f04c65ea51ad094"
+    },
+    "graphify": {
+      "source": "Graphify-Labs/graphify",
+      "sourceType": "github",
+      "skillPath": "graphify/SKILL.md",
+      "computedHash": "7fe2e1347678fe2063617a4afa14a0b50811b4285cc3e20ec0492624854dbc5d"
+    },
+    "internal-linking": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/internal-linking/SKILL.md",
+      "computedHash": "d553f32a24ec3c2c396a1938d69d29dde9e8bc4fad33443736fe34ed9df50fc9"
+    },
+    "lead-magnets": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/Marketing-Ops/lead-magnets/SKILL.md",
+      "computedHash": "da6a31d8f8370ad6e5279f2723a9a9f71d216b7eacef805c647c44a7f2a11146"
+    },
+    "linkedin-ads": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/Marketing-Ops/linkedin-ads/SKILL.md",
+      "computedHash": "4cd264889c5df9deef8ade90c69f8e6612fc85444d7a3449f682fe9693778a7e"
+    },
+    "marketing-council": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/Marketing-Ops/marketing-council/SKILL.md",
+      "computedHash": "3dde29b0e79ca27fb794a6aebc81fa87c91caf572b861a9a7839866d99f090a9"
+    },
+    "marketing-monthly": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/Marketing-Ops/marketing-monthly/SKILL.md",
+      "computedHash": "be52e045719af6044eee91ccc1bf75a34311aeef32350463c17663928bc0d14c"
+    },
+    "pipeline-analysis": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/Marketing-Ops/pipeline-analysis/SKILL.md",
+      "computedHash": "0ea6c57d0e57d170894638bab190171274da34698fbb4fecc47e2e25e7772be4"
+    },
+    "product-launch": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/Marketing-Ops/product-launch/SKILL.md",
+      "computedHash": "06a369ff78505c0dbdbd018289dab6b7f2fa3276b3504381c16c117a6bfa8473"
+    },
+    "semgrep": {
+      "source": "trailofbits/skills",
+      "sourceType": "github",
+      "skillPath": "plugins/static-analysis/skills/semgrep/SKILL.md",
+      "computedHash": "6ce4dd995d671502bec8f33fa13d66ddf3d0e23e2d91a7d9c0531ae9ac547985"
+    },
+    "seo": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo/SKILL.md",
+      "computedHash": "df21ddb2403418505d3b9c1143ee50d8f80abe20aa5e15bba0292855682764e9"
+    },
+    "seo-ahrefs": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-ahrefs/SKILL.md",
+      "computedHash": "c3e3e943a023c7c5e57f5c3d599f5a3e5f58b009b80dc6e4d2cc7e31df368a96"
+    },
+    "seo-audit": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-audit/SKILL.md",
+      "computedHash": "63348e3c79e9dad2af83b238892c9f89d20d5a8abdcd7d16467e62ecd529e04a"
+    },
+    "seo-backlinks": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-backlinks/SKILL.md",
+      "computedHash": "0adcdac347ef03b5c53fcab50368bde2e00237cbb2bf6d0e15af777a977ab342"
+    },
+    "seo-bing": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-bing/SKILL.md",
+      "computedHash": "a688a44a4cd2c515bb83c4e267158cc77f8e05a1e57f3e402a8996100c43b176"
+    },
+    "seo-cluster": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-cluster/SKILL.md",
+      "computedHash": "9eae9ede93c2d9e66f96f8ba288bedbe9f3b6b6620efda1220a0b0862a329242"
+    },
+    "seo-competitor-pages": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-competitor-pages/SKILL.md",
+      "computedHash": "dce46a31312f7ba2a3c13222f6cd489baf1d3caafcb04727b5c576d3d1f5b2f4"
+    },
+    "seo-content": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-content/SKILL.md",
+      "computedHash": "e21b2b9967b8981f7cbeab7b19d5a8d833002609c7b837be78f2f3c29eef5cb6"
+    },
+    "seo-content-brief": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-content-brief/SKILL.md",
+      "computedHash": "16b413c133ecafc9403b923706ac404c97a58d2ddffd980ba0d5fb86e19568cc"
+    },
+    "seo-dataforseo": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-dataforseo/SKILL.md",
+      "computedHash": "33c8583a1a260377e4a7bd56e765f7aaafe1577bb376075477dedd73e20cb3d3"
+    },
+    "seo-drift": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-drift/SKILL.md",
+      "computedHash": "1f393a230f5274cac559b668ad63ca6ef448aad3400c70c61fbe654a0ba054ac"
+    },
+    "seo-ecommerce": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-ecommerce/SKILL.md",
+      "computedHash": "2f2b0383435a880a40d8f14429e181e27ed15f1cb4ea8a43d70a8753fdfe35e7"
+    },
+    "seo-firecrawl": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-firecrawl/SKILL.md",
+      "computedHash": "58fd13bcea1fe7fa74c32c7c8440271bb2beb748048eebf6729cc983307dc344"
+    },
+    "seo-flow": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-flow/SKILL.md",
+      "computedHash": "d8fbf1fd12a8124f220db2f0a9947170f1dc00c5efe27035dfa960fd9add9621"
+    },
+    "seo-geo": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-geo/SKILL.md",
+      "computedHash": "0dc3a6140a72fbf96d148e0d804b52dedcf8d0edaa9ad609fa0728b6e87ae7d1"
+    },
+    "seo-google": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-google/SKILL.md",
+      "computedHash": "252372b3c183cd0f850fbca3a207f095bf944624e8f99047fded69c8cf61cbe0"
+    },
+    "seo-hreflang": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-hreflang/SKILL.md",
+      "computedHash": "7bb2aab9bfd3280d78564beb36fe8c0e8a07900b0be48526c9fc973f706e2674"
+    },
+    "seo-image-gen": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-image-gen/SKILL.md",
+      "computedHash": "0fc6ea4f73fe4b03340d366f21dfba70dc9cc71a0ac66107818c4bfb35540a59"
+    },
+    "seo-images": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-images/SKILL.md",
+      "computedHash": "c5176bf598272ffd4d1685b557c55ca7a438714130e20849084d207e19347805"
+    },
+    "seo-local": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-local/SKILL.md",
+      "computedHash": "9236b5b22ead5230fa91febb06de87a7f681b5894c3e6ed8a62bdb92199470e6"
+    },
+    "seo-maps": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-maps/SKILL.md",
+      "computedHash": "19f9ec5d97c6dbfc13c10e5e1e6aea7c429794b0abbb54897a3aa4b00ec5c7af"
+    },
+    "seo-page": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-page/SKILL.md",
+      "computedHash": "c33a5668b3d902bf30643b590ae2b37debf88840edd83718a6b06243e644ade9"
+    },
+    "seo-plan": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-plan/SKILL.md",
+      "computedHash": "e3d8e67b91dfa9a12fceff566869eb2f8f0d11077c7331fa39155f2010e98457"
+    },
+    "seo-profound": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-profound/SKILL.md",
+      "computedHash": "897367e93239096917ff44733fd803a0f7fcf50020c11c3d249e08d53c79cb09"
+    },
+    "seo-programmatic": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-programmatic/SKILL.md",
+      "computedHash": "3af354c06ffce6c1212a4a71dd0bbb01f1bec6487e417318487678e2718a8e38"
+    },
+    "seo-report": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/seo-report/SKILL.md",
+      "computedHash": "f7711a31208e7dd8c3dabf9a80f119abd8a52def9ca5b12503a709cd992f5cf3"
+    },
+    "seo-schema": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-schema/SKILL.md",
+      "computedHash": "6de82ba2fce7247e88bae7ed983a428c395b033493b7b9f1bd42bb1f324e9544"
+    },
+    "seo-seranking": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-seranking/SKILL.md",
+      "computedHash": "18f83adcc1e247ef519e1a216ba7b772ccf622ca0cf30b9b86f3d755136eb4c4"
+    },
+    "seo-sitemap": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-sitemap/SKILL.md",
+      "computedHash": "e798294cf051b3c367be86c8fab7407302f0e6a7946c37641b05a5c8439e741a"
+    },
+    "seo-sxo": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-sxo/SKILL.md",
+      "computedHash": "baa60f676254e9c6006ff37702001d0bc2b50a8b02b2f4b060fc19fc68d84b16"
+    },
+    "seo-technical": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-technical/SKILL.md",
+      "computedHash": "e2a9997feda0c9015e7076f63600fa0bef5c808676ade008a0035365727266a1"
+    },
+    "seo-unlighthouse": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/SEO/claude-seo/seo-unlighthouse/SKILL.md",
+      "computedHash": "b199d55eef411f491906cd4ea23cd7cd6cbd325ffd40c058a1bc2e857e689249"
+    },
+    "slides": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/slides/SKILL.md",
+      "computedHash": "059825b15a508a5f1533ab646f968ffcbcdbb8eadd76c2d122151bfbcf19d287"
+    },
+    "ui-styling": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/ui-styling/SKILL.md",
+      "computedHash": "a598d8ad69832a394d4040e4c94e4b9c7b8daf2b1fdca050929058f7b70bc816"
+    },
+    "ui-ux-pro-max": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/ui-ux-pro-max/SKILL.md",
+      "computedHash": "9700c4f6c9460810a4158f3a6d3238d8ee58bc682e0aa7190c2c333cf6c666b1"
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/react-best-practices/SKILL.md",
+      "computedHash": "7991ed4fbecdac23f47c1a40c243e00a212a9e7f3604db93959b3ae11dffe299"
+    },
+    "writing-assistant": {
+      "source": "risukisu/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/Writing/writing-assistant/SKILL.md",
+      "computedHash": "b108faf97d7c551c085bac7184016e16824fa509b4b623c4fd6615f4f5929987"
+    }
+  }
+}

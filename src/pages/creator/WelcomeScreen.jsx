@@ -48,24 +48,13 @@ const WelcomeScreen = () => {
   return (
     <div className={styles.welcomeContainer}>
       <div className={styles.contentWrapper}>
-        {/* Logo Section */}
-        <div className={styles.logoSection}>
-          <div className={styles.logoCircle}>
-            <img 
-              src="https://res.cloudinary.com/dzvtsnpr6/image/upload/v1756973830/Copilot_20250904_134350_fyxhey.webp"
-              alt="AURAX Logo"
-              className={styles.logoImage}
-            />
-          </div>
-        </div>
-
         {/* Mobile-First Headline */}
         <h1 className={styles.welcomeTitle}>
           Welcome to AURAX
         </h1>
         
         <p className={styles.welcomeSubtitle}>
-          You're one step away from accessing hand-picked brand collaborations
+          Set up your creator profile to get access to hand-picked brand campaigns.
         </p>
 
         {/* Why This Matters (Mobile Info Box) */}
@@ -110,60 +99,18 @@ const WelcomeScreen = () => {
         {/* Single Primary CTA (Mobile-First) */}
         <div className={styles.ctaSection}>
           <button onClick={handleGetStarted} className={styles.primaryCta}>
-            Start Profile Setup
+            Start profile setup
             <svg className={styles.ctaArrow} viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
             </svg>
           </button>
-          <p className={styles.ctaHelper}>Required to access campaigns</p>
-        </div>
-
-        {/* Trust Signals (Compact) */}
-        <div className={styles.trustSignals}>
-          <div className={styles.trustItem}>
-            <span className={styles.trustIcon}>🔒</span>
-            <span className={styles.trustText}>Secure & Private</span>
-          </div>
-          <div className={styles.trustDivider}>•</div>
-          <div className={styles.trustItem}>
-            <span className={styles.trustIcon}>⚡</span>
-            <span className={styles.trustText}>Fast Approval</span>
-          </div>
-        </div>
-
-        {/* Hidden desktop cards */}
-        <div className={styles.desktopOnly}>
-          <div className={styles.cardsContainer}>
-            <div className={styles.valueCard}>
-              <div className={styles.cardIcon}>🎯</div>
-              <h3 className={styles.cardTitle}>Quality First</h3>
-              <p className={styles.cardDescription}>
-                Every creator is manually reviewed to ensure authentic brands connect with genuine influencers
-              </p>
-            </div>
-
-            <div className={styles.valueCard}>
-              <div className={styles.cardIcon}>🤝</div>
-              <h3 className={styles.cardTitle}>Trust Layer</h3>
-              <p className={styles.cardDescription}>
-                Our verification process builds confidence for brands seeking reliable collaborations
-              </p>
-            </div>
-
-            <div className={styles.valueCard}>
-            <div className={styles.cardIcon}>🚀</div>
-            <h3 className={styles.cardTitle}>Smart Matching</h3>
-            <p className={styles.cardDescription}>
-              AI-powered recommendations connect you with brands that align with your niche and values
-            </p>
-          </div>
-        </div>
+          <p className={styles.ctaHelper}>Takes about 3 minutes. Required to apply to campaigns.</p>
         </div>
 
         {/* Secondary Actions (Mobile) */}
         <div className={styles.secondaryActions}>
           <button onClick={() => navigate('/help')} className={styles.secondaryBtn}>
-            Need Help?
+            Get help
           </button>
         </div>
       </div>

@@ -3,10 +3,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
-import AdminNav from "../../components/admin/AdminNav";
 import CreatorDatabase from "./CreatorDatabase";
 import CreatorContactList from "./CreatorContactList";
 import styles from "./BrandIntelligence.module.css";
+import Icon from '../../components/ui/Icon';
 
 /**
  * Brand Intelligence Dashboard
@@ -195,7 +195,6 @@ const BrandIntelligenceDashboard = () => {
   if (loading || isLoading) {
     return (
       <div className={styles.pageWrapper}>
-        <AdminNav />
         <div className={styles.mainContent}>
           <div className={styles.container}>
             <div className={styles.loading}>
@@ -211,11 +210,10 @@ const BrandIntelligenceDashboard = () => {
   if (error) {
     return (
       <div className={styles.pageWrapper}>
-        <AdminNav />
         <div className={styles.mainContent}>
           <div className={styles.container}>
             <div className={styles.error}>
-              <h2>⚠️ Error</h2>
+              <h2>Error</h2>
               <p>{error}</p>
               <button onClick={fetchDashboardData}>Retry</button>
             </div>
@@ -227,18 +225,17 @@ const BrandIntelligenceDashboard = () => {
   
   return (
     <div className={styles.pageWrapper}>
-      <AdminNav />
       <div className={styles.mainContent}>
         <div className={styles.container}>
       {/* Header */}
       <div className={styles.header}>
         <div>
-          <h1>🧠 Brand Intelligence</h1>
-          <p>High-Intent Instagram Advertisers · India</p>
+          <h1>Brand intelligence</h1>
+          <p>Brands advertising on Instagram in India, ranked by buying intent.</p>
         </div>
         <div className={styles.headerActions}>
           <button className={styles.refreshBtn} onClick={fetchDashboardData}>
-            🔄 Refresh Data
+            Refresh data
           </button>
         </div>
       </div>
@@ -249,31 +246,31 @@ const BrandIntelligenceDashboard = () => {
           className={activeTab === "overview" ? styles.tabActive : ""}
           onClick={() => setActiveTab("overview")}
         >
-          📊 Overview
+          Overview
         </button>
         <button
           className={activeTab === "brands" ? styles.tabActive : ""}
           onClick={() => setActiveTab("brands")}
         >
-          🏢 All Brands
+          All Brands
         </button>
         <button
           className={activeTab === "trending" ? styles.tabActive : ""}
           onClick={() => setActiveTab("trending")}
         >
-          🔥 Trending
+          Trending
         </button>
         <button
           className={activeTab === "creators" ? styles.tabActive : ""}
           onClick={() => setActiveTab("creators")}
         >
-          👥 Creator Database
+          Creator Database
         </button>
         <button
           className={activeTab === "contacts" ? styles.tabActive : ""}
           onClick={() => setActiveTab("contacts")}
         >
-          📧 Contact List
+          Contact List
         </button>
       </div>
       
@@ -283,31 +280,31 @@ const BrandIntelligenceDashboard = () => {
           {/* Stats Grid */}
           <div className={styles.statsGrid}>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>🏢</div>
+              <div className={styles.statIcon}><Icon name="building" size={22} /></div>
               <div className={styles.statValue}>{stats.total_brands}</div>
               <div className={styles.statLabel}>Total Brands</div>
             </div>
             
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>🎯</div>
+              <div className={styles.statIcon}><Icon name="radar" size={22} /></div>
               <div className={styles.statValue}>{stats.high_intent_brands}</div>
               <div className={styles.statLabel}>High-Intent (8-10)</div>
             </div>
             
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>⚡</div>
+              <div className={styles.statIcon}><Icon name="trend" size={22} /></div>
               <div className={styles.statValue}>{stats.active_this_week}</div>
               <div className={styles.statLabel}>Active This Week</div>
             </div>
             
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>🆕</div>
+              <div className={styles.statIcon}><Icon name="sparkle" size={22} /></div>
               <div className={styles.statValue}>{stats.new_advertisers}</div>
               <div className={styles.statLabel}>New Advertisers</div>
             </div>
             
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>📈</div>
+              <div className={styles.statIcon}><Icon name="chart" size={22} /></div>
               <div className={styles.statValue}>{stats.scaling_brands}</div>
               <div className={styles.statLabel}>Scaling Fast</div>
             </div>
@@ -315,7 +312,7 @@ const BrandIntelligenceDashboard = () => {
           
           {/* Top Industries */}
           <div className={styles.section}>
-            <h2>🏭 Top Industries</h2>
+            <h2>Top Industries</h2>
             <div className={styles.industryList}>
               {stats.top_industries.map((industry, index) => (
                 <div key={index} className={styles.industryCard}>
@@ -329,7 +326,7 @@ const BrandIntelligenceDashboard = () => {
           
           {/* Trending Brands Preview */}
           <div className={styles.section}>
-            <h2>🔥 Trending Brands</h2>
+            <h2>Trending Brands</h2>
             <div className={styles.brandList}>
               {trendingBrands.slice(0, 5).map((brand) => (
                 <div 
@@ -347,8 +344,8 @@ const BrandIntelligenceDashboard = () => {
                     <span>{brand.industry}</span>
                     <span>•</span>
                     <span>{brand.active_ads} ads</span>
-                    {brand.is_new_advertiser && <span className={styles.newBadge}>NEW</span>}
-                    {brand.is_scaling && <span className={styles.scalingBadge}>📈 SCALING</span>}
+                    {brand.is_new_advertiser && <span className={styles.newBadge}>New</span>}
+                    {brand.is_scaling && <span className={styles.scalingBadge}>Scaling</span>}
                   </div>
                 </div>
               ))}
@@ -446,8 +443,8 @@ const BrandIntelligenceDashboard = () => {
                 </div>
                 
                 <div className={styles.brandTags}>
-                  {brand.is_new_advertiser && <span className={styles.newBadge}>🆕 NEW</span>}
-                  {brand.is_scaling && <span className={styles.scalingBadge}>📈 SCALING</span>}
+                  {brand.is_new_advertiser && <span className={styles.newBadge}>New</span>}
+                  {brand.is_scaling && <span className={styles.scalingBadge}>Scaling</span>}
                   {brand.cta_types.slice(0, 3).map((cta) => (
                     <span key={cta} className={styles.ctaBadge}>
                       {cta.replace("_", " ")}
@@ -477,7 +474,7 @@ const BrandIntelligenceDashboard = () => {
       {activeTab === "trending" && (
         <div className={styles.trendingTab}>
           <div className={styles.section}>
-            <h2>🔥 Brands with High Growth Signals</h2>
+            <h2>Brands with High Growth Signals</h2>
             <p>New advertisers or brands scaling ad spend rapidly</p>
             
             <div className={styles.brandList}>
@@ -501,10 +498,10 @@ const BrandIntelligenceDashboard = () => {
                   </div>
                   
                   <div className={styles.brandTags}>
-                    {brand.is_new_advertiser && <span className={styles.newBadge}>🆕 NEW ADVERTISER</span>}
-                    {brand.is_scaling && <span className={styles.scalingBadge}>📈 SCALING FAST</span>}
+                    {brand.is_new_advertiser && <span className={styles.newBadge}>New advertiser</span>}
+                    {brand.is_scaling && <span className={styles.scalingBadge}>Scaling fast</span>}
                     {brand.growth_velocity === "accelerating" && (
-                      <span className={styles.acceleratingBadge}>🚀 ACCELERATING</span>
+                      <span className={styles.acceleratingBadge}>Accelerating</span>
                     )}
                   </div>
                 </div>

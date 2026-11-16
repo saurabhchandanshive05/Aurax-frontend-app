@@ -47,10 +47,10 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: radial-gradient(1px 1px at 25% 25%, white, transparent),
+  background-image: var(--ax-night),
     radial-gradient(1px 1px at 50% 75%, rgba(255, 255, 255, 0.8), transparent),
     radial-gradient(1px 1px at 75% 50%, rgba(255, 255, 255, 0.6), transparent),
-    radial-gradient(1px 1px at 90% 10%, rgba(255, 255, 255, 0.9), transparent);
+    radial-gradient(1px 1px at 90% 10%, var(--ax-dusk), transparent);
   background-repeat: repeat;
   background-size: 400px 400px, 300px 300px, 200px 200px, 150px 150px;
   animation: aurax-stars-twinkle 15s ease-in-out infinite;
@@ -487,7 +487,7 @@
   width: 20px;
   height: 20px;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top: 2px solid white;
+  border-top: 2px solid var(--ax-line-strong);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }

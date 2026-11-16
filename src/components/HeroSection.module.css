@@ -14,7 +14,7 @@
   min-height: 100vh;
   width: 100vw;
   background: var(--bg-dark);
-  font-family: "Poppins", "Outfit", Arial, sans-serif;
+  font-family: var(--ax-font-ui);
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -49,7 +49,7 @@
 .heading {
   font-size: 4rem;
   color: var(--text-white);
-  font-family: "Poppins", "Outfit", Arial, sans-serif;
+  font-family: var(--ax-font-ui);
   font-weight: 700;
   line-height: 1.1;
   margin-bottom: 34px;

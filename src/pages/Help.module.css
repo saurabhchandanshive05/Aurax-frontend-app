@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--ax-night);
   padding: 40px 20px;
 }
 
@@ -52,7 +52,7 @@
   right: 8px;
   top: 50%;
   transform: translateY(-50%);
-  background: #4f46e5;
+  background: var(--ax-action);
   border: none;
   border-radius: 50%;
   width: 40px;
@@ -60,7 +60,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--ax-action-ink);
   cursor: pointer;
 }
 
@@ -77,7 +77,7 @@
 }
 
 .categoryCard {
-  background: white;
+  background: var(--ax-dusk);
   padding: 30px;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -92,19 +92,19 @@
 .categoryIcon {
   width: 50px;
   height: 50px;
-  color: #667eea;
+  color: var(--ax-cyan);
   margin-bottom: 20px;
 }
 
 .categoryCard h3 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #333;
+  color: var(--ax-text);
   margin-bottom: 12px;
 }
 
 .categoryCard p {
-  color: #666;
+  color: var(--ax-text-2);
   margin-bottom: 20px;
   line-height: 1.6;
 }
@@ -120,7 +120,7 @@
 }
 
 .helpLinks a {
-  color: #667eea;
+  color: var(--ax-cyan);
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
@@ -131,13 +131,13 @@
 }
 
 .helpLinks a:hover {
-  color: #5a67d8;
+  color: var(--ax-cyan);
   background: rgba(102, 126, 234, 0.1);
   padding-left: 8px;
 }
 
 .quickActions {
-  background: white;
+  background: var(--ax-dusk);
   padding: 40px;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -148,7 +148,7 @@
 .quickActions h2 {
   font-size: 2rem;
   font-weight: 600;
-  color: #333;
+  color: var(--ax-text);
   margin-bottom: 30px;
 }
 
@@ -161,8 +161,8 @@
 
 .actionButton {
   display: inline-block;
-  background: #667eea;
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
   padding: 14px 28px;
   border-radius: 8px;
   text-decoration: none;
@@ -174,8 +174,9 @@
 }
 
 .actionButton:hover {
-  background: #5a67d8;
+  background: var(--ax-action);
   transform: translateY(-2px);
+  color: var(--ax-action-ink);
 }
 
 .backLink {

@@ -14,21 +14,28 @@ export default class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center p-4 bg-red-50">
-          <div className="text-center max-w-md">
-            <h1 className="text-2xl font-bold text-red-600 mb-4">
-              Component Error
-            </h1>
-            <p className="text-gray-700 mb-2">
-              {this.state.error?.message ||
-                "An error occurred in this component"}
+        <div className="ax-error" role="alert">
+          <div className="ax-error__panel">
+            <h1 className="ax-error__title">This page didn't load</h1>
+            <p className="ax-error__text">
+              Something on this page stopped working. Try loading it again. If
+              it keeps happening, go back to the home page.
             </p>
-            <button
-              className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
-              onClick={() => this.setState({ hasError: false })}
-            >
-              Try Again
-            </button>
+            {this.state.error?.message && (
+              <p className="ax-error__detail">{this.state.error.message}</p>
+            )}
+            <div className="ax-error__actions">
+              <button
+                type="button"
+                className="ax-btn ax-btn--primary"
+                onClick={() => this.setState({ hasError: false })}
+              >
+                Try again
+              </button>
+              <a className="ax-btn ax-btn--ghost" href="/">
+                Go to home
+              </a>
+            </div>
           </div>
         </div>
       );

@@ -5,6 +5,8 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { ThemeProvider } from '@mui/material/styles';
+import muiAura from '../../theme/muiAura';
 import {
   Container,
   Paper,
@@ -161,16 +163,19 @@ const InstagramInfluencerProfiles = () => {
 
   if (checkingConfig) {
     return (
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <ThemeProvider theme={muiAura}>
+      <Container maxWidth="lg" sx={{ mt: 0, mb: 4 }}>
         <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
           <CircularProgress />
         </Box>
       </Container>
+      </ThemeProvider>
     );
   }
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+    <ThemeProvider theme={muiAura}>
+    <Container maxWidth="lg" sx={{ mt: 0, mb: 4 }}>
       {/* Header */}
       <Box sx={{ mb: 4 }}>
         <Box display="flex" alignItems="center" gap={2} mb={2}>
@@ -447,8 +452,8 @@ const InstagramInfluencerProfiles = () => {
 
       {/* Help Text */}
       {!profile && !loading && (
-        <Paper sx={{ p: 3, textAlign: 'center', backgroundColor: 'grey.50' }}>
-          <InstagramIcon sx={{ fontSize: 60, color: 'grey.400', mb: 2 }} />
+        <Paper sx={{ p: 3, textAlign: 'center', backgroundColor: 'background.default', borderStyle: 'dashed' }}>
+          <InstagramIcon sx={{ fontSize: 60, color: 'text.disabled', mb: 2 }} />
           <Typography variant="h6" color="text.secondary" gutterBottom>
             No Profile Loaded
           </Typography>
@@ -458,6 +463,7 @@ const InstagramInfluencerProfiles = () => {
         </Paper>
       )}
     </Container>
+    </ThemeProvider>
   );
 };
 

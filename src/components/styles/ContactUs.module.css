@@ -4,7 +4,7 @@
   background: linear-gradient(135deg, #0a0a1f 0%, #111122 100%);
   overflow: hidden;
   z-index: 2;
-  font-family: "Satoshi", "Neue Montreal", sans-serif;
+  font-family: var(--ax-font-ui);
 }
 
 .neuralGrid {
@@ -83,7 +83,7 @@
   font-weight: 800;
   background: var(
     --gradient-aurax-full,
-    linear-gradient(135deg, #a259ff 0%, #00e0ff 50%, #ff4fcb 100%)
+    var(--ax-aura-linear)
   );
   background-size: 300% 300%;
   -webkit-background-clip: text;
@@ -127,7 +127,7 @@
 .emailLink {
   font-size: 1.75rem;
   font-weight: 700;
-  background: linear-gradient(90deg, #5b77ff, #00d2ff);
+  background: var(--ax-aura-linear);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -217,7 +217,7 @@
 .emailDisplay:hover .emailLink {
   background: var(
     --gradient-aurax-accent,
-    linear-gradient(135deg, #00e0ff, #ff4fcb)
+    var(--ax-aura-linear)
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -399,7 +399,7 @@
   align-items: center;
   font-size: 1.25rem;
   font-weight: 600;
-  background: linear-gradient(90deg, #5b77ff, #ec4899);
+  background: var(--ax-aura-linear);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

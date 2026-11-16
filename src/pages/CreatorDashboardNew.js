@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { apiClient } from '../utils/apiClient';
 import { getApiEndpoint, redirectToInstagramOAuth } from '../utils/getApiUrl';
+import Icon from '../components/ui/Icon';
 import './CreatorDashboardNew.css';
 
 const CreatorDashboardNew = () => {
-  const navigate = useNavigate();
-  const { currentUser, logout } = useAuth();
-  const [activeSection, setActiveSection] = useState('overview');
+
+  const { currentUser } = useAuth();
+  // The active section lives in the URL (?section=) so the app rail can drive it.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const SECTIONS = ['overview', 'profile', 'content', 'monetization', 'orders', 'instagram'];
+  const requested = searchParams.get('section');
+  const activeSection = SECTIONS.includes(requested) ? requested : 'overview';
+  const setActiveSection = (next) => {
+    const params = new URLSearchParams(searchParams);
+    if (next === 'overview') params.delete('section'); else params.set('section', next);
+    setSearchParams(params);
+  };
   const [creatorData, setCreatorData] = useState(null);
   const [stats, setStats] = useState({
     totalFollowers: 0,
@@ -17,6 +27,7 @@ const CreatorDashboardNew = () => {
     pendingOrders: 0
   });
   const [loading, setLoading] = useState(true);
+  const [linkCopied, setLinkCopied] = useState(false);
   const [isConnectingInstagram, setIsConnectingInstagram] = useState(false);
   const [instagramProfile, setInstagramProfile] = useState(null);
   const [loadingInstagramData, setLoadingInstagramData] = useState(false);
@@ -100,142 +111,183 @@ const CreatorDashboardNew = () => {
     }
   };
 
-  const handleLogout = () => {
-    const confirmed = window.confirm('Are you sure you want to logout?');
-    if (confirmed) {
-      // Clear all authentication tokens
-      localStorage.removeItem('token');
-      localStorage.removeItem('authToken');
-      sessionStorage.removeItem('token');
-      sessionStorage.removeItem('authToken');
-      
-      // Call the logout function from AuthContext
-      logout();
-      
-      // Show success message
-      // Redirect to home
-      navigate('/', { replace: true });
-    }
-  };
+  const renderOverview = () => {
+    const name =
+      creatorData?.displayName || creatorData?.fullName || creatorData?.username || currentUser?.name || 'there';
+    const slug = creatorData?.creatorSlug;
+    const igConnected = Boolean(creatorData?.instagram?.connected || creatorData?.instagramConnected);
+    const hasOffer = Boolean(
+      creatorData?.subscriptionPlans?.length ||
+        creatorData?.services?.some((s) => s.isActive || s.enabled)
+    );
+    const steps = [
+      { key: 'profile', label: 'Add a display name and bio', done: Boolean(creatorData?.displayName && creatorData?.bio), cta: 'Edit profile', go: () => setActiveSection('profile') },
+      { key: 'photo', label: 'Add a profile photo', done: Boolean(creatorData?.profileImage), cta: 'Add photo', go: () => setActiveSection('profile') },
+      { key: 'instagram', label: 'Connect your Instagram account', done: igConnected, cta: 'Connect', go: () => setActiveSection('instagram') },
+      { key: 'page', label: 'Create your public page', done: Boolean(slug), cta: 'Create page', href: '/creator/public-page-setup' },
+      { key: 'offer', label: 'Add a subscription plan or service', done: hasOffer, cta: 'Set up', go: () => setActiveSection('monetization') },
+    ];
+    const doneCount = steps.filter((s) => s.done).length;
+    const complete = doneCount === steps.length;
+    const pct = Math.round((doneCount / steps.length) * 100);
+    const publicUrl = slug ? `https://auraxai.in/creator/${slug}` : null;
+    const fmt = (n) => Number(n || 0).toLocaleString('en-IN');
 
-  const renderOverview = () => (
-    <div className="dashboard-overview-new">
-      <h2>Welcome back, {creatorData?.displayName || creatorData?.username || currentUser?.name}! 👋</h2>
-      
-      <div className="stats-grid-new">
-        <div className="stat-card-new">
-          <div className="stat-icon-new">👥</div>
-          <div className="stat-content-new">
-            <h3>{stats.totalFollowers}</h3>
-            <p>Total Followers</p>
-          </div>
-        </div>
-        
-        <div className="stat-card-new earnings-new">
-          <div className="stat-icon-new">💰</div>
-          <div className="stat-content-new">
-            <h3>₹{stats.totalEarnings}</h3>
-            <p>Total Earnings</p>
-          </div>
-        </div>
-        
-        <div className="stat-card-new">
-          <div className="stat-icon-new">⭐</div>
-          <div className="stat-content-new">
-            <h3>{stats.activeSubscriptions}</h3>
-            <p>Active Subscriptions</p>
-          </div>
-        </div>
-        
-        <div className="stat-card-new pending-new">
-          <div className="stat-icon-new">📬</div>
-          <div className="stat-content-new">
-            <h3>{stats.pendingOrders}</h3>
-            <p>Pending Orders</p>
-          </div>
-        </div>
-      </div>
+    const copyLink = () => {
+      navigator.clipboard.writeText(publicUrl).then(() => {
+        setLinkCopied(true);
+        setTimeout(() => setLinkCopied(false), 2000);
+      });
+    };
 
-      <div className="quick-actions-new">
-        <h3>Quick Actions</h3>
-        <div className="action-buttons-new">
-          <button onClick={() => setActiveSection('profile')} className="action-btn-new">
-            ✏️ Edit Profile
-          </button>
-          <button onClick={() => setActiveSection('content')} className="action-btn-new">
-            📸 Upload Content
-          </button>
-          <button onClick={() => setActiveSection('monetization')} className="action-btn-new">
-            💳 Manage Plans
-          </button>
-          <button onClick={() => setActiveSection('orders')} className="action-btn-new">
-            📦 View Orders
-          </button>
-        </div>
-      </div>
+    return (
+      <div className="cd-overview">
+        <header className="cd-hero">
+          <div
+            className="ax-ring cd-hero__ring"
+            style={{ '--ring-size': '88px', '--ring-fill': pct }}
+            role="img"
+            aria-label={`Setup ${pct}% complete`}
+          >
+            {creatorData?.profileImage ? (
+              <img className="cd-hero__photo" src={creatorData.profileImage} alt="" />
+            ) : (
+              <span className="cd-hero__initial">{name.charAt(0).toUpperCase()}</span>
+            )}
+          </div>
+          <div className="cd-hero__text">
+            <h1>Welcome back, {name}</h1>
+            <p>
+              {complete
+                ? 'Your setup is complete. Share your public page to start earning.'
+                : `${doneCount} of ${steps.length} setup steps done. Finish the rest so brands and fans can find you.`}
+            </p>
+          </div>
+          <div className="cd-hero__actions">
+            {slug ? (
+              <a className="ax-btn ax-btn--ghost" href={`/creator/${slug}`} target="_blank" rel="noopener noreferrer">
+                View public page <Icon name="external" size={16} />
+              </a>
+            ) : (
+              <a className="ax-btn ax-btn--primary" href="/creator/public-page-setup">
+                Create public page
+              </a>
+            )}
+          </div>
+        </header>
 
-      {creatorData?.creatorSlug && (
-        <div className="public-page-link-new">
-          <h3>Your Public Page 🌐</h3>
-          <div className="page-link-container">
-            <a 
-              href={`/creator/${creatorData.creatorSlug}`} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="page-link-new"
-            >
-              https://auraxai.in/creator/{creatorData.creatorSlug}
+        <section className="cd-stats" aria-label="Your numbers">
+          <div className="cd-stat">
+            <span className="cd-stat__label">Followers</span>
+            <span className="cd-stat__value">{fmt(stats.totalFollowers)}</span>
+          </div>
+          <div className="cd-stat cd-stat--money">
+            <span className="cd-stat__label">Earnings</span>
+            <span className="cd-stat__value">₹{fmt(stats.totalEarnings)}</span>
+          </div>
+          <div className="cd-stat">
+            <span className="cd-stat__label">Subscribers</span>
+            <span className="cd-stat__value">{fmt(stats.activeSubscriptions)}</span>
+          </div>
+          <div className="cd-stat">
+            <span className="cd-stat__label">Pending orders</span>
+            <span className="cd-stat__value">{fmt(stats.pendingOrders)}</span>
+          </div>
+        </section>
+
+        <div className="cd-grid">
+          <section className="cd-panel">
+            <h2 className="cd-panel__title">{complete ? 'Your public page' : 'Finish your setup'}</h2>
+            {!complete && (
+              <ol className="cd-steps">
+                {steps.map((step) => (
+                  <li key={step.key} className={`cd-step${step.done ? ' is-done' : ''}`}>
+                    <Icon name={step.done ? 'check-circle' : 'circle'} size={20} className="cd-step__icon" />
+                    <span className="cd-step__label">{step.label}</span>
+                    {step.done ? (
+                      <span className="cd-step__state">Done</span>
+                    ) : step.href ? (
+                      <a className="cd-step__cta" href={step.href}>{step.cta}</a>
+                    ) : (
+                      <button type="button" className="cd-step__cta" onClick={step.go}>{step.cta}</button>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            )}
+            {publicUrl && (
+              <div className="cd-link">
+                <a href={`/creator/${slug}`} target="_blank" rel="noopener noreferrer" className="cd-link__url">
+                  {publicUrl}
+                </a>
+                <button type="button" className="ax-btn ax-btn--ghost cd-link__copy" onClick={copyLink}>
+                  {linkCopied ? 'Copied' : 'Copy link'}
+                </button>
+                <p className="cd-link__hint" aria-live="polite">Add this link to your Instagram bio.</p>
+              </div>
+            )}
+          </section>
+
+          <section className="cd-panel">
+            <h2 className="cd-panel__title">Shortcuts</h2>
+            <ul className="cd-shortcuts">
+              {[
+                { icon: 'user', label: 'Edit profile', section: 'profile' },
+                { icon: 'image', label: 'Upload content', section: 'content' },
+                { icon: 'wallet', label: 'Manage plans and services', section: 'monetization' },
+                { icon: 'package', label: 'View orders', section: 'orders' },
+              ].map((s) => (
+                <li key={s.section}>
+                  <button type="button" className="cd-shortcut" onClick={() => setActiveSection(s.section)}>
+                    <Icon name={s.icon} size={18} />
+                    <span>{s.label}</span>
+                    <Icon name="chevron-right" size={16} className="cd-shortcut__go" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <a className="cd-live" href="/live/campaigns">
+              <span className="cd-live__dot" aria-hidden="true" />
+              <span>
+                <strong>LIVE campaigns</strong>
+                <span>Brands looking for creators right now</span>
+              </span>
+              <Icon name="arrow-right" size={18} />
             </a>
-            <button 
-              onClick={() => navigator.clipboard.writeText(`https://auraxai.in/creator/${creatorData.creatorSlug}`)}
-              className="copy-link-btn"
-            >
-              📋 Copy
-            </button>
-          </div>
-          <p className="page-hint">Share this link on your Instagram bio!</p>
+          </section>
         </div>
-      )}
-
-      {!creatorData?.creatorSlug && (
-        <div className="setup-prompt">
-          <h3>⚠️ Complete Your Setup</h3>
-          <p>Create your public creator page to start monetizing!</p>
-          <button onClick={() => window.location.href = '/creator/public-page-setup'} className="setup-btn">
-            Create Public Page →
-          </button>
-        </div>
-      )}
-    </div>
-  );
+      </div>
+    );
+  };
 
   const renderProfileManagement = () => (
     <div className="dashboard-profile-new">
-      <h2>Profile Management</h2>
+      <h2>Profile</h2>
+      <p className="section-description">This is what brands and fans see on your public page.</p>
       <ProfileEditForm creatorData={creatorData} onUpdate={fetchDashboardData} />
     </div>
   );
 
   const renderContentManagement = () => (
     <div className="dashboard-content-new">
-      <h2>Content & Exclusives</h2>
-      <p className="section-description">Upload and manage your exclusive content for subscribers</p>
+      <h2>Content</h2>
+      <p className="section-description">Exclusive posts for your subscribers.</p>
       <ContentManager creatorId={creatorData?._id} />
     </div>
   );
 
   const renderMonetization = () => (
     <div className="dashboard-monetization-new">
-      <h2>Monetization Controls</h2>
-      <p className="section-description">Manage your subscription plans and services</p>
+      <h2>Monetization</h2>
+      <p className="section-description">Set what fans pay for subscriptions and one-off requests.</p>
       <MonetizationSettings creatorData={creatorData} onUpdate={fetchDashboardData} />
     </div>
   );
 
   const renderOrders = () => (
     <div className="dashboard-orders-new">
-      <h2>Orders & Messages</h2>
-      <p className="section-description">View and respond to your fan requests</p>
+      <h2>Orders</h2>
+      <p className="section-description">Paid requests from your fans.</p>
       <OrdersManager creatorId={creatorData?._id} />
     </div>
   );
@@ -286,136 +338,61 @@ const CreatorDashboardNew = () => {
   };
 
   const renderInstagram = () => {
-    // Debug logging for Instagram connection state
+    const connected = creatorData?.instagram?.connected || creatorData?.instagramConnected;
+    const profile = instagramProfile?.profile;
+    const metrics = profile?.engagement_metrics;
+    const fmt = (n) => Number(n || 0).toLocaleString('en-IN');
     return (
       <div className="dashboard-instagram-new">
-        <h2>📱 Connect Instagram</h2>
-        <p className="section-description">Link your Instagram to display your feed and grow your following</p>
-        
+        <h2>Instagram</h2>
+        <p className="section-description">Connect Instagram to show your feed and real audience numbers to brands.</p>
+
         <div className="instagram-status-card">
-          {creatorData?.instagram?.connected || creatorData?.instagramConnected ? (
+          {connected ? (
             <div className="instagram-connected">
-              <div className="status-indicator connected">✓ Connected</div>
-              
+              <span className="status-indicator connected">
+                <Icon name="check" size={14} /> Connected
+              </span>
+
               {loadingInstagramData ? (
-                <div style={{padding: '20px', textAlign: 'center'}}>
-                  <p>Loading Instagram data...</p>
-                </div>
+                <p className="ig-muted">Loading Instagram data…</p>
               ) : instagramProfile ? (
                 <>
-                  {/* Profile Header */}
-                  <div style={{display: 'flex', alignItems: 'center', gap: '16px', margin: '16px 0'}}>
-                    {instagramProfile.profile?.profile_picture_url && (
-                      <img 
-                        src={instagramProfile.profile.profile_picture_url} 
-                        alt="Profile" 
-                        style={{width: '64px', height: '64px', borderRadius: '50%', border: '2px solid #E1306C'}}
-                      />
+                  <div className="ig-profile">
+                    {profile?.profile_picture_url && (
+                      <span className="ax-ring" style={{ '--ring-size': '64px' }}>
+                        <img className="ig-profile__photo" src={profile.profile_picture_url} alt="" />
+                      </span>
                     )}
                     <div>
-                      <p className="ig-username" style={{margin: '0 0 4px 0'}}>
-                        @{instagramProfile.profile?.username || creatorData?.instagram?.username}
-                      </p>
-                      <p style={{color: '#4a5568', fontSize: '12px', margin: 0}}>
-                        {instagramProfile.profile?.account_type} Account
-                      </p>
+                      <p className="ig-username">@{profile?.username || creatorData?.instagram?.username}</p>
+                      {profile?.account_type && <p className="ig-muted">{profile.account_type} account</p>}
                     </div>
                   </div>
 
-                  {/* Stats Grid */}
-                  <div style={{
-                    display: 'grid', 
-                    gridTemplateColumns: 'repeat(3, 1fr)', 
-                    gap: '12px', 
-                    margin: '16px 0',
-                    padding: '16px',
-                    background: '#f7fafc',
-                    borderRadius: '8px'
-                  }}>
-                    <div style={{textAlign: 'center'}}>
-                      <div style={{fontSize: '24px', fontWeight: 'bold', color: '#2d3748'}}>
-                        {instagramProfile.profile?.followers_count?.toLocaleString() || 0}
-                      </div>
-                      <div style={{fontSize: '12px', color: '#718096'}}>Followers</div>
-                    </div>
-                    <div style={{textAlign: 'center'}}>
-                      <div style={{fontSize: '24px', fontWeight: 'bold', color: '#2d3748'}}>
-                        {instagramProfile.profile?.follows_count?.toLocaleString() || 0}
-                      </div>
-                      <div style={{fontSize: '12px', color: '#718096'}}>Following</div>
-                    </div>
-                    <div style={{textAlign: 'center'}}>
-                      <div style={{fontSize: '24px', fontWeight: 'bold', color: '#2d3748'}}>
-                        {instagramProfile.profile?.media_count?.toLocaleString() || 0}
-                      </div>
-                      <div style={{fontSize: '12px', color: '#718096'}}>Posts</div>
-                    </div>
-                  </div>
+                  <dl className="ig-stats">
+                    <div><dt>Followers</dt><dd>{fmt(profile?.followers_count)}</dd></div>
+                    <div><dt>Following</dt><dd>{fmt(profile?.follows_count)}</dd></div>
+                    <div><dt>Posts</dt><dd>{fmt(profile?.media_count)}</dd></div>
+                  </dl>
 
-                  {/* Engagement Metrics */}
-                  {instagramProfile.profile?.engagement_metrics && (
-                    <div style={{
-                      padding: '12px',
-                      background: '#f0f9ff',
-                      borderRadius: '8px',
-                      margin: '12px 0'
-                    }}>
-                      <div style={{fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#1e40af'}}>
-                        📊 Engagement Metrics
-                      </div>
-                      <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', fontSize: '13px'}}>
-                        <div>
-                          <span style={{color: '#64748b'}}>Avg. Engagement:</span> 
-                          <strong style={{marginLeft: '4px'}}>
-                            {instagramProfile.profile.engagement_metrics.avg_engagement_per_post}
-                          </strong>
-                        </div>
-                        <div>
-                          <span style={{color: '#64748b'}}>Engagement Rate:</span> 
-                          <strong style={{marginLeft: '4px'}}>
-                            {instagramProfile.profile.engagement_metrics.engagement_rate}%
-                          </strong>
-                        </div>
-                      </div>
-                    </div>
+                  {metrics && (
+                    <dl className="ig-stats ig-stats--engagement">
+                      <div><dt>Average engagement per post</dt><dd>{metrics.avg_engagement_per_post}</dd></div>
+                      <div><dt>Engagement rate</dt><dd>{metrics.engagement_rate}%</dd></div>
+                    </dl>
                   )}
 
-                  {/* Recent Posts Preview */}
                   {instagramProfile.media && instagramProfile.media.length > 0 && (
-                    <div style={{margin: '16px 0'}}>
-                      <div style={{fontSize: '14px', fontWeight: '600', marginBottom: '12px'}}>
-                        📸 Recent Posts ({instagramProfile.media.length})
-                      </div>
-                      <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(4, 1fr)',
-                        gap: '8px'
-                      }}>
+                    <div className="ig-media">
+                      <p className="ig-media__title">Recent posts</p>
+                      <div className="ig-media__grid">
                         {instagramProfile.media.slice(0, 4).map((post) => (
-                          <a 
-                            key={post.id}
-                            href={post.permalink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{
-                              position: 'relative',
-                              paddingTop: '100%',
-                              overflow: 'hidden',
-                              borderRadius: '8px',
-                              cursor: 'pointer'
-                            }}
-                          >
+                          <a key={post.id} href={post.permalink} target="_blank" rel="noopener noreferrer" className="ig-media__item">
                             <img
                               src={post.thumbnail_url || post.media_url}
                               alt={post.caption?.substring(0, 50) || 'Instagram post'}
-                              style={{
-                                position: 'absolute',
-                                top: 0,
-                                left: 0,
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover'
-                              }}
+                              loading="lazy"
                             />
                           </a>
                         ))}
@@ -423,196 +400,62 @@ const CreatorDashboardNew = () => {
                     </div>
                   )}
 
-                  <p style={{color: '#4a5568', fontSize: '12px', margin: '12px 0 8px 0'}}>
-                    Business Account ID: {creatorData?.instagram?.accountId}
-                  </p>
+                  <p className="ig-muted ig-account-id">Business account ID: {creatorData?.instagram?.accountId}</p>
                 </>
               ) : (
                 <>
                   <p className="ig-username">@{creatorData?.instagram?.username || creatorData?.instagramUsername}</p>
-                  <p style={{color: '#4a5568', fontSize: '14px', margin: '8px 0'}}>
-                    Instagram Business Account ID: {creatorData?.instagram?.accountId}
-                  </p>
+                  <p className="ig-muted ig-account-id">Business account ID: {creatorData?.instagram?.accountId}</p>
                 </>
               )}
-              
+
               <button className="btn-secondary" onClick={handleInstagramDisconnect}>
                 Disconnect Instagram
               </button>
             </div>
           ) : (
             <div className="instagram-not-connected">
-              <div className="status-indicator not-connected">Not Connected</div>
-              <p style={{fontSize: '15px', color: '#4a5568', marginBottom: '20px'}}>
-                Link your Instagram to display your feed and grow your following
-              </p>
+              <span className="status-indicator not-connected">Not connected</span>
 
-              {/* Desktop Version - Detailed Requirements */}
-              <div className="ig-requirements-desktop">
-                <div style={{
-                  background: '#f0f9ff', 
-                  padding: '20px', 
-                  borderRadius: '12px', 
-                  marginBottom: '20px',
-                  border: '1px solid #bfdbfe'
-                }}>
-                  <div style={{fontSize: '16px', fontWeight: '600', color: '#1e40af', marginBottom: '12px'}}>
-                    📋 Before you connect, make sure:
-                  </div>
-                  <ul style={{
-                    margin: '0', 
-                    paddingLeft: '24px', 
-                    fontSize: '14px', 
-                    lineHeight: '1.8',
-                    color: '#1e3a8a'
-                  }}>
-                    <li>Your Instagram account is a <strong>Creator or Business account</strong></li>
-                    <li>Your Instagram is <strong>linked to a Facebook Page</strong></li>
-                    <li>You're <strong>logged into the correct Instagram account</strong></li>
-                    <li>You grant access to <strong>basic profile & insights</strong> (followers, reach, posts)</li>
-                  </ul>
-                </div>
+              <div className="ig-requirements">
+                <p className="ig-requirements__title">Before you connect, check that:</p>
+                <ul>
+                  <li>Your Instagram is a <strong>Creator or Business account</strong></li>
+                  <li>It is <strong>linked to a Facebook Page</strong></li>
+                  <li>You are <strong>logged into the right Instagram account</strong></li>
+                  <li>You allow access to <strong>basic profile and insights</strong> (followers, reach, posts)</li>
+                </ul>
               </div>
 
-              {/* Mobile Version - Shorter Requirements */}
-              <div className="ig-requirements-mobile">
-                <div style={{
-                  background: '#f0f9ff', 
-                  padding: '16px', 
-                  borderRadius: '12px', 
-                  marginBottom: '16px',
-                  border: '1px solid #bfdbfe'
-                }}>
-                  <div style={{fontSize: '14px', fontWeight: '600', color: '#1e40af', marginBottom: '10px'}}>
-                    📋 Requirements
-                  </div>
-                  <ul style={{
-                    margin: '0', 
-                    paddingLeft: '20px', 
-                    fontSize: '13px', 
-                    lineHeight: '1.6',
-                    color: '#1e3a8a'
-                  }}>
-                    <li>Creator/Business Instagram account</li>
-                    <li>Linked Facebook Page</li>
-                    <li>Permission to fetch profile & insights</li>
-                  </ul>
-                </div>
-              </div>
-
-            <button 
-              className="btn-primary btn-connect-instagram" 
-              onClick={handleInstagramConnect}
-              disabled={isConnectingInstagram}
-              style={isConnectingInstagram ? {opacity: 0.6, cursor: 'not-allowed'} : {}}
-            >
-              {isConnectingInstagram ? '⏳ Connecting...' : '🔗 Connect Instagram Account'}
-            </button>
-          </div>
-        )}
+              <button
+                className="btn-primary btn-connect-instagram"
+                onClick={handleInstagramConnect}
+                disabled={isConnectingInstagram}
+              >
+                <Icon name="instagram" size={18} />
+                {isConnectingInstagram ? 'Connecting…' : 'Connect Instagram'}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
     );
   };
 
   if (loading) {
     return (
-      <div className="dashboard-loading-new">
-        <div className="spinner-new"></div>
-        <p>Loading your dashboard...</p>
+      <div className="dashboard-loading-new" role="status">
+        <div className="ax-ring ax-loader__ring" aria-hidden="true"></div>
+        <p>Loading your dashboard…</p>
       </div>
     );
   }
 
   return (
     <div className="creator-dashboard-new">
-      <aside className="dashboard-sidebar-new">
-        <div className="sidebar-header-new">
-          <div className="logo-section">
-            <h2>💎 AURAX</h2>
-            <span className="creator-badge">Creator</span>
-          </div>
-        </div>
-        
-        <nav className="sidebar-nav-new">
-          <button 
-            className={activeSection === 'overview' ? 'active-nav' : ''}
-            onClick={() => setActiveSection('overview')}
-          >
-            <span className="nav-icon-new">🏠</span>
-            <span>Overview</span>
-          </button>
-          
-          <button 
-            className={activeSection === 'profile' ? 'active-nav' : ''}
-            onClick={() => setActiveSection('profile')}
-          >
-            <span className="nav-icon-new">👤</span>
-            <span>Profile</span>
-          </button>
-          
-          <button 
-            className={activeSection === 'content' ? 'active-nav' : ''}
-            onClick={() => setActiveSection('content')}
-          >
-            <span className="nav-icon-new">📸</span>
-            <span>Content</span>
-          </button>
-          
-          <button 
-            className={activeSection === 'monetization' ? 'active-nav' : ''}
-            onClick={() => setActiveSection('monetization')}
-          >
-            <span className="nav-icon-new">💰</span>
-            <span>Monetization</span>
-          </button>
-          
-          <button 
-            className={activeSection === 'orders' ? 'active-nav' : ''}
-            onClick={() => setActiveSection('orders')}
-          >
-            <span className="nav-icon-new">📦</span>
-            <span>Orders</span>
-            {stats.pendingOrders > 0 && (
-              <span className="badge-new">{stats.pendingOrders}</span>
-            )}
-          </button>
-          
-          <button 
-            className={activeSection === 'instagram' ? 'active-nav' : ''}
-            onClick={() => setActiveSection('instagram')}
-          >
-            <span className="nav-icon-new">📱</span>
-            <span>Connect Instagram</span>
-          </button>
-          
-          <button 
-            className={activeSection === 'analytics' ? 'active-nav' : ''}
-            onClick={() => setActiveSection('analytics')}
-            disabled
-          >
-            <span className="nav-icon-new">📊</span>
-            <span>Analytics</span>
-            <span className="coming-soon-badge">Soon</span>
-          </button>
-        </nav>
+      {/* Navigation is provided by the app shell rail (see components/layout/appNav.js). */}
 
-        <div className="sidebar-footer-new">
-          <button 
-            onClick={() => navigate('/')} 
-            className="home-link"
-            style={{ marginBottom: '8px', border: 'none', background: 'transparent', cursor: 'pointer', color: '#888', transition: 'color 0.2s' }}
-            onMouseOver={(e) => e.target.style.color = '#fff'}
-            onMouseOut={(e) => e.target.style.color = '#888'}
-          >
-            🏠 Back to Home
-          </button>
-          <a href="/creator/welcome" className="settings-link">⚙️ Settings</a>
-          <button onClick={handleLogout} className="logout-link">🚪 Logout</button>
-        </div>
-      </aside>
-
-      <main className="dashboard-content-area-new">
+      <div className="dashboard-content-area-new">
         {activeSection === 'overview' && renderOverview()}
         {activeSection === 'profile' && renderProfileManagement()}
         {activeSection === 'content' && renderContentManagement()}
@@ -626,7 +469,7 @@ const CreatorDashboardNew = () => {
             <p>Coming soon! Track your page visits, link clicks, conversions, and revenue growth.</p>
           </div>
         )}
-      </main>
+      </div>
     </div>
   );
 };
@@ -671,11 +514,11 @@ const ProfileEditForm = ({ creatorData, onUpdate }) => {
       });
       
       if (response.success) {
-        setMessage('✅ Profile updated successfully!');
+        setMessage('Profile saved.');
         onUpdate();
       }
     } catch (error) {
-      setMessage('❌ Failed to update profile');
+      setMessage('Profile not saved. Check your connection and try again.');
     } finally {
       setSaving(false);
     }
@@ -683,11 +526,11 @@ const ProfileEditForm = ({ creatorData, onUpdate }) => {
 
   return (
     <form onSubmit={handleSubmit} className="profile-edit-form-new">
-      {message && <div className={`message-box ${message.includes('✅') ? 'success' : 'error'}`}>{message}</div>}
+      {message && <div role="status" className={`message-box ${message.startsWith('Profile saved') ? 'success' : 'error'}`}>{message}</div>}
       
       <div className="form-row">
         <div className="form-group-new">
-          <label>Display Name *</label>
+          <label>Display name *</label>
           <input
             type="text"
             value={formData.displayName}
@@ -698,7 +541,7 @@ const ProfileEditForm = ({ creatorData, onUpdate }) => {
         </div>
 
         <div className="form-group-new">
-          <label>Total Followers</label>
+          <label>Total followers</label>
           <input
             type="number"
             value={formData.totalFollowers}
@@ -719,7 +562,7 @@ const ProfileEditForm = ({ creatorData, onUpdate }) => {
       </div>
 
       <div className="form-group-new">
-        <label>Welcome Message</label>
+        <label>Welcome message</label>
         <textarea
           value={formData.welcomeMessage}
           onChange={(e) => setFormData({...formData, welcomeMessage: e.target.value})}
@@ -730,7 +573,7 @@ const ProfileEditForm = ({ creatorData, onUpdate }) => {
 
       <div className="form-row">
         <div className="form-group-new">
-          <label>Profile Image URL</label>
+          <label>Profile image URL</label>
           <input
             type="url"
             value={formData.profileImage}
@@ -740,7 +583,7 @@ const ProfileEditForm = ({ creatorData, onUpdate }) => {
         </div>
 
         <div className="form-group-new">
-          <label>Cover Image URL</label>
+          <label>Cover image URL</label>
           <input
             type="url"
             value={formData.coverImage}
@@ -751,7 +594,7 @@ const ProfileEditForm = ({ creatorData, onUpdate }) => {
       </div>
 
       <div className="form-group-new">
-        <label>Instagram Username</label>
+        <label>Instagram username</label>
         <div className="input-with-prefix">
           <span className="input-prefix">@</span>
           <input
@@ -764,7 +607,7 @@ const ProfileEditForm = ({ creatorData, onUpdate }) => {
       </div>
 
       <button type="submit" disabled={saving} className="save-btn-new">
-        {saving ? '💾 Saving...' : '✓ Save Changes'}
+        {saving ? 'Saving…' : 'Save changes'}
       </button>
     </form>
   );
@@ -799,7 +642,7 @@ const ContentManager = ({ creatorId }) => {
     <div className="content-manager-new">
       <div className="content-header-new">
         <button onClick={() => setShowUploadForm(true)} className="upload-btn-new">
-          ➕ Upload New Content
+          <Icon name="plus" size={18} /> Upload content
         </button>
       </div>
 
@@ -818,9 +661,9 @@ const ContentManager = ({ creatorId }) => {
           <div className="loading-state">Loading content...</div>
         ) : posts.length === 0 ? (
           <div className="empty-state-new">
-            <div className="empty-icon">📸</div>
+            <div className="empty-icon"><Icon name="image" size={28} /></div>
             <h3>No content yet</h3>
-            <p>Upload your first exclusive post to start monetizing!</p>
+            <p>Upload your first exclusive post. Subscribers see it on your public page.</p>
             <button onClick={() => setShowUploadForm(true)} className="empty-action-btn">
               Upload Content
             </button>
@@ -831,14 +674,14 @@ const ContentManager = ({ creatorId }) => {
               <div className="content-media">
                 <img src={post.mediaUrl} alt={post.title} />
                 <span className={`lock-badge-new ${post.isLocked ? 'locked' : 'public'}`}>
-                  {post.isLocked ? '🔒' : '🌐'}
+                  {post.isLocked ? 'Locked' : 'Public'}
                 </span>
               </div>
               <div className="content-info-new">
                 <h4>{post.title}</h4>
                 <p>{post.description}</p>
                 {post.requiresSubscription && (
-                  <span className="sub-required">⭐ Subscription Required</span>
+                  <span className="sub-required">Subscribers only</span>
                 )}
               </div>
             </div>
@@ -886,8 +729,8 @@ const ContentUploadForm = ({ onClose, onSuccess }) => {
     <div className="upload-modal-new">
       <div className="upload-form-container-new">
         <div className="upload-header-new">
-          <h3>📸 Upload Exclusive Content</h3>
-          <button onClick={onClose} className="close-btn-new">✕</button>
+          <h3>Upload content</h3>
+          <button type="button" onClick={onClose} className="close-btn-new" aria-label="Close"><Icon name="x" size={18} /></button>
         </div>
 
         <form onSubmit={handleSubmit} className="upload-form-new">
@@ -925,13 +768,13 @@ const ContentUploadForm = ({ onClose, onSuccess }) => {
           </div>
 
           <div className="form-group-new">
-            <label>Media Type</label>
+            <label>Media type</label>
             <select
               value={formData.mediaType}
               onChange={(e) => setFormData({...formData, mediaType: e.target.value})}
             >
-              <option value="image">📷 Image</option>
-              <option value="video">🎥 Video</option>
+              <option value="image">Image</option>
+              <option value="video">Video</option>
             </select>
           </div>
 
@@ -942,7 +785,7 @@ const ContentUploadForm = ({ onClose, onSuccess }) => {
                 checked={formData.isLocked}
                 onChange={(e) => setFormData({...formData, isLocked: e.target.checked})}
               />
-              <span>🔒 Lock content (require login to view)</span>
+              <span>Lock content (viewers must log in)</span>
             </label>
           </div>
 
@@ -953,7 +796,7 @@ const ContentUploadForm = ({ onClose, onSuccess }) => {
                 checked={formData.requiresSubscription}
                 onChange={(e) => setFormData({...formData, requiresSubscription: e.target.checked})}
               />
-              <span>⭐ Require active subscription</span>
+              <span>Subscribers only</span>
             </label>
           </div>
 
@@ -962,7 +805,7 @@ const ContentUploadForm = ({ onClose, onSuccess }) => {
               Cancel
             </button>
             <button type="submit" disabled={uploading} className="submit-btn-new">
-              {uploading ? '⏳ Uploading...' : '✓ Upload Content'}
+              {uploading ? 'Uploading…' : 'Upload content'}
             </button>
           </div>
         </form>
@@ -1053,14 +896,14 @@ const MonetizationSettings = ({ creatorData, onUpdate }) => {
     <div className="monetization-settings-new">
       <div className="monetization-section-new">
         <div className="section-header-new">
-          <h3>💳 Subscription Plans</h3>
-          <button onClick={addPlan} className="add-plan-btn-new">+ Add Plan</button>
+          <h3>Subscription plans</h3>
+          <button type="button" onClick={addPlan} className="add-plan-btn-new"><Icon name="plus" size={16} /> Add plan</button>
         </div>
         
         <div className="plans-list-new">
           {plans.length === 0 ? (
             <div className="empty-plans">
-              <p>No subscription plans yet. Add your first plan!</p>
+              <p>No plans yet. Add a monthly plan to start taking subscriptions.</p>
             </div>
           ) : (
             plans.map((plan, index) => (
@@ -1076,9 +919,9 @@ const MonetizationSettings = ({ creatorData, onUpdate }) => {
                         setPlans(newPlans);
                       }}
                     >
-                      <option value="monthly">📅 Monthly</option>
-                      <option value="quarterly">📅 Quarterly (3 months)</option>
-                      <option value="yearly">📅 Yearly (12 months)</option>
+                      <option value="monthly">Monthly</option>
+                      <option value="quarterly">Quarterly (3 months)</option>
+                      <option value="yearly">Yearly (12 months)</option>
                     </select>
                   </div>
                   
@@ -1102,8 +945,10 @@ const MonetizationSettings = ({ creatorData, onUpdate }) => {
                   <button 
                     onClick={() => setPlans(plans.filter((_, i) => i !== index))}
                     className="remove-plan-btn"
+                    type="button"
+                    aria-label="Remove plan"
                   >
-                    🗑️
+                    <Icon name="x" size={18} />
                   </button>
                 </div>
               </div>
@@ -1113,7 +958,7 @@ const MonetizationSettings = ({ creatorData, onUpdate }) => {
       </div>
 
       <div className="monetization-section-new">
-        <h3>🎯 Services</h3>
+        <h3>Services</h3>
         <div className="services-list-new">
           {services.map((service, index) => (
             <div key={index} className="service-card-new">
@@ -1150,7 +995,7 @@ const MonetizationSettings = ({ creatorData, onUpdate }) => {
       </div>
 
       <button onClick={savePlans} disabled={saving} className="save-settings-btn-new">
-        {saving ? '💾 Saving...' : '✓ Save All Settings'}
+        {saving ? 'Saving…' : 'Save plans and services'}
       </button>
     </div>
   );
@@ -1189,19 +1034,19 @@ const OrdersManager = ({ creatorId }) => {
             className={filter === 'all' ? 'active-filter' : ''}
             onClick={() => setFilter('all')}
           >
-            All Orders
+            All
           </button>
           <button 
             className={filter === 'pending' ? 'active-filter' : ''}
             onClick={() => setFilter('pending')}
           >
-            ⏳ Pending
+            Pending
           </button>
           <button 
             className={filter === 'completed' ? 'active-filter' : ''}
             onClick={() => setFilter('completed')}
           >
-            ✅ Completed
+            Completed
           </button>
         </div>
       </div>
@@ -1211,18 +1056,15 @@ const OrdersManager = ({ creatorId }) => {
           <div className="loading-state">Loading orders...</div>
         ) : orders.length === 0 ? (
           <div className="empty-state-new">
-            <div className="empty-icon">📦</div>
+            <div className="empty-icon"><Icon name="package" size={28} /></div>
             <h3>No orders yet</h3>
-            <p>Your paid requests will appear here</p>
+            <p>When a fan pays for a service, the request shows up here.</p>
           </div>
         ) : (
           orders.map(order => (
             <div key={order._id} className="order-card-new">
               <div className="order-header-new">
                 <div className="order-type">
-                  {order.type === 'video' && '🎥'}
-                  {order.type === 'message' && '💌'}
-                  {order.type === 'question' && '❓'}
                   <span>{order.type}</span>
                 </div>
                 <span className={`order-status ${order.status}`}>

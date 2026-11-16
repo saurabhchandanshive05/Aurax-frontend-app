@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback, Suspense, lazy } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
+import { getApiEndpoint } from "../utils/getApiUrl";
 import styles from "./styles/Hero.module.css";
 
 // three.js scene is desktop-only: load it on demand so mobile never downloads it
@@ -25,11 +26,10 @@ const itemVariants = {
 
 const Hero = () => {
   const [timeOfDay, setTimeOfDay] = useState("day");
-  const [aiMessage, setAiMessage] = useState("Initializing Neural Grid...");
-  const [avatarIndex, setAvatarIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(
     () => typeof window !== "undefined" && window.innerWidth < 768
   );
+  const [live, setLive] = useState(null);
   const ctaRef = useRef(null);
   const heroRef = useRef(null);
 
@@ -41,40 +41,24 @@ const Hero = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // AI Avatars data
-  const aiAvatars = [
-    { name: "NEURO", color: "#5b77ff" },
-    { name: "SYNAPSE", color: "#ec4899" },
-    { name: "QUANTUM", color: "#00d2ff" },
-  ];
-
+  // Real platform numbers (read-only endpoint, no view tracking)
   useEffect(() => {
-    // Set time of day
-    const hour = new Date().getHours();
-    setTimeOfDay(hour > 18 || hour < 6 ? "night" : "day");
-
-    // AI greeting sequence
-    const greetings = [
-      "Initializing Neural Grid...",
-      "Authenticating Creator Signature...",
-      `Welcome back, ${localStorage.getItem("username") || "Creator"}.`,
-    ];
-
-    let step = 0;
-    const timer = setInterval(() => {
-      setAiMessage(greetings[step]);
-      step = (step + 1) % greetings.length;
-    }, 2000);
-
-    return () => clearInterval(timer);
+    let cancelled = false;
+    fetch(getApiEndpoint("/api/public/campaigns/stats/overview"))
+      .then((r) => (r.ok ? r.json() : null))
+      .then((json) => {
+        if (!cancelled && json?.data) setLive(json.data);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  // Avatar rotation
+  // Time of day only tints the background
   useEffect(() => {
-    const rotate = setInterval(() => {
-      setAvatarIndex((prev) => (prev + 1) % aiAvatars.length);
-    }, 5000);
-    return () => clearInterval(rotate);
+    const hour = new Date().getHours();
+    setTimeOfDay(hour > 18 || hour < 6 ? "night" : "day");
   }, []);
 
   // Ripple effect for CTA - optimized with requestAnimationFrame
@@ -97,33 +81,16 @@ const Hero = () => {
     });
   }, []);
 
-  // Modern stats for mobile
-  const stats = [
-    {
-      id: 1,
-      title: "Active Creators",
-      value: "247",
-      change: "+12.7%",
-      icon: "👑",
-      color: "#FF6B6B",
-    },
-    {
-      id: 2,
-      title: "Daily Reach",
-      value: "4.2M",
-      change: "+27.3%",
-      icon: "📈",
-      color: "#4ECDC4",
-    },
-    {
-      id: 3,
-      title: "AI Matches",
-      value: "18",
-      change: "+9.2%",
-      icon: "🤖",
-      color: "#45B7D1",
-    },
-  ];
+  // Only real numbers: shown when the API answers and there is something live
+  const stats =
+    live && live.totalLiveCampaigns > 0
+      ? [
+          { id: "live", title: "Live brand campaigns", value: live.totalLiveCampaigns },
+          ...(live.handPickedCampaigns > 0
+            ? [{ id: "picked", title: "Hand-picked by our team", value: live.handPickedCampaigns }]
+            : []),
+        ]
+      : [];
 
   return (
     <section
@@ -141,36 +108,6 @@ const Hero = () => {
         transition={{ duration: 1 }}
       />
 
-      {/* Status indicator */}
-      <motion.div
-        className={styles.statusIndicator}
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-      >
-        <div className={styles.statusDot} />
-        <span>Platform Online</span>
-      </motion.div>
-
-      {/* AI Greeting - redesigned */}
-      <motion.div
-        className={styles.aiGreetingNew}
-        variants={itemVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <div className={styles.aiIcon}>✨</div>
-        <div className={styles.aiText}>
-          <span className={styles.aiMessage}>{aiMessage}</span>
-          <span
-            className={styles.aiAvatar}
-            style={{ color: aiAvatars[avatarIndex].color }}
-          >
-            {aiAvatars[avatarIndex].name}
-          </span>
-        </div>
-      </motion.div>
-
       {/* Main content */}
       <motion.div
         className={styles.mainContent}
@@ -181,21 +118,22 @@ const Hero = () => {
         {/* Header section */}
         <div className={styles.headerSection}>
           <motion.div className={styles.badge} variants={itemVariants}>
-            <span className={styles.badgeText}>🚀 Next-Gen Platform</span>
+            <span className={styles.badgeText}>Creator marketplace, made in India</span>
           </motion.div>
 
           <motion.h1 className={styles.modernHeadline} variants={itemVariants}>
-            Create. Connect.
+            Brands and creators,
             <br />
-            <span className={styles.gradientTextNew}>Influence</span>
+            matched on real numbers.
           </motion.h1>
 
           <motion.p
             className={styles.modernSubheadline}
             variants={itemVariants}
           >
-            Join the future of influencer marketing with AI-powered matching,
-            real-time analytics, and seamless brand collaborations.
+            Creators build a page, connect Instagram and apply to live brand
+            campaigns. Brands post what they need and get a shortlist of
+            reviewed creators.
           </motion.p>
 
           {/* CTA buttons */}
@@ -203,11 +141,11 @@ const Hero = () => {
             <motion.button
               ref={ctaRef}
               className={styles.primaryCta}
-              onClick={() => (window.location.href = "/explore")}
+              onClick={() => (window.location.href = "/creator/signup")}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <span>Get Started</span>
+              <span>Join as a creator</span>
               <svg
                 className={styles.ctaArrow}
                 viewBox="0 0 20 20"
@@ -223,57 +161,35 @@ const Hero = () => {
 
             <motion.button
               className={styles.secondaryCta}
+              onClick={() => (window.location.href = "/creators")}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              Watch Demo
+              Find creators
             </motion.button>
           </motion.div>
         </div>
 
-        {/* Stats section - redesigned for mobile */}
-        <motion.div
-          className={styles.statsSection}
-          variants={containerVariants}
-        >
-          <motion.h3 className={styles.statsTitle} variants={itemVariants}>
-            Platform Insights
-          </motion.h3>
-
-          <div className={styles.statsGrid}>
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.id}
-                className={styles.statCard}
-                variants={itemVariants}
-                whileHover={{ scale: 1.02 }}
-                custom={index}
-              >
-                <div className={styles.statCardInner}>
-                  <div className={styles.statHeader}>
-                    <span
-                      className={styles.statIcon}
-                      style={{
-                        backgroundColor: `${stat.color}20`,
-                        color: stat.color,
-                      }}
-                    >
-                      {stat.icon}
-                    </span>
-                    <span
-                      className={styles.statChange}
-                      style={{ color: stat.color }}
-                    >
-                      {stat.change}
-                    </span>
+        {/* Live numbers from the API (hidden when unavailable) */}
+        {stats.length > 0 && (
+          <motion.a
+            href="/live/campaigns"
+            className={styles.statsSection}
+            variants={containerVariants}
+            aria-label="Open the LIVE campaign board"
+          >
+            <div className={styles.statsGrid}>
+              {stats.map((stat, index) => (
+                <motion.div key={stat.id} className={styles.statCard} variants={itemVariants} custom={index}>
+                  <div className={styles.statCardInner}>
+                    <div className={styles.statValue}>{stat.value}</div>
+                    <div className={styles.statLabel}>{stat.title}</div>
                   </div>
-                  <div className={styles.statValue}>{stat.value}</div>
-                  <div className={styles.statLabel}>{stat.title}</div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.a>
+        )}
 
         {/* Feature highlights */}
         <motion.div
@@ -282,9 +198,9 @@ const Hero = () => {
         >
           <div className={styles.featuresList}>
             {[
-              "AI-Powered Matching",
-              "Real-time Analytics",
-              "Secure Payments",
+              "Every creator reviewed",
+              "Instagram-connected stats",
+              "LIVE campaign board",
             ].map((feature, index) => (
               <motion.div
                 key={feature}

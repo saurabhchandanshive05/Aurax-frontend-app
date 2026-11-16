@@ -2,15 +2,15 @@
 .pageWrapper {
   display: flex;
   min-height: 100vh;
-  background: #f3f4f6;
+  background: var(--ax-night);
   padding-top: 70px; /* Space for navbar */
 }
 
 .mainContent {
   flex: 1;
-  margin-left: 280px;
+  margin-left: 0;
   min-height: calc(100vh - 70px);
-  background: #ffffff;
+  background: var(--ax-dusk);
 }
 
 .curatorContainer {
@@ -29,18 +29,18 @@
 .curatorHeader h1 {
   font-size: 2rem;
   margin: 0 0 5px 0;
-  color: #1a1a1a;
+  color: var(--ax-text);
 }
 
 .curatorHeader p {
-  color: #666;
+  color: var(--ax-text-2);
   margin: 0;
 }
 
 .addBtn {
   padding: 12px 24px;
-  background: #0066FF;
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
   border: none;
   border-radius: 8px;
   font-size: 1rem;
@@ -50,7 +50,8 @@
 }
 
 .addBtn:hover {
-  background: #0052CC;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
 }
 
 /* Alert Messages */
@@ -75,7 +76,7 @@
 
 /* Form Container */
 .formContainer {
-  background: white;
+  background: var(--ax-dusk);
   border-radius: 12px;
   padding: 30px;
   margin-bottom: 30px;
@@ -85,7 +86,7 @@
 .formContainer h2 {
   margin: 0 0 25px 0;
   font-size: 1.5rem;
-  color: #1a1a1a;
+  color: var(--ax-text);
 }
 
 .campaignForm {
@@ -106,7 +107,7 @@
 .section h3 {
   margin: 0 0 20px 0;
   font-size: 1.1rem;
-  color: #333;
+  color: var(--ax-text);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -127,7 +128,7 @@
 .formGroup label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #333;
+  color: var(--ax-text);
 }
 
 .formGroup input[type="text"],
@@ -138,7 +139,7 @@
 .formGroup select,
 .formGroup textarea {
   padding: 10px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--ax-line-strong);
   border-radius: 6px;
   font-size: 0.95rem;
   font-family: inherit;
@@ -149,7 +150,7 @@
 .formGroup select:focus,
 .formGroup textarea:focus {
   outline: none;
-  border-color: #0066FF;
+  border-color: var(--ax-cyan);
 }
 
 .formGroup textarea {
@@ -183,8 +184,8 @@
 
 .submitBtn {
   padding: 12px 32px;
-  background: #0066FF;
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
   border: none;
   border-radius: 8px;
   font-size: 1rem;
@@ -194,19 +195,20 @@
 }
 
 .submitBtn:hover:not(:disabled) {
-  background: #0052CC;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
 }
 
 .submitBtn:disabled {
-  background: #ccc;
+  background: var(--ax-dusk-2);
   cursor: not-allowed;
 }
 
 .cancelBtn {
   padding: 12px 32px;
-  background: white;
-  color: #666;
-  border: 1px solid #ddd;
+  background: var(--ax-dusk);
+  color: var(--ax-text-2);
+  border: 1px solid var(--ax-line-strong);
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 600;
@@ -216,7 +218,7 @@
 
 .cancelBtn:hover {
   border-color: #999;
-  color: #333;
+  color: var(--ax-text);
 }
 
 /* Campaigns List */
@@ -227,7 +229,7 @@
 .campaignsList h2 {
   font-size: 1.5rem;
   margin-bottom: 20px;
-  color: #1a1a1a;
+  color: var(--ax-text);
 }
 
 .campaignsGrid {
@@ -237,7 +239,7 @@
 }
 
 .campaignCard {
-  background: white;
+  background: var(--ax-dusk);
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -260,13 +262,13 @@
 .cardHeader h3 {
   font-size: 1.1rem;
   margin: 0 0 5px 0;
-  color: #1a1a1a;
+  color: var(--ax-text);
   line-height: 1.4;
 }
 
 .company {
   font-size: 0.85rem;
-  color: #666;
+  color: var(--ax-text-2);
   margin: 0;
 }
 
@@ -294,7 +296,7 @@
 
 .badge.verified {
   background: #E6F7FF;
-  color: #0066FF;
+  color: var(--ax-cyan);
 }
 
 .badge.live {
@@ -303,8 +305,8 @@
 }
 
 .badge.draft {
-  background: #F5F5F5;
-  color: #666;
+  background: var(--ax-night);
+  color: var(--ax-text-2);
 }
 
 .badge.closed {
@@ -318,17 +320,17 @@
   gap: 8px;
   margin-bottom: 15px;
   padding: 15px 0;
-  border-top: 1px solid #f0f0f0;
-  border-bottom: 1px solid #f0f0f0;
+  border-top: 1px solid var(--ax-line-strong);
+  border-bottom: 1px solid var(--ax-line-strong);
 }
 
 .detail {
   font-size: 0.9rem;
-  color: #555;
+  color: var(--ax-text-2);
 }
 
 .detail strong {
-  color: #333;
+  color: var(--ax-text);
   margin-right: 5px;
 }
 
@@ -340,9 +342,9 @@
 .actionBtn {
   flex: 1;
   padding: 8px 16px;
-  background: white;
-  color: #0066FF;
-  border: 1px solid #0066FF;
+  background: var(--ax-dusk);
+  color: var(--ax-cyan);
+  border: 1px solid var(--ax-cyan);
   border-radius: 6px;
   font-size: 0.85rem;
   font-weight: 600;
@@ -351,8 +353,8 @@
 }
 
 .actionBtn:hover {
-  background: #0066FF;
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
 }
 
 .actionBtn.delete {
@@ -446,8 +448,8 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -509,7 +511,7 @@
 .imagePreview {
   margin-top: 10px;
   padding: 10px;
-  background: #f9fafb;
+  background: var(--ax-night);
   border-radius: 8px;
   border: 1px solid #E5E5E5;
   display: flex;
@@ -526,7 +528,7 @@
 
 .fieldHelp {
   display: block;
-  color: #666;
+  color: var(--ax-text-2);
   font-size: 0.8rem;
   margin-top: 5px;
 }
@@ -540,3 +542,15 @@
 .actionBtn.edit:hover {
   background: #10B981;
   color: white;}
+/* ---- Aura: page sits inside the app shell, which owns padding and chrome ---- */
+.pageWrapper { display: block; min-height: 0; padding-top: 0; background: transparent; }
+.mainContent { min-height: 0; background: transparent; }
+.curatorContainer { max-width: none; padding: 0; }
+.curatorHeader {
+  padding-bottom: var(--ax-s5);
+  margin-bottom: var(--ax-s5);
+  border-bottom: 1px solid var(--ax-line);
+  gap: var(--ax-s4);
+  flex-wrap: wrap;
+}
+.curatorHeader h1 { font-size: var(--ax-fs-2xl); }

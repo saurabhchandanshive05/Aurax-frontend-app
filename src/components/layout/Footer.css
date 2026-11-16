@@ -808,7 +808,7 @@
 @media (prefers-contrast: high) {
   .aurax-footer {
     background: #000;
-    border-top: 3px solid #fff;
+    border-top: 3px solid var(--ax-line-strong);
   }
 
   .newsletter-section {

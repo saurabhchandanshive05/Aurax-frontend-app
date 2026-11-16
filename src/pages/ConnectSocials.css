@@ -1,17 +1,15 @@
 .connect-socials-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--ax-night);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--ax-font-ui);
 }
 
 .connect-socials-card {
-  background: white;
+  background: var(--ax-dusk);
   border-radius: 24px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   max-width: 600px;
@@ -20,8 +18,8 @@
 }
 
 .connect-socials-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
   padding: 40px 30px;
   text-align: center;
 }
@@ -54,7 +52,7 @@
 
 .info-section h2 {
   font-size: 24px;
-  color: #1a1a1a;
+  color: var(--ax-text);
   margin: 0 0 24px 0;
 }
 
@@ -107,13 +105,13 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 20px rgba(79, 209, 232, 0.4);
 }
 
 .btn-primary:active {
@@ -121,12 +119,12 @@
 }
 
 .btn-secondary {
-  background: #f3f4f6;
-  color: #6b7280;
+  background: var(--ax-night);
+  color: var(--ax-text-3);
 }
 
 .btn-secondary:hover {
-  background: #e5e7eb;
+  background: var(--ax-dusk-2);
 }
 
 .btn-icon {
@@ -146,7 +144,7 @@
   top: 50%;
   width: 40%;
   height: 1px;
-  background: #e5e7eb;
+  background: var(--ax-dusk-2);
 }
 
 .divider::before {
@@ -158,16 +156,16 @@
 }
 
 .divider span {
-  background: white;
+  background: var(--ax-dusk);
   padding: 0 16px;
-  color: #9ca3af;
+  color: var(--ax-text-3);
   font-size: 14px;
 }
 
 .security-note {
   margin-top: 24px;
   font-size: 14px;
-  color: #6b7280;
+  color: var(--ax-text-3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -190,8 +188,8 @@
 .spinner {
   width: 60px;
   height: 60px;
-  border: 4px solid #f3f4f6;
-  border-top-color: #667eea;
+  border: 4px solid var(--ax-line);
+  border-top-color: var(--ax-cyan);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto;
@@ -203,12 +201,12 @@
 
 .status-section h2 {
   font-size: 24px;
-  color: #1a1a1a;
+  color: var(--ax-text);
   margin: 0 0 12px 0;
 }
 
 .status-section p {
-  color: #6b7280;
+  color: var(--ax-text-3);
   font-size: 16px;
 }
 
@@ -251,7 +249,7 @@
   transform: translate(-50%, -50%);
   font-size: 24px;
   font-weight: 700;
-  color: #667eea;
+  color: var(--ax-cyan);
 }
 
 .analysis-steps {
@@ -269,18 +267,18 @@
   padding: 12px;
   margin-bottom: 8px;
   border-radius: 8px;
-  background: #f9fafb;
-  color: #9ca3af;
+  background: var(--ax-night);
+  color: var(--ax-text-3);
   transition: all 0.3s ease;
 }
 
 .step.active {
-  background: #eff6ff;
-  color: #3b82f6;
+  background: var(--ax-night);
+  color: var(--ax-cyan);
 }
 
 .step.complete {
-  background: #f0fdf4;
+  background: var(--ax-night);
   color: #10b981;
 }
 
@@ -312,7 +310,7 @@
 }
 
 .stat-card {
-  background: #f9fafb;
+  background: var(--ax-night);
   padding: 20px;
   border-radius: 12px;
   text-align: center;
@@ -320,7 +318,7 @@
 
 .stat-label {
   font-size: 13px;
-  color: #6b7280;
+  color: var(--ax-text-3);
   margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -329,13 +327,13 @@
 .stat-value {
   font-size: 24px;
   font-weight: 700;
-  color: #667eea;
+  color: var(--ax-cyan);
 }
 
 .redirect-message {
   margin-top: 24px;
   font-size: 14px;
-  color: #6b7280;
+  color: var(--ax-text-3);
   font-style: italic;
 }
 
@@ -355,7 +353,7 @@
 }
 
 .error-message {
-  background: #fef2f2;
+  background: var(--ax-night);
   color: #dc2626;
   padding: 16px;
   border-radius: 8px;
@@ -364,20 +362,20 @@
 }
 
 .connect-socials-footer {
-  background: #f9fafb;
+  background: var(--ax-night);
   padding: 20px 30px;
   text-align: center;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--ax-line-strong);
 }
 
 .connect-socials-footer p {
   margin: 0;
-  color: #6b7280;
+  color: var(--ax-text-3);
   font-size: 14px;
 }
 
 .connect-socials-footer a {
-  color: #667eea;
+  color: var(--ax-cyan);
   text-decoration: none;
   font-weight: 600;
 }

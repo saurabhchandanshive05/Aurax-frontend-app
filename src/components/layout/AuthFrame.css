@@ -1,0 +1,85 @@
+/* Split-screen auth frame */
+.ax-auth {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: calc(100vh - 90px);
+  margin-top: 90px; /* marketing navbar is fixed */
+  background: var(--ax-night);
+}
+
+.ax-auth__aside {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--ax-s7);
+  background: var(--ax-night-deep);
+  border-right: 1px solid var(--ax-line);
+}
+.ax-auth__mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ax-text);
+  font: 700 1.25rem/1 var(--ax-font-display);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  position: relative;
+  z-index: 1;
+}
+.ax-auth__ring {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--ax-aura);
+  -webkit-mask: radial-gradient(circle, transparent 8px, #000 8.5px);
+  mask: radial-gradient(circle, transparent 8px, #000 8.5px);
+}
+.ax-auth__pitch { position: relative; z-index: 1; max-width: 30ch; }
+.ax-auth__title {
+  font: 700 clamp(1.9rem, 3vw, 2.6rem) / 1.1 var(--ax-font-display);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--ax-s5);
+}
+.ax-auth__points { list-style: none; display: grid; gap: var(--ax-s3); color: var(--ax-text-2); }
+.ax-auth__points li { display: flex; gap: var(--ax-s3); align-items: baseline; }
+.ax-auth__points li::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--ax-cyan);
+  transform: translateY(-1px);
+}
+
+/* The aura: one large ring bleeding off the corner, the panel's only ornament */
+.ax-auth__halo {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  right: -200px;
+  bottom: -200px;
+  border-radius: 50%;
+  background: var(--ax-aura);
+  -webkit-mask: radial-gradient(circle, transparent 228px, #000 230px, #000 238px, transparent 240px);
+  mask: radial-gradient(circle, transparent 228px, #000 230px, #000 238px, transparent 240px);
+  opacity: 0.9;
+  /* Rotation only: runs on the compositor, no repaint per frame */
+  will-change: transform;
+  animation: ax-auth-turn 40s linear infinite;
+}
+@keyframes ax-auth-turn { to { transform: rotate(360deg); } }
+
+.ax-auth__form {
+  display: grid;
+  place-items: center;
+  padding: var(--ax-s6) var(--ax-s4);
+}
+
+@media (max-width: 960px) {
+  .ax-auth { grid-template-columns: minmax(0, 1fr); margin-top: 70px; min-height: calc(100vh - 70px); }
+  .ax-auth__aside { display: none; }
+  .ax-auth__form { align-items: start; padding-top: var(--ax-s5); }
+}

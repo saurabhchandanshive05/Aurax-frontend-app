@@ -1,9 +1,9 @@
 /* Optimized BrandPage.css - Apple-like Premium Design */
 
 .brands-page {
-  background: linear-gradient(135deg, #0f0c29, #302b63);
+  background: var(--ax-night);
   color: white;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--ax-font-ui);
   min-height: 100vh;
   line-height: 1.6;
 }
@@ -35,7 +35,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="var(--ax-dusk)" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
   opacity: 0.3;
 }
 
@@ -48,7 +48,7 @@
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 700;
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, #ff00cc, #3333ff);
+  background: var(--ax-aura-linear);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

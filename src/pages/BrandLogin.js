@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { apiClient } from "../utils/apiClient";
 import styles from "./BrandLogin.module.css";
+import AuthFrame from "../components/layout/AuthFrame";
 
 const BrandLogin = () => {
   const [email, setEmail] = useState("");
@@ -71,7 +72,7 @@ const BrandLogin = () => {
   };
 
   return (
-    <div className={styles.loginContainer}>
+    <AuthFrame audience="brand">
       <div className={styles.loginCard}>
         {/* AURAX Logo - Top Center */}
         <div className={styles.logoSection}>
@@ -89,9 +90,9 @@ const BrandLogin = () => {
         </div>
 
         <div className={styles.header}>
-          <h1 className={styles.title}>Welcome back!</h1>
+          <h1 className={styles.title}>Brand log in</h1>
           <p className={styles.subtitle}>
-            Let's get you signed in to your Brand Portal
+            Find creators and manage your campaigns.
           </p>
         </div>
 
@@ -261,7 +262,7 @@ const BrandLogin = () => {
           </div>
         </div>
       </div>
-    </div>
+    </AuthFrame>
   );
 };
 

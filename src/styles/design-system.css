@@ -60,11 +60,9 @@
   --neon-orange: #ff6b35;
 
   /* AURAX Typography */
-  --font-primary: "Inter", "Poppins", -apple-system, BlinkMacSystemFont,
-    sans-serif;
-  --font-display: "Space Grotesk", "Orbitron", "Clash Display", "Inter",
-    sans-serif;
-  --font-heading: "Space Grotesk", "Orbitron", "Arial Black", sans-serif;
+  --font-primary: var(--ax-font-ui);
+  --font-display: var(--ax-font-display);
+  --font-heading: var(--ax-font-display);
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
 
   /* Spacing Scale */

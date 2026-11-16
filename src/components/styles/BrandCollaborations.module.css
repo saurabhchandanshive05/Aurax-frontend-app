@@ -67,7 +67,7 @@
 .title {
   font-size: 3.5rem;
   font-weight: 800;
-  background: linear-gradient(90deg, #a855f7, #0ea5e9, #d946ef);
+  background: var(--ax-aura-linear);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -85,9 +85,10 @@
   transform: translateX(-50%);
   width: 120px;
   height: 4px;
-  background: linear-gradient(90deg, #a855f7, #0ea5e9);
+  background: var(--ax-action);
   border-radius: 2px;
   animation: pulseLine 3s infinite;
+  color: var(--ax-action-ink);
 }
 
 @keyframes pulseLine {
@@ -137,8 +138,9 @@
   left: 0;
   width: 100%;
   height: 4px;
-  background: linear-gradient(90deg, #a855f7, #0ea5e9);
+  background: var(--ax-action);
   opacity: 0.8;
+  color: var(--ax-action-ink);
 }
 
 .statsGrid {
@@ -210,7 +212,7 @@
 .statValue {
   font-size: 3rem;
   font-weight: 800;
-  background: linear-gradient(90deg, #a855f7, #0ea5e9, #d946ef);
+  background: var(--ax-aura-linear);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -273,9 +275,10 @@
   left: 0;
   width: 100%;
   height: 4px;
-  background: linear-gradient(90deg, #a855f7, #0ea5e9);
+  background: var(--ax-action);
   opacity: 0;
   transition: opacity 0.3s ease;
+  color: var(--ax-action-ink);
 }
 
 .logoItem::after {
@@ -392,12 +395,12 @@
 .logoFallback {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #a855f7, #0ea5e9);
+  background: var(--ax-action);
   border-radius: 12px;
   display: none;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--ax-action-ink);
   font-weight: 700;
   font-size: 1.5rem;
 }
@@ -464,10 +467,11 @@
 .aiConnection {
   position: absolute;
   height: 2px;
-  background: linear-gradient(90deg, #a855f7, #0ea5e9);
+  background: var(--ax-action);
   z-index: 0;
   filter: blur(1px);
   opacity: 0.4;
+  color: var(--ax-action-ink);
 }
 
 /* Mobile Carousel Wrapper */
@@ -543,10 +547,11 @@
 
 .progressBar {
   height: 100%;
-  background: linear-gradient(90deg, #a855f7, #0ea5e9);
+  background: var(--ax-action);
   border-radius: 2px;
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  color: var(--ax-action-ink);
 }
 
 .progressBar::after {

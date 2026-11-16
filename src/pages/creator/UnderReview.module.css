@@ -1,7 +1,7 @@
 /* Review Container */
 .reviewContainer {
   min-height: 100vh;
-  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  background: var(--ax-night);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,7 +11,7 @@
 .reviewCard {
   max-width: 900px;
   width: 100%;
-  background: white;
+  background: var(--ax-dusk);
   border-radius: 24px;
   padding: 3rem 2.5rem;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
@@ -37,8 +37,8 @@
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
-  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-  color: #2d3748;
+  background: var(--ax-night);
+  color: var(--ax-text);
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -90,14 +90,14 @@
   font-size: 2.5rem;
   font-weight: 800;
   text-align: center;
-  color: #1a202c;
+  color: var(--ax-text);
   margin-bottom: 1rem;
 }
 
 .message {
   font-size: 1.15rem;
   text-align: center;
-  color: #4a5568;
+  color: var(--ax-text-2);
   line-height: 1.7;
   max-width: 700px;
   margin: 0 auto 3rem;
@@ -107,7 +107,7 @@
 .timeline {
   margin: 3rem 0;
   padding: 2rem;
-  background: linear-gradient(135deg, #fff5eb 0%, #ffe4cc 100%);
+  background: var(--ax-night);
   border-radius: 16px;
 }
 
@@ -165,8 +165,8 @@
 }
 
 .pending {
-  background: #e2e8f0;
-  color: #a0aec0;
+  background: var(--ax-dusk-2);
+  color: var(--ax-text-3);
 }
 
 .timelineContent {
@@ -177,19 +177,19 @@
 .timelineTitle {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--ax-text);
   margin-bottom: 0.25rem;
 }
 
 .timelineDate {
   font-size: 0.95rem;
-  color: #718096;
+  color: var(--ax-text-3);
 }
 
 .timelineConnector {
   width: 2px;
   height: 60px;
-  background: linear-gradient(to bottom, #cbd5e0 0%, #e2e8f0 100%);
+  background: linear-gradient(to bottom, var(--ax-dusk-2) 0%, var(--ax-dusk-2) 100%);
   margin-left: 24px;
   position: relative;
   z-index: 1;
@@ -204,7 +204,7 @@
   font-size: 1.75rem;
   font-weight: 700;
   text-align: center;
-  color: #2d3748;
+  color: var(--ax-text);
   margin-bottom: 2rem;
 }
 
@@ -215,7 +215,7 @@
 }
 
 .infoCard {
-  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  background: var(--ax-night);
   border-radius: 16px;
   padding: 2rem;
   text-align: center;
@@ -235,13 +235,13 @@
 .infoCardTitle {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--ax-text);
   margin-bottom: 0.5rem;
 }
 
 .infoCardText {
   font-size: 0.95rem;
-  color: #718096;
+  color: var(--ax-text-3);
   line-height: 1.6;
 }
 
@@ -249,14 +249,14 @@
 .profileSummary {
   margin: 3rem 0;
   padding: 2rem;
-  background: linear-gradient(135deg, #f0f4ff 0%, #e9e4ff 100%);
+  background: var(--ax-night);
   border-radius: 16px;
 }
 
 .summaryTitle {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2d3748;
+  color: var(--ax-text);
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -276,7 +276,7 @@
 .summaryLabel {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #718096;
+  color: var(--ax-text-3);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -284,7 +284,7 @@
 .summaryValue {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--ax-text);
 }
 
 /* Actions */
@@ -311,8 +311,9 @@
 }
 
 .refreshButton {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  background: var(--ax-action);
+  box-shadow: 0 4px 12px rgba(79, 209, 232, 0.3);
+  color: var(--ax-action-ink);
 }
 
 .homeButton {
@@ -322,7 +323,7 @@
 
 .refreshButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 16px rgba(79, 209, 232, 0.4);
 }
 
 .homeButton:hover {
@@ -349,12 +350,12 @@
   text-align: center;
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--ax-line-strong);
 }
 
 .brandingText {
   font-size: 0.95rem;
-  color: #718096;
+  color: var(--ax-text-3);
 }
 
 .brandLink {
@@ -375,7 +376,7 @@
   width: 60px;
   height: 60px;
   border: 6px solid rgba(102, 126, 234, 0.2);
-  border-top-color: #667eea;
+  border-top-color: var(--ax-cyan);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -387,20 +388,20 @@
 /* Help Text */
 .helpText {
   text-align: center;
-  color: #718096;
+  color: var(--ax-text-3);
   font-size: 0.95rem;
   line-height: 1.6;
 }
 
 .link {
-  color: #667eea;
+  color: var(--ax-cyan);
   font-weight: 600;
   text-decoration: underline;
   transition: color 0.2s ease;
 }
 
 .link:hover {
-  color: #764ba2;
+  color: var(--ax-cyan);
 }
 
 /* Responsive */

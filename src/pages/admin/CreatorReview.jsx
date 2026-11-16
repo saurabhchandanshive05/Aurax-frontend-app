@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import AdminNav from '../../components/admin/AdminNav';
 import styles from './CampaignCurator.module.css';
 import { getApiEndpoint } from '../../utils/getApiUrl';
 
@@ -71,7 +70,6 @@ const CreatorReview = () => {
 
   return (
     <div className={styles.pageWrapper}>
-      <AdminNav />
       <div className={styles.mainContent}>
         <div className={styles.curatorContainer}>
           <div className={styles.curatorHeader}>

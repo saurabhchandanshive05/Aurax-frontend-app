@@ -7,25 +7,7 @@ import "./CreatorDirectory.css";
 const CreatorDirectory = () => {
   const [activeCategory, setActiveCategory] = useState("creation");
 
-  // AURAX AI Performance Data
-  const performanceData = {
-    contentPerformance: {
-      title: "Content Performance Analysis",
-      text: "Your 'Gaming Setup' carousel has a 45% higher engagement rate than your average. Our AI detected high intent-to-purchase signals in the comments. We've auto-generated a similar Reel idea for you.",
-      cta: "View AI Concept",
-      metric: "45%",
-      trend: "higher",
-      category: "gaming",
-    },
-    dealReadiness: {
-      title: "Deal Readiness Score",
-      text: "Your Aura Score is 82/100. You're highly likely to secure a deal in the Tech category. Your audience has a 35% higher disposable income than the platform average. 2 new potential matches found.",
-      cta: "Review Matches",
-      score: "82/100",
-      category: "tech",
-      matches: 2,
-    },
-  };
+
 
   // Instagram-Inspired Categories (based on the detailed breakdown from images)
   const categories = [
@@ -185,15 +167,6 @@ const CreatorDirectory = () => {
       subtitle: "Optimize Your Content Performance",
       description:
         "Upload your Reels and get instant AI analysis of what drives engagement. Our AI identifies patterns in your top-performing content and suggests improvements.",
-      metrics: [
-        { label: "Content Score", value: "92/100", target: "AI rating" },
-        {
-          label: "Engagement Boost",
-          value: "+45%",
-          target: "predicted increase",
-        },
-        { label: "Viral Potential", value: "High", target: "AI assessment" },
-      ],
       cta: "Analyze Your Content",
       icon: "🤖",
     },
@@ -203,15 +176,6 @@ const CreatorDirectory = () => {
       subtitle: "Get Matched with Perfect Brands",
       description:
         "Our AI matches you with brands based on your content style, audience demographics, and engagement rates. No more cold pitching.",
-      metrics: [
-        { label: "Brand Matches", value: "12", target: "this month" },
-        {
-          label: "Avg. Deal Value",
-          value: "$2,500",
-          target: "per collaboration",
-        },
-        { label: "Response Rate", value: "85%", target: "from brands" },
-      ],
       cta: "View Brand Matches",
       icon: "🎯",
     },
@@ -221,15 +185,6 @@ const CreatorDirectory = () => {
       subtitle: "Maximize Your Creator Income",
       description:
         "AI-powered rate calculator and earnings forecast based on your metrics, audience value, and market demand. Never undercharge again.",
-      metrics: [
-        { label: "Rate Increase", value: "+200%", target: "suggested raise" },
-        {
-          label: "Monthly Potential",
-          value: "$15K",
-          target: "earnings forecast",
-        },
-        { label: "ROI Boost", value: "3.2x", target: "higher returns" },
-      ],
       cta: "Calculate Your Rates",
       icon: "💰",
     },
@@ -242,12 +197,6 @@ const CreatorDirectory = () => {
       icon: "📈",
       title: "Subscribers Analytics",
       description: "Track subscriber growth, churn, and engagement. See a minimal chart and key counts.",
-      chart: true,
-      stats: [
-        { label: "Active Subscribers", value: "1,245" },
-        { label: "Churn Rate", value: "2.1%" },
-        { label: "Growth (30d)", value: "+8%" },
-      ],
     },
     {
       id: "perks",
@@ -265,30 +214,18 @@ const CreatorDirectory = () => {
       icon: "💬",
       title: "Engagement Hub",
       description: "Manage Q&A inbox, shout-outs, and live session schedule.",
-      inbox: 12,
-      shoutouts: 3,
-      liveSessions: 2,
     },
     {
       id: "revenue",
       icon: "💰",
       title: "Revenue & Payouts",
       description: "View earnings, next payout date, and insights.",
-      earnings: "$4,200",
-      payoutDate: "Sep 15, 2025",
-      insights: "+18% MoM growth",
     },
     {
       id: "community",
       icon: "🏆",
       title: "Community Highlights",
       description: "See top subscribers and engagement leaderboard.",
-      topSubscribers: ["@jennytech", "@maxpower", "@creativemike"],
-      leaderboard: [
-        { name: "@jennytech", score: 98 },
-        { name: "@maxpower", score: 92 },
-        { name: "@creativemike", score: 89 },
-      ],
     },
     {
       id: "ai",
@@ -346,6 +283,7 @@ const CreatorDirectory = () => {
                     </div>
                   </div>
                   <p className="insight-description premium-card-desc">{insight.description}</p>
+                  {insight.metrics && (
                   <div className="insight-metrics premium-metrics">
                     {insight.metrics.map((metric, idx) => (
                       <div key={idx} className="metric-item premium-metric-item">
@@ -357,6 +295,7 @@ const CreatorDirectory = () => {
                       </div>
                     ))}
                   </div>
+                  )}
                   <button className="insight-cta premium-cta">{insight.cta}</button>
                 </motion.div>
               ))}

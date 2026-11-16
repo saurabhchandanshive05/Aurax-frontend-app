@@ -8,8 +8,7 @@
     rgba(26, 26, 46, 0.98) 100%
   );
   color: #ffffff;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui,
-    sans-serif;
+  font-family: var(--ax-font-ui);
   position: relative;
   overflow-x: hidden;
 }
