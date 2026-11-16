@@ -81,6 +81,16 @@
   font-family: var(--font-heading, "Space Grotesk", "Orbitron", sans-serif);
   font-size: 3.5rem;
   font-weight: 800;
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+  text-shadow: 0 0 40px rgba(162, 89, 255, 0.6);
+  letter-spacing: 0.02em;
+}
+
+/* Gradient text lives on its own span so the animated sparkle is not
+   painted through the text clip (it rendered on top of "St"). */
+.headingText {
   background: var(
     --gradient-aurax-full,
     var(--ax-aura-linear)
@@ -89,12 +99,7 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 2rem;
-  position: relative;
-  display: inline-block;
   animation: premiumGradientShift 4s ease-in-out infinite;
-  text-shadow: 0 0 40px rgba(162, 89, 255, 0.6);
-  letter-spacing: 0.02em;
 }
 
 .heading::after {

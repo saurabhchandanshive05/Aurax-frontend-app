@@ -74,7 +74,7 @@ const ContactUs = () => {
         <div className={styles.contentWrapper}>
           <div className={`${styles.leftContent} contact-left`}>
             <h2 className={styles.heading}>
-              Step Into the Aura — Let's Connect
+              <span className={styles.headingText}>Step Into the Aura — Let's Connect</span>
               <span className={styles.sparkle}>✨</span>
             </h2>
 

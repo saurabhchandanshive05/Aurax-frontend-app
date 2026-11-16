@@ -109,14 +109,19 @@
   font-weight: 800;
   line-height: 1.1;
   margin: 0 0 1.5rem 0;
+  text-shadow: 0 0 40px rgba(162, 89, 255, 0.6);
+  letter-spacing: 0.02em;
+}
+
+/* Gradient text on its own span so the animated sparkle is not painted
+   through the text clip. */
+.aurax-hero-title-text {
   background: var(--gradient-aurax-full);
   background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: premiumGradientShift 4s ease-in-out infinite;
-  text-shadow: 0 0 40px rgba(162, 89, 255, 0.6);
-  letter-spacing: 0.02em;
 }
 
 .hero-sparkle {

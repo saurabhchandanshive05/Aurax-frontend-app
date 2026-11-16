@@ -20,7 +20,6 @@ import GlobalLoadingScreen from "./components/GlobalLoadingScreen";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
-import BackToTop from "./components/BackToTop";
 import CustomCursor from "./components/CustomCursor";
 import ErrorBoundary from "./components/ErrorBoundary";
 import HomePage from "./pages/HomePage";
@@ -558,8 +557,6 @@ function App() {
                 Recheck Backend
               </button>
             )}
-
-            <BackToTop />
           </div>
           </AuthGate>
         </Router>

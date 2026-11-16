@@ -130,7 +130,7 @@ const Contact = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Step Into the Aura — Let's Connect
+            <span className="aurax-hero-title-text">Step Into the Aura — Let's Connect</span>
             <span className="hero-sparkle">✨</span>
           </motion.h1>
 
