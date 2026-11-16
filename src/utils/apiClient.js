@@ -2,12 +2,8 @@
 import { copyLogger } from "./copyLogger";
 import { getApiUrl } from './getApiUrl';
 
-const BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://influencer-backend-7.onrender.com/api"
-    : process.env.REACT_APP_API_URL
-    ? `${process.env.REACT_APP_API_URL}/api`
-    : `${getApiUrl()}/api`; // Default fallback for development
+// Single source of truth for the backend URL (REACT_APP_API_URL in production)
+const BASE_URL = `${getApiUrl()}/api`;
 
 class APIError extends Error {
   constructor(message, status, details = {}) {
@@ -136,27 +132,6 @@ export const apiClient = {
     }
   },
 
-  async verifyRegistration(verificationData) {
-    copyLogger.info("Verifying registration OTP", {
-      email: verificationData.email,
-    });
-
-    try {
-      const response = await this.request("/auth/verify-registration", {
-        method: "POST",
-        body: JSON.stringify(verificationData),
-      });
-
-      copyLogger.info("Registration verification successful", {
-        email: verificationData.email,
-      });
-      return response;
-    } catch (error) {
-      copyLogger.error("Registration verification failed", error);
-      throw error;
-    }
-  },
-
   async verifyEmail(verificationData) {
     copyLogger.info("Verifying email", { email: verificationData.email });
 
@@ -228,40 +203,6 @@ export const apiClient = {
     }
   },
 
-  async requestLoginOTP(email) {
-    copyLogger.info("Requesting login OTP", { email });
-
-    try {
-      const response = await this.request("/auth/request-login-otp", {
-        method: "POST",
-        body: JSON.stringify({ email }),
-      });
-
-      copyLogger.info("Login OTP requested", { email });
-      return response;
-    } catch (error) {
-      copyLogger.error("Login OTP request failed", error);
-      throw error;
-    }
-  },
-
-  async resendRegistrationOTP(email) {
-    copyLogger.info("Resending registration OTP", { email });
-
-    try {
-      const response = await this.request("/auth/resend-registration-otp", {
-        method: "POST",
-        body: JSON.stringify({ email }),
-      });
-
-      copyLogger.info("Registration OTP resent", { email });
-      return response;
-    } catch (error) {
-      copyLogger.error("Resend registration OTP failed", error);
-      throw error;
-    }
-  },
-
   async resendVerification(data) {
     copyLogger.info("Resending verification code", { email: data.email });
 
@@ -281,217 +222,6 @@ export const apiClient = {
       return response;
     } catch (error) {
       copyLogger.error("Resend verification failed", error);
-      throw error;
-    }
-  },
-
-  async getProfile() {
-    copyLogger.info("Fetching user profile");
-
-    try {
-      const response = await this.request("/auth/profile", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-
-      copyLogger.info("Profile fetched successfully");
-      return response;
-    } catch (error) {
-      copyLogger.error("Profile fetch failed", error);
-      throw error;
-    }
-  },
-
-  async updateLoginPreferences(preferences) {
-    copyLogger.info("Updating login preferences", preferences);
-
-    try {
-      const response = await this.request("/auth/login-preferences", {
-        method: "PUT",
-        body: JSON.stringify(preferences),
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-
-      copyLogger.info("Login preferences updated");
-      return response;
-    } catch (error) {
-      copyLogger.error("Update login preferences failed", error);
-      throw error;
-    }
-  },
-
-  async resendVerificationOTP(data) {
-    copyLogger.info("Resending verification OTP", { email: data.email });
-
-    try {
-      // Ensure type parameter is included (backend requires it)
-      const requestData = {
-        email: data.email,
-        type: data.type || "email", // Default to email if not specified
-      };
-
-      const response = await this.request("/resend-verification", {
-        method: "POST",
-        body: JSON.stringify(requestData),
-      });
-
-      copyLogger.info("Verification code resent", { email: data.email });
-      return response;
-    } catch (error) {
-      copyLogger.error("Failed to resend verification", error);
-      throw error;
-    }
-  },
-
-  // Instagram OAuth Methods
-  async getInstagramOAuthURL() {
-    copyLogger.info("Getting Instagram OAuth URL");
-
-    try {
-      const response = await this.request("/instagram/oauth/url", {
-        method: "GET",
-      });
-
-      copyLogger.info("Instagram OAuth URL generated");
-      return response;
-    } catch (error) {
-      copyLogger.error("Failed to get Instagram OAuth URL", error);
-      throw error;
-    }
-  },
-
-  async exchangeInstagramCode(data) {
-    copyLogger.info("Exchanging Instagram OAuth code for token");
-
-    try {
-      const response = await this.request("/instagram/oauth/callback", {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
-
-      if (response.success && response.instagram?.access_token) {
-        localStorage.setItem(
-          "instagram_access_token",
-          response.instagram.access_token
-        );
-        copyLogger.info("Instagram OAuth successful", {
-          username: response.instagram.profile?.username,
-        });
-      }
-
-      return response;
-    } catch (error) {
-      copyLogger.error("Instagram OAuth failed", error);
-      throw error;
-    }
-  },
-
-  async validateInstagramToken(accessToken) {
-    copyLogger.info("Validating Instagram access token");
-
-    try {
-      const response = await this.request("/instagram/oauth/validate", {
-        method: "POST",
-        body: JSON.stringify({ accessToken }),
-      });
-
-      copyLogger.info("Instagram token validation completed", {
-        valid: response.valid,
-      });
-      return response;
-    } catch (error) {
-      copyLogger.error("Instagram token validation failed", error);
-      throw error;
-    }
-  },
-
-  async getInstagramConnectionStatus() {
-    copyLogger.info("Getting Instagram connection status");
-
-    try {
-      const response = await this.request("/instagram/connection-status", {
-        method: "GET",
-      });
-
-      copyLogger.info("Instagram connection status retrieved");
-      return response;
-    } catch (error) {
-      copyLogger.error("Failed to get Instagram connection status", error);
-      throw error;
-    }
-  },
-
-  async disconnectInstagram() {
-    copyLogger.info("Disconnecting Instagram account");
-
-    try {
-      const response = await this.request("/instagram/disconnect", {
-        method: "POST",
-      });
-
-      if (response.success) {
-        localStorage.removeItem("instagram_access_token");
-        copyLogger.info("Instagram account disconnected");
-      }
-
-      return response;
-    } catch (error) {
-      copyLogger.error("Failed to disconnect Instagram", error);
-      throw error;
-    }
-  },
-
-  async getInstagramProfile(accessToken) {
-    copyLogger.info("Getting Instagram profile data");
-
-    try {
-      const response = await this.request(
-        `/instagram/profile?accessToken=${accessToken}`,
-        {
-          method: "GET",
-        }
-      );
-
-      copyLogger.info("Instagram profile data retrieved");
-      return response;
-    } catch (error) {
-      copyLogger.error("Failed to get Instagram profile", error);
-      throw error;
-    }
-  },
-
-  async logout() {
-    copyLogger.info("Logging out user");
-
-    try {
-      // Clear all stored tokens
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("instagram_access_token");
-
-      copyLogger.info("User logged out successfully");
-      return { success: true };
-    } catch (error) {
-      copyLogger.error("Logout failed", error);
-      throw error;
-    }
-  },
-
-  async getUserProfile() {
-    copyLogger.info("Getting user profile");
-
-    try {
-      const response = await this.request("/auth/profile", {
-        method: "GET",
-      });
-
-      copyLogger.info("User profile retrieved");
-      return response;
-    } catch (error) {
-      copyLogger.error("Failed to get user profile", error);
       throw error;
     }
   },
@@ -523,38 +253,6 @@ export const apiClient = {
       method: "DELETE",
     });
   },
-};
-
-// Global error handler
-export const handleAPIError = (error) => {
-  if (error instanceof APIError) {
-    console.error(`API Error (${error.status}):`, error.message, error.details);
-
-    // Centralized error handling logic
-    switch (error.status) {
-      case 400:
-        // Bad request - validation error
-        break;
-      case 401:
-        // Unauthorized - redirect to brand login
-        apiClient.logout();
-        window.location.href = "/brand/login";
-        break;
-      case 403:
-        // Forbidden - show access denied
-        break;
-      case 404:
-        // Not found
-        break;
-      case 500:
-        // Server error
-        break;
-      default:
-      // Generic error
-    }
-  } else {
-    console.error("Unexpected error:", error);
-  }
 };
 
 // Export apiClient as default export
