@@ -72,25 +72,78 @@ const LiveCampaignsMobile = () => {
   const observerTarget = useRef(null);
   const filterTriggerRef = useRef(null);
   const firstFilterRef = useRef(null);
+  const filterPanelRef = useRef(null);
   const filterWasOpen = useRef(false);
 
-  // Filter dialog: move focus in when opened, restore it when closed, close on Escape
+  // Desktop shows the filters as an inline bar; mobile shows them as a modal sheet
+  const desktopQuery = '(min-width: 768px)';
+  const [isDesktop, setIsDesktop] = useState(
+    () => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia(desktopQuery).matches
+  );
   useEffect(() => {
-    if (showFilterPanel) {
+    if (typeof window.matchMedia !== 'function') return undefined;
+    const mq = window.matchMedia(desktopQuery);
+    const onChange = (e) => setIsDesktop(e.matches);
+    mq.addEventListener ? mq.addEventListener('change', onChange) : mq.addListener(onChange);
+    return () => (mq.removeEventListener ? mq.removeEventListener('change', onChange) : mq.removeListener(onChange));
+  }, []);
+  const isFilterModal = showFilterPanel && !isDesktop;
+
+  // Filter sheet (mobile modal): focus in when opened, trap Tab, close on Escape, restore focus on close
+  useEffect(() => {
+    if (isFilterModal) {
       filterWasOpen.current = true;
-      firstFilterRef.current?.focus();
+      // The sheet only becomes focusable once its visibility style applies,
+      // so retry on each frame (max ~20 frames) until focus lands inside it
+      let raf;
+      let tries = 0;
+      const focusFirst = () => {
+        const el = firstFilterRef.current;
+        if (el) el.focus();
+        if (document.activeElement !== el && tries++ < 20) raf = requestAnimationFrame(focusFirst);
+      };
+      raf = requestAnimationFrame(focusFirst);
+      const focusables = () =>
+        filterPanelRef.current
+          ? [...filterPanelRef.current.querySelectorAll('select, button, [href], input, [tabindex]:not([tabindex="-1"])')]
+              .filter((el) => !el.disabled && el.getClientRects().length > 0)
+          : [];
       const onKey = (e) => {
-        if (e.key === 'Escape') setShowFilterPanel(false);
+        if (e.key === 'Escape') {
+          setShowFilterPanel(false);
+          return;
+        }
+        if (e.key !== 'Tab') return;
+        const items = focusables();
+        if (!items.length) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        const inside = filterPanelRef.current.contains(document.activeElement);
+        if (e.shiftKey && (document.activeElement === first || !inside)) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && (document.activeElement === last || !inside)) {
+          e.preventDefault();
+          first.focus();
+        }
       };
       document.addEventListener('keydown', onKey);
-      return () => document.removeEventListener('keydown', onKey);
+      return () => {
+        cancelAnimationFrame(raf);
+        document.removeEventListener('keydown', onKey);
+      };
     }
     if (filterWasOpen.current) {
       filterWasOpen.current = false;
       filterTriggerRef.current?.focus();
     }
     return undefined;
-  }, [showFilterPanel]);
+  }, [isFilterModal]);
+
+  // If the viewport grows to desktop while the sheet is open, the inline bar takes over
+  useEffect(() => {
+    if (isDesktop && showFilterPanel) setShowFilterPanel(false);
+  }, [isDesktop, showFilterPanel]);
 
   // Auto-resume CTA action after login
   useEffect(() => {
@@ -298,53 +351,6 @@ const LiveCampaignsMobile = () => {
         aria-hidden="true"
       />
 
-      {/* Filter Panel (slide-up on mobile, inline bar on desktop) */}
-      <div
-        id="live-filter-panel"
-        className={`${styles.filterPanel} ${showFilterPanel ? styles.open : ''}`}
-        role="dialog"
-        aria-modal={showFilterPanel ? 'true' : undefined}
-        aria-labelledby="live-filter-title"
-      >
-        <div className={styles.filterPanelHandle} aria-hidden="true" />
-        <h2 id="live-filter-title" className={styles.filterPanelTitle}>Filter Campaigns</h2>
-
-        <div className={styles.filterGroup}>
-          <label className={styles.filterLabel} htmlFor="live-filter-platform">Platform</label>
-          <select
-            id="live-filter-platform"
-            ref={firstFilterRef}
-            className={styles.filterSelect}
-            value={filters.platform}
-            onChange={(e) => setFilters({ ...filters, platform: e.target.value })}
-          >
-            <option value="">All Platforms</option>
-            {filterOptions.platforms.map(platform => (
-              <option key={platform} value={platform}>{platform}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className={styles.filterGroup}>
-          <label className={styles.filterLabel} htmlFor="live-filter-category">Category</label>
-          <select
-            id="live-filter-category"
-            className={styles.filterSelect}
-            value={filters.category}
-            onChange={(e) => setFilters({ ...filters, category: e.target.value })}
-          >
-            <option value="">All Categories</option>
-            {filterOptions.categories.map(category => (
-              <option key={category} value={category}>{category}</option>
-            ))}
-          </select>
-        </div>
-
-        <button type="button" className={styles.filterApply} onClick={applyFilters}>
-          Apply Filters
-        </button>
-      </div>
-
       {/* Hero Section */}
       <header className={styles.hero}>
         <p className={styles.heroEyebrow}>
@@ -398,6 +404,54 @@ const LiveCampaignsMobile = () => {
           aria-controls="live-filter-panel"
         >
           <Icon name="sliders" />
+        </button>
+      </div>
+
+      {/* Filter Panel (slide-up on mobile, inline bar on desktop) */}
+      <div
+        id="live-filter-panel"
+        className={`${styles.filterPanel} ${showFilterPanel ? styles.open : ''}`}
+        ref={filterPanelRef}
+        {...(isDesktop
+          ? { role: 'group', 'aria-label': 'Filter campaigns' }
+          : { role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'live-filter-title' })}
+      >
+        <div className={styles.filterPanelHandle} aria-hidden="true" />
+        <h2 id="live-filter-title" className={styles.filterPanelTitle}>Filter Campaigns</h2>
+
+        <div className={styles.filterGroup}>
+          <label className={styles.filterLabel} htmlFor="live-filter-platform">Platform</label>
+          <select
+            id="live-filter-platform"
+            ref={firstFilterRef}
+            className={styles.filterSelect}
+            value={filters.platform}
+            onChange={(e) => setFilters({ ...filters, platform: e.target.value })}
+          >
+            <option value="">All Platforms</option>
+            {filterOptions.platforms.map(platform => (
+              <option key={platform} value={platform}>{platform}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className={styles.filterGroup}>
+          <label className={styles.filterLabel} htmlFor="live-filter-category">Category</label>
+          <select
+            id="live-filter-category"
+            className={styles.filterSelect}
+            value={filters.category}
+            onChange={(e) => setFilters({ ...filters, category: e.target.value })}
+          >
+            <option value="">All Categories</option>
+            {filterOptions.categories.map(category => (
+              <option key={category} value={category}>{category}</option>
+            ))}
+          </select>
+        </div>
+
+        <button type="button" className={styles.filterApply} onClick={applyFilters}>
+          Apply Filters
         </button>
       </div>
 
@@ -537,15 +591,15 @@ const LiveCampaignsMobile = () => {
                     </div>
                     <div className={styles.metric}>
                       <dt className={styles.metricLabel}><Icon name="users" />Creators</dt>
-                      <dd className={styles.metricValue}>{campaign.creatorsNeeded ? `${campaign.creatorsNeeded} needed` : '—'}</dd>
+                      <dd className={styles.metricValue}>{campaign.creatorsNeeded ? `${campaign.creatorsNeeded} needed` : 'Not specified'}</dd>
                     </div>
                     <div className={styles.metric}>
                       <dt className={styles.metricLabel}><Icon name="device" />Type</dt>
-                      <dd className={styles.metricValue}>{campaign.platform || '—'}</dd>
+                      <dd className={styles.metricValue}>{campaign.platform || 'Not specified'}</dd>
                     </div>
                     <div className={styles.metric}>
                       <dt className={styles.metricLabel}><Icon name="pin" />Location</dt>
-                      <dd className={styles.metricValue}>{campaign.locations?.[0] || 'Anywhere'}</dd>
+                      <dd className={styles.metricValue}>{campaign.locations?.[0] || 'Not specified'}</dd>
                     </div>
                   </dl>
 
