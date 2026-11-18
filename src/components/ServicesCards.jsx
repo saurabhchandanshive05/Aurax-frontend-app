@@ -1,83 +1,37 @@
-import React, { useState, useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React, { useEffect, useRef, useState } from "react";
 import FeaturedCreators from "./FeaturedCreators";
 import styles from "./ServicesCards.module.css";
 
-// Register ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
+const ARROW = (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
 
 function ServicesCards() {
-  const marqueeRef = useRef(null);
   const brandsSectionRef = useRef(null);
+  const [revealed, setRevealed] = useState(false);
+  const [touchPaused, setTouchPaused] = useState(false);
 
+  // Reveal once the section is on screen (replaces the per-card ScrollTrigger tweens,
+  // whose cleanup also killed every ScrollTrigger on the page)
   useEffect(() => {
-    if (brandsSectionRef.current) {
-      const cards =
-        brandsSectionRef.current.querySelectorAll("[data-brand-card]");
-      gsap.utils.toArray(cards).forEach((card, i) => {
-        gsap.fromTo(
-          card,
-          { opacity: 0, scale: 0.9 },
-          {
-            opacity: 1,
-            scale: 1,
-            duration: 0.6,
-            delay: i * 0.1,
-            scrollTrigger: {
-              trigger: card,
-              start: "top 90%",
-            },
-          }
-        );
-      });
+    const el = brandsSectionRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setRevealed(true);
+      return undefined;
     }
-
-    if (marqueeRef.current) {
-      const track = marqueeRef.current;
-      const width = track.scrollWidth / 2;
-      const tween = gsap.to(track, {
-        x: -width,
-        duration: 30,
-        repeat: -1,
-        ease: "none",
-      });
-
-      // Pause on hover for desktop
-      const container = track.parentElement;
-      const onEnter = () => tween.pause();
-      const onLeave = () => tween.resume();
-      container.addEventListener("mouseenter", onEnter);
-      container.addEventListener("mouseleave", onLeave);
-
-      // Touch swipe support for mobile
-      let startX = 0;
-      const onTouchStart = (e) => {
-        startX = e.touches[0].clientX;
-        tween.pause();
-      };
-      const onTouchEnd = (e) => {
-        const delta = e.changedTouches[0].clientX - startX;
-        // Nudge the track in swipe direction for tactile feel
-        gsap.to(track, { x: "+=" + delta, duration: 0.3, ease: "power2.out" });
-        tween.resume();
-      };
-      container.addEventListener("touchstart", onTouchStart, { passive: true });
-      container.addEventListener("touchend", onTouchEnd, { passive: true });
-
-      // Cleanup
-      return () => {
-        container.removeEventListener("mouseenter", onEnter);
-        container.removeEventListener("mouseleave", onLeave);
-        container.removeEventListener("touchstart", onTouchStart);
-        container.removeEventListener("touchend", onTouchEnd);
-        tween.kill();
-      };
-    }
-
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setRevealed(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px -15% 0px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
   const handleBrandClick = (brand) => {
@@ -97,6 +51,13 @@ function ServicesCards() {
     { id: 10, name: "PRODUCTS", logo: "/logos/products.webp" },
   ];
 
+  // Two runway rows: the second starts halfway through the list and runs the other way
+  const rowB = [...brands.slice(5), ...brands.slice(0, 5)];
+  const rows = [
+    { key: "a", items: brands, reverse: false },
+    { key: "b", items: rowB, reverse: true },
+  ];
+
   return (
     <div className={styles.servicesContainer}>
       <div className={styles.neuralGrid}></div>
@@ -104,49 +65,74 @@ function ServicesCards() {
       {/* Modern Featured Creators Section */}
       <FeaturedCreators />
 
-      <section ref={brandsSectionRef} className={styles.brandsSection}>
-        <div className="max-w-6xl mx-auto text-center">
-          <h2 className={styles.sectionTitle}>Trusted by the Best</h2>
-          <p className={styles.sectionKicker}>
-            Top brands collaborate with our creators
-          </p>
-          <p className={styles.sectionSubtitle}>
-            Brands who've scaled with our creator network
-          </p>
-
-          <div className={styles.marqueeContainer}>
-            <div className={styles.marqueeTrack} ref={marqueeRef}>
-              {[...brands, ...brands].map((brand, index) => (
-                <div
-                  key={`brand-${brand.id}-${index}`}
-                  className={styles.brandCard}
-                  data-brand-card
-                  onClick={() => handleBrandClick(brand)}
-                >
-                  <div className={styles.brandLogo}>
-                    <img
-                      src={brand.logo}
-                      alt={brand.name}
-                      className={styles.brandLogoImg}
-                      loading="lazy"
-                      decoding="async"
-                      draggable="false"
-                    />
-                    <div className={styles.glowEffect}></div>
-                    <div className={styles.shimmerEffect}></div>
-                  </div>
-                </div>
-              ))}
+      <section
+        ref={brandsSectionRef}
+        className={`${styles.brandsSection} ${revealed ? styles.isRevealed : ""}`}
+        aria-labelledby="trusted-best-title"
+      >
+        <div className={styles.tbHeader}>
+          <div className={styles.tbHeading}>
+            <p className={styles.sectionKicker}>
+              Top brands collaborate with our creators
+            </p>
+            <h2 id="trusted-best-title" className={styles.tbTitle}>Trusted by the Best</h2>
+          </div>
+          <div className={styles.tbAside}>
+            <p className={styles.sectionSubtitle}>
+              Brands who've scaled with our creator network
+            </p>
+            <div className={styles.sectionCtaRow}>
+              <button
+                className={styles.caseStudiesCta}
+                onClick={() => (window.location.href = "/case-studies")}
+              >
+                <span>See success stories</span>
+                <span className={styles.ctaArrow}>{ARROW}</span>
+              </button>
             </div>
           </div>
+        </div>
 
-          <div className={styles.sectionCtaRow}>
-            <button
-              className={styles.caseStudiesCta}
-              onClick={() => (window.location.href = "/case-studies")}
-            >
-              See success stories →
-            </button>
+        <div
+          className={`${styles.runway} ${touchPaused ? styles.isPaused : ""}`}
+          onTouchStart={() => setTouchPaused(true)}
+          onTouchEnd={() => setTouchPaused(false)}
+          onTouchCancel={() => setTouchPaused(false)}
+        >
+          <div className={styles.runwayPlane}>
+            {rows.map((row, r) => (
+              <div
+                key={row.key}
+                className={`${styles.marqueeContainer} ${row.reverse ? styles.reverse : ""}`}
+                aria-hidden={r === 1 ? true : undefined}
+              >
+                <ul className={styles.marqueeTrack} aria-label={r === 0 ? "Brands" : undefined}>
+                  {[...row.items, ...row.items].map((brand, index) => (
+                    <li
+                      key={`brand-${row.key}-${brand.id}-${index}`}
+                      className={styles.brandCard}
+                      data-brand-card
+                      aria-hidden={index >= row.items.length ? true : undefined}
+                      onClick={() => handleBrandClick(brand)}
+                    >
+                      <div className={styles.brandLogo}>
+                        <img
+                          src={brand.logo}
+                          alt={brand.name}
+                          className={styles.brandLogoImg}
+                          width="320"
+                          height="154"
+                          loading="lazy"
+                          decoding="async"
+                          draggable="false"
+                        />
+                        <span className={styles.gloss} aria-hidden="true" />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
       </section>

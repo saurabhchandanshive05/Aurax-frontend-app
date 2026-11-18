@@ -4,6 +4,7 @@ import {
   AnimatePresence,
   useScroll,
   useTransform,
+  useReducedMotion,
 } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
 import debounce from "lodash/debounce";
@@ -33,6 +34,9 @@ const FeaturedCreators = () => {
   const scrollTimeoutRef = useRef(null);
   const profilePreviewTimeoutRef = useRef(null);
   const isScrolling = useRef(false);
+  // Autoplay pauses while the carousel is hovered or focused, and never runs under reduced motion
+  const reduceMotion = useReducedMotion();
+  const [isPaused, setIsPaused] = useState(false);
 
   const influencers = [
     {
@@ -45,9 +49,9 @@ const FeaturedCreators = () => {
       youtubeUrl: "",
       bio: "Fitness | Fashion",
       categories: ["Fitness", "Fashion"],
-      followers: "50K",
+      followers: "105K",
       engagement: "5.3%",
-      posts: "341",
+      posts: "804",
     },
     {
       id: 2,
@@ -182,14 +186,50 @@ const FeaturedCreators = () => {
 
   // Auto-scroll functionality
   useEffect(() => {
-    if (!isManualScroll) {
+    if (!isManualScroll && !isPaused && !reduceMotion) {
       const interval = setInterval(() => {
+        // Never advance under a finger: a tick during a swipe added a second step (skipped a card)
+        if (touchActiveRef.current) return;
         setIsTransitioning(true);
         setCurrentIndex((prev) => prev + 1);
       }, 5000);
       return () => clearInterval(interval);
     }
-  }, [isManualScroll]);
+  }, [isManualScroll, isPaused, reduceMotion]);
+
+  // Clear pending timers on unmount
+  useEffect(
+    () => () => {
+      clearTimeout(scrollTimeoutRef.current);
+      clearTimeout(profilePreviewTimeoutRef.current);
+    },
+    []
+  );
+
+  // Close the profile preview with Escape
+  useEffect(() => {
+    if (!showProfilePreview) return undefined;
+    const onKey = (e) => e.key === "Escape" && setShowProfilePreview(false);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [showProfilePreview]);
+
+  // Mouse tilt on the card in focus: CSS variables only, no React re-render per move
+  const onTilt = (e) => {
+    if (reduceMotion || e.pointerType !== "mouse") return;
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    el.style.setProperty("--rx", `${(-y * 7).toFixed(2)}deg`);
+    el.style.setProperty("--ry", `${(x * 9).toFixed(2)}deg`);
+    el.style.setProperty("--mx", `${((x + 0.5) * 100).toFixed(1)}%`);
+    el.style.setProperty("--my", `${((y + 0.5) * 100).toFixed(1)}%`);
+  };
+  const resetTilt = (e) => {
+    e.currentTarget.style.setProperty("--rx", "0deg");
+    e.currentTarget.style.setProperty("--ry", "0deg");
+  };
 
   const handleScroll = (direction) => {
     setIsManualScroll(true);
@@ -258,6 +298,8 @@ const FeaturedCreators = () => {
   const handleTouchEnd = useRef({ x: 0, y: 0, time: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [touchMoved, setTouchMoved] = useState(false);
+  // True while a finger is on the carousel (a ref, so the autoplay timer reads it without a re-render)
+  const touchActiveRef = useRef(false);
 
   // Prevent body scroll when touching carousel
   useEffect(() => {
@@ -279,8 +321,13 @@ const FeaturedCreators = () => {
   }, []);
 
   const onTouchStart = (e) => {
-    if (isScrolling.current) return;
+    if (isScrolling.current) {
+      // Ignore this gesture entirely (also at touchend), instead of measuring it from the last one's start
+      handleTouchStart.current = { x: 0, y: 0, time: 0 };
+      return;
+    }
 
+    touchActiveRef.current = true;
     setTouchMoved(false);
     setIsDragging(false);
 
@@ -310,7 +357,8 @@ const FeaturedCreators = () => {
   };
 
   const onTouchEnd = (e) => {
-    if (isScrolling.current) return;
+    touchActiveRef.current = false;
+    if (isScrolling.current || !handleTouchStart.current.time) return;
 
     handleTouchEnd.current = {
       x: e.changedTouches[0].clientX,
@@ -324,8 +372,11 @@ const FeaturedCreators = () => {
       handleTouchEnd.current.time - handleTouchStart.current.time;
 
     // Only trigger swipe if it was a clear horizontal gesture
+    handleTouchStart.current = { x: 0, y: 0, time: 0 };
+
+    // Decided from the start/end positions only. It used to also require isDragging, but that state is
+    // stale when a fast flick's touchmoves are coalesced or not yet re-rendered, which dropped swipes.
     if (
-      isDragging &&
       Math.abs(deltaX) > 40 && // Reduced threshold for better responsiveness
       Math.abs(deltaX) > Math.abs(deltaY) * 1.5 && // Horizontal movement must be 1.5x vertical
       deltaTime < 600 && // Increased time window
@@ -397,21 +448,81 @@ const FeaturedCreators = () => {
     );
   };
 
+  const isMobileLayout = itemWidthPercent === 90;
+  // The card at currentIndex is the one in focus. Desktop shows it centred between its
+  // neighbours; mobile shows it with a peek of the next and previous cards.
+  const trackOffset = isMobileLayout
+    ? -(currentIndex * itemWidthPercent) + 5
+    : -((currentIndex - 1) * itemWidthPercent);
+  const activeIndex = ((currentIndex % total) + total) % total;
+  const handleOf = (url) =>
+    (url || "").replace(/\/+$/, "").split("/").pop() || "";
+
   return (
     <section className={styles.featuredSection}>
       <div className={styles.container}>
         {/* Section Header */}
-        <div className={styles.header}>
-          <h2 className={styles.sectionTitle}>Featured Creators</h2>
-          <p className={styles.sectionSubtitle}>
-            Discover top-performing creators across all niches
-          </p>
-        </div>
+        <motion.header
+          className={styles.header}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.6, ease: [0.2, 0, 0, 1] }}
+        >
+          <div className={styles.headerText}>
+            <h2 className={styles.sectionTitle}>Featured Creators</h2>
+            <p className={styles.sectionSubtitle}>
+              Discover top-performing creators across all niches
+            </p>
+          </div>
+
+          <div className={styles.controls}>
+            <p className={styles.counter} aria-live="polite">
+              <span className={styles.counterNow}>
+                {String(activeIndex + 1).padStart(2, "0")}
+              </span>
+              <span className={styles.counterTotal}>
+                / {String(total).padStart(2, "0")}
+              </span>
+            </p>
+            {/* Navigation Buttons */}
+            <button
+              className={`${styles.navButton} ${styles.navPrev}`}
+              onClick={() => handleScroll("prev")}
+              aria-label="Previous creator"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <button
+              className={`${styles.navButton} ${styles.navNext}`}
+              onClick={() => handleScroll("next")}
+              aria-label="Next creator"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </div>
+        </motion.header>
 
         {/* Main Carousel */}
-        <div
+        <motion.div
           className={styles.carouselWrapper}
           style={{ touchAction: "pan-y pinch-zoom" }}
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.7, ease: [0.2, 0, 0, 1], delay: 0.1 }}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onFocus={() => setIsPaused(true)}
+          onBlur={(e) => {
+            if (!e.currentTarget.contains(e.relatedTarget)) setIsPaused(false);
+          }}
+          aria-roledescription="carousel"
+          aria-label="Featured creators"
         >
           <div
             className={styles.carousel}
@@ -419,208 +530,213 @@ const FeaturedCreators = () => {
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
+            onTouchCancel={() => {
+              touchActiveRef.current = false;
+              handleTouchStart.current = { x: 0, y: 0, time: 0 };
+            }}
           >
+            <div className={styles.stageLight} aria-hidden="true" />
             <div
-              className={styles.carouselTrack}
+              className={`${styles.carouselTrack} ${
+                isTransitioning ? "" : styles.snapping
+              }`}
               style={{
-                transform: `translate3d(-${
-                  currentIndex * itemWidthPercent
-                }%, 0, 0)`,
+                transform: `translate3d(${trackOffset}%, 0, 0)`,
+                // Reduced motion: an instant 1ms move still fires transitionend for the loop snap
                 transition: isTransitioning
-                  ? "transform 0.5s cubic-bezier(0.2, 0, 0.2, 1)"
+                  ? reduceMotion
+                    ? "transform 1ms linear"
+                    : "transform 0.65s cubic-bezier(0.2, 0, 0, 1)"
                   : "none",
               }}
-              onTransitionEnd={handleTransitionEnd}
+              onTransitionEnd={(e) => {
+                // Cards animate too; only the track's own slide drives the loop snap
+                if (e.target === e.currentTarget) handleTransitionEnd();
+              }}
             >
-              {extendedCreators.map((creator, index) => (
-                <motion.div
-                  key={`${creator.id}-${index}`}
-                  className={styles.creatorCard}
-                  data-creator-id={creator.id}
-                  style={{
-                    opacity: visibleCards.has(index) ? 1 : 0.3,
-                    transform: "translateZ(0)",
-                    width: `${itemWidthPercent}%`,
-                  }}
-                  onClick={(e) => {
-                    // Prevent click if touch moved or is dragging
-                    if (touchMoved || isDragging) {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      return;
-                    }
-                    // Only allow clicks if it's a clean tap
-                    if (!isScrolling.current) {
-                      handleCardPress(creator);
-                    }
-                  }}
-                >
-                  {/* Image Container */}
+              {extendedCreators.map((creator, index) => {
+                const offset = index - currentIndex;
+                const depth = Math.min(Math.abs(offset), 3);
+                const isFocal = offset === 0;
+                const isNear = Math.abs(offset) <= 1;
+                const handle = handleOf(creator.instagramUrl);
+                return (
                   <div
-                    className={styles.imageContainer}
+                    key={`${creator.id}-${index}`}
+                    className={`${styles.creatorCard} ${isFocal ? styles.isFocal : ""}`}
+                    data-creator-id={creator.id}
+                    style={{
+                      width: `${itemWidthPercent}%`,
+                      "--d": Math.max(-3, Math.min(3, offset)),
+                      "--ad": depth,
+                    }}
+                    aria-hidden={isNear ? undefined : true}
                     onClick={(e) => {
-                      // Prevent image clicks during swipe
+                      // Prevent click if touch moved or is dragging
                       if (touchMoved || isDragging) {
                         e.preventDefault();
                         e.stopPropagation();
+                        return;
+                      }
+                      // Only allow clicks if it's a clean tap
+                      if (!isScrolling.current) {
+                        handleCardPress(creator);
                       }
                     }}
                   >
-                    {!loadedImages.has(creator.image) && (
-                      <div className={styles.imageSkeleton} aria-hidden="true" />
-                    )}
-                    {(visibleCards.has(index) || loadedImages.has(creator.image)) && (
-                      <img
-                        src={optimizeImage(creator.image)}
-                        alt={creator.name}
-                        className={`${styles.creatorImage} ${
-                          loadedImages.has(creator.image) ? "" : styles.imageLoading
-                        }`}
-                        loading={index <= currentIndex + 1 ? "eager" : "lazy"}
-                        fetchpriority={
-                          Math.abs(index - currentIndex) <= 1 ? "high" : "auto"
-                        }
-                        decoding="async"
-                        onLoad={() => markImageLoaded(creator.image)}
-                        onError={() => markImageLoaded(creator.image)}
-                      />
-                    )}
-
-                    {/* Gradient Overlay */}
-                    <div className={styles.gradientOverlay} />
-
-                    {/* Favorite Button */}
-                    <motion.button
-                      className={`${styles.favoriteButton} ${
-                        favorites.has(creator.id) ? styles.favorited : ""
-                      }`}
-                      onClick={(e) => toggleFavorite(creator.id, e)}
-                      whileTap={{ scale: 1.2 }}
-                      whileHover={{ scale: 1.1 }}
-                    >
-                      <motion.svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill={favorites.has(creator.id) ? "#ff6b6b" : "none"}
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        animate={
-                          favorites.has(creator.id)
-                            ? { scale: [1, 1.2, 1] }
-                            : { scale: 1 }
-                        }
-                        transition={{ duration: 0.3 }}
+                    <div className={styles.cardStage}>
+                      <div
+                        className={styles.cardBody}
+                        onPointerMove={isFocal ? onTilt : undefined}
+                        onPointerLeave={isFocal ? resetTilt : undefined}
                       >
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                      </motion.svg>
-                    </motion.button>
+                        {/* Image Container */}
+                        <div
+                          className={styles.imageContainer}
+                          onClick={(e) => {
+                            // Prevent image clicks during swipe
+                            if (touchMoved || isDragging) {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }
+                          }}
+                        >
+                          {!loadedImages.has(creator.image) && (
+                            <div className={styles.imageSkeleton} aria-hidden="true" />
+                          )}
+                          {(visibleCards.has(index) || loadedImages.has(creator.image)) && (
+                            <img
+                              src={optimizeImage(creator.image)}
+                              alt={creator.name}
+                              className={`${styles.creatorImage} ${
+                                loadedImages.has(creator.image) ? "" : styles.imageLoading
+                              }`}
+                              loading={index <= currentIndex + 1 ? "eager" : "lazy"}
+                              fetchpriority={
+                                Math.abs(index - currentIndex) <= 1 ? "high" : "auto"
+                              }
+                              decoding="async"
+                              onLoad={() => markImageLoaded(creator.image)}
+                              onError={() => markImageLoaded(creator.image)}
+                            />
+                          )}
 
-                    {/* Plus Button */}
-                    <motion.button
-                      className={styles.plusButton}
-                      whileTap={{ scale: 0.95 }}
-                      whileHover={{ scale: 1.1 }}
-                      animate={{
-                        rotate: [0, 0, 0],
-                        scale: [1, 1.1, 1],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        repeatDelay: 3,
-                      }}
-                    >
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                      >
-                        <path
-                          d="M12 5v14M5 12h14"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                    </motion.button>
-                  </div>
+                          {/* Gradient Overlay */}
+                          <div className={styles.gradientOverlay} />
+                          <div className={styles.sheen} aria-hidden="true" />
 
-                  {/* Content */}
-                  <div className={styles.cardContent}>
-                    <div className={styles.nameLocation}>
-                      <h3 className={styles.creatorName}>{creator.name}</h3>
-                      <p className={styles.creatorLocation}>
-                        {creator.location}
-                      </p>
-                    </div>
+                          {creator.engagement && (
+                            <span className={styles.engagementChip}>
+                              <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M4 16l5-5 4 4 7-7M15 8h5v5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                              </svg>
+                              <strong>{creator.engagement}</strong>
+                              <span>engagement</span>
+                            </span>
+                          )}
 
-                    <div className={styles.stats}>
-                      <div className={styles.stat}>
-                        <span className={styles.statValue}>
-                          {creator.followers}
-                        </span>
-                        <span className={styles.statLabel}>Followers</span>
+                          {/* Favorite Button */}
+                          <motion.button
+                            className={`${styles.favoriteButton} ${
+                              favorites.has(creator.id) ? styles.favorited : ""
+                            }`}
+                            onClick={(e) => toggleFavorite(creator.id, e)}
+                            whileTap={{ scale: 1.2 }}
+                            aria-pressed={favorites.has(creator.id)}
+                            aria-label={`${favorites.has(creator.id) ? "Remove" : "Add"} ${creator.name} ${favorites.has(creator.id) ? "from" : "to"} favourites`}
+                            tabIndex={isNear ? 0 : -1}
+                          >
+                            <motion.svg
+                              width="20"
+                              height="20"
+                              viewBox="0 0 24 24"
+                              fill={favorites.has(creator.id) ? "currentColor" : "none"}
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              animate={
+                                favorites.has(creator.id)
+                                  ? { scale: [1, 1.25, 1] }
+                                  : { scale: 1 }
+                              }
+                              transition={{ duration: 0.3 }}
+                              aria-hidden="true"
+                            >
+                              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </motion.svg>
+                          </motion.button>
+                        </div>
+
+                        {/* Content */}
+                        <div className={styles.cardContent}>
+                          <div className={styles.nameLocation}>
+                            <h3 className={styles.creatorName}>
+                              <button
+                                type="button"
+                                className={styles.nameButton}
+                                tabIndex={isNear ? 0 : -1}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleCardPress(creator);
+                                }}
+                              >
+                                {creator.name}
+                              </button>
+                            </h3>
+                            {handle && <p className={styles.handle}>@{handle}</p>}
+                            <p className={styles.creatorLocation}>
+                              <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0113 0c0 5.4-6.5 11-6.5 11z" fill="none" stroke="currentColor" strokeWidth="1.8" />
+                                <circle cx="12" cy="10" r="2.3" fill="currentColor" />
+                              </svg>
+                              {creator.location}
+                            </p>
+                          </div>
+
+                          <div className={styles.stats}>
+                            <div className={styles.stat}>
+                              <span className={styles.statValue}>{creator.followers}</span>
+                              <span className={styles.statLabel}>Followers</span>
+                            </div>
+                            <div className={styles.stat}>
+                              <span className={styles.statValue}>{creator.posts}</span>
+                              <span className={styles.statLabel}>Posts</span>
+                            </div>
+                          </div>
+
+                          <div className={styles.cardFoot}>
+                            <div className={styles.categories}>
+                              {creator.categories.slice(0, 2).map((category, idx) => (
+                                <span key={idx} className={styles.categoryTag}>
+                                  {category}
+                                </span>
+                              ))}
+                            </div>
+
+                            {/* Plus Button */}
+                            <motion.button
+                              className={styles.plusButton}
+                              whileTap={{ scale: 0.92 }}
+                              aria-label={`Add ${creator.name}`}
+                              tabIndex={isNear ? 0 : -1}
+                            >
+                              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                              </svg>
+                            </motion.button>
+                          </div>
+                        </div>
                       </div>
-                      <div className={styles.stat}>
-                        <span className={styles.statValue}>
-                          {creator.engagement}
-                        </span>
-                        <span className={styles.statLabel}>Engagement</span>
-                      </div>
-                    </div>
-
-                    <div className={styles.categories}>
-                      {creator.categories.slice(0, 2).map((category, idx) => (
-                        <span key={idx} className={styles.categoryTag}>
-                          {category}
-                        </span>
-                      ))}
                     </div>
                   </div>
-                </motion.div>
-              ))}
+                );
+              })}
             </div>
           </div>
-
-          {/* Navigation Buttons */}
-          <button
-            className={`${styles.navButton} ${styles.navPrev}`}
-            onClick={() => handleScroll("prev")}
-            aria-label="Previous creator"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M15 18l-6-6 6-6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-
-          <button
-            className={`${styles.navButton} ${styles.navNext}`}
-            onClick={() => handleScroll("next")}
-            aria-label="Next creator"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M9 18l6-6-6-6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        </div>
+        </motion.div>
 
         {/* Indicators */}
-        <div className={styles.indicators}>
-          {influencers.map((_, index) => (
+        <div className={styles.indicators} role="group" aria-label="Choose a creator">
+          {influencers.map((creator, index) => (
             <button
               key={index}
               className={`${styles.indicator} ${
@@ -641,27 +757,23 @@ const FeaturedCreators = () => {
                   setIsManualScroll(false);
                 }, 10000);
               }}
-              aria-label={`Go to creator ${index + 1}`}
-            />
+              aria-label={`Go to creator ${index + 1}: ${creator.name}`}
+              aria-current={index === currentIndex % influencers.length ? "true" : undefined}
+            >
+              <span className={styles.indicatorFill} />
+            </button>
           ))}
         </div>
 
         {/* Explore Button */}
         <motion.button
           className={styles.exploreButton}
-          whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => (window.location.href = "/creators")}
         >
-          <span>✨ Explore All Creators</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M5 12h14M12 5l7 7-7 7"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+          <span>Explore All Creators</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </motion.button>
       </div>
@@ -678,27 +790,40 @@ const FeaturedCreators = () => {
           >
             <motion.div
               className={styles.profilePreviewCard}
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
+              role="dialog"
+              aria-modal="true"
+              aria-label={`${selectedCreator.name} profile preview`}
+              initial={{ y: 24, scale: 0.96, opacity: 0 }}
+              animate={{ y: 0, scale: 1, opacity: 1 }}
+              exit={{ y: 12, scale: 0.98, opacity: 0 }}
+              transition={{ duration: 0.28, ease: [0.2, 0, 0, 1] }}
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 className={styles.profileCloseButton}
                 onClick={() => setShowProfilePreview(false)}
+                aria-label="Close profile preview"
+                autoFocus
               >
-                ×
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                </svg>
               </button>
 
               <div className={styles.profilePreviewContent}>
-                <img
-                  src={optimizeImage(selectedCreator.image)}
-                  alt={selectedCreator.name}
-                  className={styles.profilePreviewImage}
-                />
+                <div className={styles.profilePreviewMedia}>
+                  <img
+                    src={optimizeImage(selectedCreator.image)}
+                    alt={selectedCreator.name}
+                    className={styles.profilePreviewImage}
+                  />
+                </div>
                 <div className={styles.profilePreviewInfo}>
                   <h3>{selectedCreator.name}</h3>
-                  <p>{selectedCreator.location}</p>
+                  {handleOf(selectedCreator.instagramUrl) && (
+                    <p className={styles.profileHandle}>@{handleOf(selectedCreator.instagramUrl)}</p>
+                  )}
+                  <p className={styles.profileLocation}>{selectedCreator.location}</p>
                   <p className={styles.profileBio}>{selectedCreator.bio}</p>
 
                   <div className={styles.profileStats}>
@@ -707,7 +832,7 @@ const FeaturedCreators = () => {
                       <span>Followers</span>
                     </div>
                     <div className={styles.profileStat}>
-                      <span>{selectedCreator.engagement}</span>
+                      <span>{selectedCreator.engagement || "–"}</span>
                       <span>Engagement</span>
                     </div>
                     <div className={styles.profileStat}>

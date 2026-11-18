@@ -1,0 +1,129 @@
+/* Phone/tablet hero orbit (under 1024px). Desktop uses HeroScene; nothing here applies there. */
+
+.stage {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  height: clamp(232px, 64vw, 268px);
+  margin: 0 auto;
+  perspective: 900px;
+  contain: layout style;
+  touch-action: pan-y; /* never steal vertical scrolling */
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+@media (min-width: 600px) {
+  .stage { height: 340px; }
+}
+
+/* Soft cyan/violet light lying in the plane of the ring */
+.glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 78%;
+  height: 46%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side at 38% 50%, rgba(79, 209, 232, 0.22), transparent),
+    radial-gradient(closest-side at 64% 50%, rgba(139, 124, 246, 0.26), transparent);
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+.rings {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.ring {
+  fill: none;
+  stroke: url(#axOrbitStroke);
+  stroke-width: 1.4;
+  opacity: 0.6;
+}
+
+/* AURAX mark at the centre of the orbit, in the same aura gradient as the navbar logo */
+.mark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font: 800 clamp(1.05rem, 4.6vw, 1.35rem) / 1 var(--ax-font-display);
+  letter-spacing: 0.32em;
+  padding-left: 0.32em; /* optical centring for the tracking */
+  background: var(--ax-aura-linear);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 50; /* between the back half of the ring (z < 50) and the front cards */
+}
+
+.pulse {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  border-radius: 50%;
+  background: #4fd1e8;
+  box-shadow: 0 0 10px 3px rgba(79, 209, 232, 0.45);
+  pointer-events: none;
+  z-index: 60;
+  will-change: transform, opacity;
+}
+.pulse[data-tone="violet"] {
+  background: #b9afff;
+  box-shadow: 0 0 10px 3px rgba(139, 124, 246, 0.5);
+}
+
+/* Card carriers: a zero-size point at the stage centre, moved by transform; the card is
+   centred on that point so scale and the slight turn happen around its middle. */
+.slot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+  will-change: transform, opacity;
+  transform-style: flat;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--ax-font-ui);
+  color: var(--ax-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.stage .slot > * {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%);
+  /* glass: the desktop card surface, a little translucent over the hero light */
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0) 45%),
+    rgba(33, 29, 69, 0.86);
+  border-color: rgba(185, 175, 255, 0.24);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 2px 6px rgba(6, 4, 20, 0.4),
+    0 18px 36px -14px rgba(6, 4, 20, 0.85);
+}
+
+.stage .lifted > * {
+  border-color: rgba(79, 209, 232, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 4px 10px rgba(6, 4, 20, 0.5),
+    0 26px 48px -16px rgba(6, 4, 20, 0.95),
+    0 0 0 3px rgba(79, 209, 232, 0.12);
+}

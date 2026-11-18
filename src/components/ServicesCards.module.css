@@ -273,141 +273,192 @@
   box-shadow: 0 0 20px rgba(0, 204, 255, 0.3);
 }
 
-/* Brands Section */
+/* ==========================================================================
+   Trusted by the Best: a partnership runway.
+   Two rows of brand cards drift in opposite directions on a plane tilted back
+   in 3D, fading out at both ends. Hover pauses a row and lifts a card forward.
+   ========================================================================== */
 .brandsSection {
+  --tb-ease: cubic-bezier(0.2, 0, 0, 1);
   position: relative;
   z-index: 2;
-  padding: 100px 0 50px;
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  background: rgba(255, 255, 255, 0.02);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 18px;
+  margin-top: 0;
+  padding: clamp(2.75rem, 5vw, 4rem) 0 clamp(1.5rem, 3vw, 2.5rem);
+  border-top: 1px solid var(--ax-line);
+  color: var(--ax-text);
 }
-
-.marqueeContainer {
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-  padding: 16px 0;
-}
-
-.marqueeTrack {
-  display: flex;
-  width: 200%;
-  animation: marquee 20s linear infinite;
-}
-
-.brandCard {
-  width: 200px;
-  height: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  flex-shrink: 0;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.brandLogo {
-  width: 100%;
-  height: 100%;
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
-  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.35));
-}
-
-/* Logo image: same box as the former contain/center background.
- z-index -2 keeps it painted beneath the glow/shimmer overlays, as the background was. */
-.brandLogoImg {
+/* soft light the runway sits in */
+.brandsSection::before {
+  content: "";
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-  z-index: -2;
+  left: 50%;
+  bottom: 0;
+  width: min(1100px, 110%);
+  height: 70%;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgba(139, 124, 246, 0.14), rgba(79, 209, 232, 0.04) 60%, transparent);
   pointer-events: none;
-  user-select: none;
 }
 
-.glowEffect {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(
-    circle at center,
-    rgba(91, 119, 255, 0.3),
-    transparent 70%
-  );
-  z-index: -1;
+.tbHeader {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  align-items: end;
+  gap: clamp(1rem, 4vw, 4rem);
+  max-width: 1240px;
+  margin: 0 auto clamp(2.25rem, 4vw, 3.25rem);
+  padding: 0 clamp(16px, 4vw, 40px);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s var(--tb-ease), transform 0.7s var(--tb-ease);
 }
-
-.brandCard:hover .brandLogo {
-  transform: scale(1.06);
-  filter: drop-shadow(0 12px 34px rgba(91, 119, 255, 0.35));
-}
-
-.brandCard:hover {
-  transform: translateY(-6px);
-}
+.isRevealed .tbHeader { opacity: 1; transform: none; }
 
 .sectionKicker {
-  font-size: 0.9rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 0.25rem;
+  margin: 0 0 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ax-cyan);
 }
-
-.sectionCtaRow {
-  margin-top: 18px;
+.tbTitle {
+  margin: 0;
+  font: 700 clamp(2.4rem, 5.4vw, 4.2rem) / 1 var(--ax-font-display);
+  letter-spacing: -0.035em;
+  color: var(--ax-text);
 }
-
+.tbAside { justify-self: end; max-width: 26rem; }
+.sectionSubtitle {
+  margin: 0 0 18px;
+  font-size: clamp(1rem, 1.4vw, 1.12rem);
+  line-height: 1.55;
+  color: var(--ax-text-2);
+}
+.sectionCtaRow { margin: 0; }
 .caseStudiesCta {
-  background: transparent;
-  color: #9ecbff;
-  border: 1px solid rgba(158, 203, 255, 0.35);
-  padding: 10px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 14px 0 22px;
+  border: 1px solid var(--ax-line-strong);
   border-radius: 999px;
-  font-weight: 700;
-  transition: all 0.25s ease;
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 60%),
+    var(--ax-dusk);
+  color: var(--ax-text);
+  font: 600 0.98rem/1 var(--ax-font-ui);
+  cursor: pointer;
+  box-shadow: 0 14px 30px -18px rgba(6, 4, 20, 0.95);
+  transition: border-color 0.25s var(--tb-ease), transform 0.25s var(--tb-ease), box-shadow 0.25s var(--tb-ease);
 }
-
+.ctaArrow {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--ax-cyan);
+  color: var(--ax-cyan-ink);
+  transition: transform 0.3s var(--tb-ease);
+}
+.ctaArrow svg { width: 15px; height: 15px; }
 .caseStudiesCta:hover {
-  background: rgba(158, 203, 255, 0.1);
-  border-color: rgba(158, 203, 255, 0.55);
+  border-color: rgba(79, 209, 232, 0.55);
   transform: translateY(-2px);
+  box-shadow: 0 20px 36px -18px rgba(79, 209, 232, 0.35);
+}
+.caseStudiesCta:hover .ctaArrow { transform: translateX(3px) rotate(-45deg); }
+.caseStudiesCta:focus-visible { outline: none; box-shadow: var(--ax-focus); }
+
+/* ---------- Runway ---------- */
+.runway {
+  position: relative;
+  perspective: 1200px;
+  perspective-origin: 50% 0%;
+  /* fade both ends so the rows run out of the light rather than being cut off */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 12%, #000 88%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.9s var(--tb-ease) 0.15s;
+}
+.isRevealed .runway { opacity: 1; }
+.runwayPlane {
+  display: grid;
+  gap: 18px;
+  padding: 18px 0 30px;
+  transform: rotateX(16deg);
+  transform-origin: 50% 100%;
+  transform-style: preserve-3d;
 }
 
-.shimmerEffect {
+.marqueeContainer { overflow: hidden; padding: 14px 0; margin: -14px 0; }
+.marqueeTrack {
+  display: flex;
+  gap: 18px;
+  width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: tbMarquee 46s linear infinite;
+}
+.reverse .marqueeTrack { animation-direction: reverse; animation-duration: 54s; }
+/* moving exactly half the track (one copy plus half a gap) makes the loop seamless */
+@keyframes tbMarquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-50% - 9px)); }
+}
+.marqueeContainer:hover .marqueeTrack,
+.isPaused .marqueeTrack { animation-play-state: paused; }
+
+.brandCard {
+  flex: 0 0 auto;
+  width: clamp(168px, 16vw, 216px);
+  transition: transform 0.4s var(--tb-ease), opacity 0.4s var(--tb-ease);
+}
+.brandLogo {
+  position: relative;
+  aspect-ratio: 320 / 154;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--ax-dusk);
+  border: 1px solid var(--ax-line-strong);
+  box-shadow:
+    0 2px 0 rgba(6, 4, 20, 0.7),
+    0 18px 32px -16px rgba(6, 4, 20, 0.95);
+  transition: border-color 0.4s var(--tb-ease), box-shadow 0.4s var(--tb-ease);
+}
+.brandLogoImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  transition: transform 0.6s var(--tb-ease);
+}
+/* glass highlight across the top of each card */
+.gloss {
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent,
-    rgba(255, 255, 255, 0.1),
-    transparent
-  );
-  animation: shimmer 3s infinite;
-  z-index: -1;
+  inset: 0;
+  background: linear-gradient(170deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.04) 32%, transparent 48%);
+  pointer-events: none;
 }
 
-@keyframes shimmer {
-  0% {
-    transform: rotate(0deg) translateX(-50%);
+@media (hover: hover) {
+  .marqueeContainer:hover .brandCard { opacity: 0.55; }
+  .marqueeContainer:hover .brandCard:hover {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.06);
   }
-  100% {
-    transform: rotate(360deg) translateX(-50%);
+  .brandCard:hover .brandLogo {
+    border-color: rgba(79, 209, 232, 0.6);
+    box-shadow:
+      0 2px 0 rgba(6, 4, 20, 0.7),
+      0 30px 44px -18px rgba(6, 4, 20, 1),
+      0 0 0 1px rgba(79, 209, 232, 0.25);
   }
+  .brandCard:hover .brandLogoImg { transform: scale(1.05); }
 }
 
 /* Responsive Design */
@@ -424,8 +475,29 @@
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
 
-  .brandCard {
-    width: 150px;
-    height: 120px;
+  /* the runway stays full-bleed inside the padded container */
+  .brandsSection { margin-left: -1rem; margin-right: -1rem; }
+  .tbHeader { grid-template-columns: 1fr; gap: 16px; }
+  .tbAside { justify-self: start; }
+  .runwayPlane { transform: rotateX(10deg); gap: 14px; }
+  .marqueeTrack { gap: 14px; }
+  @keyframes tbMarquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-50% - 7px)); }
   }
+  .brandCard { width: 150px; }
+}
+
+/* Reduced motion: still rows the user can scroll sideways, no tilt or lift */
+@media (prefers-reduced-motion: reduce) {
+  .marqueeTrack { animation: none; }
+  .marqueeContainer { overflow-x: auto; scrollbar-width: none; }
+  .marqueeContainer::-webkit-scrollbar { display: none; }
+  .runwayPlane { transform: none; }
+  .tbHeader,
+  .runway { opacity: 1; transform: none; transition: none; }
+  .brandCard,
+  .brandLogoImg { transition: none; }
+  .marqueeContainer:hover .brandCard:hover { transform: none; }
+  .brandCard:hover .brandLogoImg { transform: none; }
 }

@@ -1,370 +1,351 @@
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-
+/* ==========================================================================
+   Campaign showcase: a concave "display wall" of reel panels.
+   Each panel turns toward the centre as the wall drifts past (--x / --ax, set
+   per frame from its position), floats above a warm floor light, and on hover
+   its video, brand plate and play control separate in depth as it tilts.
+   Transforms and opacity only; no WebGL.
+   ========================================================================== */
 .showcaseSection {
-  padding: 80px 0 40px;
-  background: linear-gradient(135deg, #0a0a23 0%, #1a1a40 100%);
+  --bs-ease: cubic-bezier(0.2, 0, 0, 1);
+  --bs-card-w: 264px;
+  --bs-gap: 28px;
   position: relative;
   overflow: hidden;
+  padding: clamp(4rem, 8vw, 6rem) 0 clamp(3rem, 6vw, 4.5rem);
+  background:
+    radial-gradient(900px 260px at 50% 86%, rgba(244, 183, 64, 0.1), transparent 70%),
+    linear-gradient(180deg, var(--ax-night) 0%, var(--ax-night-deep) 100%);
+  color: var(--ax-text);
+  font-family: var(--ax-font-ui);
 }
 
-.showcaseSection::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(
-      circle at 10% 20%,
-      rgba(100, 100, 200, 0.1) 0%,
-      transparent 20%
-    ),
-    radial-gradient(
-      circle at 90% 80%,
-      rgba(200, 100, 200, 0.1) 0%,
-      transparent 20%
-    );
-  z-index: 0;
-}
-
+/* ---------- Header ---------- */
 .header {
-  text-align: center;
-  margin-bottom: 50px;
-  position: relative;
-  z-index: 1;
-  max-width: 1200px;
-  margin: 0 auto 50px;
+  max-width: 760px;
+  margin: 0 auto clamp(2rem, 4vw, 3rem);
   padding: 0 20px;
+  text-align: center;
 }
-
 .sectionTitle {
-  font-size: 3rem;
-  font-weight: 800;
-  color: white;
-  margin-bottom: 20px;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  margin: 0 0 12px;
+  font: 700 clamp(2.1rem, 4.6vw, 3.4rem) / 1.05 var(--ax-font-display);
+  letter-spacing: -0.03em;
+  color: var(--ax-text);
 }
-
 .sectionSubtitle {
-  font-size: 1.3rem;
-  color: rgba(255, 255, 255, 0.85);
-  max-width: 700px;
   margin: 0 auto;
-  font-weight: 300;
+  max-width: 34rem;
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  line-height: 1.55;
+  color: var(--ax-text-2);
 }
 
-.carouselWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  width: 100%;
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 0 20px 60px;
-}
+/* ---------- Wall ---------- */
+.carouselWrapper { position: relative; }
 
 .cardsContainer {
-  overflow: hidden;
   width: 100%;
-  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x pan-y;
+  /* room for the lift, tilt and floor shadow */
+  padding: 36px 0 64px;
+  /* the wall fades out at the edges instead of being cut off */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
 }
+.cardsContainer::-webkit-scrollbar { display: none; }
 
 .cardsInnerContainer {
+  position: relative;
   display: flex;
-  gap: 25px;
+  gap: var(--bs-gap);
   width: max-content;
-  will-change: transform;
+  padding: 0 var(--bs-gap);
 }
 
 .card {
   position: relative;
-  width: 280px;
-  aspect-ratio: 9/16;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  transition: all 0.3s ease;
-  flex-shrink: 0;
-  background: rgba(20, 20, 60, 0.4);
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  cursor: pointer;
+  flex: 0 0 auto;
+  width: var(--bs-card-w);
+  perspective: 1100px;
+}
+/* Floor light: a soft warm contact shadow under each floating panel */
+.card::after {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: -34px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(6, 4, 20, 0.85), rgba(6, 4, 20, 0) 100%);
+  filter: blur(2px);
+  opacity: calc(0.9 - var(--ax, 0) * 0.35);
+  pointer-events: none;
+}
+
+/* Concave placement from the panel's position on the wall */
+.cardStage {
+  transform-style: preserve-3d;
+  transform:
+    rotateY(calc(var(--x, 0) * -16deg))
+    translateZ(calc(var(--ax, 0) * 26px));
+  transform-origin: 50% 50%;
+}
+
+/* The panel itself: tilt + hover lift, layers inside keep their depth */
+.cardBody {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  border-radius: 22px;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--ty, 0deg)) rotateY(var(--tx, 0deg)) translateZ(0);
+  transition: transform 0.45s var(--bs-ease);
+  cursor: default;
+}
+.cardBody::before {
+  /* panel edge + layered shadow, kept behind the video */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid var(--ax-line-strong);
+  box-shadow:
+    0 2px 8px rgba(6, 4, 20, 0.5),
+    0 30px 60px -24px rgba(6, 4, 20, 0.95);
+  transition: box-shadow 0.45s var(--bs-ease), border-color 0.45s var(--bs-ease);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .videoContainer {
-  position: relative;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  background: var(--ax-dusk);
+}
+/* Poster (a still from the campaign's own video) sits under the video, so the panel
+   shows the artwork straight away; the video covers it once it is playing. */
+.poster,
+.posterFallback {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  border-radius: 16px;
-  overflow: hidden;
+}
+.poster {
+  object-fit: cover;
+  display: block;
+  transform: scale(1.02);
+  transition: transform 0.9s var(--bs-ease);
+}
+/* Shown only if no poster image can be loaded */
+.posterFallback {
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(120% 70% at 50% 30%, rgba(244, 183, 64, 0.16), transparent 60%),
+    linear-gradient(180deg, var(--ax-dusk-2) 0%, var(--ax-night-deep) 100%);
+}
+.posterFallback span {
+  font: 700 1.9rem/1 var(--ax-font-display);
+  letter-spacing: -0.02em;
+  color: var(--ax-text-2);
 }
 
 .video {
+  position: relative;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  transform: scale(1.02);
+  transition: transform 0.9s var(--bs-ease);
 }
-
 .gradientOverlay {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(15, 12, 36, 0.35) 0%, transparent 22%, transparent 52%, rgba(15, 12, 36, 0.92) 100%);
+  pointer-events: none;
+}
+.glare {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(360px circle at var(--lx, 50%) var(--ly, 20%), rgba(255, 255, 255, 0.16), transparent 50%);
+  opacity: 0;
+  transition: opacity 0.45s var(--bs-ease);
+  pointer-events: none;
 }
 
+/* Brand plate floats in front of the video */
 .infoOverlay {
   position: absolute;
-  bottom: 20px;
-  left: 20px;
-  color: white;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
   z-index: 2;
-  width: calc(100% - 40px);
+  padding: 14px 14px 12px;
+  border-radius: 16px;
+  /* solid translucent plate: a live blur on 12 moving 3D panels re-rendered visibly while scrolling */
+  background: rgba(21, 18, 46, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translateZ(0);
+  transition: transform 0.45s var(--bs-ease);
 }
-
 .brandName {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-  letter-spacing: 0.5px;
+  margin: 0 0 10px;
+  font: 700 1.45rem/1 var(--ax-font-display);
+  letter-spacing: -0.02em;
+  color: var(--ax-text);
 }
-
 .statsContainer {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-top: 10px;
+  border-top: 1px solid var(--ax-line);
 }
-
 .views,
 .roas {
-  display: flex;
-  align-items: center;
-  font-size: 1rem;
-  font-weight: 600;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 6px 15px;
-  border-radius: 20px;
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: grid;
+  gap: 2px;
+  font-size: 11.5px;
+  color: var(--ax-text-3);
 }
+.roas { padding-left: 12px; border-left: 1px solid var(--ax-line); }
+.views strong,
+.roas strong {
+  font: 700 1.15rem/1.1 var(--ax-font-display);
+  font-variant-numeric: tabular-nums;
+}
+.views strong { color: var(--ax-text); }
+.roas strong { color: var(--ax-marigold); }
 
+/* Play / pause */
 .playPauseButton {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
-  width: 30px;
-  height: 30px;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: 12px;
+  right: 12px;
   z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 50%;
+  background: rgba(15, 12, 36, 0.7);
+  color: var(--ax-text);
   cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.2);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transform: translateZ(0) scale(0.92);
+  transition: opacity 0.3s var(--bs-ease), transform 0.45s var(--bs-ease), background 0.2s var(--bs-ease);
 }
-
-.card:hover .playPauseButton {
-  opacity: 1;
-}
-
+.playPauseButton:hover { background: rgba(15, 12, 36, 0.8); }
 .playIcon {
   width: 0;
   height: 0;
-  border-top: 8px solid transparent;
-  border-left: 12px solid white;
-  border-bottom: 8px solid transparent;
   margin-left: 3px;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 13px solid currentColor;
+}
+.pauseIcon { display: flex; gap: 4px; }
+.pauseBar { width: 4px; height: 14px; border-radius: 1px; background: currentColor; }
+
+/* ---------- Hover (pointer devices) ---------- */
+@media (hover: hover) {
+  .cardBody:hover { transform: rotateX(var(--ty, 0deg)) rotateY(var(--tx, 0deg)) translateZ(34px); }
+  .cardBody:hover::before {
+    border-color: rgba(244, 183, 64, 0.45);
+    box-shadow:
+      0 4px 12px rgba(6, 4, 20, 0.55),
+      0 46px 80px -26px rgba(6, 4, 20, 1);
+  }
+  .cardBody:hover .video,
+  .cardBody:hover .poster { transform: scale(1.08); }
+  .cardBody:hover .glare { opacity: 1; }
+  .cardBody:hover .infoOverlay { transform: translateZ(38px); }
+  .cardBody:hover .playPauseButton { opacity: 1; transform: translateZ(28px) scale(1); }
+}
+.playPauseButton:focus-visible {
+  opacity: 1;
+  transform: translateZ(0) scale(1);
+  outline: none;
+  box-shadow: var(--ax-focus);
+}
+/* Touch devices: the control is always visible */
+@media (hover: none) {
+  .playPauseButton { opacity: 1; transform: none; }
 }
 
-.pauseIcon {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-
-.pauseBar {
-  width: 4px;
-  height: 14px;
-  background: white;
-}
-
-/* Floating scroll CTA */
+/* ---------- Arrows ---------- */
 .floatingScrollCTA {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
   display: flex;
-  gap: 15px;
-  z-index: 20;
-}
-
-.scrollButton {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  gap: 12px;
+  margin-top: 4px;
+}
+.scrollButton {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid var(--ax-line-strong);
+  border-radius: 50%;
+  background: rgba(33, 29, 69, 0.6);
+  color: var(--ax-text);
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  animation: float 2s infinite;
+  transition: background var(--ax-dur) var(--bs-ease), border-color var(--ax-dur) var(--bs-ease), transform var(--ax-dur) var(--bs-ease);
 }
+.scrollButton:hover { background: var(--ax-dusk-2); border-color: rgba(244, 183, 64, 0.5); }
+.scrollButton:active { transform: scale(0.94); }
+.scrollButton:focus-visible { outline: none; box-shadow: var(--ax-focus); }
 
-.scrollButton:hover {
-  background: rgba(255, 255, 255, 0.25);
-  animation: pulse 1s infinite;
-  transform: scale(1.1);
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) {
+  .showcaseSection { --bs-card-w: 240px; --bs-gap: 24px; }
 }
-
-/* Responsive adjustments */
-@media (max-width: 1200px) {
-  .card {
-    width: 250px;
-  }
-
-  .brandName {
-    font-size: 1.7rem;
-  }
-}
-
-@media (max-width: 992px) {
-  .sectionTitle {
-    font-size: 2.5rem;
-  }
-
-  .card {
-    width: 230px;
-  }
-}
-
 @media (max-width: 768px) {
-  .showcaseSection {
-    padding: 60px 0 20px;
-  }
-
-  .sectionTitle {
-    font-size: 2.2rem;
-  }
-
-  .sectionSubtitle {
-    font-size: 1.1rem;
-  }
-
-  .card {
-    width: 220px;
-  }
-
-  .brandName {
-    font-size: 1.5rem;
-  }
-
-  .views,
-  .roas {
-    font-size: 0.9rem;
-    padding: 5px 12px;
-  }
-
-  .scrollButton {
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
-  }
-
-  .floatingScrollCTA {
-    bottom: 10px;
-    right: 10px;
-    gap: 10px;
+  .showcaseSection { --bs-card-w: 220px; --bs-gap: 20px; }
+  .cardStage { transform: rotateY(calc(var(--x, 0) * -10deg)) translateZ(calc(var(--ax, 0) * 14px)); }
+  .cardsContainer {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
   }
 }
+@media (max-width: 480px) {
+  .showcaseSection { --bs-card-w: min(58vw, 236px); --bs-gap: 16px; }
+  .brandName { font-size: 1.25rem; }
+  .views strong,
+  .roas strong { font-size: 1.05rem; }
+}
 
-@media (max-width: 576px) {
-  .showcaseSection {
-    padding: 50px 0 10px;
-  }
-
-  .sectionTitle {
-    font-size: 1.8rem;
-  }
-
-  .card {
-    width: 200px;
-  }
-
-  .infoOverlay {
-    bottom: 15px;
-    left: 15px;
-    width: calc(100% - 30px);
-  }
-
-  .brandName {
-    font-size: 1.3rem;
-    margin-bottom: 8px;
-  }
-
-  .statsContainer {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .playPauseButton {
-    bottom: 15px;
-    right: 15px;
-    width: 26px;
-    height: 26px;
-  }
-
-  .playIcon {
-    border-top: 6px solid transparent;
-    border-left: 10px solid white;
-    border-bottom: 6px solid transparent;
-  }
-
-  .pauseBar {
-    width: 3px;
-    height: 10px;
-  }
-
-  .cardsInnerContainer {
-    gap: 15px;
-  }
-
-  .scrollButton {
-    width: 36px;
-    height: 36px;
-    font-size: 1.1rem;
-  }
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .cardStage,
+  .cardBody,
+  .cardBody:hover,
+  .cardBody:hover .infoOverlay,
+  .cardBody:hover .playPauseButton { transform: none !important; }
+  .cardBody,
+  .cardBody::before,
+  .video,
+  .poster,
+  .glare,
+  .infoOverlay,
+  .playPauseButton,
+  .scrollButton { transition: none !important; }
+  .video,
+  .poster,
+  .cardBody:hover .video,
+  .cardBody:hover .poster { transform: none !important; }
+  .glare { display: none; }
+  .playPauseButton { opacity: 1; }
 }

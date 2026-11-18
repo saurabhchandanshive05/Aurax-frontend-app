@@ -3,8 +3,10 @@ import { motion } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
 import { getApiEndpoint } from "../utils/getApiUrl";
 import styles from "./styles/Hero.module.css";
+import HeroOrbitMobile from "./HeroOrbitMobile";
 
-// three.js scene is desktop-only: load it on demand so mobile never downloads it
+// three.js scene is desktop-only (1024px and up): load it on demand so phones and tablets
+// never download it. Below 1024px the lightweight CSS orbit (HeroOrbitMobile) is shown.
 const HeroScene = lazy(() => import("./HeroScene"));
 
 const containerVariants = {
@@ -29,13 +31,19 @@ const Hero = () => {
   const [isMobile, setIsMobile] = useState(
     () => typeof window !== "undefined" && window.innerWidth < 768
   );
+  const [isCompact, setIsCompact] = useState(
+    () => typeof window !== "undefined" && window.innerWidth < 1024
+  );
   const [live, setLive] = useState(null);
   const ctaRef = useRef(null);
   const heroRef = useRef(null);
 
   // Check for mobile on mount and resize
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+      setIsCompact(window.innerWidth < 1024);
+    };
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
@@ -136,6 +144,13 @@ const Hero = () => {
             reviewed creators.
           </motion.p>
 
+          {/* Phones and tablets: compact orbit between the copy and the buttons */}
+          {isCompact && (
+            <motion.div variants={itemVariants} style={{ width: "100%" }}>
+              <HeroOrbitMobile />
+            </motion.div>
+          )}
+
           {/* CTA buttons */}
           <motion.div className={styles.ctaGroup} variants={itemVariants}>
             <motion.button
@@ -217,7 +232,7 @@ const Hero = () => {
       </motion.div>
 
       {/* 3D Scene for desktop */}
-      {!isMobile && (
+      {!isCompact && (
         <div className={styles.sceneContainer}>
           <Suspense fallback={null}>
             <HeroScene />

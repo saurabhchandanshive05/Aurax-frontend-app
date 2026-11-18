@@ -1,64 +1,62 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useNavigate } from "react-router-dom";
+import ServiceVisual from "./SpecializationVisuals";
 import styles from "./styles/Specialization.module.css";
 
-gsap.registerPlugin(ScrollTrigger);
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  typeof window.matchMedia === "function" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const Specialization = () => {
   const sectionRef = useRef(null);
   const [active, setActive] = useState(null);
   const navigate = useNavigate();
+  const [reduced] = useState(prefersReducedMotion);
 
+  // Scroll reveal from each card's real position (IntersectionObserver). The previous
+  // ScrollTrigger reveal measured positions once; sections above change height as their
+  // media loads, so some cards never reached their stale trigger and stayed invisible.
   useEffect(() => {
-    const techItems = gsap.utils.toArray(".tech-item");
+    const cells = Array.from(sectionRef.current?.querySelectorAll(".tech-item") || []);
+    const show = (el) => el.classList.add(styles.revealed);
+    if (reduced || typeof IntersectionObserver === "undefined") {
+      cells.forEach(show);
+      return undefined;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            show(entry.target);
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -10% 0px" }
+    );
+    cells.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [reduced]);
 
-    techItems.forEach((item, i) => {
-      gsap.fromTo(
-        item,
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          delay: i * 0.1,
-          scrollTrigger: {
-            trigger: item,
-            start: "top 90%",
-          },
-        }
-      );
-    });
-
-    // Mouse move effect for cards
-    techItems.forEach((card) => {
-      card.addEventListener("mousemove", (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        card.style.setProperty("--mouse-x", `${x}px`);
-        card.style.setProperty("--mouse-y", `${y}px`);
-      });
-    });
-
-    return () => {
-      techItems.forEach((card) => {
-        card.removeEventListener("mousemove", () => {});
-      });
-    };
-  }, []);
+  // Close the details dialog with Escape
+  useEffect(() => {
+    if (!active) return undefined;
+    const onKey = (e) => e.key === "Escape" && setActive(null);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [active]);
 
   const handleCardClick = (e, tech) => {
-    // Ripple feedback
+    // Ripple feedback, positioned from the card's own box
     const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
     const circle = document.createElement("span");
-    const diameter = Math.max(el.clientWidth, el.clientHeight);
+    const diameter = Math.max(rect.width, rect.height);
     const radius = diameter / 2;
     circle.style.width = circle.style.height = `${diameter}px`;
-    circle.style.left = `${e.clientX - el.offsetLeft - radius}px`;
-    circle.style.top = `${e.clientY - el.offsetTop - radius}px`;
+    circle.style.left = `${e.clientX - rect.left - radius}px`;
+    circle.style.top = `${e.clientY - rect.top - radius}px`;
     circle.classList.add(styles.ripple);
     const ripple = el.getElementsByClassName(styles.ripple)[0];
     if (ripple) ripple.remove();
@@ -67,21 +65,22 @@ const Specialization = () => {
     setTimeout(() => setActive(tech), 150);
   };
 
-  // 3D tilt handlers (lightweight, no extra deps)
+  // 3D tilt + spotlight position (lightweight, no extra deps)
   const handleMouseMove = useCallback((e) => {
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width - 0.5;
     const py = (e.clientY - rect.top) / rect.height - 0.5;
-    const rotateX = (-py * 10).toFixed(2);
-    const rotateY = (px * 12).toFixed(2);
-    card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+    card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+    card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+    card.style.setProperty("--rx", `${(-py * 8).toFixed(2)}deg`);
+    card.style.setProperty("--ry", `${(px * 10).toFixed(2)}deg`);
   }, []);
 
   const handleMouseLeave = useCallback((e) => {
     const card = e.currentTarget;
-    card.style.transform =
-      "perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0)";
+    card.style.setProperty("--rx", "0deg");
+    card.style.setProperty("--ry", "0deg");
   }, []);
 
   const techStack = [
@@ -139,6 +138,8 @@ const Specialization = () => {
     typeof window !== "undefined" &&
     window.matchMedia &&
     window.matchMedia("(pointer: fine)").matches;
+  const tilt = hasFinePointer && !reduced;
+  const activeIndex = active ? techStack.findIndex((t) => t.name === active.name) : -1;
 
   return (
     <section
@@ -146,86 +147,61 @@ const Specialization = () => {
       id="services"
       className={styles.specializationSection}
     >
-      {/* Neural Grid Background */}
-      <div className={styles.neuralGrid} />
+      {/* Perspective grid floor and one soft light */}
+      <div className={styles.neuralGrid} aria-hidden="true" />
+      <div className={styles.sectionLight} aria-hidden="true" />
 
-      {/* Neural Connection Lines */}
-      <div
-        className={styles.neuralConnection}
-        style={{
-          top: "30%",
-          left: "10%",
-          width: "25%",
-          transform: "rotate(-15deg)",
-        }}
-      />
-      <div
-        className={styles.neuralConnection}
-        style={{
-          top: "45%",
-          left: "35%",
-          width: "30%",
-          transform: "rotate(10deg)",
-        }}
-      />
-      <div
-        className={styles.neuralConnection}
-        style={{
-          top: "60%",
-          left: "65%",
-          width: "25%",
-          transform: "rotate(-5deg)",
-        }}
-      />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+      <div className={styles.inner}>
+        <header className={styles.header}>
           <h2 className={styles.sectionTitle}>We Specialize In</h2>
           <p className={styles.sectionSubtitle}>
             Empowering creators with AI-first, data-intelligent tools that
             transform digital influence
           </p>
-        </div>
+        </header>
 
         <div className={styles.techGrid}>
           {techStack.map((tech, index) => (
             <div
               key={index}
-              className={`${styles.techItem} tech-item`}
-              style={{ "--accent-color": tech.color }}
-              onClick={(e) => handleCardClick(e, tech)}
-              onMouseMove={hasFinePointer ? handleMouseMove : undefined}
-              onMouseLeave={hasFinePointer ? handleMouseLeave : undefined}
+              className={`${styles.techCell} tech-item`}
+              style={{ "--reveal-delay": `${(index % 3) * 0.1}s` }}
             >
-              <div className={styles.techIcon}>{tech.icon}</div>
-              <h3 className={styles.techName}>{tech.name}</h3>
-              <p className={styles.techDescription}>{tech.description}</p>
-              <div className={styles.cardActions}>
-                <button
-                  className={styles.cardCta}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(tech.path);
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                >
-                  Learn more
-                </button>
+              <div
+                className={styles.techItem}
+                style={{ "--float-delay": `${-index * 1.1}s` }}
+                onClick={(e) => handleCardClick(e, tech)}
+                onMouseMove={tilt ? handleMouseMove : undefined}
+                onMouseLeave={tilt ? handleMouseLeave : undefined}
+              >
+                <div className={styles.techStage}>
+                  <span className={styles.stageShadow} aria-hidden="true" />
+                  <div className={styles.techIcon}>
+                    <ServiceVisual name={tech.name} uid={index} className={styles.visual} />
+                  </div>
+                </div>
+                <div className={styles.techBody}>
+                  <h3 className={styles.techName}>{tech.name}</h3>
+                  <p className={styles.techDescription}>{tech.description}</p>
+                  <div className={styles.cardActions}>
+                    <button
+                      className={styles.cardCta}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(tech.path);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                    >
+                      Learn more
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
-        </div>
-        <div className={styles.swipeHint} aria-hidden>
-          <span>Swipe</span>
-          <svg width="28" height="12" viewBox="0 0 28 12" fill="none">
-            <path
-              d="M1 6h24M19 1l6 5-6 5"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
         </div>
       </div>
 
@@ -242,14 +218,17 @@ const Specialization = () => {
             <button
               className={styles.modalClose}
               onClick={() => setActive(null)}
+              aria-label="Close details"
+              autoFocus
             >
-              ×
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
             </button>
-            <div
-              className={styles.modalHeader}
-              style={{ borderColor: active.color }}
-            >
-              <span className={styles.modalIcon}>{active.icon}</span>
+            <div className={styles.modalHeader}>
+              <span className={styles.modalIcon}>
+                <ServiceVisual name={active.name} uid={`m${activeIndex}`} className={styles.visual} />
+              </span>
               <h3>{active.name}</h3>
             </div>
             <p className={styles.modalCopy}>{active.description}</p>
