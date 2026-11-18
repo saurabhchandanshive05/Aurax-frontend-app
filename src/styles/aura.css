@@ -142,6 +142,16 @@
   box-shadow: var(--ax-shadow-float);
 }
 
+/* ---- Homepage sections waiting for the hero (src/hooks/useDeferredStart.js) ----
+   Looping animations stay paused until the hero is ready or the section nears the viewport,
+   so they don't compete with the hero's startup. Nothing here is visible yet. */
+[data-defer-idle],
+[data-defer-idle] *,
+[data-defer-idle] *::before,
+[data-defer-idle] *::after {
+  animation-play-state: paused !important;
+}
+
 /* ---- Visually hidden (screen-reader only) ---- */
 .ax-sr-only {
   position: absolute;

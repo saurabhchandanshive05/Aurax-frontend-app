@@ -4,6 +4,11 @@ import { Html, Line } from "@react-three/drei";
 import * as THREE from "three";
 import styles from "./styles/HeroScene.module.css";
 import { CONTENT } from "./HeroCards";
+import { markHeroReady } from "../utils/heroReady";
+
+// This code has arrived: if WebGL never draws a card (unsupported or failing GPU), release the
+// rest of the homepage after 4s instead of waiting for the global backstop.
+if (typeof window !== "undefined") window.setTimeout(markHeroReady, 4000);
 
 /*
  * Homepage hero visual: the AURAX ecosystem.
@@ -97,6 +102,7 @@ function Ecosystem({ reduced, hovered }) {
   const camera = useThree((s) => s.camera);
   const size = useThree((s) => s.size);
   const gl = useThree((s) => s.gl);
+  const invalidate = useThree((s) => s.invalidate);
   const rig = useRef();
   const nodeRefs = useRef({});
   const cardEls = useRef({});
@@ -104,7 +110,10 @@ function Ecosystem({ reduced, hovered }) {
   const dotRefs = useRef([]);
   const pointer = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
   const lift = useRef(Object.fromEntries(NODES.map((n) => [n.id, 0])));
-  const alpha = useRef(Object.fromEntries(NODES.map((n) => [n.id, 1])));
+  // null = not shown yet. Starting at 1 showed every card at its unplaced position and over the
+  // headline until the first check; now each card appears on the first frame it is placed and
+  // measured, straight at its final opacity (no fade-in delay), and fades only after that.
+  const alpha = useRef(Object.fromEntries(NODES.map((n) => [n.id, null])));
   const spin = useRef({ angle: 0, speed: 1 });
   const blockers = useRef([]); // hero copy, buttons, features and navbar, px from canvas centre
   const cardSize = useRef({}); // card CSS size, measured once mounted
@@ -236,9 +245,11 @@ function Ecosystem({ reduced, hovered }) {
 
       // Never cover the copy: fade out while the card's on-screen box meets a blocker
       const el = cardEls.current[n.id];
+      if (!cardSize.current[n.id] && el && el.offsetWidth) cardSize.current[n.id] = [el.offsetWidth, el.offsetHeight];
       const sz = cardSize.current[n.id];
-      let hit = false;
-      if (sz) {
+      // Unmeasured cards stay hidden: until a card's size is known it cannot be checked against the copy
+      let hit = !sz || !blockers.current.length;
+      if (sz && blockers.current.length) {
         const persp = CAMERA_Z / (CAMERA_Z - z);
         // margin covers what the prediction ignores: pointer parallax and the card's tilt
         const hw = (sz[0] / 2) * cardScale * s * persp * 1.06 + 6;
@@ -246,8 +257,11 @@ function Ecosystem({ reduced, hovered }) {
         const cl = px - hw, cr = px + hw, ct = py - hh, cb = py + hh;
         hit = blockers.current.some((b) => cr > b.l && cl < b.r && cb > b.t && ct < b.b);
       }
-      const a = (alpha.current[n.id] = reduced ? (hit ? 0 : 1) : damp(alpha.current[n.id], hit ? 0 : 1, hit ? 16 : 5, dt));
-      if (el) {
+      const prev = alpha.current[n.id];
+      const a = (alpha.current[n.id] = !sz ? null : reduced || prev === null ? (hit ? 0 : 1) : damp(prev, hit ? 0 : 1, hit ? 16 : 5, dt));
+      if (el && a !== null) {
+        // First card shown: the hero is complete, below-the-fold sections may start
+        if (prev === null && a > 0) markHeroReady();
         el.style.opacity = a.toFixed(3);
         el.style.visibility = a < 0.02 ? "hidden" : "visible";
       }
@@ -310,7 +324,12 @@ function Ecosystem({ reduced, hovered }) {
         return (
           <group key={n.id} ref={(el) => (nodeRefs.current[n.id] = el)}>
             <Html transform distanceFactor={pxToWorld} pointerEvents="none" zIndexRange={[20, 0]}>
-              <div data-eco-card={n.id} className={styles.node} ref={(el) => (cardEls.current[n.id] = el)}>
+              <div data-eco-card={n.id} className={styles.node} ref={(el) => {
+                  cardEls.current[n.id] = el;
+                  // Cards stay hidden until a frame places them; make sure one runs after each
+                  // card mounts (the on-demand loop may already be idle, e.g. reduced motion)
+                  if (el) invalidate();
+                }}>
                 <Content />
               </div>
             </Html>
@@ -413,14 +432,13 @@ const HeroScene = () => {
 
   return (
     <div ref={wrapRef} className={styles.wrap} aria-hidden="true">
-      {/* Same backdrop tint the previous scene painted, so the hero background is unchanged */}
-      <div className={styles.backdrop} />
       <Canvas
         className={styles.canvas}
         camera={{ position: [0, 0, CAMERA_Z], fov: FOV, near: 0.1, far: 50 }}
         dpr={[1, 1.75]}
-        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+        gl={{ antialias: true, alpha: true, powerPreference: "default" }}
         frameloop="demand"
+        onCreated={() => wrapRef.current?.classList.add(styles.isReady)}
       >
         <FrameDriver visibleRef={visibleRef} reduced={reduced} kickRef={kickRef} />
         <Ecosystem reduced={reduced} hovered={hovered} />

@@ -3,11 +3,33 @@ import { motion } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
 import { getApiEndpoint } from "../utils/getApiUrl";
 import styles from "./styles/Hero.module.css";
+import sceneStyles from "./styles/HeroScene.module.css";
 import HeroOrbitMobile from "./HeroOrbitMobile";
+import { markHeroReady } from "../utils/heroReady";
 
 // three.js scene is desktop-only (1024px and up): load it on demand so phones and tablets
 // never download it. Below 1024px the lightweight CSS orbit (HeroOrbitMobile) is shown.
-const HeroScene = lazy(() => import("./HeroScene"));
+// Desktop hero scene (three.js) is code-split. On desktop-width screens start fetching it as
+// soon as this module runs rather than when the hero first renders, so it is already arriving
+// while React renders the rest of the homepage. Phones and tablets never load it.
+// High fetch priority: as a code-split script it otherwise loads at "Low" and shares the
+// connection with below-the-fold images, which on slow links delayed the 3D hero by seconds.
+const loadHeroScene = () => {
+  const p = import(/* webpackFetchPriority: "high" */ "./HeroScene");
+  // If the 3D code can't be downloaded, don't hold the rest of the homepage back for it
+  p.catch(() => markHeroReady());
+  return p;
+};
+// Only on the homepage: this module is part of the main bundle, so without the path check every
+// desktop page would download the 3D code (other routes still load it if they navigate home).
+if (
+  typeof window !== "undefined" &&
+  window.innerWidth >= 1024 &&
+  window.location.pathname === "/"
+) {
+  loadHeroScene();
+}
+const HeroScene = lazy(loadHeroScene);
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -48,6 +70,14 @@ const Hero = () => {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  // Phones and tablets have no 3D scene to wait for (the CSS orbit is part of the first paint):
+  // let the rest of the homepage start right after it. Desktop is marked ready by HeroScene.
+  useEffect(() => {
+    if (!isCompact) return undefined;
+    const raf = requestAnimationFrame(() => markHeroReady());
+    return () => cancelAnimationFrame(raf);
+  }, [isCompact]);
 
   // Real platform numbers (read-only endpoint, no view tracking)
   useEffect(() => {
@@ -234,6 +264,8 @@ const Hero = () => {
       {/* 3D Scene for desktop */}
       {!isCompact && (
         <div className={styles.sceneContainer}>
+          {/* Hero background tint, painted with the copy instead of when the 3D scene arrives */}
+          <div className={sceneStyles.backdrop} />
           <Suspense fallback={null}>
             <HeroScene />
           </Suspense>

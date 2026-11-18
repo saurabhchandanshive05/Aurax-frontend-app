@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import useDeferredStart from "../../hooks/useDeferredStart";
 // Footer.css is kept as it was: some of its global class names (section-title, social-icon,
 // contact-item, ...) are also used on other pages, which would change if it were removed.
 // The footer itself is styled by the scoped module below.
@@ -76,6 +77,7 @@ const Footer = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [email, setEmail] = useState("");
   const footerRef = useRef(null);
+  const started = useDeferredStart(footerRef);
   const signatureRef = useRef(null);
 
   useEffect(() => {
@@ -163,7 +165,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className={s.footer} ref={footerRef}>
+    <footer className={s.footer} ref={footerRef} data-defer-idle={started ? undefined : ""}>
       <div className={s.grid} aria-hidden="true" />
       <div className={s.glow} aria-hidden="true" />
 

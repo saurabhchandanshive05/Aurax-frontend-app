@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
+import useDeferredStart from "../hooks/useDeferredStart";
 import { useNavigate } from "react-router-dom";
 import ServiceVisual from "./SpecializationVisuals";
 import styles from "./styles/Specialization.module.css";
@@ -10,6 +11,7 @@ const prefersReducedMotion = () =>
 
 const Specialization = () => {
   const sectionRef = useRef(null);
+  const started = useDeferredStart(sectionRef);
   const [active, setActive] = useState(null);
   const navigate = useNavigate();
   const [reduced] = useState(prefersReducedMotion);
@@ -144,6 +146,7 @@ const Specialization = () => {
   return (
     <section
       ref={sectionRef}
+      data-defer-idle={started ? undefined : ""}
       id="services"
       className={styles.specializationSection}
     >

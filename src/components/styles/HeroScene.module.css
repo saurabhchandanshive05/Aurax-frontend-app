@@ -16,10 +16,27 @@
 .canvas {
   position: absolute !important;
   inset: 0;
+  opacity: 0;
+  transition: opacity 0.25s ease-out;
+}
+
+/* WebGL is ready: fade the ring in instead of popping it in over the finished hero copy */
+.isReady .canvas {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas {
+    transition: none;
+  }
 }
 
 /* ---------- cards ---------- */
+/* Hidden until the scene places them (it sets opacity/visibility every frame); before the
+   first frame a card would otherwise flash at the canvas's top-left corner */
 .node {
+  opacity: 0;
+  visibility: hidden;
   font-family: var(--ax-font-ui);
   color: var(--ax-text);
   -webkit-font-smoothing: antialiased;

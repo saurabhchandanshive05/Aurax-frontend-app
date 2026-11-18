@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
+import useDeferredStart from "../hooks/useDeferredStart";
 import styles from "./styles/ContactUs.module.css";
 
 const ContactUs = () => {
   const containerRef = useRef(null);
+  const started = useDeferredStart(containerRef);
   const stackRef = useRef(null);
   const [emailCopied, setEmailCopied] = useState(false);
   const [revealed, setRevealed] = useState(false);
@@ -55,6 +57,7 @@ const ContactUs = () => {
   return (
     <section
       ref={containerRef}
+      data-defer-idle={started ? undefined : ""}
       className={`${styles.section} ${revealed ? styles.isRevealed : ""}`}
       aria-labelledby="contact-cta-title"
     >

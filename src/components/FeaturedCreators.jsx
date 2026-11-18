@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
+import useDeferredStart from "../hooks/useDeferredStart";
 import {
   motion,
   AnimatePresence,
@@ -31,6 +32,9 @@ const FeaturedCreators = () => {
     setLoadedImages((prev) => (prev.has(src) ? prev : new Set(prev).add(src)));
 
   const carouselRef = useRef(null);
+  // Creator photos and autoplay wait until the homepage hero is ready, or until the carousel is
+  // about to scroll into view, so they don't take bandwidth and frames from the hero on load
+  const photosReady = useDeferredStart(carouselRef, "0px 0px 100px 0px");
   const scrollTimeoutRef = useRef(null);
   const profilePreviewTimeoutRef = useRef(null);
   const isScrolling = useRef(false);
@@ -186,7 +190,7 @@ const FeaturedCreators = () => {
 
   // Auto-scroll functionality
   useEffect(() => {
-    if (!isManualScroll && !isPaused && !reduceMotion) {
+    if (!isManualScroll && !isPaused && !reduceMotion && photosReady) {
       const interval = setInterval(() => {
         // Never advance under a finger: a tick during a swipe added a second step (skipped a card)
         if (touchActiveRef.current) return;
@@ -195,7 +199,7 @@ const FeaturedCreators = () => {
       }, 5000);
       return () => clearInterval(interval);
     }
-  }, [isManualScroll, isPaused, reduceMotion]);
+  }, [isManualScroll, isPaused, reduceMotion, photosReady]);
 
   // Clear pending timers on unmount
   useEffect(
@@ -604,7 +608,7 @@ const FeaturedCreators = () => {
                           {!loadedImages.has(creator.image) && (
                             <div className={styles.imageSkeleton} aria-hidden="true" />
                           )}
-                          {(visibleCards.has(index) || loadedImages.has(creator.image)) && (
+                          {photosReady && (visibleCards.has(index) || loadedImages.has(creator.image)) && (
                             <img
                               src={optimizeImage(creator.image)}
                               alt={creator.name}
@@ -612,9 +616,6 @@ const FeaturedCreators = () => {
                                 loadedImages.has(creator.image) ? "" : styles.imageLoading
                               }`}
                               loading={index <= currentIndex + 1 ? "eager" : "lazy"}
-                              fetchpriority={
-                                Math.abs(index - currentIndex) <= 1 ? "high" : "auto"
-                              }
                               decoding="async"
                               onLoad={() => markImageLoaded(creator.image)}
                               onError={() => markImageLoaded(creator.image)}

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import useDeferredStart from "../hooks/useDeferredStart";
 import { motion, useInView } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import styles from "./styles/BrandCollaborations.module.css";
@@ -46,6 +47,8 @@ const useAnimatedCounter = (end, start = 0, duration = 2, instant = false) => {
 
 const BrandCollaborations = () => {
   const statsRef = useRef(null);
+  const sectionRef = useRef(null);
+  const started = useDeferredStart(sectionRef);
   const wallRef = useRef(null);
   const navigate = useNavigate();
   const [reduced] = useState(prefersReducedMotion);
@@ -224,7 +227,7 @@ const BrandCollaborations = () => {
   };
 
   return (
-    <section className={styles.section} onMouseMove={onWallMove} onMouseLeave={onWallLeave}>
+    <section ref={sectionRef} data-defer-idle={started ? undefined : ""} className={styles.section} onMouseMove={onWallMove} onMouseLeave={onWallLeave}>
       {/* Neural Grid Background */}
       <div className={styles.neuralGrid} aria-hidden="true" />
       <div className={styles.wallLight} aria-hidden="true" />

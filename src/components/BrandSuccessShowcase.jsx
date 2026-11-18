@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
+import useDeferredStart from "../hooks/useDeferredStart";
 import { motion } from "framer-motion";
 import styles from "./BrandSuccessShowcase/BrandSuccessShowcase.module.css";
 
@@ -23,6 +24,8 @@ const posterCandidates = (campaign) =>
 
 const BrandSuccessShowcase = () => {
   const containerRef = useRef(null);
+  const sectionRef = useRef(null);
+  const started = useDeferredStart(sectionRef);
   const innerContainerRef = useRef(null);
   const videoRefs = useRef({});
   const [isMobileVideo] = useState(isMobileViewport);
@@ -259,6 +262,8 @@ const BrandSuccessShowcase = () => {
   useEffect(() => () => clearTimeout(resumeTimerRef.current), []);
 
   useEffect(() => {
+    // Not while the homepage hero is still starting (unless this section is already close)
+    if (!started) return undefined;
     const el = containerRef.current;
     if (!el || typeof IntersectionObserver === "undefined") {
       setPostersReady(true);
@@ -275,7 +280,7 @@ const BrandSuccessShowcase = () => {
     );
     io.observe(el);
     return () => io.disconnect();
-  }, []);
+  }, [started]);
 
   const resumeLater = () => {
     clearTimeout(resumeTimerRef.current);
@@ -327,7 +332,7 @@ const BrandSuccessShowcase = () => {
   };
 
   return (
-    <section className={styles.showcaseSection}>
+    <section ref={sectionRef} className={styles.showcaseSection} data-defer-idle={started ? undefined : ""}>
       <div className={styles.header}>
         <motion.h2
           className={styles.sectionTitle}
