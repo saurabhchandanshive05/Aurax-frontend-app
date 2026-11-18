@@ -8,11 +8,12 @@ import ContactUs from "../components/ContactUs";
 import SmartSearch from "../components/ui/SmartSearch";
 import PWAInstallPrompt from "../components/pwa/PWAInstallPrompt";
 import { FloatingActionButton } from "../components/ui/MicroInteractions";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const HomePage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Scroll to services section if navigated from Services link
@@ -68,10 +69,7 @@ const HomePage = () => {
             />
           </svg>
         }
-        onClick={() => {
-          // Open chat/support
-
-        }}
+        onClick={() => navigate("/contact")}
         tooltip="Need help? Chat with us!"
         position="bottom-right"
       />

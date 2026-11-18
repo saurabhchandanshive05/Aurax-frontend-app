@@ -1,4 +1,4 @@
-﻿// Safe Copy Environment Logger
+// Safe Copy Environment Logger
 // All actions are logged to ensure we only interact with copy resources
 class CopyLogger {
   constructor() {

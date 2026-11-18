@@ -187,7 +187,27 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    // Tell the server this session has ended so the token stops working everywhere it may have been
+    // copied. Only this session's token is ended; other devices stay signed in. Never blocks sign-out:
+    // if the request fails or takes more than 3 seconds, sign-out continues locally as before.
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token") || localStorage.getItem("authToken");
+    if (token) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 3000);
+      try {
+        await fetch(getApiEndpoint("/api/auth/logout"), {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          credentials: "include",
+          signal: controller.signal,
+        });
+      } catch {
+        // offline or server unreachable: still sign out locally
+      } finally {
+        clearTimeout(timer);
+      }
+    }
 
     clearStoredTokens();
     setCurrentUser(null);

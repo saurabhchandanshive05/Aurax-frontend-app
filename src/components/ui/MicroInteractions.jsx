@@ -46,6 +46,7 @@ export const FloatingActionButton = ({
               : "bg-gradient-to-r from-gray-500 to-gray-600"
           }`}
           onClick={handleClick}
+          aria-label={tooltip}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           transition={{ type: "spring", stiffness: 400, damping: 17 }}

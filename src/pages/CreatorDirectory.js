@@ -246,6 +246,7 @@ const CreatorDirectory = () => {
 
   return (
     <div className="creator-directory">
+      <h1 className="ax-sr-only">Creators</h1>
       {/* Professional Algorithm Insights Section - Premium Apple-inspired UI */}
       <section className="algorithm-insights premium-algorithm-insights">
         <div className="container">

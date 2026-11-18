@@ -403,7 +403,13 @@ function App() {
                     />
                     <Route
                       path="/brand-collaborations"
-                      element={<BrandCollaborations />}
+                      element={
+                        <>
+                          {/* The section's own heading is an h2 (it also appears on the homepage). */}
+                          <h1 className="ax-sr-only">Brand collaborations</h1>
+                          <BrandCollaborations />
+                        </>
+                      }
                     />
 
                     {/* Protected Routes */}

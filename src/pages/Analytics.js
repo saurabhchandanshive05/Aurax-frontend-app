@@ -36,8 +36,15 @@ const Analytics = () => {
     }
   }, []);
 
+  // Stats are only computed when creators are cached in this browser, and the effect above runs
+  // once, so without that cache the page used to say "Loading analytics..." forever.
   if (!stats) {
-    return <div className="text-center py-12">Loading analytics...</div>;
+    return (
+      <div className="text-center py-12">
+        <h1 className="text-2xl font-bold mb-6">Analytics Dashboard</h1>
+        <p>No analytics data yet.</p>
+      </div>
+    );
   }
 
   return (

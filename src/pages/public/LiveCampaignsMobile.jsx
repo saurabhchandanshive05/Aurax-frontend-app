@@ -179,15 +179,13 @@ const LiveCampaignsMobile = () => {
       { threshold: 0.1 }
     );
 
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
+    // Use the node observed now; the ref may point elsewhere by the time cleanup runs
+    const target = observerTarget.current;
+    if (target) {
+      observer.observe(target);
     }
 
-    return () => {
-      if (observerTarget.current) {
-        observer.unobserve(observerTarget.current);
-      }
-    };
+    return () => observer.disconnect();
   }, [hasMore, loading, loadingMore, page]);
 
   const fetchStats = async () => {
