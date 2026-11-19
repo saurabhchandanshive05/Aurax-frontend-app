@@ -85,6 +85,29 @@ const Signup = () => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Count down on the success screen, then sign in and open the new account's first page.
+  // login() loads the account from /api/me; it must finish before navigating, or the protected
+  // dashboard route sees no user yet and sends the visitor to the homepage.
+  const startRedirectCountdown = (seconds, token, onDone) => {
+    let left = seconds;
+    setAutoRedirectCountdown(left);
+    const redirectTimer = setInterval(async () => {
+      left -= 1;
+      setAutoRedirectCountdown(Math.max(left, 0));
+      if (left > 0) return;
+      clearInterval(redirectTimer);
+      if (onDone) onDone();
+      if (token) {
+        await login(token);
+        // Creators go to onboarding after signup
+        navigate(form.role === "creator" ? "/creator/welcome" : "/brand/dashboard");
+      } else {
+        // No token: sign in on the login page
+        navigate(form.role === "creator" ? "/creator/login" : "/brand/login");
+      }
+    }, 1000);
+  };
+
   // Handle email verification
   const handleVerifyEmail = async (e) => {
     e.preventDefault();
@@ -118,32 +141,9 @@ const Signup = () => {
         }, 1500);
 
         // Auto-redirect after 4 seconds (increased for better UX)
-        setAutoRedirectCountdown(4);
-        const redirectTimer = setInterval(() => {
-          setAutoRedirectCountdown((prev) => {
-            if (prev <= 1) {
-              clearInterval(redirectTimer);
-              setSuccessMessage("🚀 Redirecting to setup your profile...");
-
-              // Handle login and redirect
-              if (resp?.token) {
-                login(resp.token);
-                // Always redirect creators to onboarding after signup
-                const redirect = form.role === "creator" 
-                  ? "/creator/welcome" 
-                  : "/brand/dashboard";
-                navigate(redirect);
-              } else {
-                // Fallback if no token - go to login page
-                navigate(
-                  form.role === "creator" ? "/creator/login" : "/brand/login"
-                );
-              }
-              return 0;
-            }
-            return prev - 1;
-          });
-        }, 1000);
+        startRedirectCountdown(4, resp?.token, () =>
+          setSuccessMessage("🚀 Redirecting to setup your profile...")
+        );
       } else if (resp?.success && !resp?.token) {
         // ENHANCED: Handle success without token (some verification responses)
         setSubmitError("");
@@ -211,22 +211,7 @@ const Signup = () => {
           setShowSuccessScreen(true);
           setSuccessMessage("🎉 Registration successful! Welcome to Aurax!");
           // Auto-redirect after 3 seconds
-          setAutoRedirectCountdown(3);
-          const redirectTimer = setInterval(() => {
-            setAutoRedirectCountdown((prev) => {
-              if (prev <= 1) {
-                clearInterval(redirectTimer);
-                login(resp.token);
-                // Always redirect creators to onboarding after signup
-                const redirect = form.role === "creator" 
-                  ? "/creator/welcome" 
-                  : "/brand/dashboard";
-                navigate(redirect);
-                return 0;
-              }
-              return prev - 1;
-            });
-          }, 1000);
+          startRedirectCountdown(3, resp.token);
         } else {
           // Email verification required - Show verification screen, NOT success screen yet
           setVerificationSent(true);
@@ -235,14 +220,17 @@ const Signup = () => {
         }
       }
     } catch (err) {
-      const isDup = err?.status === 409;
-      const isBad = err?.status === 400;
+      // Show the server's reason (e.g. "User with this email or phone already exists" comes back
+      // as a 400, and an email-sending failure as a 500). Only a request that never reached the
+      // server is reported as a connection problem.
+      const isNetwork = !!err?.details?.originalError;
+      const serverMessage = err?.details?.message;
       setSubmitError(
-        isDup
+        err?.status === 409
           ? "This email is already registered. Try signing in instead or use a different email."
-          : isBad
-          ? "Please fix the highlighted errors and try again."
-          : "Registration failed. Please check your connection and try again."
+          : isNetwork
+          ? "Registration failed. Please check your connection and try again."
+          : serverMessage || "Registration failed. Please try again."
       );
     } finally {
       setSubmitting(false);
