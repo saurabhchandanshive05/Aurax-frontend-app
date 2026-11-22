@@ -29,17 +29,11 @@ import HomePage from "./pages/HomePage";
 // /creators lists real, approved creators (the previous CreatorDirectory page advertised tools that
 // do not exist; it is kept in the repo, unrouted, pending the legacy-page review)
 const CreatorDiscovery = React.lazy(() => import("./pages/CreatorDiscovery"));
-const CreatorProfile = React.lazy(() => import("./pages/CreatorProfile"));
-const CampaignManager = React.lazy(() => import("./pages/CampaignManager"));
+// Retired legacy pages (CampaignManager, Analytics, AdminPanel, AddTalent, CreatorProfile,
+// CreatorDashboard, CreatorOnboarding, MinimalWelcome) are no longer routed; see src/pages/LEGACY.md.
 const BrandDashboard = React.lazy(() => import("./pages/BrandDashboard"));
-const CreatorDashboard = React.lazy(() => import("./pages/CreatorDashboard"));
 const CreatorDashboardNew = React.lazy(() => import("./pages/CreatorDashboardNew"));
-const MinimalWelcome = React.lazy(() => import("./pages/MinimalWelcome"));
 const PublicPageSetup = React.lazy(() => import("./pages/PublicPageSetup"));
-const CreatorOnboarding = React.lazy(() => import("./pages/CreatorOnboarding"));
-const AddTalent = React.lazy(() => import("./pages/AddTalent"));
-const Analytics = React.lazy(() => import("./pages/Analytics"));
-const AdminPanel = React.lazy(() => import("./pages/AdminPanel"));
 const BrandLogin = React.lazy(() => import("./pages/BrandLogin"));
 const CreatorLogin = React.lazy(() => import("./pages/CreatorLogin"));
 const ComingSoonPage = React.lazy(() => import("./pages/ComingSoonPage"));
@@ -194,6 +188,22 @@ function MobileNavMenu() {
     </nav>
   );
   */
+}
+
+// Sends each signed-in role (or a guest) to its own page; used for retired legacy URLs
+function RoleRedirect({ admin = "/", brand = "/", creator = "/", guest = "/" }) {
+  const { currentUser } = useAuth();
+  const roles = [currentUser?.role, ...(currentUser?.roles || [])];
+  const to = !currentUser
+    ? guest
+    : roles.includes("admin")
+    ? admin
+    : roles.includes("brand")
+    ? brand
+    : roles.includes("creator")
+    ? creator
+    : guest;
+  return <Navigate to={to} replace />;
 }
 
 // Layout wrapper component that checks for standalone routes
@@ -354,7 +364,7 @@ function App() {
                     <Route path="/about" element={<AboutPage />} />
                     <Route path="/brands" element={<BrandsPage />} />
                     <Route path="/creators" element={<CreatorDiscovery />} />
-                    <Route path="/creators/:id" element={<CreatorProfile />} />
+                    <Route path="/creators/:id" element={<Navigate to="/creators" replace />} />
                     
                     {/* Public LIVE Campaign Board */}
                     <Route path="/live/campaigns" element={<LiveCampaigns />} />
@@ -365,8 +375,10 @@ function App() {
                     
                     {/* Public Creator Page - Fan-facing monetization page */}
                     <Route path="/creator/:slug" element={<PublicCreatorPage />} />
-                    <Route path="/campaigns" element={<CampaignManager />} />
-                    <Route path="/analytics" element={<Analytics />} />
+                    {/* Legacy pages that only kept data in the browser: send visitors to the real feature.
+                        The page files are kept in the repo (see src/pages/LEGACY.md). */}
+                    <Route path="/campaigns" element={<Navigate to="/live/campaigns" replace />} />
+                    <Route path="/analytics" element={<RoleRedirect admin="/admin/brand-intelligence" brand="/brand/dashboard" creator="/creator/dashboard" guest="/live/campaigns" />} />
                     <Route path="/careers" element={<CareersPage />} />
                     <Route path="/contact" element={<ContactPage />} />
                     
@@ -464,14 +476,6 @@ function App() {
                       }
                     />
                     <Route
-                      path="/creator/welcome"
-                      element={
-                        <ProtectedRoute role="creator">
-                          <MinimalWelcome />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
                       path="/creator/public-page-setup"
                       element={
                         <ProtectedRoute role="creator" requireMinimalProfile={true}>
@@ -479,14 +483,7 @@ function App() {
                         </ProtectedRoute>
                       }
                     />
-                    <Route
-                      path="/creator/welcome-old"
-                      element={
-                        <ProtectedRoute role="creator">
-                          <CreatorOnboarding />
-                        </ProtectedRoute>
-                      }
-                    />
+                    <Route path="/creator/welcome-old" element={<Navigate to="/creator/welcome" replace />} />
                     <Route
                       path="/creator/dashboard"
                       element={
@@ -495,19 +492,12 @@ function App() {
                         </ProtectedRoute>
                       }
                     />
-                    <Route
-                      path="/creator/dashboard-old"
-                      element={
-                        <ProtectedRoute role="creator">
-                          <CreatorDashboard />
-                        </ProtectedRoute>
-                      }
-                    />
+                    <Route path="/creator/dashboard-old" element={<Navigate to="/creator/dashboard" replace />} />
                     <Route
                       path="/add-talent"
                       element={
                         <ProtectedRoute roles={["brand", "admin"]}>
-                          <AddTalent />
+                          <RoleRedirect admin="/admin/brand-intelligence/creators" brand="/brand/dashboard" />
                         </ProtectedRoute>
                       }
                     />
@@ -515,7 +505,7 @@ function App() {
                       path="/admin"
                       element={
                         <ProtectedRoute role="admin">
-                          <AdminPanel />
+                          <Navigate to="/admin/brand-intelligence" replace />
                         </ProtectedRoute>
                       }
                     />
