@@ -5,7 +5,9 @@ import { getApiEndpoint } from "../utils/getApiUrl";
 import styles from "./styles/Hero.module.css";
 import sceneStyles from "./styles/HeroScene.module.css";
 import HeroOrbitMobile from "./HeroOrbitMobile";
+import HeroOrbitFlat from "./HeroOrbitFlat";
 import { markHeroReady } from "../utils/heroReady";
+import { webglTier } from "../utils/webglSupport";
 
 // three.js scene is desktop-only (1024px and up): load it on demand so phones and tablets
 // never download it. Below 1024px the lightweight CSS orbit (HeroOrbitMobile) is shown.
@@ -25,7 +27,8 @@ const loadHeroScene = () => {
 if (
   typeof window !== "undefined" &&
   window.innerWidth >= 1024 &&
-  window.location.pathname === "/"
+  window.location.pathname === "/" &&
+  webglTier() === "hardware" // without GPU-accelerated WebGL the 3D code is not downloaded
 ) {
   loadHeroScene();
 }
@@ -71,8 +74,15 @@ const Hero = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // The desktop 3D scene needs GPU-accelerated WebGL. Starting it on a software renderer
+  // (SwiftShader, llvmpipe, no GPU drivers) blocks the page for seconds while three.js sets up
+  // on the CPU, so those desktops, and browsers without WebGL, get the same orbit in plain
+  // CSS instead (HeroOrbitFlat: no WebGL, no per-frame JavaScript).
+  const [has3d] = useState(() => typeof window === "undefined" || webglTier() === "hardware");
+
   // Phones and tablets have no 3D scene to wait for (the CSS orbit is part of the first paint):
-  // let the rest of the homepage start right after it. Desktop is marked ready by HeroScene.
+  // let the rest of the homepage start right after it. Desktop is marked ready by HeroScene,
+  // or by HeroOrbitFlat once its cards are placed.
   useEffect(() => {
     if (!isCompact) return undefined;
     const raf = requestAnimationFrame(() => markHeroReady());
@@ -266,9 +276,13 @@ const Hero = () => {
         <div className={styles.sceneContainer}>
           {/* Hero background tint, painted with the copy instead of when the 3D scene arrives */}
           <div className={sceneStyles.backdrop} />
-          <Suspense fallback={null}>
-            <HeroScene />
-          </Suspense>
+          {has3d ? (
+            <Suspense fallback={null}>
+              <HeroScene />
+            </Suspense>
+          ) : (
+            <HeroOrbitFlat />
+          )}
         </div>
       )}
 

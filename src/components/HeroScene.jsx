@@ -97,7 +97,7 @@ const depthAt = (theta) => {
   return { z: 0.6 - 3.0 * v, scale: 1 - 0.3 * v };
 };
 
-function Ecosystem({ reduced, hovered }) {
+function Ecosystem({ reduced, hovered, visibleRef }) {
   const { upp, cardScale, orbitPx, toWorld } = useLayout();
   const camera = useThree((s) => s.camera);
   const size = useThree((s) => s.size);
@@ -169,13 +169,17 @@ function Ecosystem({ reduced, hovered }) {
       });
     };
     measure();
-    const iv = setInterval(measure, 600);
+    // Re-measure only while the hero is on screen and the tab is visible (nothing renders otherwise)
+    const iv = setInterval(() => {
+      if (document.hidden || (visibleRef && !visibleRef.current)) return;
+      measure();
+    }, 600);
     window.addEventListener("resize", measure);
     return () => {
       clearInterval(iv);
       window.removeEventListener("resize", measure);
     };
-  }, [gl, size.width, size.height]);
+  }, [gl, size.width, size.height, visibleRef]);
 
   const ringPoints = useMemo(
     () => Array.from({ length: RING_POINTS + 1 }, (_, i) => {
@@ -441,7 +445,7 @@ const HeroScene = () => {
         onCreated={() => wrapRef.current?.classList.add(styles.isReady)}
       >
         <FrameDriver visibleRef={visibleRef} reduced={reduced} kickRef={kickRef} />
-        <Ecosystem reduced={reduced} hovered={hovered} />
+        <Ecosystem reduced={reduced} hovered={hovered} visibleRef={visibleRef} />
       </Canvas>
     </div>
   );

@@ -1,0 +1,118 @@
+/* Desktop hero orbit without WebGL (HeroOrbitFlat.jsx). The cards themselves use the shared
+   card styles from HeroScene.module.css via HeroCards; this file only places and moves them. */
+.wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  contain: layout paint;
+  opacity: 0;
+  transition: opacity 0.25s ease-out;
+}
+/* Keyframes built: fade the orbit in, as the 3D canvas does when WebGL is ready */
+.isReady { opacity: 1; }
+
+.ring {
+  position: absolute;
+  inset: 0;
+  fill: none;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  opacity: 0.36;
+}
+
+/* Everything orbits the hero centre; each child's keyframes translate it from here */
+.origin {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+}
+
+.orbit,
+.dot,
+.pulse {
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation-duration: 110s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  will-change: transform, opacity;
+}
+
+/* Gentle independent float, as in the 3D scene (7px, one cycle about 11.4s) */
+.float {
+  animation: axoFloat 5.71s ease-in-out infinite alternate both;
+  will-change: transform;
+}
+@keyframes axoFloat {
+  from { transform: translateY(-7px); }
+  to { transform: translateY(7px); }
+}
+
+.node {
+  /* centred on the orbit point; size is measured unscaled */
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%);
+  visibility: hidden;
+  font-family: var(--ax-font-ui);
+  color: var(--ax-text);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  /* natural width (the orbit origin is 0px wide, which would otherwise squash chips) */
+  width: max-content;
+}
+.isReady .node { visibility: visible; }
+
+.dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: #b9afff;
+  opacity: 0.7;
+}
+
+.pulse {
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: var(--pulse);
+  opacity: 0.95;
+}
+.pulse::before {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: -7px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--pulse);
+  opacity: 0.17;
+}
+
+/* Off screen: stop all motion (no work while the visitor reads further down) */
+.paused .orbit,
+.paused .dot,
+.paused .pulse,
+.paused .float {
+  animation-play-state: paused;
+}
+
+/* Reduced motion: the cards hold their starting places, like the 3D scene does */
+@media (prefers-reduced-motion: reduce) {
+  .wrap { transition: none; }
+  .orbit,
+  .dot,
+  .pulse,
+  .float {
+    animation-play-state: paused;
+  }
+}
