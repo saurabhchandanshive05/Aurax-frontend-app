@@ -251,7 +251,7 @@
   background: var(--ax-action);
   color: var(--ax-action-ink);
   border-radius: 50%;
-  font-size: 10px;
+  font-size: 12px; /* minimum readable size */
   font-weight: bold;
 }
 

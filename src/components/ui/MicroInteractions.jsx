@@ -1,83 +1,29 @@
 import React, { useState } from "react";
 import { motion, useSpring, useMotionValue } from "framer-motion";
-import { useTheme } from "../../context/ThemeContext";
+import fab from "./MicroInteractions.module.css";
 
-// Floating Action Button with ripple effect
+// Floating action button (homepage "contact the team" shortcut). Styled with AURAX tokens in
+// MicroInteractions.module.css (it used Tailwind classes, which this project doesn't load, so it
+// rendered unstyled). The label shows on hover and keyboard focus.
 export const FloatingActionButton = ({
   icon,
   onClick,
   position = "bottom-right",
   tooltip = "",
-  color = "primary",
-}) => {
-  const { currentTheme } = useTheme();
-  const [isRippling, setIsRippling] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
-
-  const getPositionClasses = () => {
-    const positions = {
-      "bottom-right": "bottom-6 right-6",
-      "bottom-left": "bottom-6 left-6",
-      "top-right": "top-6 right-6",
-      "top-left": "top-6 left-6",
-    };
-    return positions[position];
-  };
-
-  const handleClick = (e) => {
-    setIsRippling(true);
-    setTimeout(() => setIsRippling(false), 600);
-    onClick?.(e);
-  };
-
-  return (
-    <div className={`fixed ${getPositionClasses()} z-40`}>
-      <motion.div
-        className="relative"
-        onHoverStart={() => setShowTooltip(true)}
-        onHoverEnd={() => setShowTooltip(false)}
-      >
-        <motion.button
-          className={`w-14 h-14 rounded-full shadow-lg backdrop-blur-sm border border-white/20 flex items-center justify-center text-white relative overflow-hidden ${
-            color === "primary"
-              ? "bg-gradient-to-r from-blue-500 to-purple-600"
-              : color === "success"
-              ? "bg-gradient-to-r from-green-500 to-emerald-600"
-              : "bg-gradient-to-r from-gray-500 to-gray-600"
-          }`}
-          onClick={handleClick}
-          aria-label={tooltip}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          transition={{ type: "spring", stiffness: 400, damping: 17 }}
-        >
-          {icon}
-
-          {/* Ripple effect */}
-          {isRippling && (
-            <motion.div
-              className="absolute inset-0 bg-white/30 rounded-full"
-              initial={{ scale: 0 }}
-              animate={{ scale: 2, opacity: 0 }}
-              transition={{ duration: 0.6 }}
-            />
-          )}
-        </motion.button>
-
-        {/* Tooltip */}
-        {tooltip && showTooltip && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="absolute bottom-full mb-2 right-0 bg-black/80 text-white text-xs px-2 py-1 rounded whitespace-nowrap"
-          >
-            {tooltip}
-          </motion.div>
-        )}
-      </motion.div>
-    </div>
-  );
-};
+}) => (
+  <div className={`${fab.wrap} ${fab[position] || fab["bottom-right"]}`}>
+    <button type="button" className={fab.button} onClick={onClick} aria-label={tooltip || undefined}>
+      <span className={fab.icon} aria-hidden="true">
+        {icon}
+      </span>
+    </button>
+    {tooltip && (
+      <span className={fab.tooltip} aria-hidden="true">
+        {tooltip}
+      </span>
+    )}
+  </div>
+);
 
 // Magnetic button effect
 export const MagneticButton = ({ children, className = "", ...props }) => {

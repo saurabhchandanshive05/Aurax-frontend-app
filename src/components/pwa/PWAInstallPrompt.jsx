@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTheme } from "../../context/ThemeContext";
+import styles from "./PWAInstallPrompt.module.css";
 
 const PWAInstallPrompt = () => {
-  const { currentTheme } = useTheme();
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
@@ -73,50 +72,33 @@ const PWAInstallPrompt = () => {
     <AnimatePresence>
       {showPrompt && (
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 50 }}
-          className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-50"
+          exit={{ opacity: 0, y: 24 }}
+          transition={{ duration: 0.22, ease: [0.2, 0, 0, 1] }}
+          className={styles.prompt}
+          role="dialog"
+          aria-labelledby="pwa-install-title"
         >
-          <div className="glass-card p-4">
-            <div className="flex items-start space-x-3">
-              <div className="text-2xl">📱</div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-white mb-1">Install App</h3>
-                <p className="text-sm text-gray-300 mb-3">
-                  Get the full experience! Install our app for faster access and
-                  offline features.
-                </p>
-
-                <div className="flex space-x-2">
-                  <motion.button
-                    onClick={handleInstall}
-                    className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg text-sm font-medium hover:from-blue-600 hover:to-purple-700 transition-all"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Install
-                  </motion.button>
-
-                  <motion.button
-                    onClick={handleDismiss}
-                    className="px-4 py-2 bg-gray-600 text-white rounded-lg text-sm hover:bg-gray-700 transition-colors"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Not now
-                  </motion.button>
-                </div>
-              </div>
-
-              <button
-                onClick={handleDismiss}
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                ×
+          <div className={styles.body}>
+            <h3 id="pwa-install-title" className={styles.title}>Install AURAX</h3>
+            <p className={styles.text}>
+              Add AURAX to your home screen to open it in one tap, like an app.
+            </p>
+            <div className={styles.actions}>
+              <button type="button" onClick={handleInstall} className="ax-btn ax-btn--primary">
+                Install
+              </button>
+              <button type="button" onClick={handleDismiss} className="ax-btn ax-btn--ghost">
+                Not now
               </button>
             </div>
           </div>
+          <button type="button" onClick={handleDismiss} className={styles.close} aria-label="Close">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </button>
         </motion.div>
       )}
     </AnimatePresence>

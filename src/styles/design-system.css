@@ -1,4 +1,9 @@
-/* Premium Design System - Influencer App */
+/* LEGACY - DEPRECATED. Do not use in new code.
+   AURAX's design system is src/styles/tokens.css (--ax-* tokens) + aura.css, documented in
+   design-system/aurax/MASTER.md. This older file is kept only because existing pages still use
+   some of its variables (--aurax-neon-purple, --gradient-aurax-primary, --text-primary...) and
+   effect classes (.glass, .glass-card, .gradient-text...). Pages are moved onto the AURAX tokens
+   one at a time; remove a variable or class here only once nothing references it. */
 
 /* CSS Custom Properties for Design Tokens */
 :root {

@@ -1,0 +1,81 @@
+/* Floating action button: AURAX tokens (src/styles/tokens.css) */
+.wrap {
+  position: fixed;
+  z-index: 40; /* under the navbar, menus and dialogs */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.bottom-right { right: var(--ax-s5); bottom: var(--ax-s5); }
+.bottom-left { left: var(--ax-s5); bottom: var(--ax-s5); align-items: flex-start; }
+.top-right { right: var(--ax-s5); top: calc(var(--navbar-height, 90px) + var(--ax-s4)); }
+.top-left { left: var(--ax-s5); top: calc(var(--navbar-height, 90px) + var(--ax-s4)); align-items: flex-start; }
+
+.button {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border: 1px solid var(--ax-line-strong);
+  border-radius: 50%;
+  background: var(--ax-dusk);
+  color: var(--ax-cyan);
+  box-shadow: var(--ax-shadow-float);
+  cursor: pointer;
+  transition: background-color var(--ax-dur) var(--ax-ease), border-color var(--ax-dur) var(--ax-ease);
+}
+
+.button:hover {
+  background: var(--ax-dusk-2);
+  border-color: var(--ax-cyan);
+}
+
+.button:focus-visible {
+  outline: none;
+  box-shadow: var(--ax-shadow-float), var(--ax-focus);
+}
+
+.icon {
+  display: grid;
+  width: 24px;
+  height: 24px;
+}
+
+.icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.tooltip {
+  order: -1;
+  margin-bottom: var(--ax-s2);
+  padding: var(--ax-s1) var(--ax-s3);
+  border: 1px solid var(--ax-line);
+  border-radius: var(--ax-r-xs);
+  background: var(--ax-night-deep);
+  color: var(--ax-text);
+  font-size: var(--ax-fs-xs);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+  transition: opacity var(--ax-dur-fast) var(--ax-ease), transform var(--ax-dur-fast) var(--ax-ease);
+}
+
+.wrap:hover .tooltip,
+.wrap:focus-within .tooltip {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 767px) {
+  .bottom-right { right: var(--ax-s4); bottom: var(--ax-s4); }
+  .bottom-left { left: var(--ax-s4); bottom: var(--ax-s4); }
+  .button { width: 52px; height: 52px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .tooltip { transition: none; }
+}

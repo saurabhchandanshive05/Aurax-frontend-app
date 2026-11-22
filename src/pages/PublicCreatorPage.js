@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getApiEndpoint } from '../utils/getApiUrl';
 import './PublicCreatorPage.css';
+import useDialog from '../hooks/useDialog';
 
 const PublicCreatorPage = () => {
   const { slug } = useParams();
@@ -16,6 +17,8 @@ const PublicCreatorPage = () => {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSubscribeModal, setShowSubscribeModal] = useState(false);
+  const loginDialogRef = useDialog(showLoginModal, () => setShowLoginModal(false));
+  const subscribeDialogRef = useDialog(showSubscribeModal, () => setShowSubscribeModal(false));
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [unlockingContent, setUnlockingContent] = useState(null);
 
@@ -554,11 +557,19 @@ const PublicCreatorPage = () => {
       {/* Login Modal */}
       {showLoginModal && (
         <div className="modal-overlay" onClick={() => setShowLoginModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setShowLoginModal(false)}>
+          <div
+            className="modal-content"
+            onClick={(e) => e.stopPropagation()}
+            ref={loginDialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="login-dialog-title"
+            tabIndex={-1}
+          >
+            <button type="button" className="modal-close" onClick={() => setShowLoginModal(false)} aria-label="Close">
               ×
             </button>
-            <h2>Login Required</h2>
+            <h2 id="login-dialog-title">Login Required</h2>
             <p>Please login to access exclusive content and subscribe to {creator.displayName}.</p>
             {selectedPlan && (
               <div className="modal-plan-preview">
@@ -586,11 +597,19 @@ const PublicCreatorPage = () => {
       {/* Subscribe Modal */}
       {showSubscribeModal && selectedPlan && (
         <div className="modal-overlay" onClick={() => setShowSubscribeModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setShowSubscribeModal(false)}>
+          <div
+            className="modal-content"
+            onClick={(e) => e.stopPropagation()}
+            ref={subscribeDialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="subscribe-dialog-title"
+            tabIndex={-1}
+          >
+            <button type="button" className="modal-close" onClick={() => setShowSubscribeModal(false)} aria-label="Close">
               ×
             </button>
-            <h2>{selectedPlan.type === 'service' ? 'Book Service' : `Subscribe to ${creator.displayName}`}</h2>
+            <h2 id="subscribe-dialog-title">{selectedPlan.type === 'service' ? 'Book Service' : `Subscribe to ${creator.displayName}`}</h2>
             <p>{selectedPlan.type === 'service' ? 'Book this personalized service' : 'Get exclusive access to all content'}</p>
             
             <div className="modal-plan">

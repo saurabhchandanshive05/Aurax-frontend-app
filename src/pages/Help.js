@@ -16,9 +16,10 @@ const Help = () => {
             type="text"
             placeholder="Search for help topics..."
             className={styles.searchInput}
+            aria-label="Search help topics"
           />
-          <button className={styles.searchButton}>
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button className={styles.searchButton} aria-label="Search">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"

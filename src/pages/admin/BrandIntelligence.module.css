@@ -387,7 +387,7 @@
   background: var(--ax-dusk-2);
   color: var(--ax-text);
   border-radius: 6px;
-  font-size: 11px;
+  font-size: 12px; /* minimum readable size */
   font-weight: 600;
   text-transform: capitalize;
 }
@@ -1159,7 +1159,7 @@
   display: inline-block;
   background: #fbbf24;
   color: #78350f;
-  font-size: 11px;
+  font-size: 12px; /* minimum readable size */
   font-weight: 700;
   padding: 2px 8px;
   border-radius: 4px;
@@ -2017,7 +2017,7 @@
 }
 
 .providerTag {
-  font-size: 11px;
+  font-size: 12px; /* minimum readable size */
   font-weight: 500;
   color: var(--ax-text-3);
   text-transform: uppercase;

@@ -1,9 +1,11 @@
 import { getApiUrl } from '../../utils/getApiUrl';
 import React, { useState } from 'react';
 import axios from 'axios';
+import useDialog from '../../hooks/useDialog';
 import './CreateCreatorModal.css';
 
 const CreateCreatorModal = ({ isOpen, onClose, onSuccess }) => {
+  const dialogRef = useDialog(isOpen, onClose);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   
@@ -186,10 +188,18 @@ const CreateCreatorModal = ({ isOpen, onClose, onSuccess }) => {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="create-creator-modal" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="create-creator-modal"
+        onClick={(e) => e.stopPropagation()}
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="create-creator-title"
+        tabIndex={-1}
+      >
         <div className="modal-header">
-          <h2>➕ Create New Creator Profile</h2>
-          <button className="modal-close" onClick={onClose}>×</button>
+          <h2 id="create-creator-title">➕ Create New Creator Profile</h2>
+          <button type="button" className="modal-close" onClick={onClose} aria-label="Close">×</button>
         </div>
 
         <form onSubmit={handleSubmit} className="creator-form">

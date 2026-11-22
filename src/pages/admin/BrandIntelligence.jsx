@@ -7,6 +7,7 @@ import CreatorDatabase from "./CreatorDatabase";
 import CreatorContactList from "./CreatorContactList";
 import styles from "./BrandIntelligence.module.css";
 import Icon from '../../components/ui/Icon';
+import useDialog from '../../hooks/useDialog';
 
 /**
  * Brand Intelligence Dashboard
@@ -60,6 +61,7 @@ const BrandIntelligenceDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const detailDialogRef = useDialog(showDetailModal, () => setShowDetailModal(false));
   
   const API_URL = getApiUrl();
   
@@ -514,10 +516,20 @@ const BrandIntelligenceDashboard = () => {
       {/* Brand Detail Modal */}
       {showDetailModal && selectedBrand && (
         <div className={styles.modal} onClick={() => setShowDetailModal(false)}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+          <div
+            className={styles.modalContent}
+            onClick={(e) => e.stopPropagation()}
+            ref={detailDialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${selectedBrand.brandName || selectedBrand.name || "Brand"} details`}
+            tabIndex={-1}
+          >
             <button 
+              type="button"
               className={styles.modalClose}
               onClick={() => setShowDetailModal(false)}
+              aria-label="Close"
             >
               ✕
             </button>

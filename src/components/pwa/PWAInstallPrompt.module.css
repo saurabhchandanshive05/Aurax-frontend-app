@@ -1,0 +1,75 @@
+/* "Install AURAX" prompt: AURAX tokens (src/styles/tokens.css) */
+.prompt {
+  position: fixed;
+  left: var(--ax-s4);
+  right: var(--ax-s4);
+  bottom: var(--ax-s4);
+  z-index: 50;
+  display: flex;
+  gap: var(--ax-s3);
+  padding: var(--ax-s4) var(--ax-s4) var(--ax-s4) var(--ax-s5);
+  border: 1px solid var(--ax-line-strong);
+  border-radius: var(--ax-r-md);
+  background: var(--ax-dusk);
+  color: var(--ax-text);
+  box-shadow: var(--ax-shadow-float);
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  margin: 0 0 var(--ax-s1);
+  font-size: var(--ax-fs-md);
+  font-weight: 700;
+}
+
+.text {
+  margin: 0 0 var(--ax-s3);
+  color: var(--ax-text-2);
+  font-size: var(--ax-fs-sm);
+  line-height: var(--ax-lh-body);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ax-s2);
+}
+
+.close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: var(--ax-r-sm);
+  background: transparent;
+  color: var(--ax-text-3);
+  cursor: pointer;
+}
+
+.close svg {
+  width: 18px;
+  height: 18px;
+}
+
+.close:hover {
+  color: var(--ax-text);
+  background: var(--ax-dusk-2);
+}
+
+.close:focus-visible {
+  outline: none;
+  box-shadow: var(--ax-focus);
+}
+
+@media (min-width: 768px) {
+  .prompt {
+    left: auto;
+    width: 384px;
+  }
+}

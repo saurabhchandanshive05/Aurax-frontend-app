@@ -1,6 +1,6 @@
 import { getApiUrl } from '../../utils/getApiUrl';
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import './CreatorProfile.css';
 
@@ -250,11 +250,11 @@ const CreatorProfile = () => {
 
       {/* Breadcrumb Navigation */}
       <div className="breadcrumb">
-        <span onClick={() => navigate('/dashboard')} className="breadcrumb-link">Admin</span>
+        <Link to="/admin/brand-intelligence" className="breadcrumb-link">Admin</Link>
         <span className="breadcrumb-separator">/</span>
-        <span onClick={() => navigate('/admin/brand-intelligence/creators')} className="breadcrumb-link">
+        <Link to="/admin/brand-intelligence/creators" className="breadcrumb-link">
           Creator Database
-        </span>
+        </Link>
         <span className="breadcrumb-separator">/</span>
         <span className="breadcrumb-current">{creator.name}</span>
       </div>

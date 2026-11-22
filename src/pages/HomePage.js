@@ -5,7 +5,6 @@ import BrandSuccessShowcase from "../components/BrandSuccessShowcase";
 import Specialization from "../components/Specialization";
 import BrandCollaborations from "../components/BrandCollaborations";
 import ContactUs from "../components/ContactUs";
-import SmartSearch from "../components/ui/SmartSearch";
 import PWAInstallPrompt from "../components/pwa/PWAInstallPrompt";
 import { FloatingActionButton } from "../components/ui/MicroInteractions";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -56,7 +55,6 @@ const HomePage = () => {
       <FloatingActionButton
         icon={
           <svg
-            className="w-6 h-6"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -70,7 +68,7 @@ const HomePage = () => {
           </svg>
         }
         onClick={() => navigate("/contact")}
-        tooltip="Need help? Chat with us!"
+        tooltip="Contact the AURAX team"
         position="bottom-right"
       />
 
