@@ -125,47 +125,22 @@ const CreatorDatabase = () => {
       {/* Header */}
       <div className="database-header">
         <div className="header-content">
-          <h1 className="database-title">List of Top Mega Influencers in Aurax 2026</h1>
+          <h1 className="database-title">Creator database</h1>
           <p className="database-subtitle">
-            Discover the top mega influencers in India. Find out who's leading the social media scene 
-            with the largest followings and the biggest impact.
+            Creators the AURAX team has added or imported, with their reach and contact details.
+            Search, filter and open a profile to edit it.
           </p>
         </div>
 
         {/* Action Buttons */}
-        <div className="action-buttons" style={{ display: 'flex', gap: '12px', marginTop: '16px', flexWrap: 'wrap' }}>
+        <div className="action-buttons">
           <button
+            type="button"
             onClick={() => setShowCreateModal(true)}
-            className="create-creator-btn"
-            style={{
-              padding: '14px 28px',
-              background: '#7c3aed',
-              color: 'white',
-              border: 'none',
-              borderRadius: '12px',
-              fontSize: '16px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              boxShadow: '0 4px 14px rgba(124, 58, 237, 0.3)',
-              transition: 'all 0.2s ease',
-              whiteSpace: 'nowrap'
-            }}
-            onMouseOver={(e) => {
-              e.target.style.background = '#6d28d9';
-              e.target.style.transform = 'translateY(-2px)';
-              e.target.style.boxShadow = '0 6px 18px rgba(124, 58, 237, 0.4)';
-            }}
-            onMouseOut={(e) => {
-              e.target.style.background = '#7c3aed';
-              e.target.style.transform = 'translateY(0)';
-              e.target.style.boxShadow = '0 4px 14px rgba(124, 58, 237, 0.3)';
-            }}
+            className="create-creator-btn ax-btn ax-btn--primary"
           >
             <Icon name="plus" size={18} />
-            Create New Creator
+            Add a creator
           </button>
         </div>
 
@@ -255,7 +230,10 @@ const CreatorDatabase = () => {
           </div>
         ) : creators.length === 0 ? (
           <div className="empty-state">
-            <p>No creators found matching your criteria</p>
+            <p>No creators match these filters.</p>
+            <button type="button" className="ax-btn ax-btn--ghost" onClick={() => setShowCreateModal(true)}>
+              Add a creator
+            </button>
           </div>
         ) : (
           creators.map((creator) => (

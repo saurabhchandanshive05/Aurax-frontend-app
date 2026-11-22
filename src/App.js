@@ -36,9 +36,9 @@ const CreatorDashboardNew = React.lazy(() => import("./pages/CreatorDashboardNew
 const PublicPageSetup = React.lazy(() => import("./pages/PublicPageSetup"));
 const BrandLogin = React.lazy(() => import("./pages/BrandLogin"));
 const CreatorLogin = React.lazy(() => import("./pages/CreatorLogin"));
-const ComingSoonPage = React.lazy(() => import("./pages/ComingSoonPage"));
 const AboutPage = React.lazy(() => import("./pages/AboutPage"));
 const BrandsPage = React.lazy(() => import("./pages/BrandsPage"));
+const ForCreators = React.lazy(() => import("./pages/ForCreators"));
 const CareersPage = React.lazy(() => import("./pages/CareersPage"));
 const ContactPage = React.lazy(() => import("./pages/ContactPage"));
 const BrandCollaborations = React.lazy(() =>
@@ -363,6 +363,7 @@ function App() {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/about" element={<AboutPage />} />
                     <Route path="/brands" element={<BrandsPage />} />
+                    <Route path="/for-creators" element={<ForCreators />} />
                     <Route path="/creators" element={<CreatorDiscovery />} />
                     <Route path="/creators/:id" element={<Navigate to="/creators" replace />} />
                     
@@ -395,7 +396,7 @@ function App() {
                     />
                     <Route path="/support" element={<Support />} />
                     <Route path="/help" element={<Help />} />
-                    <Route path="/coming-soon" element={<ComingSoonPage />} />
+                    <Route path="/coming-soon" element={<Navigate to="/" replace />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/brand/signup" element={<Signup />} />
                     <Route path="/creator/signup" element={<Signup />} />
@@ -565,7 +566,7 @@ function App() {
                     />
                     <Route
                       path="/creator"
-                      element={<Navigate to="/creators" replace />}
+                      element={<Navigate to="/for-creators" replace />}
                     />
 
                     {/* 404 */}

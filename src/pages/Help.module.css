@@ -226,3 +226,23 @@
     max-width: 300px;
   }
 }
+
+/* Search results (Phase 4) */
+.searchBox { margin-bottom: 0.75rem; }
+.searchStatus {
+  min-height: 1.4em;
+  margin: 0 0 2.5rem;
+  color: var(--ax-text-muted);
+  font-size: var(--ax-fs-sm);
+  text-align: center;
+}
+.noResults {
+  max-width: 520px;
+  margin: 1rem auto 2.5rem;
+  padding: var(--ax-s6) var(--ax-s5);
+  border: 1px dashed var(--ax-border-strong);
+  border-radius: var(--ax-card-radius);
+  text-align: center;
+}
+.noResults h2 { margin: 0 0 var(--ax-s2); font-size: var(--ax-fs-lg); }
+.noResults p { margin: 0 0 var(--ax-s4); color: var(--ax-text-secondary); }

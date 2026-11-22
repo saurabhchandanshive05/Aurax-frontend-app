@@ -2233,3 +2233,36 @@
 .viewAllBtn:hover { background: var(--ax-dusk-2); border-color: var(--ax-cyan); transform: none; }
 .statCard { box-shadow: none; border: 1px solid var(--ax-line); }
 .statIcon { color: var(--ax-cyan); }
+
+/* ---------- Phase 4 polish ---------- */
+/* Five overview stats sit in one row on desktop, two compact columns on phones */
+.statsGrid {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--ax-s4);
+}
+
+.sectionEmpty {
+  margin: 0;
+  color: var(--ax-text-muted);
+  line-height: var(--ax-lh-body);
+}
+
+.brandCard:focus-visible {
+  outline: none;
+  box-shadow: var(--ax-focus-ring);
+}
+
+@media (max-width: 767px) {
+  /* Tabs scroll sideways instead of being cut off */
+  .tabs {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs button { flex: none; white-space: nowrap; }
+
+  .statsGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ax-s3); }
+  .statCard { padding: var(--ax-s4); }
+  .section { padding: var(--ax-s5) var(--ax-s4); }
+}

@@ -1,0 +1,217 @@
+/* "For Brands" and "For Creators": AURAX tokens only */
+.page {
+  color: var(--ax-text-primary);
+  background: var(--ax-bg);
+}
+
+.wrap {
+  max-width: var(--ax-content-max);
+  margin: 0 auto;
+  padding: 0 var(--ax-s4);
+}
+
+/* ---- hero ---- */
+.hero {
+  padding: calc(var(--navbar-mobile-height, 70px) + var(--ax-s7)) 0 var(--ax-s7);
+  border-bottom: 1px solid var(--ax-border);
+}
+
+.heroGrid {
+  display: grid;
+  gap: var(--ax-s6);
+  align-items: end;
+}
+
+.eyebrow {
+  margin: 0 0 var(--ax-s3);
+  color: var(--ax-cyan);
+  font-size: var(--ax-fs-sm);
+  font-weight: 700;
+}
+
+.title {
+  margin: 0 0 var(--ax-s4);
+  max-width: 18ch;
+  font-family: var(--ax-font-display);
+  font-size: clamp(2.2rem, 6vw, var(--ax-fs-4xl));
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.lede {
+  margin: 0 0 var(--ax-s5);
+  max-width: 56ch;
+  color: var(--ax-text-secondary);
+  font-size: var(--ax-fs-lg);
+  line-height: var(--ax-lh-body);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ax-s3);
+}
+
+/* Live numbers from the API */
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ax-s3);
+  margin: 0;
+}
+
+.number {
+  padding: var(--ax-s4);
+  border: 1px solid var(--ax-border);
+  border-radius: var(--ax-card-radius);
+  background: var(--ax-surface);
+}
+
+.number dt {
+  color: var(--ax-text-muted);
+  font-size: var(--ax-fs-sm);
+}
+
+.number dd {
+  margin: 4px 0 0;
+  font-family: var(--ax-font-display);
+  font-size: var(--ax-fs-3xl);
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ---- sections ---- */
+.section {
+  padding: var(--ax-s8) 0;
+  border-bottom: 1px solid var(--ax-border);
+}
+
+.sectionTitle {
+  margin: 0 0 var(--ax-s2);
+  font-family: var(--ax-font-display);
+  font-size: var(--ax-fs-2xl);
+  line-height: var(--ax-lh-tight);
+}
+
+.sectionLede {
+  margin: 0 0 var(--ax-s6);
+  max-width: 60ch;
+  color: var(--ax-text-secondary);
+  line-height: var(--ax-lh-body);
+}
+
+/* Steps: a real sequence, so numbered */
+.steps {
+  display: grid;
+  gap: var(--ax-s4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.step {
+  position: relative;
+  padding: var(--ax-s5) var(--ax-s5) var(--ax-s5) calc(var(--ax-s5) + 40px);
+  border: 1px solid var(--ax-border);
+  border-radius: var(--ax-card-radius);
+  background: var(--ax-surface);
+  counter-increment: step;
+}
+
+.step::before {
+  content: counter(step);
+  position: absolute;
+  left: var(--ax-s5);
+  top: var(--ax-s5);
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--ax-cyan);
+  color: var(--ax-cyan);
+  font-size: var(--ax-fs-sm);
+  font-weight: 700;
+}
+
+.step h3,
+.feature h3 {
+  margin: 0 0 var(--ax-s2);
+  font-size: var(--ax-fs-lg);
+}
+
+.step p,
+.feature p {
+  margin: 0;
+  color: var(--ax-text-secondary);
+  line-height: var(--ax-lh-body);
+}
+
+.features {
+  display: grid;
+  gap: var(--ax-s4);
+}
+
+.feature {
+  padding: var(--ax-s5);
+  border: 1px solid var(--ax-border);
+  border-radius: var(--ax-card-radius);
+  background: var(--ax-surface);
+}
+
+.featureIcon {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: var(--ax-s3);
+  border-radius: var(--ax-r-sm);
+  background: var(--ax-info-soft);
+  color: var(--ax-cyan);
+}
+
+.note {
+  margin-top: var(--ax-s3);
+  color: var(--ax-text-muted);
+  font-size: var(--ax-fs-sm);
+}
+
+/* ---- closing call to action ---- */
+.closing {
+  padding: var(--ax-s8) 0;
+}
+
+.closingPanel {
+  display: grid;
+  gap: var(--ax-s4);
+  padding: var(--ax-s6);
+  border: 1px solid var(--ax-border-strong);
+  border-radius: var(--ax-r-lg);
+  background: var(--ax-surface);
+}
+
+.closingPanel h2 {
+  margin: 0;
+  font-family: var(--ax-font-display);
+  font-size: var(--ax-fs-2xl);
+}
+
+.closingPanel p {
+  margin: 0;
+  color: var(--ax-text-secondary);
+  line-height: var(--ax-lh-body);
+}
+
+@media (min-width: 768px) {
+  .hero { padding-top: calc(var(--navbar-height, 90px) + var(--ax-s8)); }
+  .features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .closingPanel { grid-template-columns: 1fr auto; align-items: center; }
+}
+
+@media (min-width: 1024px) {
+  .heroGrid { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
+  .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .steps.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

@@ -13,25 +13,24 @@ const TrendForecasting = () => {
     <div className={styles.container}>
       <div className={styles.hero}>
         <h1>Trend Forecasting</h1>
-        <p className={styles.subtitle}>Predictive analytics for emerging creator opportunities</p>
+        <p className={styles.subtitle}>What brands are asking for right now, from the briefs live on AURAX</p>
       </div>
 
       <div className={styles.content}>
-        <h2>Proactive Trend Intelligence</h2>
+        <h2>Read demand from real briefs</h2>
         <p>
-          Our AI scans millions of social signals to detect emerging trends, empowering your brand 
-          to lead rather than follow. With seasonal trend maps and competitor insights, you'll always 
-          be one step ahead.
+          Every campaign on the AURAX LIVE board is a real brief from a brand. Looking across them
+          shows which categories, platforms and creator sizes brands want right now, and the AURAX
+          team uses that when matching creators to new briefs.
         </p>
         
         <div className={styles.features}>
           <h3>Key Benefits:</h3>
           <ul>
-            <li>Early viral trend detection</li>
-            <li>Seasonal trend mapping</li>
-            <li>Competitor gap analysis</li>
-            <li>Emerging niche identification</li>
-            <li>Cultural moment prediction</li>
+            <li>See the categories brands are posting in</li>
+            <li>See which platforms they want content for</li>
+            <li>Spot hand-picked campaigns from the AURAX team</li>
+            <li>Apply to briefs that fit you</li>
           </ul>
         </div>
       </div>

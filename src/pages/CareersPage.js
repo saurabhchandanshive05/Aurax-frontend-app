@@ -1,52 +1,39 @@
-import React from "react";
-import "./ComingSoonPage.css";
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
+import styles from "./Audience.module.css";
 
-function ComingSoonPage() {
+// Careers. (This page used to be a generic "Coming Soon" placeholder saying the creator dashboard
+// and login were "70% complete"; both have shipped. ComingSoonPage.css is no longer used here.)
+function CareersPage() {
+  useEffect(() => {
+    document.title = "Careers | AURAX";
+  }, []);
+
   return (
-    <div className="coming-soon-container">
-      <div className="coming-soon-content">
-        <h1 className="coming-soon-title">Coming Soon</h1>
-        <p className="coming-soon-text">
-          We're working hard to bring you an amazing creator experience!
-        </p>
-
-        <div className="progress-container">
-          <div className="progress-bar">
-            <div className="progress-fill"></div>
-          </div>
-          <div className="progress-text">70% Complete</div>
-        </div>
-
-        <p className="coming-soon-subtext">
-          Our creator dashboard and login features will be available shortly.
-          Stay tuned!
-        </p>
-
-        <div className="features-grid">
-          <div className="feature-card">
-            <div className="feature-icon">🚀</div>
-            <h3>AI-Powered Matching</h3>
-            <p>Smart algorithms connect brands with perfect creators</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon">💎</div>
-            <h3>Premium Dashboard</h3>
-            <p>Track campaigns, earnings, and analytics in one place</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon">📊</div>
-            <h3>Real-time Analytics</h3>
-            <p>Monitor performance and optimize your content</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon">🤝</div>
-            <h3>Secure Collaboration</h3>
-            <p>Safe and efficient communication with brands</p>
+    <main className={styles.page}>
+      <section className={styles.hero}>
+        <div className={styles.wrap}>
+          <p className={styles.eyebrow}>Careers</p>
+          <h1 className={styles.title}>Work with AURAX</h1>
+          <p className={styles.lede}>
+            There are no open roles listed right now. If you'd like to work with us in creator
+            partnerships, brand success or engineering, write to us and tell us what you'd like to do.
+          </p>
+          <div className={styles.actions}>
+            <a
+              href="mailto:hello@auraxai.in?subject=Working%20with%20AURAX"
+              className="ax-btn ax-btn--primary"
+            >
+              Email hello@auraxai.in
+            </a>
+            <Link to="/about" className="ax-btn ax-btn--ghost">
+              About AURAX
+            </Link>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
 
-export default ComingSoonPage;
+export default CareersPage;

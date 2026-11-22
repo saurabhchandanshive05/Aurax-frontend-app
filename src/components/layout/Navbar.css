@@ -1568,3 +1568,46 @@
     background: #000000;
   }
 }
+
+/* ---- AURAX mark (Phase 4): ring + solid wordmark, matching AppShell and Footer ---- */
+.logo-combination {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-mark-ring {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--ax-aura);
+  -webkit-mask: radial-gradient(circle, transparent 8px, #000 8.5px);
+  mask: radial-gradient(circle, transparent 8px, #000 8.5px);
+}
+.aurax-brand-text {
+  font-family: var(--ax-font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--ax-text);
+}
+
+/* ---- Desktop fit (Phase 4): labels never wrap; spacing shrinks with the viewport ---- */
+.nav-links {
+  gap: clamp(0.75rem, 1.7vw, 2.5rem);
+}
+.nav-links a,
+.aurax-nav-link,
+.login-btn {
+  white-space: nowrap;
+}
+.login-btn {
+  animation: none; /* no idle bobbing */
+}
+@media (min-width: 1101px) and (max-width: 1440px) {
+  .nav-container { padding: 0 1.5rem; }
+  .login-btn { padding: 0.7rem 1.2rem; font-size: 0.9rem; }
+}

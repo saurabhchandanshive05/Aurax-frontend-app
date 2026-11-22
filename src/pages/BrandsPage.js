@@ -1,220 +1,142 @@
 import React, { useEffect } from "react";
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import "./BrandPage.css";
+import Icon from "../components/ui/Icon";
+import useAudienceNumbers from "./useAudienceNumbers";
+import styles from "./Audience.module.css";
+
+// For Brands: what AURAX offers brands today. Every item describes a feature that exists.
+// (The previous version showed invented success stories, a "95% accuracy" claim and placeholder
+// prices such as "$XX9/month"; those were removed. BrandPage.css is no longer used.)
+const FEATURES = [
+  {
+    icon: "check-circle",
+    title: "Only reviewed creators",
+    text: "The AURAX team reviews every creator before they appear, so you're choosing from real, active profiles.",
+  },
+  {
+    icon: "search",
+    title: "Browse creators yourself",
+    text: "Search approved creators by name, niche or city and open their public pages.",
+  },
+  {
+    icon: "instagram",
+    title: "Numbers you can trust",
+    text: "Follower counts from a connected Instagram account are marked as verified; self-reported numbers are labelled as such.",
+  },
+  {
+    icon: "live",
+    title: "A LIVE board for your brief",
+    text: "Your campaign can go on the LIVE board, where creators who fit can tell us they're interested.",
+  },
+];
 
 const BrandsPage = () => {
+  const { liveCampaigns, creators } = useAudienceNumbers();
+
   useEffect(() => {
-    document.title = "For Brands - AURAX";
+    document.title = "For Brands | AURAX";
   }, []);
 
-  const brandFeatures = [
-    {
-      icon: "🎯",
-      title: "AI-Powered Creator Matching",
-      description: "Find perfect creators with precision algorithms.",
-      benefits: ["95% accuracy", "Save time", "Audience fit"],
-    },
-    {
-      icon: "📊",
-      title: "Real-Time Analytics",
-      description: "Track performance with live insights.",
-      benefits: ["Live tracking", "ROI optimization", "Insights"],
-    },
-    {
-      icon: "🚀",
-      title: "Campaign Management",
-      description: "Streamline workflows with smart automation.",
-      benefits: ["Streamlined workflows", "Automation", "Multi-platform"],
-    },
-    {
-      icon: "💎",
-      title: "Premium Creators",
-      description: "Access verified, high-performing talent.",
-      benefits: ["Vetted network", "Quality assurance", "Brand safety"],
-    },
-  ];
-
-  const successStories = [
-    {
-      brand: "TechStart Inc.",
-      results: "300% awareness increase",
-      metric: "2.5M+ impressions",
-    },
-    {
-      brand: "Fashion Forward",
-      results: "180% sales boost",
-      metric: "15K+ conversions",
-    },
-    {
-      brand: "HealthTech Pro",
-      results: "250% engagement growth",
-      metric: "500K+ interactions",
-    },
-  ];
-
-  const pricingPlans = [
-    {
-      name: "Starter",
-      price: "$XX9/month",
-      description: "For small businesses",
-      features: ["10 campaigns", "Basic analytics", "Email support"],
-    },
-    {
-      name: "Professional",
-      price: "$XXX9/month",
-      description: "For growing brands",
-      features: [
-        "Unlimited campaigns",
-        "Advanced insights",
-        "Priority support",
-        "AI recommendations",
-      ],
-    },
-    {
-      name: "Enterprise",
-      price: "Custom",
-      description: "For large brands",
-      features: [
-        "All Professional features",
-        "Dedicated manager",
-        "Custom integrations",
-        "White-label options",
-      ],
-    },
-  ];
-
   return (
-    <div className="brands-page">
-      <section className="hero-section">
-        <div className="hero-content">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="hero-text"
-          >
-            <h1>Empower Your Brand with AI</h1>
-            <p>Connect, collaborate, and achieve results.</p>
-            <div className="hero-actions">
-              <Link to="/brand/login" className="cta-button primary">
-                Get Started
+    <main className={styles.page}>
+      <section className={styles.hero}>
+        <div className={`${styles.wrap} ${styles.heroGrid}`}>
+          <div>
+            <p className={styles.eyebrow}>For brands</p>
+            <h1 className={styles.title}>Brief reviewed creators, not a cold list</h1>
+            <p className={styles.lede}>
+              Tell us your niche, city, budget and timeline. The AURAX team shortlists reviewed
+              creators who fit, or you can browse and pick them yourself.
+            </p>
+            <div className={styles.actions}>
+              <Link to="/inquiry/form?purpose=campaign" className="ax-btn ax-btn--primary">
+                Post a requirement
               </Link>
-              <Link to="/contact" className="cta-button secondary">
-                Learn More
+              <Link to="/creators" className="ax-btn ax-btn--ghost">
+                Browse creators
               </Link>
             </div>
-          </motion.div>
+          </div>
+          {(liveCampaigns !== null || creators !== null) && (
+            <dl className={styles.numbers} aria-label="AURAX right now">
+              {creators !== null && (
+                <div className={styles.number}>
+                  <dt>Reviewed creators with a public page</dt>
+                  <dd>{creators}</dd>
+                </div>
+              )}
+              {liveCampaigns !== null && (
+                <div className={styles.number}>
+                  <dt>Live brand campaigns</dt>
+                  <dd>{liveCampaigns}</dd>
+                </div>
+              )}
+            </dl>
+          )}
         </div>
       </section>
 
-      <section className="features-section">
-        <div className="container">
-          <motion.div
-            className="section-header"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h2>Key Features</h2>
-            <p>Advanced technology meets proven results</p>
-          </motion.div>
-          <div className="features-grid">
-            {brandFeatures.map((feature, index) => (
-              <motion.div
-                key={index}
-                className="feature-card"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <div className="feature-icon">{feature.icon}</div>
-                <h3>{feature.title}</h3>
-                <p>{feature.description}</p>
-                <ul>
-                  {feature.benefits.map((benefit) => (
-                    <li key={benefit}>{benefit}</li>
-                  ))}
-                </ul>
-              </motion.div>
+      <section className={styles.section} aria-labelledby="brand-steps">
+        <div className={styles.wrap}>
+          <h2 id="brand-steps" className={styles.sectionTitle}>How it works</h2>
+          <p className={styles.sectionLede}>From brief to a shortlist of creators who fit.</p>
+          <ol className={`${styles.steps} ${styles.three}`}>
+            <li className={styles.step}>
+              <h3>Post a requirement</h3>
+              <p>Niche, city, budget, timeline and what you need made. It takes a couple of minutes.</p>
+            </li>
+            <li className={styles.step}>
+              <h3>We shortlist creators</h3>
+              <p>The team matches your brief against reviewed creators and gets back to you.</p>
+            </li>
+            <li className={styles.step}>
+              <h3>You choose</h3>
+              <p>Pick the creators you want to work with and we connect you.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section className={styles.section} aria-labelledby="brand-features">
+        <div className={styles.wrap}>
+          <h2 id="brand-features" className={styles.sectionTitle}>What you get</h2>
+          <p className={styles.sectionLede}>A smaller, better list instead of thousands of unknown profiles.</p>
+          <div className={styles.features}>
+            {FEATURES.map((f) => (
+              <article key={f.title} className={styles.feature}>
+                <span className={styles.featureIcon}>
+                  <Icon name={f.icon} size={20} />
+                </span>
+                <h3>{f.title}</h3>
+                <p>{f.text}</p>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="success-stories">
-        <div className="container">
-          <motion.div
-            className="section-header"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h2>Success Stories</h2>
-            <p>Real results from real brands</p>
-          </motion.div>
-          <div className="stories-grid">
-            {successStories.map((story, index) => (
-              <motion.div
-                key={index}
-                className="story-card"
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <h3>{story.brand}</h3>
-                <p>
-                  {story.results} ({story.metric})
-                </p>
-              </motion.div>
-            ))}
+      <section className={styles.closing}>
+        <div className={styles.wrap}>
+          <div className={styles.closingPanel}>
+            <div>
+              <h2>Pricing</h2>
+              <p>
+                Pricing depends on the campaign: how many creators, what they make and for how long.
+                Post your requirement or talk to us and we'll send a quote.
+              </p>
+            </div>
+            <div className={styles.actions}>
+              <Link to="/inquiry/form?purpose=campaign" className="ax-btn ax-btn--primary">
+                Get a quote
+              </Link>
+              <Link to="/contact" className="ax-btn ax-btn--ghost">
+                Talk to us
+              </Link>
+            </div>
           </div>
         </div>
       </section>
-
-      <section className="pricing-section">
-        <div className="container">
-          <motion.div
-            className="section-header"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h2>Pricing</h2>
-            <p>Choose the plan that fits your needs</p>
-          </motion.div>
-          <div className="pricing-grid">
-            {pricingPlans.map((plan, index) => (
-              <motion.div
-                key={index}
-                className="pricing-card"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <h3>{plan.name}</h3>
-                <p className="price">{plan.price}</p>
-                <p>{plan.description}</p>
-                <ul>
-                  {plan.features.map((feature) => (
-                    <li key={feature}>{feature}</li>
-                  ))}
-                </ul>
-                <Link to="/brand/login" className="plan-button">
-                  Select
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </div>
+    </main>
   );
 };
 

@@ -4,6 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import styles from './CampaignCurator.module.css';
 
+// "₹25,000 – ₹60,000", "₹50,000", or "Not disclosed" (an empty budget used to read "₹0 - 0")
+const formatBudget = (budget) => {
+  const sym = budget?.currency === "USD" ? "$" : "₹";
+  const min = Number(budget?.min) || 0;
+  const max = Number(budget?.max) || 0;
+  if (!min && !max) return "Not disclosed";
+  if (!max || min === max) return `${sym}${(min || max).toLocaleString("en-IN")}`;
+  if (!min) return `Up to ${sym}${max.toLocaleString("en-IN")}`;
+  return `${sym}${min.toLocaleString("en-IN")} – ${sym}${max.toLocaleString("en-IN")}`;
+};
+
 const CampaignCurator = () => {
   const navigate = useNavigate();
   const { currentUser, isAuthenticated, isLoading } = useAuth();
@@ -905,8 +916,8 @@ const CampaignCurator = () => {
                   <div>
                     <h3>{campaign.title}</h3>
                     <p className={styles.company}>
-                      {campaign.company} • {campaign.posterName}
-                      {(campaign.linkedinVerified || true) && (
+                      {[campaign.company, campaign.posterName].filter(Boolean).join(" • ")}
+                      {(campaign.linkedinVerified || campaign.linkedinUrl) && (
                         <div className={styles.linkedinBadgeContainer}>
                           {campaign.linkedinUrl ? (
                             <a 
@@ -935,11 +946,13 @@ const CampaignCurator = () => {
                               </svg>
                             </span>
                           )}
-                          {/* Separate Verification Shield */}
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className={`${styles.verificationShield} ${!campaign.linkedinUrl ? styles.verificationShieldDisabled : ''}`}>
-                            <path d="M12 1L21 4v7c0 5.55-3.84 10.74-9 12-5.16-1.26-9-6.45-9-12V4l9-3z" fill="#10B981"/>
-                            <path d="M10 12.5l2 2 4-4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
+                          {/* Verification shield: only for posters the AURAX team verified on LinkedIn */}
+                          {campaign.linkedinVerified && (
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className={`${styles.verificationShield} ${!campaign.linkedinUrl ? styles.verificationShieldDisabled : ''}`}>
+                              <path d="M12 1L21 4v7c0 5.55-3.84 10.74-9 12-5.16-1.26-9-6.45-9-12V4l9-3z" fill="#10B981"/>
+                              <path d="M10 12.5l2 2 4-4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          )}
                         </div>
                       )}
                     </p>
@@ -963,8 +976,7 @@ const CampaignCurator = () => {
                   <strong>Platform:</strong> {campaign.platform}
                 </div>
                 <div className={styles.detail}>
-                  <strong>Budget:</strong> {campaign.budget?.currency === 'INR' ? '₹' : '$'}
-                  {(campaign.budget?.min || 0).toLocaleString()} - {(campaign.budget?.max || 0).toLocaleString()}
+                  <strong>Budget:</strong> {formatBudget(campaign.budget)}
                 </div>
                 <div className={styles.detail}>
                   <strong>Source:</strong> {campaign.source?.type || 'manual'}

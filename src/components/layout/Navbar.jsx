@@ -82,7 +82,7 @@ function Navbar() {
       ? [{ path: "/brand/dashboard", label: "Dashboard" }]
       : []),
     { path: "/brands", label: "For Brands" },
-    { path: "/creators", label: "For Creators" },
+    { path: "/for-creators", label: "For Creators" },
   ];
 
   const featureItems = [
@@ -106,52 +106,17 @@ function Navbar() {
         </div>
         <div className="nav-container">
           {/* Logo with Cloudinary Icon + AURAX Text */}
-          <Link to="/" className="logo">
+          <Link to="/" className="logo" aria-label="AURAX home">
             <motion.div
               className="logo-combination"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              {/* Cloudinary Logo Icon (Circular) */}
-              <motion.div
-                className="cloudinary-icon-container"
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                transition={{ duration: 0.3 }}
-              >
-                <img
-                  src="https://res.cloudinary.com/dzvtsnpr6/image/upload/w_64,h_64,c_fill,f_webp,q_auto/v1756973830/Copilot_20250904_134350_fyxhey.webp"
-                  alt="AURAX Icon"
-                  className="navbar-cloudinary-icon"
-                  loading="eager"
-                  crossOrigin="anonymous"
-                  onError={(e) => {
-
-                    // Try original URL without transformations
-                    if (e.target.src.includes("w_64,h_64")) {
-                      e.target.src =
-                        "https://res.cloudinary.com/dzvtsnpr6/image/upload/v1756973830/Copilot_20250904_134350_fyxhey.webp";
-                    } else {
-                      // Use a placeholder SVG if all fails
-                      e.target.src =
-                        "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9InVybCgjZ3JhZGllbnQwX2xpbmVhcl8xXzEpIi8+CjxwYXRoIGQ9Ik0yMCAyMkg0NEwyMCA0NEgzNkw0NCAzNkwyOCAyOFoiIGZpbGw9IndoaXRlIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50MF9saW5lYXJfMV8xIiB4MT0iMCIgeTE9IjAiIHgyPSI2NCIgeTI9IjY0IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiM2NjdlZWEiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNzY0YmEyIi8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHN2Zz4K";
-                    }
-                  }}
-                  onLoad={() => {
-
-                  }}
-                />
-                <div className="icon-glow-effect" />
-              </motion.div>
-
-              {/* Custom AURAX Text */}
-              <motion.div
-                className="aurax-brand-text"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-              >
-                AURAX
-              </motion.div>
+              {/* AURAX mark: the aura ring + wordmark, the same mark as the dashboards and footer
+                  (it was an AI-generated "A" image from Cloudinary) */}
+              <span className="nav-mark-ring" aria-hidden="true" />
+              <span className="aurax-brand-text">AURAX</span>
             </motion.div>
           </Link>
 
@@ -620,7 +585,7 @@ function Navbar() {
                                 <path d="M20 6h-2.18c.11-.31.18-.65.18-1a2.996 2.996 0 0 0-5.5-1.65l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1z" />
                               </svg>
                             );
-                          case "/creators":
+                          case "/for-creators":
                             return (
                               <svg
                                 className="mobile-nav-icon"

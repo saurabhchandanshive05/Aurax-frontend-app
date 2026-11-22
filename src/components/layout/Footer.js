@@ -5,6 +5,7 @@ import useDeferredStart from "../../hooks/useDeferredStart";
 // The footer itself is styled by the scoped module below.
 import "./Footer.css";
 import s from "./Footer.module.css";
+import { getApiEndpoint } from "../../utils/getApiUrl";
 
 const Icon = {
   phone: (
@@ -76,6 +77,8 @@ const socials = [
 const Footer = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [email, setEmail] = useState("");
+  // Newsletter: idle | sending | done | error (it used to show an alert and save nothing)
+  const [newsletter, setNewsletter] = useState({ status: "idle", message: "" });
   const footerRef = useRef(null);
   const started = useDeferredStart(footerRef);
   const signatureRef = useRef(null);
@@ -140,12 +143,29 @@ const Footer = () => {
     });
   };
 
-  const handleNewsletterSubmit = (e) => {
+  const handleNewsletterSubmit = async (e) => {
     e.preventDefault();
-    if (email) {
-      // Newsletter signup logic here
-      alert("Welcome to the AURAX community! 🌟");
+    if (!email || newsletter.status === "sending") return;
+    setNewsletter({ status: "sending", message: "" });
+    try {
+      const res = await fetch(getApiEndpoint("/api/newsletter"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      const json = await res.json().catch(() => null);
+      if (!res.ok) {
+        const reason =
+          res.status === 429
+            ? "Too many attempts. Please try again in a few minutes."
+            : json?.validationErrors?.[0] || json?.message || "We couldn't subscribe you. Please try again.";
+        setNewsletter({ status: "error", message: reason });
+        return;
+      }
+      setNewsletter({ status: "done", message: "You're subscribed. Thanks for joining!" });
       setEmail("");
+    } catch {
+      setNewsletter({ status: "error", message: "We couldn't reach AURAX. Check your connection and try again." });
     }
   };
 
@@ -160,8 +180,7 @@ const Footer = () => {
   const companyLinks = [
     { name: "About", href: "/about", icon: "ℹ️" },
     { name: "Careers", href: "/careers", icon: "💼" },
-    { name: "Blog", href: "/", icon: "📝" },
-    { name: "Press", href: "/", icon: "📰" },
+    // Blog and Press links removed: there are no such pages (both pointed at the homepage)
   ];
 
   return (
@@ -192,11 +211,18 @@ const Footer = () => {
               autoComplete="email"
               required
             />
-            <button type="submit" className={s.newsletterBtn}>
-              <span>Subscribe</span>
+            <button type="submit" className={s.newsletterBtn} disabled={newsletter.status === "sending"}>
+              <span>{newsletter.status === "sending" ? "Subscribing…" : "Subscribe"}</span>
               <span className={s.btnIcon}>{Icon.send}</span>
             </button>
           </form>
+          <p
+            className={`${s.newsletterStatus} ${newsletter.status === "error" ? s.newsletterError : ""}`}
+            role="status"
+            aria-live="polite"
+          >
+            {newsletter.message}
+          </p>
         </section>
 
         {/* Directory */}

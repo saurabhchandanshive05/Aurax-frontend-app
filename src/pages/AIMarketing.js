@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Icon from "../components/ui/Icon";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/AIMarketing.module.css";
 
@@ -17,20 +18,19 @@ const AIMarketing = () => {
       <div className={`${styles.content} ${isLoaded ? styles.loaded : ""}`}>
         {/* Hero Section */}
         <section className={styles.hero}>
-          <div className={styles.heroIcon}>🚀</div>
+          <div className={styles.heroIcon}><Icon name="megaphone" size={44} /></div>
           <h1 className={styles.title}>AI Marketing</h1>
           <p className={styles.subtitle}>
-            Next-generation AI-powered marketing automation for influencer
-            campaigns
+            Campaign planning by the AURAX team: we turn your brief into a shortlist of reviewed
+            creators and a plan for what they post
           </p>
         </section>
 
         {/* CTA Section */}
         <section className={styles.cta}>
-          <h2 className={styles.ctaTitle}>Ready to Transform?</h2>
+          <h2 className={styles.ctaTitle}>Plan a campaign with us</h2>
           <p className={styles.ctaText}>
-            Revolutionize your marketing campaigns with AI-driven insights and
-            automation
+            Tell us what you need and the AURAX team will shortlist reviewed creators for it.
           </p>
           <div className={styles.buttonGroup}>
             <button

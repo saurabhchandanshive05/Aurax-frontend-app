@@ -90,15 +90,20 @@ const Specialization = () => {
       name: "AI-Powered Marketing",
       icon: "🧠",
       color: "#5b77ff",
-      description: "AI-optimized campaigns that learn and adapt in real-time",
+      summary: "Your brief, turned into a creator shortlist",
+      description: "Campaign planning by the AURAX team: we turn your brief into a shortlist of reviewed creators and a plan for what they post.",
+      points: ["Your brief reviewed by the team", "A shortlist of reviewed creators", "Your campaign listed on the LIVE board"],
       path: "/ai-marketing",
-      video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      // (A placeholder YouTube video, not an AURAX demo, was embedded here; removed)
+      video: "",
     },
     {
       name: "UGC Automation",
       icon: "🎥",
       color: "#ec4899",
-      description: "Automated content creation with human-like authenticity",
+      summary: "Content made by reviewed creators",
+      description: "User-generated content made by reviewed creators, briefed and coordinated by the AURAX team.",
+      points: ["Creators matched to your product and niche", "Deliverables agreed up front", "One point of contact for every creator"],
       path: "/ugc-automation",
       video: "",
     },
@@ -106,7 +111,9 @@ const Specialization = () => {
       name: "Creator CRM Systems",
       icon: "📊",
       color: "#00d2ff",
-      description: "Intelligent relationship management for creators",
+      summary: "Your creators, their pages and stats",
+      description: "One place for the creators you work with: their public pages, verified stats and contact through AURAX.",
+      points: ["Public creator pages", "Verified Instagram follower counts", "Contact and follow-ups handled by the team"],
       path: "/creator-crm",
       video: "",
     },
@@ -114,7 +121,9 @@ const Specialization = () => {
       name: "Trend Forecasting",
       icon: "📈",
       color: "#9d4edd",
-      description: "Predictive analytics for emerging creator opportunities",
+      summary: "What brands are asking for right now",
+      description: "See what brands are asking for right now, from the briefs live on the AURAX board.",
+      points: ["The live campaign board", "Categories and platforms in demand", "Hand-picked campaigns flagged"],
       path: "/trend-forecasting",
       video: "",
     },
@@ -122,15 +131,19 @@ const Specialization = () => {
       name: "Influencer Discovery",
       icon: "🔍",
       color: "#ff9e00",
-      description: "AI-powered matching with perfect creator partnerships",
-      path: "influencer-discovery",
+      summary: "Find reviewed creators by niche or city",
+      description: "Search reviewed creators by name, niche or city, or let the team shortlist them for you.",
+      points: ["Only reviewed creators", "Search by niche and city", "Verified and self-reported numbers labelled"],
+      path: "/influencer-discovery",
       video: "",
     },
     {
       name: "Data-Driven Growth",
       icon: "🚀",
       color: "#43aa8b",
-      description: "Growth strategies powered by neural analytics",
+      summary: "Real, verified numbers, not estimates",
+      description: "Decisions based on real numbers: verified follower counts and live campaign data, not estimates.",
+      points: ["Instagram-connected stats", "Live campaign counts", "Self-reported numbers clearly marked"],
       path: "/data-driven-growth",
       video: "",
     },
@@ -174,6 +187,16 @@ const Specialization = () => {
                 className={styles.techItem}
                 style={{ "--float-delay": `${-index * 1.1}s` }}
                 onClick={(e) => handleCardClick(e, tech)}
+                role="button"
+                tabIndex={0}
+                aria-label={`${tech.name}: details`}
+                onKeyDown={(e) => {
+                  // Keyboard users open the details too (the card was mouse-only)
+                  if ((e.key === "Enter" || e.key === " ") && e.target === e.currentTarget) {
+                    e.preventDefault();
+                    setActive(tech);
+                  }
+                }}
                 onMouseMove={tilt ? handleMouseMove : undefined}
                 onMouseLeave={tilt ? handleMouseLeave : undefined}
               >
@@ -185,7 +208,7 @@ const Specialization = () => {
                 </div>
                 <div className={styles.techBody}>
                   <h3 className={styles.techName}>{tech.name}</h3>
-                  <p className={styles.techDescription}>{tech.description}</p>
+                  <p className={styles.techDescription}>{tech.summary || tech.description}</p>
                   <div className={styles.cardActions}>
                     <button
                       className={styles.cardCta}
@@ -236,9 +259,9 @@ const Specialization = () => {
             </div>
             <p className={styles.modalCopy}>{active.description}</p>
             <ul className={styles.modalList}>
-              <li>Smart onboarding with presets and best practices</li>
-              <li>Real-time insights with anomaly alerts</li>
-              <li>Templates, playbooks, and case studies</li>
+              {(active.points || []).map((point) => (
+                <li key={point}>{point}</li>
+              ))}
             </ul>
             {active.video && (
               <div className={styles.modalVideoWrap}>

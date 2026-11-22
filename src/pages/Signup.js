@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Icon from "../components/ui/Icon";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { apiClient } from "../utils/apiClient";
@@ -129,7 +130,7 @@ const Signup = () => {
       if (resp?.success) {
         // ENHANCED: Clear any previous errors and show success immediately
         setSubmitError("");
-        setSuccessMessage("🎉 Email verified successfully! Welcome to Aurax!");
+        setSuccessMessage("Email verified. Welcome to AURAX!");
 
         // Show success screen after successful verification
         setShowSuccessScreen(true);
@@ -137,24 +138,24 @@ const Signup = () => {
 
         // ENHANCED: Show temporary success message before redirect
         setTimeout(() => {
-          setSuccessMessage("✅ Account verified! Preparing your dashboard...");
+          setSuccessMessage("Account verified. Preparing your dashboard…");
         }, 1500);
 
         // Auto-redirect after 4 seconds (increased for better UX)
         startRedirectCountdown(4, resp?.token, () =>
-          setSuccessMessage("🚀 Redirecting to setup your profile...")
+          setSuccessMessage("Taking you to your account…")
         );
       } else if (resp?.success && !resp?.token) {
         // ENHANCED: Handle success without token (some verification responses)
         setSubmitError("");
-        setSuccessMessage("🎉 Email verified successfully!");
+        setSuccessMessage("Email verified.");
         setShowSuccessScreen(true);
         setVerificationSent(false);
 
         // Show manual navigation option
         setTimeout(() => {
           setSuccessMessage(
-            "✅ Verification complete! You can now sign in to your account."
+            "Verification complete. You can now sign in to your account."
           );
         }, 2000);
       }
@@ -178,7 +179,7 @@ const Signup = () => {
       });
 
       if (resp?.success) {
-        setSuccessMessage("✅ New verification code sent to your email!");
+        setSuccessMessage("A new verification code is on its way to your email.");
       }
     } catch (err) {
       setSubmitError(
@@ -209,7 +210,7 @@ const Signup = () => {
         if (resp.token) {
           // Direct login if token provided (skip email verification)
           setShowSuccessScreen(true);
-          setSuccessMessage("🎉 Registration successful! Welcome to Aurax!");
+          setSuccessMessage("Registration complete. Welcome to AURAX!");
           // Auto-redirect after 3 seconds
           startRedirectCountdown(3, resp.token);
         } else {
@@ -267,7 +268,7 @@ const Signup = () => {
           animation: "pulse 2s ease-in-out infinite",
         }}
       >
-        📧
+        <Icon name="mail" size={34} />
       </div>
 
       {/* Verification Title */}
@@ -401,12 +402,12 @@ const Signup = () => {
             }}
           >
             {showSuccessScreen
-              ? "🎉 Verification Complete!"
+              ? "Verification complete"
               : isVerifying
-              ? "⏳ Verifying Code..."
+              ? "Verifying code…"
               : successMessage && successMessage.includes("verified")
-              ? "✅ Verified Successfully!"
-              : "🚀 Verify Email Code"}
+              ? "Verified"
+              : "Verify email"}
           </button>
 
           <button
@@ -432,7 +433,7 @@ const Signup = () => {
               e.target.style.borderColor = "rgba(96, 165, 250, 0.4)";
             }}
           >
-            📨 Resend Code
+            Resend code
           </button>
         </div>
       </form>
@@ -448,7 +449,7 @@ const Signup = () => {
           border: "1px solid rgba(255, 255, 255, 0.1)",
         }}
       >
-        📧 <strong>Can't find the email?</strong>
+        <strong>Can't find the email?</strong>
         <br />
         • Check your spam or junk folder
         <br />
@@ -503,7 +504,7 @@ const Signup = () => {
             animation: "bounceIn 0.6s ease-out",
           }}
         >
-          ✅
+          <Icon name="check" size={36} strokeWidth={2.4} />
         </div>
 
         {/* Success Message */}
@@ -546,7 +547,7 @@ const Signup = () => {
               color: "#93c5fd",
             }}
           >
-            🚀 Automatically redirecting to your dashboard in{" "}
+            Taking you to your dashboard in{" "}
             {autoRedirectCountdown} seconds...
           </div>
         )}
@@ -576,7 +577,7 @@ const Signup = () => {
               e.target.style.boxShadow = "0 4px 15px rgba(37, 99, 235, 0.4)";
             }}
           >
-            🚀 Sign In Now - Start Creating!
+            Sign in
           </Link>
 
           {/* Secondary CTA - Skip Verification (if needed) */}
@@ -657,7 +658,7 @@ const Signup = () => {
               border: "1px solid rgba(255, 255, 255, 0.1)",
             }}
           >
-            🎉 <strong>Next Steps:</strong>
+            <strong>Next steps:</strong>
             <br />
             • Complete your profile setup
             <br />• Explore{" "}
@@ -689,10 +690,12 @@ const Signup = () => {
         }}
       >
         {/* Show Success Screen OR Email Verification Screen OR Registration Form */}
+        {/* Called as functions, not <Components />: they are defined inside Signup, so as
+            components React remounted them on every keystroke and the code input lost focus */}
         {showSuccessScreen ? (
-          <SuccessScreen />
+          SuccessScreen()
         ) : verificationSent ? (
-          <EmailVerificationScreen />
+          EmailVerificationScreen()
         ) : (
           <>
             <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 8 }}>

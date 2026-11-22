@@ -38,11 +38,12 @@
 }
 
 .stat-card {
-  background: var(--ax-action);
-  padding: 1.5rem;
-  border-radius: 12px;
-  color: var(--ax-action-ink);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Surface tile like the other admin pages (a cyan fill read as a button) */
+  background: var(--ax-surface);
+  border: 1px solid var(--ax-border);
+  padding: var(--ax-card-pad);
+  border-radius: var(--ax-card-radius);
+  color: var(--ax-text-primary);
 }
 
 .stat-value {
@@ -52,8 +53,8 @@
 }
 
 .stat-label {
-  font-size: 0.9rem;
-  opacity: 0.9;
+  font-size: var(--ax-fs-sm);
+  color: var(--ax-text-secondary);
 }
 
 /* Search and Filters */
@@ -72,11 +73,19 @@
 
 .search-input {
   flex: 1;
-  padding: 0.875rem 1.25rem;
-  border: 2px solid var(--ax-line-strong);
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: all 0.2s;
+  min-height: var(--ax-input-h);
+  padding: 0 var(--ax-s4);
+  border: 1px solid var(--ax-border-strong);
+  border-radius: var(--ax-r-sm);
+  background: var(--ax-surface-sunken);
+  color: var(--ax-text-primary);
+  font: inherit;
+  font-size: var(--ax-fs-md);
+  transition: border-color var(--ax-dur-fast) var(--ax-ease);
+}
+
+.search-input::placeholder {
+  color: var(--ax-text-muted);
 }
 
 .search-input:focus {
@@ -111,13 +120,21 @@
 }
 
 .filter-select {
-  padding: 0.625rem 1rem;
-  border: 2px solid var(--ax-line-strong);
-  border-radius: 8px;
-  font-size: 0.9rem;
-  background: var(--ax-dusk);
+  min-height: 40px;
+  padding: 0 var(--ax-s4);
+  border: 1px solid var(--ax-border-strong);
+  border-radius: var(--ax-r-sm);
+  font: inherit;
+  font-size: var(--ax-fs-sm);
+  background: var(--ax-surface-sunken);
+  color: var(--ax-text-primary);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: border-color var(--ax-dur-fast) var(--ax-ease);
+}
+
+.filter-select option {
+  background: var(--ax-surface-sunken);
+  color: var(--ax-text-primary);
 }
 
 .filter-select:focus {
@@ -126,13 +143,21 @@
 }
 
 .clear-filters-btn {
-  padding: 0.625rem 1.25rem;
+  min-height: 40px;
+  padding: 0 var(--ax-s4);
   background: transparent;
-  border: 2px solid var(--ax-line-strong);
-  border-radius: 8px;
-  font-size: 0.9rem;
+  border: 1px solid var(--ax-border-strong);
+  border-radius: var(--ax-r-sm);
+  color: var(--ax-text-secondary);
+  font: inherit;
+  font-size: var(--ax-fs-sm);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: border-color var(--ax-dur-fast) var(--ax-ease), color var(--ax-dur-fast) var(--ax-ease);
+}
+
+.clear-filters-btn:hover {
+  color: var(--ax-text-primary);
+  border-color: var(--ax-text-muted);
 }
 
 .clear-filters-btn:hover {
@@ -440,3 +465,15 @@
 
 /* ---- Aura: inside the app shell ---- */
 .creator-database { max-width: none; padding: 0; background: transparent; }
+
+/* Header actions (was inline styles) */
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ax-s3);
+  margin-top: var(--ax-s4);
+}
+
+.empty-state .ax-btn {
+  margin-top: var(--ax-s4);
+}

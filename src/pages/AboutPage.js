@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import "./AboutPage.css";
+import useAudienceNumbers from "./useAudienceNumbers";
 
 const AboutPage = () => {
   const [isVisible, setIsVisible] = useState({});
@@ -44,12 +45,13 @@ const AboutPage = () => {
     },
   };
 
+  // Real platform numbers from the API (this showed invented figures such as "50K+ Successful
+  // Campaigns" and "92% Prediction Accuracy")
+  const { liveCampaigns, creators } = useAudienceNumbers();
   const stats = [
-    { number: "300%", label: "Average ROI Increase" },
-    { number: "50K+", label: "Successful Campaigns" },
-    { number: "200+", label: "Data Points Analyzed" },
-    { number: "92%", label: "Prediction Accuracy" },
-  ];
+    creators !== null && { number: creators, label: "Reviewed creators with a public page" },
+    liveCampaigns !== null && { number: liveCampaigns, label: "Live brand campaigns" },
+  ].filter(Boolean);
 
   const values = [
     {
@@ -168,9 +170,9 @@ const AboutPage = () => {
                 thrive through authentic partnerships.
               </p>
               <p className="story-text">
-                Today, AURAX powers thousands of successful campaigns globally,
-                helping brands achieve 3x better ROI while empowering creators
-                to build sustainable businesses.
+                Today, AURAX connects brands with creators the team has reviewed,
+                through a live board of real brand briefs and public creator pages
+                backed by verified numbers.
               </p>
             </motion.div>
 
@@ -279,10 +281,10 @@ const AboutPage = () => {
             variants={fadeInUp}
           >
             <h2 className="cta-title">
-              Ready to Transform Your Influencer Marketing?
+              Work with reviewed creators
             </h2>
             <p className="cta-subtitle">
-              Join thousands of brands already using AI to drive better results
+              Tell us what you need and we'll shortlist reviewed creators for it
             </p>
             <div className="cta-buttons">
               <button className="cta-primary">

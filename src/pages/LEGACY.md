@@ -15,6 +15,7 @@ old links and bookmarks keep working. Nothing was deleted.
 | `/creators` (old content) | `CreatorDirectory.js` | Advertised AI tools that don't exist; buttons did nothing | Replaced by `CreatorDiscovery.jsx` (real, approved creators) |
 | `/creator/dashboard-old` | `CreatorDashboard.js` (+ `AdvancedAnalytics`, `AIContentRecommender`, `SentimentAnalysis`) | Widgets showed sample data | `/creator/dashboard` |
 | `/creator/welcome-old` | `CreatorOnboarding.js` | Superseded onboarding | `/creator/welcome` |
+| `/coming-soon` | `ComingSoonPage.js` | Said the creator dashboard and login were "70% complete"; both have shipped. Nothing linked to it | Homepage |
 | `/creator/welcome` (second entry) | `MinimalWelcome.js` | Duplicate route: the first `/creator/welcome` (WelcomeScreen) always matched, so it never rendered | unchanged (`WelcomeScreen`) |
 
 To restore a page: re-add its `React.lazy` import in `src/App.js` and point its route back at it.

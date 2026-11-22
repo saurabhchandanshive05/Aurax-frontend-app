@@ -3,8 +3,19 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import styles from './CampaignDetail.module.css';
+import Icon from '../../components/ui/Icon';
 
 const API_URL = getApiUrl();
+
+// "10,000 – 50,000", "From 10,000", "Up to 50,000" or null when neither end is set
+const formatRange = (range, suffix = '') => {
+  const min = Number(range?.min) || 0;
+  const max = Number(range?.max) || 0;
+  if (!min && !max) return null;
+  const f = (n) => n.toLocaleString('en-IN');
+  if (min && max) return min === max ? `${f(min)}${suffix}` : `${f(min)} – ${f(max)}${suffix}`;
+  return min ? `From ${f(min)}${suffix}` : `Up to ${f(max)}${suffix}`;
+};
 
 const CampaignDetail = () => {
   const { id } = useParams();
@@ -12,6 +23,7 @@ const CampaignDetail = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [campaign, setCampaign] = useState(null);
   const [loading, setLoading] = useState(true);
+  const isSignedIn = !!(localStorage.getItem('token') || sessionStorage.getItem('token'));
 
   useEffect(() => {
     fetchCampaign();
@@ -141,7 +153,7 @@ const CampaignDetail = () => {
   if (!campaign) {
     return (
       <div className={styles.errorContainer}>
-        <div className={styles.errorIcon}>❌</div>
+        <div className={styles.errorIcon}><Icon name="alert" size={28} /></div>
         <h2>Campaign not found</h2>
         <p>This campaign may have expired or been removed</p>
         <button className={styles.backBtn} onClick={() => navigate('/live/campaigns')}>
@@ -159,33 +171,33 @@ const CampaignDetail = () => {
           type="button"
           className={styles.actionBtn} 
           onClick={(e) => handleCTAClick('chat', e)} 
-          title="Chat with us"
+          title="Contact the AURAX team about this campaign"
         >
-          💬 Quick Chat
+          <Icon name="chat" size={18} /> Contact us
         </button>
         <button 
           type="button"
           className={styles.actionBtn} 
           onClick={(e) => handleCTAClick('call', e)} 
-          title="Schedule a call"
+          title="Request a call"
         >
-          📞 Call
+          <Icon name="phone" size={18} /> Request a call
         </button>
         <button 
           type="button"
           className={styles.primaryActionBtn} 
           onClick={(e) => handleCTAClick('post', e)} 
-          title="Post your campaign"
+          title="Post your own campaign"
         >
-          📝 Post Campaign
+          <Icon name="megaphone" size={18} /> Post a campaign
         </button>
       </div>
 
       {/* Header */}
       <header className={styles.header}>
         <div className={styles.headerContent}>
-          <button className={styles.backButton} onClick={() => navigate('/live/campaigns')}>
-            ← Back
+          <button type="button" className={styles.backButton} onClick={() => navigate('/live/campaigns')}>
+            <Icon name="arrow-left" size={18} /> LIVE board
           </button>
           
           <div className={styles.headerRight}>
@@ -202,7 +214,7 @@ const CampaignDetail = () => {
         {/* Campaign Summary */}
         <div className={styles.summaryCard}>
           {campaign.isHandPicked && (
-            <div className={styles.handPickedBadge}>⭐ Hand Picked</div>
+            <div className={styles.handPickedBadge}><Icon name="star" size={14} /> Hand-picked</div>
           )}
 
           {/* Brand Info */}
@@ -213,11 +225,11 @@ const CampaignDetail = () => {
             <div className={styles.brandDetails}>
               <div className={styles.brandName}>
                 {campaign.brandName}
-                {campaign.isVerified && <span className={styles.verifiedBadge}>✓ Verified Brand</span>}
+                {campaign.isVerified && <span className={styles.verifiedBadge}><Icon name="check" size={14} /> Verified brand</span>}
               </div>
               <div className={styles.posterInfo}>
                 Posted by {campaign.posterName}
-                {(campaign.linkedinVerified || true) && (
+                {(campaign.linkedinVerified || campaign.linkedinUrl) && (
                   <div className={styles.linkedinBadgeContainer}>
                     {campaign.linkedinUrl ? (
                       <a 
@@ -245,13 +257,16 @@ const CampaignDetail = () => {
                         </svg>
                       </span>
                     )}
-                    {/* Separate Verification Shield */}
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className={`${styles.verificationShield} ${!campaign.linkedinUrl ? styles.verificationShieldDisabled : ''}`}>
-                      <path d="M12 1L21 4v7c0 5.55-3.84 10.74-9 12-5.16-1.26-9-6.45-9-12V4l9-3z" fill="#10B981"/>
-                      <path d="M10 12.5l2 2 4-4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
+                    {/* Verification shield: only for posters the AURAX team verified on LinkedIn */}
+                    {campaign.linkedinVerified && (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className={`${styles.verificationShield} ${!campaign.linkedinUrl ? styles.verificationShieldDisabled : ''}`}>
+                        <path d="M12 1L21 4v7c0 5.55-3.84 10.74-9 12-5.16-1.26-9-6.45-9-12V4l9-3z" fill="#10B981"/>
+                        <path d="M10 12.5l2 2 4-4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    )}
                   </div>
-                )} • {campaign.posterRole}
+                )}
+                {campaign.posterRole && <span className={styles.posterRole}>{campaign.posterRole}</span>}
               </div>
               <div className={styles.timeAgo}>{formatTimeAgo(campaign.createdAt)}</div>
             </div>
@@ -263,19 +278,19 @@ const CampaignDetail = () => {
           {/* Highlight Cards */}
           <div className={styles.highlightGrid}>
             <div className={styles.highlightCard}>
-              <div className={styles.highlightIcon}>💰</div>
+              <div className={styles.highlightIcon}><Icon name="wallet" size={20} /></div>
               <div className={styles.highlightLabel}>Budget</div>
               <div className={styles.highlightValue}>{formatBudget(campaign.budget)}</div>
             </div>
 
             <div className={styles.highlightCard}>
-              <div className={styles.highlightIcon}>🏷</div>
+              <div className={styles.highlightIcon}><Icon name="tag" size={20} /></div>
               <div className={styles.highlightLabel}>Brand</div>
               <div className={styles.highlightValue}>{campaign.company || campaign.brandName}</div>
             </div>
 
             <div className={styles.highlightCard}>
-              <div className={styles.highlightIcon}>📱</div>
+              <div className={styles.highlightIcon}><Icon name="smartphone" size={20} /></div>
               <div className={styles.highlightLabel}>Platform</div>
               <div className={styles.highlightValue}>{campaign.platform}</div>
             </div>
@@ -284,7 +299,7 @@ const CampaignDetail = () => {
 
         {/* Campaign Details */}
         <div className={styles.detailsCard}>
-          <h2 className={styles.sectionTitle}>📋 Campaign Brief</h2>
+          <h2 className={styles.sectionTitle}><Icon name="list" size={20} /> Campaign brief</h2>
           
           {/* Objective */}
           <div className={styles.detailSection}>
@@ -315,24 +330,20 @@ const CampaignDetail = () => {
 
         {/* Requirements */}
         <div className={styles.detailsCard}>
-          <h2 className={styles.sectionTitle}>🎯 Key Requirements</h2>
+          <h2 className={styles.sectionTitle}><Icon name="target" size={20} /> Key requirements</h2>
           
           <div className={styles.requirementsGrid}>
-            {campaign.followerRange && (
+            {formatRange(campaign.followerRange) && (
               <div className={styles.requirementItem}>
-                <div className={styles.requirementLabel}>Follower Range</div>
-                <div className={styles.requirementValue}>
-                  {campaign.followerRange.min?.toLocaleString()} - {campaign.followerRange.max?.toLocaleString()}
-                </div>
+                <div className={styles.requirementLabel}>Follower range</div>
+                <div className={styles.requirementValue}>{formatRange(campaign.followerRange)}</div>
               </div>
             )}
 
-            {campaign.avgViews && (
+            {formatRange(campaign.avgViews) && (
               <div className={styles.requirementItem}>
-                <div className={styles.requirementLabel}>Average Views</div>
-                <div className={styles.requirementValue}>
-                  {campaign.avgViews.min?.toLocaleString()} - {campaign.avgViews.max?.toLocaleString()} per post
-                </div>
+                <div className={styles.requirementLabel}>Average views</div>
+                <div className={styles.requirementValue}>{formatRange(campaign.avgViews, ' per post')}</div>
               </div>
             )}
 
@@ -370,38 +381,45 @@ const CampaignDetail = () => {
           </div>
         </div>
 
-        {/* CTA Section */}
+        {/* Next step: one clear action for each visitor */}
         <div className={styles.ctaCard}>
-          <div className={styles.ctaIcon}>🔒</div>
-          <h2 className={styles.ctaTitle}>Want to apply for this campaign?</h2>
-          <p className={styles.ctaText}>
-            Login and get verified to see if you match this campaign's requirements and connect with the brand
-          </p>
-          
-          <div className={styles.ctaButtons}>
-            <button 
-              className={styles.loginBtn}
-              onClick={() => {
-                const returnUrl = encodeURIComponent(window.location.pathname);
-                navigate(`/login?returnUrl=${returnUrl}&campaignId=${id}`);
-              }}
-            >
-              Login Now
-            </button>
-            <button 
-              className={styles.verifyBtn}
-              onClick={() => {
-                const returnUrl = encodeURIComponent(window.location.pathname);
-                navigate(`/login?returnUrl=${returnUrl}&campaignId=${id}`);
-              }}
-            >
-              Get Verified
-            </button>
-          </div>
-
-          <div className={styles.ctaNote}>
-            💡 Verified creators get priority access and can apply directly
-          </div>
+          <div className={styles.ctaIcon}><Icon name={isSignedIn ? 'chat' : 'lock'} size={26} /></div>
+          {isSignedIn ? (
+            <>
+              <h2 className={styles.ctaTitle}>Interested in this campaign?</h2>
+              <p className={styles.ctaText}>
+                Tell the AURAX team. We check that you match the brief and connect you with the brand.
+              </p>
+              <div className={styles.ctaButtons}>
+                <button type="button" className={styles.loginBtn} onClick={(e) => handleCTAClick('chat', e)}>
+                  I'm interested
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 className={styles.ctaTitle}>Want to apply for this campaign?</h2>
+              <p className={styles.ctaText}>
+                Sign in to tell the AURAX team you're interested. We check that you match the brief
+                and connect you with the brand.
+              </p>
+              <div className={styles.ctaButtons}>
+                <button
+                  type="button"
+                  className={styles.loginBtn}
+                  onClick={() => {
+                    const returnUrl = encodeURIComponent(window.location.pathname);
+                    navigate(`/login?returnUrl=${returnUrl}&campaignId=${id}`);
+                  }}
+                >
+                  Sign in to apply
+                </button>
+                <button type="button" className={styles.verifyBtn} onClick={() => navigate('/signup?role=creator')}>
+                  Create a creator account
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

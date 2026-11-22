@@ -315,6 +315,12 @@ const BrandIntelligenceDashboard = () => {
           {/* Top Industries */}
           <div className={styles.section}>
             <h2>Top Industries</h2>
+            {stats.top_industries.length === 0 && (
+              <p className={styles.sectionEmpty}>
+                No industries yet. They're counted from the brands being tracked, which are added
+                or imported by the AURAX team.
+              </p>
+            )}
             <div className={styles.industryList}>
               {stats.top_industries.map((industry, index) => (
                 <div key={index} className={styles.industryCard}>
@@ -329,12 +335,26 @@ const BrandIntelligenceDashboard = () => {
           {/* Trending Brands Preview */}
           <div className={styles.section}>
             <h2>Trending Brands</h2>
+            {trendingBrands.length === 0 && (
+              <p className={styles.sectionEmpty}>
+                No trending brands yet. Brands show up here once they're tracked and running ads.
+              </p>
+            )}
             <div className={styles.brandList}>
               {trendingBrands.slice(0, 5).map((brand) => (
                 <div 
                   key={brand.brand_id} 
                   className={styles.brandCard}
                   onClick={() => viewBrandDetails(brand.brand_id)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      viewBrandDetails(brand.brand_id);
+                    }
+                  }}
+                  aria-label={`View ${brand.brand_name} details`}
                 >
                   <div className={styles.brandHeader}>
                     <h3>{brand.brand_name}</h3>
@@ -352,12 +372,15 @@ const BrandIntelligenceDashboard = () => {
                 </div>
               ))}
             </div>
+            {trendingBrands.length > 0 && (
             <button 
+              type="button"
               className={styles.viewAllBtn}
               onClick={() => setActiveTab("trending")}
             >
               View All Trending →
             </button>
+            )}
           </div>
         </div>
       )}
@@ -522,7 +545,7 @@ const BrandIntelligenceDashboard = () => {
             ref={detailDialogRef}
             role="dialog"
             aria-modal="true"
-            aria-label={`${selectedBrand.brandName || selectedBrand.name || "Brand"} details`}
+            aria-label={`${selectedBrand.brand_name || "Brand"} details`}
             tabIndex={-1}
           >
             <button 

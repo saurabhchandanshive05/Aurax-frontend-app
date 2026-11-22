@@ -109,22 +109,6 @@ const PublicCreatorPage = () => {
     }
   };
 
-  const proceedToCheckout = (plan) => {
-    if (!plan) {
-      alert('Invalid plan selected');
-      return;
-    }
-
-    const planName = plan.name || plan.duration || 'Subscription';
-    const planPrice = plan.price || 0;
-    const planDuration = plan.duration || 'month';
-
-    // TODO: Implement payment integration (Razorpay/Stripe)
-    alert(`Payment integration coming soon!\nPlan: ${planName}\nPrice: ₹${planPrice}/${planDuration}`);
-    
-    // After successful payment, reload page to update subscription status
-    // window.location.reload();
-  };
 
   const handleLoginRedirect = () => {
     // Preserve intent: redirect back to this page with unlock parameter
@@ -634,12 +618,18 @@ const PublicCreatorPage = () => {
               )}
             </div>
             
-            <button 
+            {/* AURAX has no payment integration yet: say so instead of a "checkout" that only
+                showed an alert */}
+            <p className="modal-payment-note" role="note">
+              Paid plans aren't available on AURAX yet, so you can't pay for this here. Ask about
+              it and the AURAX team will get back to you.
+            </p>
+            <a
               className="btn-primary btn-modal-action"
-              onClick={() => proceedToCheckout(selectedPlan)}
+              href={`mailto:hello@auraxai.in?subject=${encodeURIComponent(`${selectedPlan.type === 'service' ? 'Service' : 'Plan'}: ${selectedPlan.name || 'plan'} – ${creator.displayName} (${slug})`)}`}
             >
-              Proceed to Payment
-            </button>
+              Ask about this {selectedPlan.type === 'service' ? 'service' : 'plan'}
+            </a>
             <button 
               className="btn-secondary" 
               onClick={() => setShowSubscribeModal(false)}

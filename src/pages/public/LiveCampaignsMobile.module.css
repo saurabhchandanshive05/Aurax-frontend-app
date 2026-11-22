@@ -93,17 +93,17 @@
 }
 
 .filterSelect:focus {
-  border-color: #667eea;
+  border-color: var(--ax-cyan);
   background: #374151;
 }
 
 .filterApply {
   width: 100%;
   padding: 16px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--ax-action);
   border: none;
   border-radius: 12px;
-  color: white;
+  color: var(--ax-action-ink);
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
@@ -132,10 +132,11 @@
 }
 
 .heroHighlight {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: none;
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: currentColor;
   background-clip: text;
+  color: var(--ax-cyan); /* solid accent instead of gradient text */
 }
 
 .heroSubtitle {
@@ -163,7 +164,7 @@
 .statNumber {
   font-size: 24px;
   font-weight: 800;
-  color: #667eea;
+  color: var(--ax-text-primary);
   margin-bottom: 4px;
 }
 
@@ -205,9 +206,9 @@
 }
 
 .viewTab.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-color: transparent;
+  background: var(--ax-surface-hover);
+  color: var(--ax-text-primary);
+  border-color: var(--ax-cyan);
 }
 
 .filterTrigger {
@@ -303,13 +304,14 @@
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--ax-surface-sunken);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 20px;
   font-weight: 800;
-  color: white;
+  color: var(--ax-text-secondary);
+  border: 1px solid var(--ax-border-strong);
   flex-shrink: 0;
 }
 
@@ -439,7 +441,7 @@
 .seeMoreBtn {
   background: none;
   border: none;
-  color: #667eea;
+  color: var(--ax-link);
   font-size: 14px;
   font-weight: 700;
   padding: 0;
@@ -451,7 +453,7 @@
 }
 
 .seeMoreBtn:active {
-  color: #764ba2;
+  color: var(--ax-action-hover);
 }
 
 /* Campaign Highlights - Compact */
@@ -532,8 +534,9 @@
 }
 
 .feedActionBtn.primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--ax-action);
   border-color: transparent;
+  color: var(--ax-action-ink);
 }
 
 /* Contacting Indicator */
@@ -570,7 +573,7 @@
   width: 48px;
   height: 48px;
   border: 4px solid rgba(102, 126, 234, 0.2);
-  border-top-color: #667eea;
+  border-top-color: var(--ax-cyan);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -650,8 +653,8 @@
 }
 
 .ctaBarBtn.primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--ax-action);
+  color: var(--ax-action-ink);
 }
 
 .ctaBarBtn:active {
@@ -756,10 +759,11 @@
   --lc-text: #f1f5f9;
   --lc-text-2: #cbd5e1;
   --lc-muted: #94a3b8;
-  --lc-accent: #8b9cff;
-  --lc-primary: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
-  --lc-primary-hover: linear-gradient(135deg, #6573e6 0%, #7a55d4 100%);
-  --lc-focus: 0 0 0 3px rgba(139, 156, 255, 0.55);
+  /* Mapped onto the AURAX tokens (were a separate purple palette) */
+  --lc-accent: var(--ax-cyan);
+  --lc-primary: var(--ax-action);
+  --lc-primary-hover: var(--ax-action-hover);
+  --lc-focus: var(--ax-focus);
   --lc-radius: 18px;
   --lc-ease: cubic-bezier(0.2, 0, 0, 1);
   color: var(--lc-text);
@@ -822,9 +826,10 @@
 }
 
 .heroHighlight {
-  background: linear-gradient(135deg, #8b9cff 0%, #b794f4 100%);
+  background: none; /* solid accent instead of gradient text */
   -webkit-background-clip: text;
   background-clip: text;
+  color: var(--ax-cyan); /* solid accent instead of gradient text */
 }
 
 .heroSubtitle {
@@ -1077,7 +1082,9 @@
   height: 40px;
   border-radius: 10px;
   font-size: 17px;
-  background: var(--lc-primary);
+  background: var(--ax-surface-sunken);
+  border: 1px solid var(--ax-border-strong);
+  color: var(--ax-text-secondary);
 }
 
 .posterName {
@@ -1253,6 +1260,7 @@
   border: 1px solid transparent;
   color: #ffffff;
   box-shadow: 0 6px 18px rgba(90, 103, 216, 0.35);
+  color: var(--ax-action-ink);
 }
 
 .feedActionBtn.secondaryAction {
@@ -1393,7 +1401,8 @@
 
   .feedActionBtn.primary {
     flex: 1 1 auto;
-  }
+    color: var(--ax-action-ink);
+}
 
   .feedActionBtn.secondaryAction {
     flex: 0 0 auto;

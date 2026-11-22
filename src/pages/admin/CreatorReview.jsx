@@ -75,7 +75,7 @@ const CreatorReview = () => {
           <div className={styles.curatorHeader}>
             <div>
               <h1>Creator Review</h1>
-              <p>AURAX LIVE - Admin Dashboard</p>
+              <p>Approve or reject creators who submitted their profile for review.</p>
             </div>
             <button className={styles.addBtn} onClick={fetchPending} disabled={loading}>
               {loading ? 'Loading...' : 'Refresh'}

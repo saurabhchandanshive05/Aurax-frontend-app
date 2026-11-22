@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Icon from "../components/ui/Icon";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/InfluencerDiscovery.module.css";
 
@@ -17,11 +18,11 @@ const InfluencerDiscovery = () => {
       <div className={`${styles.content} ${isLoaded ? styles.loaded : ""}`}>
         {/* Hero Section */}
         <section className={styles.hero}>
-          <span className={styles.heroIcon}>🔍</span>
+          <span className={styles.heroIcon}><Icon name="search" size={44} /></span>
           <h1 className={styles.title}>Influencer Discovery</h1>
           <p className={styles.subtitle}>
-            AI-powered creator discovery with advanced matching algorithms and
-            comprehensive analytics for precision targeting
+            Search reviewed creators by name, niche or city, or let the AURAX team shortlist them for
+            you
           </p>
         </section>
 
@@ -29,27 +30,26 @@ const InfluencerDiscovery = () => {
         <section className={styles.featuresContainer}>
           <div className={styles.featuresGrid}>
             <div className={styles.featureCard}>
-              <div className={styles.featureIcon}>🎯</div>
-              <h3 className={styles.featureTitle}>Smart Matching</h3>
+              <div className={styles.featureIcon}><Icon name="target" size={28} /></div>
+              <h3 className={styles.featureTitle}>Shortlists from the team</h3>
               <p className={styles.featureDescription}>
-                Precision targeting with AI-driven creator recommendations based
-                on audience demographics, engagement rates, and brand alignment
+                Tell us your niche, city and budget and the AURAX team shortlists reviewed creators
+                who fit
               </p>
             </div>
             <div className={styles.featureCard}>
-              <div className={styles.featureIcon}>📊</div>
-              <h3 className={styles.featureTitle}>Deep Analytics</h3>
+              <div className={styles.featureIcon}><Icon name="chart" size={28} /></div>
+              <h3 className={styles.featureTitle}>Numbers you can check</h3>
               <p className={styles.featureDescription}>
-                Comprehensive insights into creator performance, audience
-                behavior, and campaign effectiveness with real-time data
+                Follower counts from connected Instagram accounts are marked verified; self-reported
+                numbers are labelled
               </p>
             </div>
             <div className={styles.featureCard}>
-              <div className={styles.featureIcon}>⚡</div>
-              <h3 className={styles.featureTitle}>Instant Discovery</h3>
+              <div className={styles.featureIcon}><Icon name="sparkle" size={28} /></div>
+              <h3 className={styles.featureTitle}>Search it yourself</h3>
               <p className={styles.featureDescription}>
-                Lightning-fast search across millions of creator profiles with
-                advanced filtering and sorting capabilities
+                Browse approved creators by name, niche or city on the Find creators page
               </p>
             </div>
           </div>
@@ -58,11 +58,10 @@ const InfluencerDiscovery = () => {
         {/* CTA Section */}
         <section className={styles.ctaSection}>
           <h2 className={styles.ctaTitle}>
-            Ready to Transform Your Creator Discovery?
+            Find creators for your brand
           </h2>
           <p className={styles.ctaDescription}>
-            Discover and connect with the perfect creators for your brand with
-            AI-powered precision matching and comprehensive analytics
+            Browse reviewed creators yourself, or tell us what you need and we'll shortlist them.
           </p>
           <button
             className={styles.primaryButton}

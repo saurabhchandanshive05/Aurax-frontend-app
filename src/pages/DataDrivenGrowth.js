@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import Icon from "../components/ui/Icon";
 import { useNavigate } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import styles from "../styles/DataDrivenGrowth.module.css";
@@ -47,41 +48,36 @@ const DataDrivenGrowth = () => {
 
   const features = [
     {
-      icon: "📊",
-      title: "Real-Time Analytics",
+      icon: "chart",
+      title: "Verified numbers",
       description:
-        "Live performance tracking with AI-powered insights that adapt to market changes instantly.",
+        "Follower counts come from a creator's connected Instagram account where available; self-reported numbers are labelled as such.",
       color: "#667eea",
     },
     {
-      icon: "🎯",
-      title: "Smart Targeting",
+      icon: "target",
+      title: "Reviewed creators",
       description:
-        "Precision audience targeting using neural networks to identify high-conversion segments.",
+        "Every creator is checked by the AURAX team before brands see them, so the list is real and active.",
       color: "#764ba2",
     },
     {
-      icon: "🚀",
-      title: "Growth Acceleration",
+      icon: "trend",
+      title: "Live demand",
       description:
-        "Automated optimization that scales successful campaigns while eliminating underperformers.",
+        "The LIVE board shows what brands are asking for right now, by category and platform.",
       color: "#f093fb",
     },
     {
-      icon: "🔮",
-      title: "Predictive Modeling",
+      icon: "sparkle",
+      title: "A team behind it",
       description:
-        "Future-ready strategies powered by machine learning algorithms and trend analysis.",
+        "The AURAX team matches your brief to creators and follows up, instead of leaving you with a list.",
       color: "#4facfe",
     },
   ];
 
-  const stats = [
-    { value: "300%", label: "Average Growth Increase" },
-    { value: "89%", label: "Cost Reduction" },
-    { value: "24/7", label: "Real-Time Monitoring" },
-    { value: "99.9%", label: "Accuracy Rate" },
-  ];
+  // (A stats bar with invented figures such as "300% average growth" was removed)
 
   return (
     <div className={styles.pageContainer} ref={containerRef}>
@@ -136,7 +132,7 @@ const DataDrivenGrowth = () => {
             animate={{ scale: 1 }}
             transition={{ duration: 0.8, delay: 0.3, type: "spring" }}
           >
-            🚀
+            <Icon name="trend" size={44} />
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
@@ -151,29 +147,9 @@ const DataDrivenGrowth = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Growth strategies powered by neural analytics and AI intelligence
+            Decisions based on real numbers: verified follower counts and live campaign data, not estimates.
           </motion.p>
 
-          {/* Stats Bar */}
-          <motion.div
-            className={styles.statsBar}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                className={styles.statItem}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
-              >
-                <div className={styles.statValue}>{stat.value}</div>
-                <div className={styles.statLabel}>{stat.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
         </motion.section>
 
         {/* Features Grid */}
@@ -190,7 +166,7 @@ const DataDrivenGrowth = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            Intelligent Growth Features
+            What the numbers are based on
           </motion.h2>
 
           <div className={styles.featuresGrid}>
@@ -209,7 +185,7 @@ const DataDrivenGrowth = () => {
                   transition: { type: "spring", stiffness: 300 },
                 }}
               >
-                <div className={styles.featureIcon}>{feature.icon}</div>
+                <div className={styles.featureIcon}><Icon name={feature.icon} size={28} /></div>
                 <h3>{feature.title}</h3>
                 <p>{feature.description}</p>
                 <div className={styles.cardGlow} />
@@ -227,10 +203,9 @@ const DataDrivenGrowth = () => {
           transition={{ duration: 0.8 }}
         >
           <div className={styles.ctaContent}>
-            <h3>Ready to Accelerate Your Growth?</h3>
+            <h3>Talk to the AURAX team</h3>
             <p>
-              Transform your business with AI-powered data insights that deliver
-              measurable results.
+              Tell us what you need and the AURAX team will shortlist reviewed creators for it.
             </p>
             <div className={styles.ctaButtons}>
               <motion.button

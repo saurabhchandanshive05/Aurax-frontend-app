@@ -520,7 +520,7 @@ const LiveCampaignsMobile = () => {
                     <div className={styles.posterInfo}>
                       <div className={styles.posterName}>
                         <span className={styles.posterNameText}>{campaign.posterName}</span>
-                        {(campaign.linkedinVerified || true) && (
+                        {(campaign.linkedinVerified || campaign.linkedinUrl) && (
                           <div className={styles.linkedinBadgeContainer}>
                             {campaign.linkedinUrl ? (
                               <a
@@ -544,10 +544,12 @@ const LiveCampaignsMobile = () => {
                                 <LinkedInLogo />
                               </span>
                             )}
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true" className={`${styles.verificationShield} ${!campaign.linkedinUrl ? styles.verificationShieldDisabled : ''}`}>
-                              <path d="M12 1L21 4v7c0 5.55-3.84 10.74-9 12-5.16-1.26-9-6.45-9-12V4l9-3z" fill="#10B981"/>
-                              <path d="M10 12.5l2 2 4-4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
+                            {campaign.linkedinVerified && (
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true" className={`${styles.verificationShield} ${!campaign.linkedinUrl ? styles.verificationShieldDisabled : ''}`}>
+                                <path d="M12 1L21 4v7c0 5.55-3.84 10.74-9 12-5.16-1.26-9-6.45-9-12V4l9-3z" fill="#10B981"/>
+                                <path d="M10 12.5l2 2 4-4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            )}
                           </div>
                         )}
                       </div>

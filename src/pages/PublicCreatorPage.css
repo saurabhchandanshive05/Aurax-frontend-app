@@ -1738,3 +1738,21 @@
 .aurax-branding-footer a:hover {
   color: #764ba2;
 }
+
+/* Payment notice in the plan dialog (Phase 4: there is no payment integration yet) */
+.modal-payment-note {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--ax-warning, #f4b740);
+  border-radius: var(--ax-r-sm, 10px);
+  background: var(--ax-warning-soft, rgba(244, 183, 64, 0.12));
+  color: var(--ax-text, #f3f1ff);
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: left;
+}
+a.btn-modal-action {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+}

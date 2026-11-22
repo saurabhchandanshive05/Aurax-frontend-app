@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Icon from "../components/ui/Icon";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/UGCAutomation.module.css";
 
@@ -18,12 +19,12 @@ const UGCAutomation = () => {
       <section className={`${styles.hero} ${isVisible ? styles.visible : ""}`}>
         <div className={styles.heroContent}>
           <div className={styles.iconContainer}>
-            <span className={styles.heroIcon}>🤖</span>
+            <span className={styles.heroIcon}><Icon name="image" size={44} /></span>
           </div>
           <h1 className={styles.heroTitle}>UGC Automation</h1>
           <p className={styles.heroSubtitle}>
-            Automate user-generated content creation and amplify authentic brand
-            engagement at scale
+            User-generated content made by reviewed creators, briefed and coordinated by the
+            AURAX team
           </p>
         </div>
       </section>
@@ -32,19 +33,19 @@ const UGCAutomation = () => {
       <section className={styles.features}>
         <div className={styles.featureGrid}>
           <div className={styles.featureCard}>
-            <div className={styles.featureIcon}>⚡</div>
-            <h3>Smart Generation</h3>
-            <p>AI-powered content creation that maintains authenticity</p>
+            <div className={styles.featureIcon}><Icon name="sparkle" size={28} /></div>
+            <h3>Real creators</h3>
+            <p>Content is made by reviewed creators, not generated</p>
           </div>
           <div className={styles.featureCard}>
-            <div className={styles.featureIcon}>📊</div>
-            <h3>Performance Analytics</h3>
-            <p>Real-time insights and engagement optimization</p>
+            <div className={styles.featureIcon}><Icon name="chart" size={28} /></div>
+            <h3>Clear briefs</h3>
+            <p>What you need, by when, and in which format, agreed up front</p>
           </div>
           <div className={styles.featureCard}>
-            <div className={styles.featureIcon}>🔄</div>
-            <h3>Workflow Automation</h3>
-            <p>Streamlined processes from creation to distribution</p>
+            <div className={styles.featureIcon}><Icon name="refresh" size={28} /></div>
+            <h3>One point of contact</h3>
+            <p>The AURAX team coordinates every creator on your campaign</p>
           </div>
         </div>
       </section>
@@ -53,10 +54,10 @@ const UGCAutomation = () => {
       <section className={styles.cta}>
         <div className={styles.ctaContent}>
           <h2 className={styles.ctaTitle}>
-            Ready to Transform Your UGC Strategy?
+            Get UGC made by reviewed creators
           </h2>
           <p className={styles.ctaDescription}>
-            Join leading brands automating their content creation workflow
+            Tell us what content you need and we'll find creators to make it.
           </p>
           <div className={styles.ctaButtons}>
             <button
