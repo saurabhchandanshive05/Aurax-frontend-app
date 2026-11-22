@@ -1,0 +1,72 @@
+/* Cursor light: AURAX violet (#8b7cf6) and cyan (#4fd1e8) in three soft layers.
+   "screen" blending only adds light, so the page's own colours are never changed; every
+   gradient feathers out to nothing inside its box, so there are no edges. */
+.layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9990; /* over page content and the navbar, under dialogs and toasts (9999+) */
+  mix-blend-mode: screen;
+  opacity: 0; /* faded in and out by the script */
+  will-change: transform, opacity;
+  contain: strict;
+}
+
+/* Slow outer trail: wide, faint violet with an off-centre cyan wash so it is not a perfect disc */
+.trail {
+  width: 300px;
+  height: 300px;
+  background:
+    radial-gradient(circle at 38% 42%, rgba(79, 209, 232, 0.10) 0%, rgba(79, 209, 232, 0) 46%),
+    radial-gradient(circle closest-side, rgba(139, 124, 246, 0.20) 0%, rgba(139, 124, 246, 0.09) 45%, rgba(139, 124, 246, 0.025) 75%, rgba(139, 124, 246, 0) 100%);
+}
+
+/* Middle glow: violet fading towards cyan */
+.glow {
+  width: 190px;
+  height: 190px;
+  background: radial-gradient(
+    circle closest-side,
+    rgba(150, 140, 250, 0.30) 0%,
+    rgba(139, 124, 246, 0.16) 38%,
+    rgba(110, 170, 240, 0.06) 70%,
+    rgba(79, 209, 232, 0) 100%
+  );
+}
+
+/* Bright core: cyan, almost white at the centre */
+.core {
+  width: 90px;
+  height: 90px;
+  background: radial-gradient(
+    circle closest-side,
+    rgba(210, 245, 252, 0.34) 0%,
+    rgba(79, 209, 232, 0.24) 32%,
+    rgba(79, 209, 232, 0.08) 65%,
+    rgba(79, 209, 232, 0) 100%
+  );
+}
+
+/* Light theme: "screen" cannot lighten a light page, so show a faint tint instead */
+:global([data-theme="light"]) .layer {
+  mix-blend-mode: normal;
+}
+:global([data-theme="light"]) .trail {
+  background: radial-gradient(circle closest-side, rgba(139, 124, 246, 0.08) 0%, rgba(139, 124, 246, 0) 100%);
+}
+:global([data-theme="light"]) .glow {
+  background: radial-gradient(circle closest-side, rgba(139, 124, 246, 0.10) 0%, rgba(79, 209, 232, 0) 100%);
+}
+:global([data-theme="light"]) .core {
+  background: radial-gradient(circle closest-side, rgba(79, 209, 232, 0.12) 0%, rgba(79, 209, 232, 0) 100%);
+}
+
+/* Never on touch-only devices, small screens or with reduced motion (the script also
+   doesn't start there) */
+@media (hover: none), (pointer: coarse), (max-width: 1023px), (prefers-reduced-motion: reduce) {
+  .layer {
+    display: none;
+  }
+}

@@ -21,6 +21,7 @@ import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
 import CustomCursor from "./components/CustomCursor";
+import CursorSpotlight from "./components/CursorSpotlight";
 import ErrorBoundary from "./components/ErrorBoundary";
 import HomePage from "./pages/HomePage";
 
@@ -278,6 +279,7 @@ function App() {
           <AuthGate>
             <div className="ax-app">
               <CustomCursor />
+              <CursorSpotlight />
 
               {/* Backend status banner */}
               {showStatus && (
