@@ -600,6 +600,8 @@
   );
   border-radius: 50%;
   filter: blur(1px);
+  /* animated forever by framer-motion: own layer, so the blur is not repainted every frame */
+  will-change: transform;
 }
 
 .floatingElement2 {
@@ -615,6 +617,7 @@
   );
   border-radius: 50%;
   filter: blur(2px);
+  will-change: transform;
 }
 
 /* 3D Scene container */
@@ -814,8 +817,24 @@
   }
 }
 
+/* Floating blobs: the motion framer-motion used to drive from JavaScript (y 0 -> -20 -> 0 and
+   rotate 0 -> 5deg -> 0 over 6s; y 0 -> 15 -> 0 and rotate 0 -> -3deg -> 0 over 8s after 1s),
+   now on the compositor. ease-in-out applies per segment, as framer's easeInOut did. */
+.floatA { animation: heroFloatA 6s ease-in-out infinite; }
+.floatB { animation: heroFloatB 8s ease-in-out 1s infinite; }
+@keyframes heroFloatA {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+}
+@keyframes heroFloatB {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(15px) rotate(-3deg); }
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
+  .floatA,
+  .floatB,
   .floatingElement,
   .floatingElement2,
   .aiIcon {

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import FeaturedCreators from "./FeaturedCreators";
 import styles from "./ServicesCards.module.css";
 import useDeferredStart from "../hooks/useDeferredStart";
+import usePauseOffscreen from "../hooks/usePauseOffscreen";
 
 const ARROW = (
   <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -15,6 +16,8 @@ function ServicesCards() {
   // Starts directly below the hero: begin when the hero is ready or once scrolled into (the -1px
   // keeps a section that merely touches the fold from counting as on screen)
   const started = useDeferredStart(containerRef, "0px 0px -1px 0px");
+  // Neural grid, marquee and image shimmers stop while the section is scrolled away
+  usePauseOffscreen(containerRef);
   const [revealed, setRevealed] = useState(false);
   const [touchPaused, setTouchPaused] = useState(false);
 

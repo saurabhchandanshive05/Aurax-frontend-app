@@ -20,7 +20,6 @@ import GlobalLoadingScreen from "./components/GlobalLoadingScreen";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
-import CustomCursor from "./components/CustomCursor";
 import CursorSpotlight from "./components/CursorSpotlight";
 import ErrorBoundary from "./components/ErrorBoundary";
 import HomePage from "./pages/HomePage";
@@ -333,7 +332,8 @@ function App() {
         <Router>
           <AuthGate>
             <div className="ax-app">
-              <CustomCursor />
+              {/* CustomCursor is not rendered: its element had no styles (invisible) while its
+                  animation loop ran every frame on every page. CursorSpotlight is the cursor effect. */}
               <CursorSpotlight />
 
               {/* Backend status banner */}

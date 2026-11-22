@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import usePauseOffscreen from "../hooks/usePauseOffscreen";
 import useDeferredStart from "../hooks/useDeferredStart";
 import { motion, useInView } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -48,6 +49,8 @@ const useAnimatedCounter = (end, start = 0, duration = 2, instant = false) => {
 const BrandCollaborations = () => {
   const statsRef = useRef(null);
   const sectionRef = useRef(null);
+  // Looping background animations stop while this section is scrolled away
+  usePauseOffscreen(sectionRef);
   const started = useDeferredStart(sectionRef);
   const wallRef = useRef(null);
   const navigate = useNavigate();

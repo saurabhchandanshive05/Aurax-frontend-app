@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import usePauseOffscreen from "../../hooks/usePauseOffscreen";
 import useDeferredStart from "../../hooks/useDeferredStart";
 // Footer.css is kept as it was: some of its global class names (section-title, social-icon,
 // contact-item, ...) are also used on other pages, which would change if it were removed.
@@ -80,6 +81,8 @@ const Footer = () => {
   // Newsletter: idle | sending | done | error (it used to show an alert and save nothing)
   const [newsletter, setNewsletter] = useState({ status: "idle", message: "" });
   const footerRef = useRef(null);
+  // Looping background animations stop while this section is scrolled away
+  usePauseOffscreen(footerRef);
   const started = useDeferredStart(footerRef);
   const signatureRef = useRef(null);
 

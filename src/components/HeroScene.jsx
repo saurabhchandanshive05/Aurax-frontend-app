@@ -169,15 +169,24 @@ function Ecosystem({ reduced, hovered, visibleRef }) {
       });
     };
     measure();
-    // Re-measure only while the hero is on screen and the tab is visible (nothing renders otherwise)
-    const iv = setInterval(() => {
-      if (document.hidden || (visibleRef && !visibleRef.current)) return;
-      measure();
-    }, 600);
+    // Each measure forces a layout. The copy only moves on resize, scroll (navbar position) and
+    // late content (fonts, live stats): measure on those, plus a slow safety interval, and only
+    // while the hero is on screen and the tab is visible.
+    const active = () => !document.hidden && !(visibleRef && !visibleRef.current);
+    const iv = setInterval(() => active() && measure(), 2000);
+    let scrollRaf = 0;
+    const onScroll = () => {
+      if (scrollRaf || !active()) return;
+      scrollRaf = requestAnimationFrame(() => { scrollRaf = 0; measure(); });
+    };
+    document.fonts?.ready?.then(() => active() && measure()).catch(() => {});
     window.addEventListener("resize", measure);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       clearInterval(iv);
+      cancelAnimationFrame(scrollRaf);
       window.removeEventListener("resize", measure);
+      window.removeEventListener("scroll", onScroll);
     };
   }, [gl, size.width, size.height, visibleRef]);
 
@@ -266,8 +275,11 @@ function Ecosystem({ reduced, hovered, visibleRef }) {
       if (el && a !== null) {
         // First card shown: the hero is complete, below-the-fold sections may start
         if (prev === null && a > 0) markHeroReady();
-        el.style.opacity = a.toFixed(3);
-        el.style.visibility = a < 0.02 ? "hidden" : "visible";
+        // Write only on change: 14 style writes per frame otherwise, mostly with the same values
+        const op = a.toFixed(3);
+        if (el.style.opacity !== op) el.style.opacity = op;
+        const vis = a < 0.02 ? "hidden" : "visible";
+        if (el.style.visibility !== vis) el.style.visibility = vis;
       }
     });
 
@@ -344,29 +356,48 @@ function Ecosystem({ reduced, hovered, visibleRef }) {
   );
 }
 
-// The canvas renders on demand. While the hero is on screen (and motion is allowed) each
-// frame requests the next one; off screen the loop simply stops, and coming back into view
-// kicks it again. No frameloop switching, so the clock never resets.
+// The canvas renders on demand, driven by one small requestAnimationFrame loop that asks for a
+// render at most every FRAME_MS (30fps): the orbit is slow (one lap in 110s) and every motion is
+// time-based (delta / elapsed clock), so halving the redraws keeps the same speed and smoothness
+// while halving the WebGL, card-transform and compositing work. The loop stops entirely while
+// the hero is off screen (or, with reduced motion, once the settle window is over); coming back
+// into view kicks it again. No frameloop switching, so the clock never resets.
 // Every kick (mount, resize, back in view) also renders for a short settle window: the card
 // layers mount asynchronously and need a frame after mounting to take their place, which a
 // single on-demand frame would miss under reduced motion.
 const SETTLE_MS = 1500;
+const FRAME_MS = 1000 / 30;
 function FrameDriver({ visibleRef, reduced, kickRef }) {
   const invalidate = useThree((s) => s.invalidate);
   const size = useThree((s) => s.size);
   const settleUntil = useRef(0);
   useEffect(() => {
+    let raf = 0;
+    let last = -Infinity;
+    const tick = (now) => {
+      const settling = now < settleUntil.current;
+      if (!visibleRef.current || (reduced && !settling)) {
+        raf = 0; // nothing to draw: stop until the next kick
+        return;
+      }
+      raf = requestAnimationFrame(tick);
+      // 2ms tolerance so a 60Hz display gets every other frame, not every third
+      if (now - last >= FRAME_MS - 2) {
+        last = now;
+        invalidate();
+      }
+    };
     kickRef.current = () => {
       settleUntil.current = performance.now() + SETTLE_MS;
       invalidate();
+      if (!raf) raf = requestAnimationFrame(tick);
     };
     kickRef.current();
-    return () => { kickRef.current = null; };
-  }, [invalidate, kickRef, reduced, size.width, size.height]);
-  useFrame(() => {
-    if (!visibleRef.current) return;
-    if (!reduced || performance.now() < settleUntil.current) invalidate();
-  });
+    return () => {
+      cancelAnimationFrame(raf);
+      kickRef.current = null;
+    };
+  }, [invalidate, kickRef, reduced, visibleRef, size.width, size.height]);
   return null;
 }
 
@@ -410,13 +441,16 @@ const HeroScene = () => {
         const wrap = wrapRef.current;
         if (!wrap) return;
         let hit = null;
-        wrap.querySelectorAll("[data-eco-card]").forEach((el) => {
+        // Pointer outside the hero (e.g. scrolled down): nothing to hit, skip measuring 7 cards
+        const wr = wrap.getBoundingClientRect();
+        const inside = e.clientX >= wr.left && e.clientX <= wr.right && e.clientY >= wr.top && e.clientY <= wr.bottom;
+        if (inside) wrap.querySelectorAll("[data-eco-card]").forEach((el) => {
           if (parseFloat(el.style.opacity || "1") < 0.5) return; // faded while clear of the copy
           const r = el.getBoundingClientRect();
           if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) hit = el;
         });
         // ignore the pointer when it is over the hero's own content (buttons, copy)
-        const top = document.elementFromPoint(e.clientX, e.clientY);
+        const top = hit ? document.elementFromPoint(e.clientX, e.clientY) : null;
         if (top && top.closest("a,button,h1,p") && !wrap.contains(top)) hit = null;
         const id = hit ? hit.getAttribute("data-eco-card") : null;
         if (id !== last) {

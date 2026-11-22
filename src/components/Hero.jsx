@@ -8,6 +8,7 @@ import HeroOrbitMobile from "./HeroOrbitMobile";
 import HeroOrbitFlat from "./HeroOrbitFlat";
 import { markHeroReady } from "../utils/heroReady";
 import { webglTier } from "../utils/webglSupport";
+import usePauseOffscreen from "../hooks/usePauseOffscreen";
 
 // three.js scene is desktop-only (1024px and up): load it on demand so phones and tablets
 // never download it. Below 1024px the lightweight CSS orbit (HeroOrbitMobile) is shown.
@@ -62,6 +63,8 @@ const Hero = () => {
   const [live, setLive] = useState(null);
   const ctaRef = useRef(null);
   const heroRef = useRef(null);
+  // Background grid, pulse and floating blobs stop while the hero is scrolled away
+  usePauseOffscreen(heroRef);
 
   // Check for mobile on mount and resize
   useEffect(() => {
@@ -289,31 +292,10 @@ const Hero = () => {
       {/* Floating elements */}
       {!isMobile && (
         <div className={styles.floatingElements}>
-          <motion.div
-            className={styles.floatingElement}
-            animate={{
-              y: [0, -20, 0],
-              rotate: [0, 5, 0],
-            }}
-            transition={{
-              duration: 6,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-          <motion.div
-            className={styles.floatingElement2}
-            animate={{
-              y: [0, 15, 0],
-              rotate: [0, -3, 0],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1,
-            }}
-          />
+          {/* Same motion as before (framer-motion), now CSS keyframes: runs on the compositor
+              instead of JavaScript every frame, and pauses with the hero when scrolled away */}
+          <div className={`${styles.floatingElement} ${styles.floatA}`} />
+          <div className={`${styles.floatingElement2} ${styles.floatB}`} />
         </div>
       )}
     </section>

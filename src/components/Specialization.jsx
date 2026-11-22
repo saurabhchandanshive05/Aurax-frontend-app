@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
+import usePauseOffscreen from "../hooks/usePauseOffscreen";
 import useDeferredStart from "../hooks/useDeferredStart";
 import { useNavigate } from "react-router-dom";
 import ServiceVisual from "./SpecializationVisuals";
@@ -11,6 +12,8 @@ const prefersReducedMotion = () =>
 
 const Specialization = () => {
   const sectionRef = useRef(null);
+  // Looping background animations stop while this section is scrolled away
+  usePauseOffscreen(sectionRef);
   const started = useDeferredStart(sectionRef);
   const [active, setActive] = useState(null);
   const navigate = useNavigate();

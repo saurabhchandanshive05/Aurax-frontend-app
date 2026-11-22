@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
+import usePauseOffscreen from "../hooks/usePauseOffscreen";
 import useDeferredStart from "../hooks/useDeferredStart";
 import styles from "./styles/ContactUs.module.css";
 
 const ContactUs = () => {
   const containerRef = useRef(null);
+  // Looping background animations stop while this section is scrolled away
+  usePauseOffscreen(containerRef);
   const started = useDeferredStart(containerRef);
   const stackRef = useRef(null);
   const [emailCopied, setEmailCopied] = useState(false);
