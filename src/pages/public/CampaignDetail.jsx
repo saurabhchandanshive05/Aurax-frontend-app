@@ -115,7 +115,9 @@ const CampaignDetail = () => {
           navigate('/contact?type=call');
           break;
         case 'post':
-          navigate('/campaigns/create');
+          // Campaign briefs are submitted through the inquiry form (there is no /campaigns/create
+          // page; navigating there fell through to the homepage)
+          navigate('/inquiry/form?purpose=campaign');
           break;
         default:
           break;

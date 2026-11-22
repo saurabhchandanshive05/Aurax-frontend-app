@@ -26,7 +26,9 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import HomePage from "./pages/HomePage";
 
 // Lazy components
-const CreatorDirectory = React.lazy(() => import("./pages/CreatorDirectory"));
+// /creators lists real, approved creators (the previous CreatorDirectory page advertised tools that
+// do not exist; it is kept in the repo, unrouted, pending the legacy-page review)
+const CreatorDiscovery = React.lazy(() => import("./pages/CreatorDiscovery"));
 const CreatorProfile = React.lazy(() => import("./pages/CreatorProfile"));
 const CampaignManager = React.lazy(() => import("./pages/CampaignManager"));
 const BrandDashboard = React.lazy(() => import("./pages/BrandDashboard"));
@@ -79,6 +81,7 @@ const InstagramInfluencerProfiles = React.lazy(() => import("./pages/admin/Insta
 const CreatorDatabase = React.lazy(() => import("./pages/admin/CreatorDatabase"));
 const AdminCreatorProfile = React.lazy(() => import("./pages/admin/CreatorProfile"));
 const CreatorReview = React.lazy(() => import("./pages/admin/CreatorReview"));
+const NotFound = React.lazy(() => import("./pages/NotFound"));
 
 // Mobile navigation component
 function MobileNavMenu() {
@@ -223,12 +226,15 @@ function AuthGate({ children }) {
   return children;
 }
 
+const IS_DEV = process.env.NODE_ENV !== "production";
+
 function App() {
   const [backendStatus, setBackendStatus] = useState({
     status: "checking",
     message: "Checking backend connection...",
   });
-  const [showStatus, setShowStatus] = useState(true);
+  // Development shows the backend diagnostic; production only speaks up if the API is slow or down
+  const [showStatus, setShowStatus] = useState(IS_DEV);
 
   useEffect(() => {
     initStorage();
@@ -240,6 +246,14 @@ function App() {
     }
 
     let timeoutId;
+    let slowId;
+    let cancelled = false;
+    let connected = false;
+    const startedAt = Date.now();
+    // The API host sleeps when idle and can take up to a minute to wake: keep retrying for a
+    // while before reporting a failure
+    const RETRY_WINDOW_MS = 75000;
+    const WAKING = "Connecting to AURAX… this can take up to a minute after a quiet period.";
 
     const checkBackendConnection = async () => {
       try {
@@ -248,26 +262,52 @@ function App() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+        if (cancelled) return;
+        connected = true;
         setBackendStatus({
           status: "connected",
-          message: data.message || "Backend connected successfully",
+          message: IS_DEV ? data.message || "Backend connected successfully" : "Connected",
         });
-
-        timeoutId = setTimeout(() => setShowStatus(false), 5000);
+        if (IS_DEV) timeoutId = setTimeout(() => setShowStatus(false), 5000);
+        else setShowStatus(false);
       } catch (error) {
+        if (cancelled) return;
+        if (Date.now() - startedAt < RETRY_WINDOW_MS) {
+          setBackendStatus({
+            status: "checking",
+            message: IS_DEV ? `Connection failed: ${error.message}. Retrying…` : WAKING,
+          });
+          setShowStatus(true);
+          timeoutId = setTimeout(checkBackendConnection, 5000);
+          return;
+        }
         setBackendStatus({
           status: "error",
-          message: `Connection failed: ${error.message}`,
+          message: IS_DEV
+            ? `Connection failed: ${error.message}`
+            : "We can't reach AURAX right now. Please try again in a moment.",
         });
+        setShowStatus(true);
       }
     };
+
+    // Production: say something only if the first answer is slow (a sleeping server holds the
+    // request open rather than failing)
+    if (!IS_DEV) {
+      slowId = setTimeout(() => {
+        if (!connected && !cancelled) {
+          setBackendStatus({ status: "checking", message: WAKING });
+          setShowStatus(true);
+        }
+      }, 4000);
+    }
 
     checkBackendConnection();
 
     return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
+      cancelled = true;
+      clearTimeout(timeoutId);
+      clearTimeout(slowId);
     };
   }, []);
 
@@ -313,7 +353,7 @@ function App() {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/about" element={<AboutPage />} />
                     <Route path="/brands" element={<BrandsPage />} />
-                    <Route path="/creators" element={<CreatorDirectory />} />
+                    <Route path="/creators" element={<CreatorDiscovery />} />
                     <Route path="/creators/:id" element={<CreatorProfile />} />
                     
                     {/* Public LIVE Campaign Board */}
@@ -539,7 +579,7 @@ function App() {
                     />
 
                     {/* 404 */}
-                    <Route path="*" element={<Navigate to="/" replace />} />
+                    <Route path="*" element={<NotFound />} />
                   </Routes>
                 </Suspense>
               </ErrorBoundary>
@@ -552,7 +592,7 @@ function App() {
             <MobileNavMenu />
 
             {/* Recheck backend button */}
-            {!showStatus && backendStatus.status === "error" && (
+            {backendStatus.status === "error" && (!showStatus || !IS_DEV) && (
               <button
                 className="ax-btn ax-btn--danger ax-recheck"
                 onClick={() => {
@@ -560,9 +600,9 @@ function App() {
                   // Reload the page to re-run backend connection check
                   window.location.reload();
                 }}
-                aria-label="Recheck backend connection"
+                aria-label={IS_DEV ? "Recheck backend connection" : "Try connecting again"}
               >
-                Recheck Backend
+                {IS_DEV ? "Recheck Backend" : "Try again"}
               </button>
             )}
           </div>

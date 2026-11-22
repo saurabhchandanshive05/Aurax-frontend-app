@@ -45,13 +45,13 @@ const Help = () => {
             <p>Learn the basics of our platform</p>
             <ul className={styles.helpLinks}>
               <li>
-                <Link to="/help/account-setup">Setting up your account</Link>
+                <Link to="/signup">Setting up your account</Link>
               </li>
               <li>
-                <Link to="/help/profile">Completing your profile</Link>
+                <Link to="/creator/dashboard">Completing your profile</Link>
               </li>
               <li>
-                <Link to="/help/first-steps">Your first steps</Link>
+                <Link to="/live/campaigns">Your first steps</Link>
               </li>
             </ul>
           </div>
@@ -71,13 +71,13 @@ const Help = () => {
             <p>Manage your account settings</p>
             <ul className={styles.helpLinks}>
               <li>
-                <Link to="/help/password-reset">Reset your password</Link>
+                <Link to="/forgot-password">Reset your password</Link>
               </li>
               <li>
-                <Link to="/help/security">Account security</Link>
+                <Link to="/contact">Account security</Link>
               </li>
               <li>
-                <Link to="/help/privacy">Privacy settings</Link>
+                <Link to="/contact">Privacy settings</Link>
               </li>
             </ul>
           </div>
@@ -97,13 +97,13 @@ const Help = () => {
             <p>Learn about creating and managing campaigns</p>
             <ul className={styles.helpLinks}>
               <li>
-                <Link to="/help/create-campaign">Creating a campaign</Link>
+                <Link to="/inquiry/form?purpose=campaign">Creating a campaign</Link>
               </li>
               <li>
-                <Link to="/help/campaign-management">Managing campaigns</Link>
+                <Link to="/brand/dashboard">Managing campaigns</Link>
               </li>
               <li>
-                <Link to="/help/analytics">Understanding analytics</Link>
+                <Link to="/contact">Understanding analytics</Link>
               </li>
             </ul>
           </div>
@@ -123,13 +123,13 @@ const Help = () => {
             <p>Working with creators and brands</p>
             <ul className={styles.helpLinks}>
               <li>
-                <Link to="/help/finding-creators">Finding creators</Link>
+                <Link to="/creators">Finding creators</Link>
               </li>
               <li>
-                <Link to="/help/collaboration-tools">Collaboration tools</Link>
+                <Link to="/contact">Collaboration tools</Link>
               </li>
               <li>
-                <Link to="/help/payments">Payments & billing</Link>
+                <Link to="/contact">Payments & billing</Link>
               </li>
             </ul>
           </div>
@@ -141,9 +141,8 @@ const Help = () => {
             <Link to="/support" className={styles.actionButton}>
               Contact Support
             </Link>
-            <button className={styles.actionButton}>Schedule a Demo</button>
-            <Link to="/docs" className={styles.actionButton}>
-              View Documentation
+            <Link to="/contact" className={styles.actionButton}>
+              Schedule a Demo
             </Link>
           </div>
         </div>

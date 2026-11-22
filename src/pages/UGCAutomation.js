@@ -61,7 +61,7 @@ const UGCAutomation = () => {
           <div className={styles.ctaButtons}>
             <button
               className={styles.primaryButton}
-              onClick={() => navigate("/brand-login")}
+              onClick={() => navigate("/brand/login")}
             >
               Get Started
             </button>

@@ -36,7 +36,7 @@ const TrendForecasting = () => {
         </div>
       </div>
 
-      <button onClick={() => navigate('/specialization')} className={styles.backButton}>
+      <button onClick={() => navigate('/', { state: { scrollToServices: true } })} className={styles.backButton}>
         ← Back to Specializations
       </button>
     </div>

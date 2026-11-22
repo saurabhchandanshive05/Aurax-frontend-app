@@ -10,6 +10,7 @@ const CreatorProfile = () => {
   
   const [creator, setCreator] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState(false);
   
@@ -77,10 +78,10 @@ const CreatorProfile = () => {
         alert('Admin access required');
         navigate('/dashboard');
       } else if (error.response?.status === 404) {
-        alert('Creator not found');
-        navigate('/admin/brand-intelligence/creators');
+        // Leave `creator` empty: the page shows its "Creator not found" view with a way back
+        setLoadError('');
       } else {
-        alert('Failed to load creator details');
+        setLoadError('Failed to load creator details. Check your connection and try again.');
       }
     } finally {
       setLoading(false);
@@ -214,8 +215,9 @@ const CreatorProfile = () => {
 
   if (!creator) {
     return (
-      <div className="creator-profile-error">
-        <h2>Creator not found</h2>
+      <div className="creator-profile-error" role="alert">
+        <h1>{loadError ? 'Could not load this creator' : 'Creator not found'}</h1>
+        <p>{loadError || 'This creator may have been removed, or the link is out of date.'}</p>
         <button onClick={() => navigate('/admin/brand-intelligence/creators')}>
           Back to List
         </button>

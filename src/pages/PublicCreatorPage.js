@@ -100,10 +100,9 @@ const PublicCreatorPage = () => {
       setShowSubscribeModal(true);
     } else {
       // Already subscribed, show content
-      if (contentId) {
-        // Navigate to specific content
-        navigate(`/creator/${slug}/content/${contentId}`);
-      }
+      // Open that content item directly (there is no separate content page)
+      const item = contentId && content.find((c) => c._id === contentId);
+      if (item?.contentUrl) window.open(item.contentUrl, '_blank', 'noopener');
     }
   };
 
@@ -543,9 +542,9 @@ const PublicCreatorPage = () => {
       <footer className="creator-footer">
         <div className="footer-links">
           <a href={`mailto:business@auraxai.in?subject=Brand Enquiry for ${creator.displayName}`}>Brand Enquiry</a>
-          <a href={`/report?creator=${slug}&name=${encodeURIComponent(creator.displayName)}`}>Report Creator</a>
-          <a href="/terms">Terms of Service</a>
-          <a href="/privacy">Privacy Policy</a>
+          <a href={`mailto:hello@auraxai.in?subject=${encodeURIComponent(`Report creator: ${creator.displayName} (${slug})`)}`}>Report Creator</a>
+          {/* Terms of Service and Privacy Policy links hidden: AURAX has no /terms or /privacy
+              pages yet (they led to the homepage). Restore them once those pages exist. */}
         </div>
         <div className="footer-branding">
           <p>Powered by <strong>Aurax</strong></p>

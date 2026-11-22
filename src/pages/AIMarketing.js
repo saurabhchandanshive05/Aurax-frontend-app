@@ -35,7 +35,7 @@ const AIMarketing = () => {
           <div className={styles.buttonGroup}>
             <button
               className={styles.primaryButton}
-              onClick={() => navigate("/brand-login")}
+              onClick={() => navigate("/brand/login")}
             >
               Get Started
             </button>

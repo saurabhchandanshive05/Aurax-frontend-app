@@ -59,7 +59,7 @@ const Support = () => {
             </div>
             <h3>Documentation</h3>
             <p>Browse our comprehensive help guides</p>
-            <Link to="/docs" className={styles.button}>
+            <Link to="/help" className={styles.button}>
               View Documentation
             </Link>
           </div>

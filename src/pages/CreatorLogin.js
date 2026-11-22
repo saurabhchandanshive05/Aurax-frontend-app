@@ -377,8 +377,8 @@ const CreatorLogin = () => {
                           </ul>
                           <p className={styles.setupGuideLink}>
                             Need help?{" "}
-                            <Link to="/help/instagram-setup">
-                              View setup guide →
+                            <Link to="/contact">
+                              Contact support →
                             </Link>
                           </p>
                         </div>
