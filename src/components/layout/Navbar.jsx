@@ -106,17 +106,56 @@ function Navbar() {
         </div>
         <div className="nav-container">
           {/* Logo with Cloudinary Icon + AURAX Text */}
-          <Link to="/" className="logo" aria-label="AURAX home">
+          <Link to="/" className="logo">
             <motion.div
               className="logo-combination"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              {/* AURAX mark: the aura ring + wordmark, the same mark as the dashboards and footer
-                  (it was an AI-generated "A" image from Cloudinary) */}
-              <span className="nav-mark-ring" aria-hidden="true" />
-              <span className="aurax-brand-text">AURAX</span>
+              {/* Cloudinary Logo Icon (Circular) */}
+              <motion.div
+                className="cloudinary-icon-container"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                transition={{ duration: 0.3 }}
+              >
+                <img
+                  src="https://res.cloudinary.com/dzvtsnpr6/image/upload/w_64,h_64,c_fill,f_webp,q_auto/v1756973830/Copilot_20250904_134350_fyxhey.webp"
+                  alt="AURAX Icon"
+                  className="navbar-cloudinary-icon"
+                  loading="eager"
+                  crossOrigin="anonymous"
+                  onError={(e) => {
+
+                    // Try original URL without transformations
+                    if (e.target.src.includes("w_64,h_64")) {
+                      e.target.src =
+                        "https://res.cloudinary.com/dzvtsnpr6/image/upload/v1756973830/Copilot_20250904_134350_fyxhey.webp";
+                    } else {
+                      // Use a placeholder SVG if all fails. Only once: this placeholder itself
+                      // fails to load, and re-setting it from here looped forever (CPU) for
+                      // visitors who can't reach Cloudinary.
+                      if (e.target.dataset.fallback) return;
+                      e.target.dataset.fallback = "1";
+                      e.target.src =
+                        "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9InVybCgjZ3JhZGllbnQwX2xpbmVhcl8xXzEpIi8+CjxwYXRoIGQ9Ik0yMCAyMkg0NEwyMCA0NEgzNkw0NCAzNkwyOCAyOFoiIGZpbGw9IndoaXRlIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50MF9saW5lYXJfMV8xIiB4MT0iMCIgeTE9IjAiIHgyPSI2NCIgeTI9IjY0IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiM2NjdlZWEiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNzY0YmEyIi8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHN2Zz4K";
+                    }
+                  }}
+                  onLoad={() => {
+
+                  }}
+                />
+                <div className="icon-glow-effect" />
+              </motion.div>
+
+              {/* Custom AURAX Text */}
+              <motion.div
+                className="aurax-brand-text"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
+                AURAX
+              </motion.div>
             </motion.div>
           </Link>
 
