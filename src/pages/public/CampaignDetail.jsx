@@ -4,6 +4,8 @@ import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import styles from './CampaignDetail.module.css';
 import Icon from '../../components/ui/Icon';
+import { useAuth } from '../../context/AuthContext';
+import { areaForUser } from '../../components/layout/appNav';
 
 const API_URL = getApiUrl();
 
@@ -20,6 +22,7 @@ const formatRange = (range, suffix = '') => {
 const CampaignDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const [campaign, setCampaign] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -101,6 +104,18 @@ const CampaignDetail = () => {
       return;
     }
     
+    // Signed in: questions about a campaign go to AURAX messages, linked to this campaign;
+    // brands create campaigns themselves
+    if (action === 'chat') {
+      const subject = `About: ${campaign?.intent || campaign?.title || 'a campaign'}`.slice(0, 140);
+      navigate(`/messages?campaign=${encodeURIComponent(id || '')}&subject=${encodeURIComponent(subject)}`);
+      return;
+    }
+    if (action === 'post' && areaForUser(currentUser) === 'brand') {
+      navigate('/campaigns/create');
+      return;
+    }
+
     // Check if user is verified for inquirer actions
     try {
       const response = await axios.get(
@@ -120,15 +135,11 @@ const CampaignDetail = () => {
       
       // User is verified, proceed with action
       switch(action) {
-        case 'chat':
-          navigate('/contact?type=chat');
-          break;
         case 'call':
           navigate('/contact?type=call');
           break;
         case 'post':
-          // Campaign briefs are submitted through the inquiry form (there is no /campaigns/create
-          // page; navigating there fell through to the homepage)
+          // Non-brand accounts send a campaign brief through the inquiry form
           navigate('/inquiry/form?purpose=campaign');
           break;
         default:

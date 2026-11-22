@@ -109,3 +109,27 @@
   .liveGo { width: 100%; padding-left: calc(10px + var(--ax-s4)); }
   .empty { padding: var(--ax-s5) var(--ax-s4); }
 }
+
+/* Your campaigns */
+.panelHead { display: flex; align-items: center; justify-content: space-between; gap: var(--ax-s3); margin-bottom: var(--ax-s3); }
+.panelHead h2 { margin-bottom: 0; }
+.campaignList { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--ax-s2); }
+.campaignRow {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--ax-s3);
+  min-height: var(--ax-control-h, 44px);
+  padding: var(--ax-s3) var(--ax-s4);
+  border: 1px solid var(--ax-border, var(--ax-line));
+  border-radius: var(--ax-r-sm);
+  background: var(--ax-surface-sunken, transparent);
+  color: var(--ax-text);
+  text-decoration: none;
+}
+a.campaignRow:hover { background: var(--ax-surface-hover, var(--ax-dusk)); }
+.campaignMain { display: grid; gap: 4px; min-width: 0; }
+.campaignTitle { font-weight: 600; overflow-wrap: anywhere; }
+.campaignMeta { color: var(--ax-text-2); font-size: var(--ax-fs-sm, 14px); }
+.status { flex-shrink: 0; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.status_review { background: var(--ax-warning-soft); color: var(--ax-warning); }
+.status_live { background: var(--ax-success-soft); color: var(--ax-success); }
+.status_muted { background: var(--ax-surface-hover, var(--ax-dusk)); color: var(--ax-text-2); }
+.panelNote { margin-top: var(--ax-s3); color: var(--ax-text-2); font-size: var(--ax-fs-sm, 14px); }

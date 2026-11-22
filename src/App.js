@@ -76,6 +76,10 @@ const CreatorDatabase = React.lazy(() => import("./pages/admin/CreatorDatabase")
 const AdminCreatorProfile = React.lazy(() => import("./pages/admin/CreatorProfile"));
 const CreatorReview = React.lazy(() => import("./pages/admin/CreatorReview"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
+const Messages = React.lazy(() => import("./pages/Messages"));
+const CreateCampaign = React.lazy(() => import("./pages/CreateCampaign"));
+const AdminAnalytics = React.lazy(() => import("./pages/admin/AdminAnalytics"));
+const AdLibrary = React.lazy(() => import("./pages/admin/AdLibrary"));
 
 // Mobile navigation component
 function MobileNavMenu() {
@@ -210,7 +214,8 @@ function RoleRedirect({ admin = "/", brand = "/", creator = "/", guest = "/" }) 
 function AppLayout({ children }) {
   const { showNavbar, showFooter } = useStandaloneRoute();
   const { pathname } = useLocation();
-  const area = shellFor(pathname);
+  const { currentUser } = useAuth();
+  const area = shellFor(pathname, currentUser);
 
   // Signed-in product areas get the app shell instead of the marketing chrome.
   if (area) return <AppShell area={area}>{children}</AppShell>;
@@ -547,6 +552,38 @@ function App() {
                       element={
                         <ProtectedRoute role="admin">
                           <CreatorDatabase />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/messages"
+                      element={
+                        <ProtectedRoute roles={["creator", "brand", "admin"]}>
+                          <Messages />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/campaigns/create"
+                      element={
+                        <ProtectedRoute role="brand">
+                          <CreateCampaign />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/analytics"
+                      element={
+                        <ProtectedRoute role="admin">
+                          <AdminAnalytics />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/ad-library"
+                      element={
+                        <ProtectedRoute role="admin">
+                          <AdLibrary />
                         </ProtectedRoute>
                       }
                     />

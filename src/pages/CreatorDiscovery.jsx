@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { getApiEndpoint } from "../utils/getApiUrl";
+import { useAuth } from "../context/AuthContext";
+import { areaForUser } from "../components/layout/appNav";
 import styles from "./CreatorDiscovery.module.css";
 
 // Find creators: approved AURAX creators who have published a public page. Real data from
@@ -86,6 +88,7 @@ const CreatorCard = ({ c }) => {
 };
 
 const CreatorDiscovery = () => {
+  const isBrand = areaForUser(useAuth().currentUser) === "brand";
   const [query, setQuery] = useState("");
   const [debounced, setDebounced] = useState("");
   const [niche, setNiche] = useState("");
@@ -221,8 +224,8 @@ const CreatorDiscovery = () => {
                 Creators appear here once they're approved and publish their page. Tell us what you
                 need and we'll shortlist creators for you.
               </p>
-              <Link to="/inquiry/form?purpose=campaign" className="ax-btn ax-btn--primary">
-                Post a requirement
+              <Link to={isBrand ? "/campaigns/create" : "/inquiry/form?purpose=campaign"} className="ax-btn ax-btn--primary">
+                {isBrand ? "Create a campaign" : "Post a requirement"}
               </Link>
             </>
           )}

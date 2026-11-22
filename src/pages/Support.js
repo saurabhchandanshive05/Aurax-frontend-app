@@ -41,9 +41,9 @@ const Support = () => {
                 />
               </svg>
             </div>
-            <h3>Live Chat</h3>
-            <p>Chat with our support team in real-time</p>
-            <button className={styles.button}>Start Live Chat</button>
+            <h3>Messages</h3>
+            <p>Message the AURAX team from your account. Replies arrive in your inbox.</p>
+            <Link to="/messages?new=1" className={styles.button}>Message the team</Link>
           </div>
 
           <div className={styles.supportCard}>

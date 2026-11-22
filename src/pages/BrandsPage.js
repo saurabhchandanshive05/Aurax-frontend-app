@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Icon from "../components/ui/Icon";
+import { useAuth } from "../context/AuthContext";
+import { areaForUser } from "../components/layout/appNav";
 import useAudienceNumbers from "./useAudienceNumbers";
 import styles from "./Audience.module.css";
 
@@ -31,6 +33,7 @@ const FEATURES = [
 ];
 
 const BrandsPage = () => {
+  const isBrand = areaForUser(useAuth().currentUser) === "brand";
   const { liveCampaigns, creators } = useAudienceNumbers();
 
   useEffect(() => {
@@ -49,9 +52,15 @@ const BrandsPage = () => {
               creators who fit, or you can browse and pick them yourself.
             </p>
             <div className={styles.actions}>
-              <Link to="/inquiry/form?purpose=campaign" className="ax-btn ax-btn--primary">
-                Post a requirement
-              </Link>
+              {isBrand ? (
+                <Link to="/campaigns/create" className="ax-btn ax-btn--primary">
+                  Create a campaign
+                </Link>
+              ) : (
+                <Link to="/inquiry/form?purpose=campaign" className="ax-btn ax-btn--primary">
+                  Post a requirement
+                </Link>
+              )}
               <Link to="/creators" className="ax-btn ax-btn--ghost">
                 Browse creators
               </Link>

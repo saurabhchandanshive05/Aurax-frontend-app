@@ -554,3 +554,39 @@
   flex-wrap: wrap;
 }
 .curatorHeader h1 { font-size: var(--ax-fs-2xl); }
+
+/* Waiting for review: drafts brands submitted themselves */
+.reviewQueue {
+  margin-top: 32px;
+  padding: var(--ax-card-pad, 20px);
+  border: 1px solid var(--ax-border, var(--ax-line));
+  border-radius: var(--ax-card-radius, 16px);
+  background: var(--ax-surface);
+}
+.reviewQueue h2 { font-size: 1.25rem; margin-bottom: 12px; color: var(--ax-text); }
+.reviewEmpty { color: var(--ax-text-2); }
+.reviewList { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.reviewItem {
+  display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--ax-border, var(--ax-line));
+  border-radius: var(--ax-r-sm, 10px);
+  background: var(--ax-surface-sunken, transparent);
+}
+.reviewMain { flex: 1 1 280px; min-width: 0; }
+.reviewTitle { font-weight: 600; color: var(--ax-text); overflow-wrap: anywhere; }
+.reviewMeta { margin-top: 4px; color: var(--ax-text-2); font-size: 14px; overflow-wrap: anywhere; }
+.reviewText { margin-top: 8px; color: var(--ax-text-2); font-size: 14px; }
+.reviewActions { display: flex; gap: 8px; }
+.publishBtn {
+  min-height: var(--ax-control-h, 44px);
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--ax-r-sm, 10px);
+  background: var(--ax-action, var(--ax-cyan));
+  color: var(--ax-night);
+  font-weight: 700;
+  cursor: pointer;
+}
+.publishBtn:disabled { opacity: 0.6; cursor: progress; }
+.publishBtn:focus-visible { outline: 2px solid var(--ax-focus-ring, var(--ax-cyan)); outline-offset: 2px; }

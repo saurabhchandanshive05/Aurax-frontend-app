@@ -22,6 +22,8 @@ const CampaignCurator = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [campaigns, setCampaigns] = useState([]);
+  const [drafts, setDrafts] = useState([]);
+  const [publishingId, setPublishingId] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [editingCampaign, setEditingCampaign] = useState(null);
 
@@ -149,8 +151,35 @@ const CampaignCurator = () => {
       if (data.success) {
         setCampaigns(data.data);
       }
+      // Drafts (including campaigns brands submitted themselves) wait here until published
+      const draftRes = await fetch(`${getApiUrl()}/api/admin/campaigns?status=draft&limit=50`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const draftData = await draftRes.json();
+      if (draftData.success) setDrafts(draftData.data);
     } catch (err) {
       console.error('Error fetching campaigns:', err);
+    }
+  };
+
+  const handlePublish = async (campaign) => {
+    setPublishingId(campaign._id);
+    setError('');
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${getApiUrl()}/api/admin/campaigns/${campaign._id}`, {
+        method: 'PATCH',
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'live' })
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) throw new Error(data.error || 'Publish failed');
+      setSuccess(`"${campaign.intent || campaign.title}" is now live on the LIVE board`);
+      fetchCampaigns();
+    } catch (err) {
+      setError('Could not publish the campaign. Try again.');
+    } finally {
+      setPublishingId(null);
     }
   };
 
@@ -892,6 +921,48 @@ const CampaignCurator = () => {
           </form>
         </div>
       )}
+
+      {/* Drafts waiting for review (brand self-service submissions and unpublished drafts) */}
+      <section className={styles.reviewQueue} aria-labelledby="cc-review">
+        <h2 id="cc-review">Waiting for review ({drafts.length})</h2>
+        {drafts.length === 0 ? (
+          <p className={styles.reviewEmpty}>
+            No drafts to review. Campaigns that brands create themselves appear here before they go live.
+          </p>
+        ) : (
+          <ul className={styles.reviewList}>
+            {drafts.map((d) => (
+              <li key={d._id} className={styles.reviewItem}>
+                <div className={styles.reviewMain}>
+                  <p className={styles.reviewTitle}>{d.intent || d.title}</p>
+                  <p className={styles.reviewMeta}>
+                    {[
+                      d.brandName,
+                      d.platform,
+                      formatBudget(d.budget),
+                      d.createdBy?.email ? `Submitted by ${d.createdBy.email}` : null,
+                    ].filter(Boolean).join(' • ')}
+                  </p>
+                  {d.objective && <p className={styles.reviewText}>{d.objective}</p>}
+                </div>
+                <div className={styles.reviewActions}>
+                  <button type="button" className={`${styles.actionBtn} ${styles.edit}`} onClick={() => handleEdit(d)}>
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.publishBtn}
+                    onClick={() => handlePublish(d)}
+                    disabled={publishingId === d._id}
+                  >
+                    {publishingId === d._id ? 'Publishing…' : 'Publish'}
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       {/* Campaigns List */}
       <div className={styles.campaignsList}>

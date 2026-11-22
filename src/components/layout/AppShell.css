@@ -315,3 +315,29 @@
 @media (max-width: 640px) {
   .axs-focus__top { padding: 0 var(--ax-s4); }
 }
+
+/* Unread count on the Messages / Inbox item */
+.axs-badge {
+  margin-left: auto;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  background: var(--ax-cyan);
+  color: var(--ax-night, #15122e);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+}
+.axs-tab__icon { position: relative; display: inline-grid; }
+.axs-tab__icon .axs-badge {
+  position: absolute;
+  top: -6px;
+  left: 12px;
+  margin: 0;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+}

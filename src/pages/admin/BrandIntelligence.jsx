@@ -1,6 +1,6 @@
 import { getApiUrl } from '../../utils/getApiUrl';
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import CreatorDatabase from "./CreatorDatabase";
@@ -337,7 +337,8 @@ const BrandIntelligenceDashboard = () => {
             <h2>Trending Brands</h2>
             {trendingBrands.length === 0 && (
               <p className={styles.sectionEmpty}>
-                No trending brands yet. Brands show up here once they're tracked and running ads.
+                No trending brands yet. Brands show up here once they're tracked and running ads.{" "}
+                <Link to="/admin/ad-library">Research a brand's ads in the Ad Library</Link>.
               </p>
             )}
             <div className={styles.brandList}>

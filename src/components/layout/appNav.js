@@ -23,6 +23,7 @@ export const APP_NAV = {
         items: [
           { label: "LIVE campaigns", short: "LIVE", icon: "live", to: "/live/campaigns" },
           { label: "Public page", icon: "link", to: "/creator/public-page-setup" },
+          { label: "Messages", icon: "chat", to: "/messages", badge: "messages" },
         ],
       },
       {
@@ -40,7 +41,8 @@ export const APP_NAV = {
           { label: "Overview", icon: "home", to: "/brand/dashboard", tab: true },
           { label: "Find creators", short: "Creators", icon: "search", to: "/creators", tab: true },
           { label: "LIVE campaigns", short: "LIVE", icon: "live", to: "/live/campaigns", tab: true },
-          { label: "Post a requirement", short: "Post", icon: "megaphone", to: "/inquiry/form", tab: true },
+          { label: "Create a campaign", short: "Create", icon: "megaphone", to: "/campaigns/create", tab: true },
+          { label: "Messages", icon: "chat", to: "/messages", badge: "messages" },
         ],
       },
     ],
@@ -54,14 +56,17 @@ export const APP_NAV = {
         items: [
           { label: "Campaign curator", short: "Campaigns", icon: "megaphone", to: "/admin/campaigns", tab: true },
           { label: "LIVE board", icon: "live", to: "/live/campaigns" },
+          { label: "Inbox", icon: "inbox", to: "/messages", badge: "messages", tab: true },
+          { label: "Analytics", icon: "chart", to: "/admin/analytics" },
         ],
       },
       {
         title: "Intelligence",
         items: [
           { label: "Brand intelligence", short: "Brands", icon: "radar", to: "/admin/brand-intelligence", exact: true, tab: true },
-          { label: "Creator database", short: "Creators", icon: "users", to: "/admin/brand-intelligence/creators", tab: true },
+          { label: "Creator database", short: "Creators", icon: "users", to: "/admin/brand-intelligence/creators" },
           { label: "Instagram profiles", icon: "instagram", to: "/admin/influencers" },
+          { label: "Ad Library research", icon: "search", to: "/admin/ad-library" },
         ],
       },
       {
@@ -72,8 +77,21 @@ export const APP_NAV = {
   },
 };
 
-/* Which shell (if any) a pathname gets. Public pages return null. */
-export function shellFor(pathname) {
+/* The product area a signed-in user belongs to (admin wins over other roles). */
+export function areaForUser(user) {
+  if (!user) return null;
+  const roles = [user.role, ...(Array.isArray(user.roles) ? user.roles : [])];
+  if (roles.includes("admin")) return "admin";
+  if (roles.includes("brand")) return "brand";
+  if (roles.includes("creator")) return "creator";
+  return null;
+}
+
+/* Which shell (if any) a pathname gets. Public pages return null.
+   Shared product pages (messages) take the signed-in user's own shell. */
+export function shellFor(pathname, user) {
+  if (/^\/messages\/?$/.test(pathname)) return areaForUser(user);
+  if (/^\/campaigns\/create\/?$/.test(pathname)) return areaForUser(user) === "brand" ? "brand" : null;
   if (/^\/admin(\/|$)/.test(pathname)) return "admin";
   if (/^\/(creator\/dashboard|dashboard)\/?$/.test(pathname)) return "creator";
   if (/^\/brand\/dashboard\/?$/.test(pathname)) return "brand";

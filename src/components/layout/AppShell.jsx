@@ -3,7 +3,52 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import Icon from "../ui/Icon";
 import { APP_NAV, isItemActive, itemHref } from "./appNav";
+import { getApiEndpoint } from "../../utils/getApiUrl";
 import "./AppShell.css";
+
+/* Unread message count for the nav badge: checked on load, every 60s while the tab is visible,
+   on navigation, and whenever the messages page marks a conversation read. */
+function useUnreadMessages(enabled, pathname) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    if (!enabled) return undefined;
+    let alive = true;
+    const load = async () => {
+      if (document.visibilityState === "hidden") return;
+      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      if (!token) return;
+      try {
+        const res = await fetch(getApiEndpoint("/api/messages/unread-count"), {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const json = res.ok ? await res.json() : null;
+        if (alive && json && typeof json.unread === "number") setCount(json.unread);
+      } catch {
+        /* offline: keep the last count */
+      }
+    };
+    load();
+    const timer = setInterval(load, 60000);
+    window.addEventListener("ax:messages-read", load);
+    document.addEventListener("visibilitychange", load);
+    return () => {
+      alive = false;
+      clearInterval(timer);
+      window.removeEventListener("ax:messages-read", load);
+      document.removeEventListener("visibilitychange", load);
+    };
+  }, [enabled, pathname]);
+  return count;
+}
+
+function Badge({ count }) {
+  if (!count) return null;
+  return (
+    <span className="axs-badge" aria-label={`${count} unread`}>
+      {count > 99 ? "99+" : count}
+    </span>
+  );
+}
 
 function displayName(user) {
   return user?.fullName || user?.name || user?.username || user?.email || "Account";
@@ -18,7 +63,7 @@ function Mark() {
   );
 }
 
-function NavList({ nav, pathname, section, onNavigate }) {
+function NavList({ nav, pathname, section, onNavigate, unread }) {
   return nav.groups.map((group, gi) => (
     <div className="axs-group" key={gi}>
       {group.title && <p className="axs-group__title">{group.title}</p>}
@@ -35,6 +80,7 @@ function NavList({ nav, pathname, section, onNavigate }) {
               >
                 <Icon name={item.icon} size={18} />
                 <span>{item.label}</span>
+                {item.badge === "messages" && <Badge count={unread} />}
               </Link>
             </li>
           );
@@ -54,6 +100,7 @@ export default function AppShell({ area, children }) {
   const allItems = useMemo(() => nav.groups.flatMap((g) => g.items), [nav]);
   const current = allItems.find((i) => isItemActive(i, pathname, section));
   const tabs = allItems.filter((i) => i.tab).slice(0, 4);
+  const unread = useUnreadMessages(allItems.some((i) => i.badge === "messages"), pathname);
 
   // Close the drawer on navigation and on Escape.
   useEffect(() => setDrawerOpen(false), [pathname, search]);
@@ -84,7 +131,7 @@ export default function AppShell({ area, children }) {
         <span className="axs-area">{nav.label}</span>
       </div>
       <nav className="axs-rail__nav" aria-label={`${nav.label} navigation`}>
-        <NavList nav={nav} pathname={pathname} section={section} />
+        <NavList nav={nav} pathname={pathname} section={section} unread={unread} />
       </nav>
       <div className="axs-rail__foot">
         <Link to="/" className="axs-link axs-link--quiet">
@@ -168,7 +215,10 @@ export default function AppShell({ area, children }) {
                 className={`axs-tab${active ? " is-active" : ""}`}
                 aria-current={active ? "page" : undefined}
               >
-                <Icon name={item.icon} size={20} />
+                <span className="axs-tab__icon">
+                  <Icon name={item.icon} size={20} />
+                  {item.badge === "messages" && <Badge count={unread} />}
+                </span>
                 <span>{item.short || item.label}</span>
               </Link>
             );

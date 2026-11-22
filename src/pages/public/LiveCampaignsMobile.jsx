@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import styles from './LiveCampaignsMobile.module.css';
+import { useAuth } from '../../context/AuthContext';
+import { areaForUser } from '../../components/layout/appNav';
 
 const API_URL = getApiUrl();
 
@@ -57,6 +59,7 @@ const SkeletonCard = () => (
 
 const LiveCampaignsMobile = () => {
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -269,6 +272,16 @@ const LiveCampaignsMobile = () => {
       navigate(`/creator/login?returnUrl=${returnUrl}&action=${ctaAction}`);
       return;
     }
+
+    // Signed in: chat opens AURAX messages; brands create campaigns themselves
+    if (action === 'chat') {
+      navigate('/messages?new=1');
+      return;
+    }
+    if (action === 'post' && areaForUser(currentUser) === 'brand') {
+      navigate('/campaigns/create');
+      return;
+    }
     
     try {
       const response = await axios.get(
@@ -285,15 +298,11 @@ const LiveCampaignsMobile = () => {
         return;
       }
       switch(action) {
-        case 'chat':
-          navigate('/contact?type=chat');
-          break;
         case 'call':
           navigate('/contact?type=call');
           break;
         case 'post':
-          // Campaign briefs are submitted through the inquiry form (there is no /campaigns/create
-          // page; navigating there fell through to the homepage)
+          // Non-brand accounts send a campaign brief through the inquiry form
           navigate('/inquiry/form?purpose=campaign');
           break;
         default:

@@ -8,12 +8,40 @@ import styles from "./BrandDashboard.module.css";
 /*
  * Brand home. Shows only real data: the LIVE board counts come from
  * /api/public/campaigns/stats/overview (read-only, no view tracking).
- * Brand-side campaign tracking has no backend yet, so that area is an
- * honest empty state pointing at the features that do work.
+ * "Your campaigns" lists the brand's own self-service campaigns from
+ * /api/campaigns/mine, with their review status.
  */
+const STATUS = {
+  draft: { label: "In review", tone: "review" },
+  live: { label: "Live", tone: "live" },
+  paused: { label: "Paused", tone: "muted" },
+  closed: { label: "Closed", tone: "muted" },
+  archived: { label: "Archived", tone: "muted" },
+};
+
+const formatBudget = (b) => {
+  if (!b || (b.min == null && b.max == null)) return "Budget not set";
+  const f = (n) => `₹${Number(n).toLocaleString("en-IN")}`;
+  if (b.min != null && b.max != null) return b.min === b.max ? f(b.min) : `${f(b.min)} – ${f(b.max)}`;
+  return b.min != null ? `From ${f(b.min)}` : `Up to ${f(b.max)}`;
+};
+
 const BrandDashboard = () => {
   const { currentUser } = useAuth();
   const [live, setLive] = useState({ status: "loading", total: 0, handPicked: 0 });
+  const [mine, setMine] = useState({ status: "loading", list: [] });
+
+  useEffect(() => {
+    let cancelled = false;
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    fetch(getApiEndpoint("/api/campaigns/mine"), { headers: { Authorization: `Bearer ${token}` } })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+      .then((json) => !cancelled && setMine({ status: "ready", list: json.campaigns || [] }))
+      .catch(() => !cancelled && setMine({ status: "error", list: [] }));
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -39,7 +67,7 @@ const BrandDashboard = () => {
     <div className={styles.page}>
       <header className={styles.header}>
         <h1>{name ? `Welcome, ${name}` : "Welcome"}</h1>
-        <p>Find creators, post what you need, and watch the LIVE board for creators ready to work.</p>
+        <p>Create campaigns, find creators, and watch the LIVE board for creators ready to work.</p>
       </header>
 
       <Link to="/live/campaigns" className={styles.liveStrip}>
@@ -62,20 +90,71 @@ const BrandDashboard = () => {
 
       <div className={styles.grid}>
         <section className={styles.panel} aria-labelledby="bd-campaigns">
-          <h2 id="bd-campaigns">Your campaigns</h2>
-          <div className={styles.empty}>
-            <span className={styles.emptyIcon}>
-              <Icon name="megaphone" size={24} />
-            </span>
-            <p className={styles.emptyTitle}>No campaigns yet</p>
-            <p className={styles.emptyText}>
-              Tell us what you need: niche, city, budget and timeline. Our team shortlists reviewed creators and
-              gets back to you.
-            </p>
-            <Link to="/inquiry/form" className="ax-btn ax-btn--primary">
-              Post a requirement
-            </Link>
+          <div className={styles.panelHead}>
+            <h2 id="bd-campaigns">Your campaigns</h2>
+            {mine.list.length > 0 && (
+              <Link to="/campaigns/create" className="ax-btn ax-btn--ghost">
+                <Icon name="plus" size={16} /> New campaign
+              </Link>
+            )}
           </div>
+          {mine.status === "loading" && <p className={styles.panelText}>Loading your campaigns…</p>}
+          {mine.status === "error" && (
+            <p className={styles.panelText} role="alert">
+              Your campaigns couldn't be loaded. Refresh the page to try again.
+            </p>
+          )}
+          {mine.status === "ready" && mine.list.length > 0 && (
+            <ul className={styles.campaignList}>
+              {mine.list.map((c) => {
+                const st = STATUS[c.status] || { label: c.status, tone: "muted" };
+                const body = (
+                  <>
+                    <span className={styles.campaignMain}>
+                      <span className={styles.campaignTitle}>{c.intent}</span>
+                      <span className={styles.campaignMeta}>
+                        {[c.platform, formatBudget(c.budget), `${c.creatorsNeeded || 1} ${c.creatorsNeeded === 1 ? "creator" : "creators"}`]
+                          .filter(Boolean)
+                          .join(" • ")}
+                      </span>
+                    </span>
+                    <span className={`${styles.status} ${styles[`status_${st.tone}`]}`}>{st.label}</span>
+                  </>
+                );
+                return (
+                  <li key={c.id}>
+                    {c.status === "live" ? (
+                      <Link to={`/live/campaigns/${c.id}`} className={styles.campaignRow}>
+                        {body}
+                      </Link>
+                    ) : (
+                      <div className={styles.campaignRow}>{body}</div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+          {mine.status === "ready" && mine.list.some((c) => c.status === "draft") && (
+            <p className={styles.panelNote}>
+              Campaigns in review go live on the LIVE board once the AURAX team has checked them.
+            </p>
+          )}
+          {mine.status !== "loading" && mine.list.length === 0 && (
+            <div className={styles.empty}>
+              <span className={styles.emptyIcon}>
+                <Icon name="megaphone" size={24} />
+              </span>
+              <p className={styles.emptyTitle}>No campaigns yet</p>
+              <p className={styles.emptyText}>
+                Describe what you need: platform, niche, city, budget and timeline. Our team reviews it and publishes it
+                on the LIVE board for creators.
+              </p>
+              <Link to="/campaigns/create" className="ax-btn ax-btn--primary">
+                Create a campaign
+              </Link>
+            </div>
+          )}
         </section>
 
         <div className={styles.side}>
@@ -89,9 +168,9 @@ const BrandDashboard = () => {
 
           <section className={styles.panel} aria-labelledby="bd-help">
             <h2 id="bd-help">Need a hand?</h2>
-            <p className={styles.panelText}>Planning a launch or a large campaign? Talk to the AURAX team directly.</p>
-            <Link to="/contact" className={styles.textLink}>
-              Contact us <Icon name="arrow-right" size={16} />
+            <p className={styles.panelText}>Planning a launch or a large campaign? Message the AURAX team directly.</p>
+            <Link to="/messages?new=1" className={styles.textLink}>
+              Message the team <Icon name="arrow-right" size={16} />
             </Link>
           </section>
         </div>

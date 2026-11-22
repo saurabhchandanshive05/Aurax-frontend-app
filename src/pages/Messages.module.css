@@ -1,0 +1,94 @@
+/* Messages: AURAX tokens. Works inside the app shell (signed-in areas) and the public layout. */
+.page { color: var(--ax-text-primary); }
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 70vh;
+  border: 1px solid var(--ax-border);
+  border-radius: var(--ax-card-radius);
+  background: var(--ax-surface);
+  overflow: hidden;
+}
+
+/* phones: list OR thread */
+.thread { display: none; }
+.threadOpen .list { display: none; }
+.threadOpen .thread { display: flex; }
+
+.list { display: flex; flex-direction: column; min-width: 0; border-right: 1px solid var(--ax-border); }
+.listHead { display: flex; align-items: center; justify-content: space-between; gap: var(--ax-s3); padding: var(--ax-s4); border-bottom: 1px solid var(--ax-border); }
+.title { margin: 0; font-family: var(--ax-font-display); font-size: var(--ax-fs-xl); }
+.filters { display: flex; gap: 4px; padding: var(--ax-s2) var(--ax-s4); border-bottom: 1px solid var(--ax-border); }
+.filterBtn { min-height: 32px; padding: 0 var(--ax-s3); border: 1px solid transparent; border-radius: var(--ax-r-pill); background: none; color: var(--ax-text-secondary); font: inherit; font-size: var(--ax-fs-sm); cursor: pointer; }
+.filterActive { border-color: var(--ax-border-strong); color: var(--ax-text-primary); background: var(--ax-surface-hover); }
+
+.items { margin: 0; padding: 0; list-style: none; overflow-y: auto; }
+.item {
+  display: grid;
+  gap: 2px;
+  width: 100%;
+  padding: var(--ax-s3) var(--ax-s4);
+  border: 0;
+  border-bottom: 1px solid var(--ax-border);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.item:hover { background: var(--ax-surface-hover); }
+.itemActive { background: var(--ax-surface-hover); box-shadow: inset 3px 0 0 var(--ax-cyan); }
+.item:focus-visible, .back:focus-visible, .filterBtn:focus-visible, .linkBtn:focus-visible { outline: none; box-shadow: var(--ax-focus-ring); }
+.itemTop { display: flex; justify-content: space-between; gap: var(--ax-s2); }
+.itemSubject { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.itemTime, .itemWho { color: var(--ax-text-muted); font-size: var(--ax-fs-xs); flex: none; }
+.itemPreview { color: var(--ax-text-secondary); font-size: var(--ax-fs-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.unread { justify-self: start; margin-top: 2px; padding: 1px 8px; border-radius: var(--ax-r-pill); background: var(--ax-info-soft); color: var(--ax-cyan); font-size: var(--ax-fs-xs); font-weight: 700; }
+
+.thread { flex-direction: column; min-width: 0; }
+.threadHead { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ax-s3); padding: var(--ax-s3) var(--ax-s4); border-bottom: 1px solid var(--ax-border); }
+.threadMeta { flex: 1; min-width: 0; }
+.threadTitle { flex: 1; margin: 0; font-size: var(--ax-fs-lg); }
+.back { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 var(--ax-s2); border: 0; border-radius: var(--ax-r-sm); background: none; color: var(--ax-text-secondary); font: inherit; cursor: pointer; }
+
+.messages { flex: 1; display: flex; flex-direction: column; gap: var(--ax-s2); min-height: 260px; max-height: 60vh; overflow-y: auto; padding: var(--ax-s4); background: var(--ax-bg); }
+.bubbleRow { display: flex; }
+.mine { justify-content: flex-end; }
+.bubble { max-width: min(560px, 85%); padding: var(--ax-s2) var(--ax-s3); border: 1px solid var(--ax-border); border-radius: var(--ax-r-md); background: var(--ax-surface); }
+.mine .bubble { background: var(--ax-surface-hover); border-color: var(--ax-border-strong); }
+.fromTeam { border-color: rgba(79, 209, 232, 0.35); }
+.sender { display: block; margin-bottom: 2px; color: var(--ax-text-muted); font-size: var(--ax-fs-xs); font-weight: 700; }
+.bubble p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: var(--ax-lh-body); }
+.bubble time { display: block; margin-top: 4px; color: var(--ax-text-muted); font-size: var(--ax-fs-xs); }
+
+.composer { display: grid; gap: var(--ax-s3); padding: var(--ax-s4); border-top: 1px solid var(--ax-border); }
+.field { display: grid; gap: 6px; font-size: var(--ax-fs-sm); color: var(--ax-text-secondary); }
+.field input, .field textarea {
+  width: 100%;
+  padding: var(--ax-s3);
+  border: 1px solid var(--ax-border-strong);
+  border-radius: var(--ax-r-sm);
+  background: var(--ax-surface-sunken);
+  color: var(--ax-text-primary);
+  font: inherit;
+  font-size: var(--ax-fs-md);
+  resize: vertical;
+}
+.field input:focus-visible, .field textarea:focus-visible { outline: none; border-color: var(--ax-cyan); box-shadow: var(--ax-focus-ring); }
+.composerFoot { display: flex; align-items: center; justify-content: space-between; gap: var(--ax-s3); }
+.error { margin: 0; color: var(--ax-danger); font-size: var(--ax-fs-sm); }
+
+.empty, .state { display: grid; place-items: center; gap: var(--ax-s2); padding: var(--ax-s6) var(--ax-s4); color: var(--ax-text-muted); text-align: center; }
+.empty { flex: 1; }
+.muted { margin: 0; color: var(--ax-text-muted); font-size: var(--ax-fs-sm); }
+.muted a, .linkBtn { color: var(--ax-link); }
+.linkBtn { border: 0; background: none; font: inherit; cursor: pointer; padding: 0; }
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (min-width: 900px) {
+  .layout { grid-template-columns: minmax(260px, 340px) 1fr; }
+  .list, .threadOpen .list { display: flex; }
+  .thread, .threadOpen .thread { display: flex; }
+  .back { display: none; }
+}
