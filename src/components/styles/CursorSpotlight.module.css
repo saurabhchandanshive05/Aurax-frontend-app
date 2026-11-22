@@ -63,9 +63,9 @@
   background: radial-gradient(circle closest-side, rgba(79, 209, 232, 0.12) 0%, rgba(79, 209, 232, 0) 100%);
 }
 
-/* Never on touch-only devices, small screens or with reduced motion (the script also
-   doesn't start there) */
-@media (hover: none), (pointer: coarse), (max-width: 1023px), (prefers-reduced-motion: reduce) {
+/* Off with reduced motion (the script doesn't start there either). Mouse users see it at every
+   width; on touch screens it shows under the finger while touching. */
+@media (prefers-reduced-motion: reduce) {
   .layer {
     display: none;
   }

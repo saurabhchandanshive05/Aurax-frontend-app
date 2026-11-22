@@ -2,12 +2,12 @@ import { useEffect, useRef } from "react";
 import styles from "./styles/CursorSpotlight.module.css";
 
 // Cursor light: three soft layers (bright cyan core, violet glow, slower violet-cyan trail) that
-// follow the mouse at different speeds, so movement leaves a short liquid trail that flows back
-// into the core when the cursor rests. Desktop pointers only (hover + fine pointer, 1024px and
-// wider), off with prefers-reduced-motion. One animation loop moves the layers with transforms
-// (no layout, no React re-renders) and stops once everything has settled.
-const QUERY =
-  "(hover: hover) and (pointer: fine) and (min-width: 1024px) and (prefers-reduced-motion: no-preference)";
+// follow the pointer at different speeds, so movement leaves a short liquid trail that flows back
+// into the core when it rests. Mouse/pen: follows the cursor at every screen width. Touch: shows
+// under the finger while touching or swiping and fades out on release. Off with
+// prefers-reduced-motion. One animation loop moves the layers with transforms (no layout, no
+// React re-renders) and stops once everything has settled.
+const QUERY = "(prefers-reduced-motion: no-preference)";
 
 // Share of the remaining distance each layer covers per frame (60fps): the core stays on the
 // cursor, the glow and the trail lag behind it a little more each.
@@ -82,12 +82,11 @@ const CursorSpotlight = () => {
       };
       const kick = () => { if (!raf) raf = requestAnimationFrame(frame); };
 
-      const onMove = (e) => {
-        if (e.pointerType && e.pointerType !== "mouse") return;
-        tx = e.clientX;
-        ty = e.clientY;
+      const moveTo = (x, y) => {
+        tx = x;
+        ty = y;
         if (!placed) {
-          // First move: start at the cursor (no glide in from the corner)
+          // First move (or first touch): start at the pointer, no glide in from elsewhere
           layers.forEach((l) => { l.x = tx; l.y = ty; });
           px = tx; py = ty;
           placed = true;
@@ -96,14 +95,39 @@ const CursorSpotlight = () => {
         kick();
       };
       const hide = () => { visTarget = 0; kick(); };
-      const onOut = (e) => { if (!e.relatedTarget) hide(); }; // pointer left the window
 
-      window.addEventListener("pointermove", onMove, { passive: true });
+      // Mouse and pen: follow the cursor (touch is handled below)
+      const onMove = (e) => { if (e.pointerType !== "touch") moveTo(e.clientX, e.clientY); };
+      const onOut = (e) => { if (e.pointerType !== "touch" && !e.relatedTarget) hide(); }; // left the window
+
+      // Touch: light under the finger while it is down, fading out on release. Touch events,
+      // not pointer events, because the browser cancels pointer events once a swipe starts
+      // scrolling, while touchmove keeps firing. All passive: taps and scrolling are untouched.
+      const onTouch = (e) => {
+        const t = e.touches[0];
+        if (t) moveTo(t.clientX, t.clientY);
+      };
+      const onTouchEnd = (e) => {
+        if (e.touches.length) return;
+        placed = false; // the next touch starts where that finger lands
+        hide();
+      };
+
+      const passive = { passive: true };
+      window.addEventListener("pointermove", onMove, passive);
       document.addEventListener("pointerout", onOut);
+      window.addEventListener("touchstart", onTouch, passive);
+      window.addEventListener("touchmove", onTouch, passive);
+      window.addEventListener("touchend", onTouchEnd, passive);
+      window.addEventListener("touchcancel", onTouchEnd, passive);
       window.addEventListener("blur", hide);
       return () => {
         window.removeEventListener("pointermove", onMove);
         document.removeEventListener("pointerout", onOut);
+        window.removeEventListener("touchstart", onTouch);
+        window.removeEventListener("touchmove", onTouch);
+        window.removeEventListener("touchend", onTouchEnd);
+        window.removeEventListener("touchcancel", onTouchEnd);
         window.removeEventListener("blur", hide);
         cancelAnimationFrame(raf);
         layers.forEach((l) => (l.el.style.opacity = "0"));
