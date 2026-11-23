@@ -575,6 +575,12 @@ const FeaturedCreators = () => {
                       "--ad": depth,
                     }}
                     aria-hidden={isNear ? undefined : true}
+                    // Cards more than three places from the focus are outside the carousel's view at
+                    // every width, even while it slides (up to two cards each side peek in on desktop).
+                    // Hidden, they are not painted: each card has a 3D transform and therefore its own
+                    // GPU layer, and ~24 of them (~9MB each at 3x) contributed to iPhone Safari/Chrome
+                    // closing the page.
+                    data-far={Math.abs(offset) > 3 ? "" : undefined}
                     onClick={(e) => {
                       // Prevent click if touch moved or is dragging
                       if (touchMoved || isDragging) {
@@ -647,13 +653,10 @@ const FeaturedCreators = () => {
                             aria-label={`${favorites.has(creator.id) ? "Remove" : "Add"} ${creator.name} ${favorites.has(creator.id) ? "from" : "to"} favourites`}
                             tabIndex={isNear ? 0 : -1}
                           >
-                            <motion.svg
-                              width="20"
-                              height="20"
-                              viewBox="0 0 24 24"
-                              fill={favorites.has(creator.id) ? "currentColor" : "none"}
-                              stroke="currentColor"
-                              strokeWidth="2"
+                            {/* The pop animates a wrapper, not the SVG: an animated SVG element measures itself
+                                (getBBox) on mount, which forced a full page layout for every card at startup. */}
+                            <motion.span
+                              style={{ display: "inline-flex" }}
                               animate={
                                 favorites.has(creator.id)
                                   ? { scale: [1, 1.25, 1] }
@@ -662,8 +665,17 @@ const FeaturedCreators = () => {
                               transition={{ duration: 0.3 }}
                               aria-hidden="true"
                             >
-                              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </motion.svg>
+                              <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill={favorites.has(creator.id) ? "currentColor" : "none"}
+                                stroke="currentColor"
+                                strokeWidth="2"
+                              >
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                              </svg>
+                            </motion.span>
                           </motion.button>
                         </div>
 

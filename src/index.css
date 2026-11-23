@@ -145,3 +145,17 @@ h1, h2, h3 {
   }
 }
 
+
+/* Homepage fade-in (0.8s). CSS rather than a JS animation: it runs on the compositor, so the
+   page appears as soon as it is painted even while scripts are still starting up.
+   Applied to the first screen (the hero) only: fading the whole homepage made the entire page,
+   ~13,000px tall on a phone, a single GPU layer for the length of the fade (~180MB at 3x pixel
+   density, at exactly the moment iOS Safari/Chrome were closing the page). The sections below
+   are off screen during the fade, so it looks the same. */
+.home-page > :first-child {
+  animation: axPageFadeIn 0.8s ease backwards;
+}
+@keyframes axPageFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

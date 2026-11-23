@@ -556,3 +556,6 @@
   .plusButton:hover { transform: none; }
   .sheen { display: none; }
 }
+
+/* Cards far from the focus (outside the view at every width) are not painted: no GPU layer */
+.creatorCard[data-far] { visibility: hidden; }

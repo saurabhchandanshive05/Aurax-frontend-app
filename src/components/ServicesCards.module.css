@@ -501,3 +501,22 @@
   .marqueeContainer:hover .brandCard:hover { transform: none; }
   .brandCard:hover .brandLogoImg { transform: none; }
 }
+
+/* Phones and touch tablets: the same angled grid drawn without a giant rotated, animated layer.
+   The desktop version is a 200% x 200% box rotated 30deg and moved by half its size; on a tall
+   section at 3x pixel density that one layer needed ~300MB of GPU memory, enough for iOS Safari
+   and Chrome to close the tab. Here the 30deg/120deg lines are painted directly (same colour,
+   spacing and opacity) on a section-sized element, without the slow drift. */
+@media (max-width: 1023px), (pointer: coarse) {
+  .neuralGrid {
+    inset: 0;
+    width: auto;
+    height: auto;
+    transform: none;
+    animation: none;
+    background-image:
+      repeating-linear-gradient(30deg, rgba(91, 119, 255, 0.05) 0 1px, transparent 1px 40px),
+      repeating-linear-gradient(120deg, rgba(91, 119, 255, 0.05) 0 1px, transparent 1px 40px);
+    background-size: auto;
+  }
+}

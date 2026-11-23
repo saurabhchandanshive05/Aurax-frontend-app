@@ -296,11 +296,14 @@ const FeatureShowcase = () => {
   const sectionRef = useRef(null);
   // Looping scenes only where the graphics are hardware-accelerated (same rule as the 3D hero);
   // without a GPU, or with reduced motion, every scene shows a complete still frame.
-  const [still] = useState(
-    () =>
-      webglTier() !== "hardware" ||
-      (typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches)
-  );
+  // Phones and touch tablets all have GPU compositing: they animate without running the WebGL test
+  // (which briefly creates a WebGL context).
+  const [still] = useState(() => {
+    if (typeof window === "undefined") return false;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return true;
+    if (window.matchMedia?.("(max-width: 1023px), (pointer: coarse)").matches) return false;
+    return webglTier() !== "hardware";
+  });
   // The card scenes loop; they stop while the section is scrolled away
   usePauseOffscreen(sectionRef);
   const area = areaForUser(useAuth().currentUser);

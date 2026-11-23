@@ -1585,3 +1585,19 @@
   .nav-container { padding: 0 1.5rem; }
   .login-btn { padding: 0.7rem 1.2rem; font-size: 0.9rem; }
 }
+
+/* Entrance of the bar and its links (was JS-driven; same values). CSS opacity/transform animations
+   run on the compositor, so the navigation appears as soon as it is painted even while the page is
+   still starting up. "backwards" only applies the start state during the delay. */
+.nav-enter-slide { animation: axNavSlide 0.6s ease-out backwards; }
+.nav-enter-down { animation: axNavDown 0.6s ease var(--d, 0s) backwards; }
+.nav-enter-left { animation: axNavLeft 0.6s ease var(--d, 0s) backwards; }
+@keyframes axNavSlide { from { transform: translateY(-100px); } to { transform: none; } }
+@keyframes axNavDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: none; } }
+@keyframes axNavLeft { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: none; } }
+@keyframes axNavFade { from { opacity: 0; } to { opacity: 1; } }
+/* Reduced motion: no movement, fades only (as with the previous MotionConfig reducedMotion="user") */
+@media (prefers-reduced-motion: reduce) {
+  .nav-enter-slide { animation: none; }
+  .nav-enter-down, .nav-enter-left { animation-name: axNavFade; }
+}

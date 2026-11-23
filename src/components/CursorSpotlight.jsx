@@ -28,7 +28,14 @@ const CursorSpotlight = () => {
     const start = () => {
       const layers = LAYERS.map((l) => ({ ...l, el: refs.current[l.key], x: 0, y: 0 })).filter((l) => l.el);
       if (layers.length !== LAYERS.length) return () => {};
-      layers.forEach((l) => (l.half = l.el.offsetWidth / 2));
+      // Layer sizes are read on the first pointer move, not here: reading offsetWidth while the page
+      // is still being built forced a full layout of the whole page during startup.
+      let measured = false;
+      const measure = () => {
+        if (measured) return;
+        layers.forEach((l) => (l.half = l.el.offsetWidth / 2));
+        measured = true;
+      };
       const [trail, glow, core] = layers;
       let tx = 0, ty = 0, px = 0, py = 0;
       let vis = 0, visTarget = 0; // fade in/out (0..1)
@@ -85,6 +92,7 @@ const CursorSpotlight = () => {
       const moveTo = (x, y) => {
         tx = x;
         ty = y;
+        measure();
         if (!placed) {
           // First move (or first touch): start at the pointer, no glide in from elsewhere
           layers.forEach((l) => { l.x = tx; l.y = ty; });

@@ -46,6 +46,13 @@ const useAnimatedCounter = (end, start = 0, duration = 2, instant = false) => {
   return displayValue;
 };
 
+// The count-up lives in its own component so each animation frame re-renders only this number,
+// not the whole section (logo wall, particles, animated blocks) ~120 times in two seconds.
+const CountUp = ({ end, instant }) => {
+  const value = useAnimatedCounter(end, 0, 2, instant);
+  return value.toLocaleString();
+};
+
 const BrandCollaborations = () => {
   const statsRef = useRef(null);
   const sectionRef = useRef(null);
@@ -61,10 +68,6 @@ const BrandCollaborations = () => {
 
   const statsInView = useInView(statsRef, { once: true, amount: 0.3 });
 
-  // Animated counters for stats
-  const campaignCount = useAnimatedCounter(statsInView ? 10000 : 0, 0, 2, reduced);
-  const creatorCount = useAnimatedCounter(statsInView ? 5000 : 0, 0, 2, reduced);
-  const brandCount = useAnimatedCounter(statsInView ? 200 : 0, 0, 2, reduced);
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -98,7 +101,6 @@ const BrandCollaborations = () => {
       title: "Campaigns",
       description: "Stories Powered by AI",
       suffix: "+",
-      counter: campaignCount,
     },
     {
       icon: "🤖",
@@ -106,7 +108,6 @@ const BrandCollaborations = () => {
       title: "Creators",
       description: "Across All Niches",
       suffix: "+",
-      counter: creatorCount,
     },
     {
       icon: "🏆",
@@ -114,7 +115,6 @@ const BrandCollaborations = () => {
       title: "Brands",
       description: "From D2C to Enterprise",
       suffix: "+",
-      counter: brandCount,
     },
   ];
 
@@ -281,7 +281,7 @@ const BrandCollaborations = () => {
               <div key={index} className={styles.statItem}>
                 <dt className={styles.statTitle}>{stat.title}</dt>
                 <dd className={styles.statValue}>
-                  <span className={styles.statNumber}>{stat.counter.toLocaleString()}</span>
+                  <span className={styles.statNumber}><CountUp end={statsInView ? stat.value : 0} instant={reduced} /></span>
                   <span className={styles.statSuffix}>{stat.suffix}</span>
                 </dd>
                 <dd className={styles.statDescription}>{stat.description}</dd>

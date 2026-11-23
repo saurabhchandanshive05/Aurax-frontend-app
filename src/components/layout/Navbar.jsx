@@ -94,12 +94,10 @@ function Navbar() {
 
   return (
     <>
-      <motion.nav
-        className={`navbar ${scrolled ? "scrolled" : ""}`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-      >
+      {/* Entrance animations of the bar and its links are CSS (Navbar.css, .nav-enter*): they run
+          on the compositor, so the navigation shows as soon as it is painted instead of waiting for
+          a free main thread while the page starts up. Same distances, durations and delays. */}
+      <motion.nav className={`navbar nav-enter-slide ${scrolled ? "scrolled" : ""}`}>
         {/* Optimized Background Effects */}
         <div className="navbar-background-effects">
           <div className="navbar-gradient-overlay"></div>
@@ -164,9 +162,8 @@ function Navbar() {
             {navItems.map((item, index) => (
               <motion.div
                 key={item.path}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 * index }}
+                className="nav-enter-down"
+                style={{ "--d": `${0.1 * index}s` }}
                 onHoverStart={() => setHoveredItem(item.path)}
                 onHoverEnd={() => setHoveredItem(null)}
               >
@@ -191,10 +188,8 @@ function Navbar() {
               </motion.div>
             ))}            {/* Features Dropdown */}
             <motion.div
-              className="nav-dropdown"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
+              className="nav-dropdown nav-enter-down"
+              style={{ "--d": "0.5s" }}
               whileHover="hover"
             >
               <motion.span
@@ -206,19 +201,18 @@ function Navbar() {
                 }`}
               >
                 Features
-                <motion.svg
+                {/* Plain SVG: Navbar.css rotates it on hover/focus. (An animated SVG element measures
+                    itself with getBBox on mount, which forced a full page layout during startup.) */}
+                <svg
                   className="dropdown-arrow"
                   width="12"
                   height="12"
                   viewBox="0 0 12 12"
                   fill="currentColor"
-                  variants={{
-                    hover: { rotate: 180 },
-                  }}
-                  transition={{ duration: 0.3 }}
+                  aria-hidden="true"
                 >
                   <path d="M2 4l4 4 4-4H2z" />
-                </motion.svg>
+                </svg>
                 <motion.div
                   className="nav-link-underline"
                   initial={{ scaleX: 0 }}
@@ -275,9 +269,8 @@ function Navbar() {
 
             {/* LIVE Campaigns Link */}
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
+              className="nav-enter-down"
+              style={{ "--d": "0.6s" }}
               onHoverStart={() => setHoveredItem('/live/campaigns')}
               onHoverEnd={() => setHoveredItem(null)}
             >
@@ -294,12 +287,7 @@ function Navbar() {
 
             {/* Auth Actions */}
             {!isAuthenticated ? (
-              <motion.div
-                className="auth-actions"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-              >
+              <motion.div className="auth-actions nav-enter-left" style={{ "--d": "0.5s" }}>
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -318,12 +306,7 @@ function Navbar() {
                 </motion.div>
               </motion.div>
             ) : (
-              <motion.div
-                className="user-actions"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-              >
+              <motion.div className="user-actions nav-enter-left" style={{ "--d": "0.5s" }}>
                 <div className="user-info">
                   <motion.div
                     className="user-badge"

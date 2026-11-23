@@ -35,22 +35,12 @@ if (
 }
 const HeroScene = lazy(loadHeroScene);
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.2 },
-  },
-};
-
-const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: { duration: 0.6, ease: "easeOut" },
-  },
-};
+// Entrance: each block rises 20px and fades in (0.6s, ease-out), 0.2s after the one before.
+// Done with CSS keyframes (styles.enter + a --d delay) rather than JS-driven variants: CSS opacity/
+// transform animations run on the compositor, so the copy appears as soon as it is painted even
+// while the main thread is still busy starting the rest of the homepage. With the JS version the
+// headline stayed at opacity 0 for several seconds on slower machines.
+const delay = (s) => ({ "--d": `${s}s` });
 
 const Hero = () => {
   const [timeOfDay, setTimeOfDay] = useState("day");
@@ -81,7 +71,24 @@ const Hero = () => {
   // (SwiftShader, llvmpipe, no GPU drivers) blocks the page for seconds while three.js sets up
   // on the CPU, so those desktops, and browsers without WebGL, get the same orbit in plain
   // CSS instead (HeroOrbitFlat: no WebGL, no per-frame JavaScript).
-  const [has3d] = useState(() => typeof window === "undefined" || webglTier() === "hardware");
+  // The WebGL capability test runs only at desktop widths: phones and tablets show the CSS orbit,
+  // so they never create a (test) WebGL context. webglTier() caches its answer.
+  const has3d = !isCompact && (typeof window === "undefined" || webglTier() === "hardware");
+  // Mount the 3D scene once the hero copy has been painted: creating the WebGL context and
+  // compiling its shaders takes a long main-thread task, which otherwise could land before the
+  // first paint. The scene's area is empty until it is ready either way, so nothing visible changes.
+  const [mount3d, setMount3d] = useState(false);
+  useEffect(() => {
+    if (!has3d) return undefined;
+    let timer = 0;
+    const raf = requestAnimationFrame(() => {
+      timer = setTimeout(() => setMount3d(true), 0);
+    });
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(timer);
+    };
+  }, [has3d]);
 
   // Phones and tablets have no 3D scene to wait for (the CSS orbit is part of the first paint):
   // let the rest of the homepage start right after it. Desktop is marked ready by HeroScene,
@@ -151,51 +158,38 @@ const Hero = () => {
       }`}
       aria-label="Modern Influencer Platform"
     >
-      {/* Animated background */}
-      <motion.div
-        className={styles.backgroundOverlay}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-      />
+      {/* Animated background (its own pulse animation sets the opacity) */}
+      <div className={styles.backgroundOverlay} />
 
       {/* Main content */}
-      <motion.div
-        className={styles.mainContent}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
+      <div className={styles.mainContent}>
         {/* Header section */}
         <div className={styles.headerSection}>
-          <motion.div className={styles.badge} variants={itemVariants}>
+          <div className={`${styles.badge} ${styles.enter}`} style={delay(0)}>
             <span className={styles.badgeText}>Creator marketplace, made in India</span>
-          </motion.div>
+          </div>
 
-          <motion.h1 className={styles.modernHeadline} variants={itemVariants}>
+          <h1 className={`${styles.modernHeadline} ${styles.enter}`} style={delay(0.2)}>
             Brands and creators,
             <br />
             matched on real numbers.
-          </motion.h1>
+          </h1>
 
-          <motion.p
-            className={styles.modernSubheadline}
-            variants={itemVariants}
-          >
+          <p className={`${styles.modernSubheadline} ${styles.enter}`} style={delay(0.4)}>
             Creators build a page, connect Instagram and apply to live brand
             campaigns. Brands post what they need and get a shortlist of
             reviewed creators.
-          </motion.p>
+          </p>
 
           {/* Phones and tablets: compact orbit between the copy and the buttons */}
           {isCompact && (
-            <motion.div variants={itemVariants} style={{ width: "100%" }}>
+            <div className={styles.enter} style={{ width: "100%", ...delay(0.6) }}>
               <HeroOrbitMobile />
-            </motion.div>
+            </div>
           )}
 
           {/* CTA buttons */}
-          <motion.div className={styles.ctaGroup} variants={itemVariants}>
+          <div className={`${styles.ctaGroup} ${styles.enter}`} style={delay(isCompact ? 0.8 : 0.6)}>
             <motion.button
               ref={ctaRef}
               className={styles.primaryCta}
@@ -225,54 +219,49 @@ const Hero = () => {
             >
               Find creators
             </motion.button>
-          </motion.div>
+          </div>
         </div>
 
         {/* Live numbers from the API (hidden when unavailable) */}
         {stats.length > 0 && (
-          <motion.a
+          <a
             href="/live/campaigns"
             className={styles.statsSection}
-            variants={containerVariants}
             aria-label="Open the LIVE campaign board"
           >
             <div className={styles.statsGrid}>
               {stats.map((stat, index) => (
-                <motion.div key={stat.id} className={styles.statCard} variants={itemVariants} custom={index}>
+                <div key={stat.id} className={`${styles.statCard} ${styles.enter}`} style={delay((isCompact ? 1 : 0.8) + 0.2 * index)}>
                   <div className={styles.statCardInner}>
                     <div className={styles.statValue}>{stat.value}</div>
                     <div className={styles.statLabel}>{stat.title}</div>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
-          </motion.a>
+          </a>
         )}
 
         {/* Feature highlights */}
-        <motion.div
-          className={styles.featuresSection}
-          variants={containerVariants}
-        >
+        <div className={styles.featuresSection}>
           <div className={styles.featuresList}>
             {[
               "Every creator reviewed",
               "Instagram-connected stats",
               "LIVE campaign board",
             ].map((feature, index) => (
-              <motion.div
+              <div
                 key={feature}
-                className={styles.featureItem}
-                variants={itemVariants}
-                custom={index}
+                className={`${styles.featureItem} ${styles.enter}`}
+                style={delay((isCompact ? 1.2 : 1) + 0.2 * index)}
               >
                 <div className={styles.featureCheck}>✓</div>
                 <span>{feature}</span>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
 
       {/* 3D Scene for desktop */}
       {!isCompact && (
@@ -280,9 +269,11 @@ const Hero = () => {
           {/* Hero background tint, painted with the copy instead of when the 3D scene arrives */}
           <div className={sceneStyles.backdrop} />
           {has3d ? (
-            <Suspense fallback={null}>
-              <HeroScene />
-            </Suspense>
+            mount3d && (
+              <Suspense fallback={null}>
+                <HeroScene />
+              </Suspense>
+            )
           ) : (
             <HeroOrbitFlat />
           )}

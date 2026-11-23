@@ -167,25 +167,50 @@ const BrandSuccessShowcase = () => {
     const inner = innerContainerRef.current;
     if (!container || !inner) return undefined;
 
-    const half = () => inner.scrollWidth / 2; // content is duplicated once
-    if (!startedRef.current) {
-      container.scrollLeft = half();
-      startedRef.current = true;
+    const cards = Array.from(inner.children);
+    // Card positions and widths only change on resize: measure them once (and again after a
+    // resize) instead of reading offsetLeft/offsetWidth for every card on every frame. Those
+    // reads came right after this loop's own style writes, so each frame forced a style and
+    // layout pass; at mount they forced full-page layouts while the homepage was starting up.
+    let geo = null;
+    const measure = () => {
+      geo = {
+        cw: container.clientWidth,
+        half: inner.scrollWidth / 2, // content is duplicated once
+        centers: cards.map((el) => el.offsetLeft + el.offsetWidth / 2),
+      };
+      return geo;
+    };
+    const g0 = () => geo || measure();
+    const half = () => g0().half;
+    let ro;
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(() => { geo = null; });
+      ro.observe(container);
+      ro.observe(inner);
     }
 
-    const cards = Array.from(inner.children);
     let raf = 0;
     let last = performance.now();
-    let visible = true;
+    let visible = false; // the loop starts when the section comes near the screen
     let carry = 0; // sub-pixel drift accumulator (scrollLeft is integer in some browsers)
 
     const place = () => {
-      const mid = container.scrollLeft + container.clientWidth / 2;
-      const span = Math.max(container.clientWidth / 2, 1);
-      for (const el of cards) {
-        const x = Math.max(-1.3, Math.min(1.3, (el.offsetLeft + el.offsetWidth / 2 - mid) / span));
-        el.style.setProperty("--x", x.toFixed(3));
-        el.style.setProperty("--ax", Math.abs(x).toFixed(3));
+      const { cw, centers } = g0();
+      const mid = container.scrollLeft + cw / 2;
+      const span = Math.max(cw / 2, 1);
+      for (let i = 0; i < cards.length; i++) {
+        const x = Math.max(-1.3, Math.min(1.3, (centers[i] - mid) / span));
+        cards[i].style.setProperty("--x", x.toFixed(3));
+        cards[i].style.setProperty("--ax", Math.abs(x).toFixed(3));
+      }
+    };
+    // Start in the middle of the duplicated strip (done when the section first comes near the
+    // screen, not during page startup)
+    const init = () => {
+      if (!startedRef.current) {
+        container.scrollLeft = half();
+        startedRef.current = true;
       }
     };
 
@@ -235,26 +260,38 @@ const BrandSuccessShowcase = () => {
 
     let io;
     if (typeof IntersectionObserver !== "undefined") {
-      io = new IntersectionObserver(([entry]) => {
-        visible = entry.isIntersecting;
-        if (visible) start();
-      });
+      io = new IntersectionObserver(
+        ([entry]) => {
+          visible = entry.isIntersecting;
+          if (visible) {
+            init();
+            place();
+            start();
+          }
+        },
+        { rootMargin: "200px 0px" }
+      );
       io.observe(container);
+    } else {
+      visible = true;
+      init();
+      place();
+      start();
     }
     // Manual scrolling (touch, arrows) while the loop is idle still updates the wall
     const onScroll = () => {
       if (!visible) {
+        init();
         wrap();
         place();
       }
     };
     container.addEventListener("scroll", onScroll, { passive: true });
-    place();
-    start();
 
     return () => {
       cancelAnimationFrame(raf);
       io?.disconnect();
+      ro?.disconnect();
       container.removeEventListener("scroll", onScroll);
     };
   }, [prefersReducedMotion]);

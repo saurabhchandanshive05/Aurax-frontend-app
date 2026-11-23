@@ -317,3 +317,20 @@
 @media (prefers-reduced-motion: reduce) and (max-width: 1100px) {
   .logoGrid { transform: none !important; }
 }
+
+/* Phones and touch tablets: same angled grid without the giant rotated, animated layer (a
+   200% x 200% box rotated 30deg needed ~90MB of GPU memory at 3x, which contributed to iOS
+   Safari/Chrome closing the page). Lines drawn directly at 30deg/120deg, same colour and spacing. */
+@media (max-width: 1023px), (pointer: coarse) {
+  .neuralGrid {
+    inset: 0;
+    width: auto;
+    height: auto;
+    transform: none;
+    animation: none;
+    background-image:
+      repeating-linear-gradient(30deg, rgba(91, 119, 255, 0.5) 0 1px, transparent 1px 40px),
+      repeating-linear-gradient(120deg, rgba(91, 119, 255, 0.5) 0 1px, transparent 1px 40px);
+    background-size: auto;
+  }
+}

@@ -28,7 +28,8 @@ const Send = () => (
 
 // Instagram profile figures as supplied for @anitasdigitaldiaryy; photo is the one the
 // Featured Creators section already uses.
-const ANITA_PHOTO = "https://res.cloudinary.com/dzvtsnpr6/image/upload/v1756719244/Aneeta_wzw8zb.webp";
+// Shown at 44px: a 240px-wide resize (f_auto/q_auto, no crop) instead of the 434KB original.
+const ANITA_PHOTO = "https://res.cloudinary.com/dzvtsnpr6/image/upload/f_auto,q_auto,c_limit,w_240/v1756719244/Aneeta_wzw8zb.webp";
 
 function CreatorProfile() {
   return (
