@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import FeaturedCreators from "./FeaturedCreators";
+import FeatureShowcase from "./FeatureShowcase";
 import styles from "./ServicesCards.module.css";
 import useDeferredStart from "../hooks/useDeferredStart";
 import usePauseOffscreen from "../hooks/usePauseOffscreen";
@@ -72,6 +73,9 @@ function ServicesCards() {
 
       {/* Modern Featured Creators Section */}
       <FeaturedCreators />
+
+      {/* Everything to get you noticed */}
+      <FeatureShowcase />
 
       <section
         ref={brandsSectionRef}
