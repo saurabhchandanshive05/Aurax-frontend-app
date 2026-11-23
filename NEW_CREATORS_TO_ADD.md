@@ -59,8 +59,8 @@ Profile Picture:  https://example.com/priya.jpg
 ### 📞 Contact
 ```
 Email:            priya@example.com
-Phone:            +91 98765 43210
-WhatsApp:         +91 98765 43210
+Phone:            +91 XXXXX XXXXX
+WhatsApp:         +91 XXXXX XXXXX
 Website:          https://priyastyle.com
 Media Kit:        https://priyastyle.com/mediakit.pdf
 ```
@@ -141,8 +141,8 @@ Profile Picture:  https://example.com/arjun.jpg
 ### 📞 Contact
 ```
 Email:            arjun@example.com
-Phone:            +91 97654 32100
-WhatsApp:         +91 97654 32100
+Phone:            +91 XXXXX XXXXX
+WhatsApp:         +91 XXXXX XXXXX
 Website:          https://techwitharjun.com
 Media Kit:        https://techwitharjun.com/mediakit.pdf
 ```
@@ -305,8 +305,8 @@ Profile Picture:  https://example.com/vikram.jpg
 ### 📞 Contact
 ```
 Email:            vikram@example.com
-Phone:            +91 99876 54321
-WhatsApp:         +91 99876 54321
+Phone:            +91 XXXXX XXXXX
+WhatsApp:         +91 XXXXX XXXXX
 Website:          https://vikramfitness.com
 Media Kit:        https://vikramfitness.com/mediakit.pdf
 ```
@@ -387,8 +387,8 @@ Profile Picture:  https://example.com/neha.jpg
 ### 📞 Contact
 ```
 Email:            neha@example.com
-Phone:            +91 98765 12345
-WhatsApp:         +91 98765 12345
+Phone:            +91 XXXXX XXXXX
+WhatsApp:         +91 XXXXX XXXXX
 Website:          https://nehasrecipes.com
 Media Kit:        https://nehasrecipes.com/mediakit.pdf
 ```
@@ -469,8 +469,8 @@ Profile Picture:  https://example.com/aditya.jpg
 ### 📞 Contact
 ```
 Email:            aditya@example.com
-Phone:            +91 97654 98765
-WhatsApp:         +91 97654 98765
+Phone:            +91 XXXXX XXXXX
+WhatsApp:         +91 XXXXX XXXXX
 Website:          https://adityatravels.com
 Media Kit:        https://adityatravels.com/mediakit.pdf
 ```
@@ -551,8 +551,8 @@ Profile Picture:  https://example.com/ishita.jpg
 ### 📞 Contact
 ```
 Email:            ishita@example.com
-Phone:            +91 96543 21098
-WhatsApp:         +91 96543 21098
+Phone:            +91 XXXXX XXXXX
+WhatsApp:         +91 XXXXX XXXXX
 Website:          https://ishitawellness.com
 Media Kit:        https://ishitawellness.com/mediakit.pdf
 ```
@@ -633,8 +633,8 @@ Profile Picture:  https://example.com/rohan.jpg
 ### 📞 Contact
 ```
 Email:            rohan@example.com
-Phone:            +91 97543 98765
-WhatsApp:         +91 97543 98765
+Phone:            +91 XXXXX XXXXX
+WhatsApp:         +91 XXXXX XXXXX
 Website:          https://rohanpatel.com
 Media Kit:        https://rohanpatel.com/mediakit.pdf
 ```
@@ -715,8 +715,8 @@ Profile Picture:  https://example.com/maya.jpg
 ### 📞 Contact
 ```
 Email:            maya@example.com
-Phone:            +91 96654 32109
-WhatsApp:         +91 96654 32109
+Phone:            +91 XXXXX XXXXX
+WhatsApp:         +91 XXXXX XXXXX
 Website:          https://mayasharma.com
 Media Kit:        
 ```
@@ -797,8 +797,8 @@ Profile Picture:  https://example.com/sanjay.jpg
 ### 📞 Contact
 ```
 Email:            sanjay@example.com
-Phone:            +91 99876 12345
-WhatsApp:         +91 99876 12345
+Phone:            +91 XXXXX XXXXX
+WhatsApp:         +91 XXXXX XXXXX
 Website:          https://sanjayfitsports.com
 Media Kit:        https://sanjayfitsports.com/mediakit.pdf
 ```

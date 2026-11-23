@@ -458,7 +458,7 @@ const CreateCreatorModal = ({ isOpen, onClose, onSuccess }) => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  placeholder="+91 9876543210"
+                  placeholder="+91 XXXXX XXXXX"
                 />
               </div>
 
@@ -469,7 +469,7 @@ const CreateCreatorModal = ({ isOpen, onClose, onSuccess }) => {
                   name="whatsappNumber"
                   value={formData.whatsappNumber}
                   onChange={handleInputChange}
-                  placeholder="+91 9876543210"
+                  placeholder="+91 XXXXX XXXXX"
                 />
               </div>
 

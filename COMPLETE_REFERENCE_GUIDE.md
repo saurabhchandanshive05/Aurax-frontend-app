@@ -268,8 +268,8 @@ Posts: 1250
 Engagement Rate: 6.8
 
 Email: priya@example.com
-Phone: +91 98765 43210
-WhatsApp: +91 98765 43210
+Phone: +91 XXXXX XXXXX
+WhatsApp: +91 XXXXX XXXXX
 
 Management: Agency Managed
 Manager: Rajesh Kumar

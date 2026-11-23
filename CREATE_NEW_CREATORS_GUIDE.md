@@ -72,8 +72,8 @@ The form is organized into sections. Each section contains related fields:
 #### 📞 Contact Information
 ```
 - Business Email         → creator@example.com
-- Phone Number           → +91 9876543210
-- WhatsApp Number        → +91 9876543210
+- Phone Number           → +91 XXXXX XXXXX
+- WhatsApp Number        → +91 XXXXX XXXXX
 - Website URL            → https://example.com
 - Media Kit Link         → PDF or document link
 ```
@@ -269,8 +269,8 @@ Let's say you want to add a fashion influencer. Here's how to fill the form:
 
 📞 CONTACT
 - Business Email:    priya@example.com
-- Phone:             +91 98765 43210
-- WhatsApp:          +91 98765 43210
+- Phone:             +91 XXXXX XXXXX
+- WhatsApp:          +91 XXXXX XXXXX
 - Website:           https://priyastyle.com
 - Media Kit:         https://priyastyle.com/mediakit.pdf
 
@@ -404,8 +404,8 @@ Emails:
 ✓ priya@example.com
 
 Phone:
-✗ 9876543210
-✓ +91 98765 43210
+✗ XXXXXXXXXX
+✓ +91 XXXXX XXXXX
 ```
 
 ### 3. Add Descriptive Bio

@@ -608,7 +608,7 @@ const CreatorProfile = () => {
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="+91 9876543210"
+                  placeholder="+91 XXXXX XXXXX"
                   className="control-select"
                 />
               ) : (

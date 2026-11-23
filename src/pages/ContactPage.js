@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import "./Contact.css";
 import { apiClient } from "../utils/apiClient";
+import { CONTACT_PHONE_LABEL, CONTACT_TEL_URL, CONTACT_WHATSAPP_URL } from "../config/contact";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -34,12 +35,10 @@ const Contact = () => {
       icon: "💼",
       url: "https://linkedin.com/company/aurax",
     },
-    {
-      platform: "WhatsApp",
-      handle: "+91 9923717300",
-      icon: "💬",
-      url: "https://wa.me/919923717300",
-    },
+    // Phone / WhatsApp come from the environment (src/config/contact.js); hidden when not set
+    ...(CONTACT_WHATSAPP_URL
+      ? [{ platform: "WhatsApp", handle: CONTACT_PHONE_LABEL || "WhatsApp", icon: "💬", url: CONTACT_WHATSAPP_URL }]
+      : []),
     {
       platform: "Twitter",
       handle: "@aurax_official",
@@ -322,24 +321,24 @@ const Contact = () => {
             </div>
 
             <div className="contact-details">
-              <div className="contact-item">
-                <span className="icon">📞</span>
-                <a href="tel:+919923717300">+91 9923717300</a>
-              </div>
+              {CONTACT_TEL_URL && (
+                <div className="contact-item">
+                  <span className="icon">📞</span>
+                  <a href={CONTACT_TEL_URL}>{CONTACT_PHONE_LABEL}</a>
+                </div>
+              )}
               <div className="contact-item">
                 <span className="icon">📧</span>
                 <a href="mailto:hello@auraxai.io">hello@auraxai.in</a>
               </div>
-              <div className="contact-item">
-                <span className="icon">💬</span>
-                <a
-                  href="https://wa.me/919923717300"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  WhatsApp Direct
-                </a>
-              </div>
+              {CONTACT_WHATSAPP_URL && (
+                <div className="contact-item">
+                  <span className="icon">💬</span>
+                  <a href={CONTACT_WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                    WhatsApp Direct
+                  </a>
+                </div>
+              )}
             </div>
 
             <div className="social-section">

@@ -109,7 +109,7 @@ Returns current user data including onboarding flags.
   "fullName": "Creator Name",
   "bio": "Creator bio text",
   "location": "City, Country",
-  "phone": "+1234567890",
+  "phone": "+91XXXXXXXXXX",
   "role": "creator",
   "isProfileCompleted": true,
   "profilesConnected": true,
@@ -139,7 +139,7 @@ Updates creator profile information.
   "fullName": "Creator Name",
   "bio": "Bio text",
   "location": "City, Country",
-  "phone": "+1234567890"
+  "phone": "+91XXXXXXXXXX"
 }
 ```
 

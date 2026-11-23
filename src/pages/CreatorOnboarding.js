@@ -646,7 +646,7 @@ const CreatorOnboarding = () => {
                 <label>Phone Number</label>
                 <input
                   type="tel"
-                  placeholder="+1 234 567 8900"
+                  placeholder="+91 XXXXX XXXXX"
                   value={profileForm.phone}
                   onChange={(e) => setProfileForm({...profileForm, phone: e.target.value})}
                 />

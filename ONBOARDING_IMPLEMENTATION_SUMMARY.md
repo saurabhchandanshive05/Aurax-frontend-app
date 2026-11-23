@@ -202,7 +202,7 @@ Updates profile information.
   "fullName": "John Doe",
   "bio": "Fashion creator",
   "location": "NYC",
-  "phone": "+1234567890"
+  "phone": "+91XXXXXXXXXX"
 }
 ```
 

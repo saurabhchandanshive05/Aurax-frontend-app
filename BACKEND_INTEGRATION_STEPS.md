@@ -143,7 +143,7 @@ curl -X PUT http://localhost:5002/api/creator/profile \
     "fullName": "John Doe",
     "bio": "Fashion content creator",
     "location": "New York, USA",
-    "phone": "+1234567890"
+    "phone": "+91XXXXXXXXXX"
   }'
 ```
 
@@ -178,7 +178,7 @@ curl -X GET http://localhost:5002/api/me \
   "fullName": "John Doe",
   "bio": "Fashion content creator",
   "location": "New York, USA",
-  "phone": "+1234567890",
+  "phone": "+91XXXXXXXXXX",
   "isProfileCompleted": true,
   "profilesConnected": true,
   "isInstagramConnected": true,
